@@ -331,10 +331,15 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
 /* =========================================
    PRINCIPAL DASHBOARD
 ========================================= */
-.dashboard-container { width: 95%; max-width: 1400px; margin: 2rem auto; }
+.principal-dashboard {
+    width: 95%;
+    max-width: 1400px;
+    margin: 2rem auto 3rem;
+    display: block;
+}
 .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--deped-blue); text-transform: uppercase; letter-spacing: 0.05em; }
 
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 3rem; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; margin-bottom: 3rem; }
 .kpi-card { background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
 .kpi-value { font-size: 2rem; font-weight: 800; color: var(--deped-blue); line-height: 1.2; }
 .kpi-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
@@ -377,6 +382,15 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     .teacher-dashboard-container { grid-template-columns: 1fr; }
     .teacher-row { grid-template-columns: 1fr; }
     .dashboard-container { width: 92%; }
+    .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .graph-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    .teacher-row { grid-template-columns: 1fr; }
+    .btn-group { flex-direction: column; }
+    .schedule-item { flex-direction: column; gap: 0.25rem; }
 }
 
 /* =========================================
