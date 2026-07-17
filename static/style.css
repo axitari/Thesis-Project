@@ -118,6 +118,18 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     display: flex; align-items: center; justify-content: space-between;
     gap: 1rem; width: 100%; max-width: 1400px; margin: 0 auto;
 }
+.navbar-title-group {
+    display: flex; align-items: center; gap: 0.75rem;
+}
+.nav-back-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.2rem; height: 2.2rem; border-radius: 999px;
+    background: rgba(255,255,255,0.16); color: white; border: 1px solid rgba(255,255,255,0.24);
+    text-decoration: none; font-size: 1rem; transition: all 0.2s ease;
+}
+.nav-back-btn:hover {
+    background: rgba(255,255,255,0.24); transform: translateY(-1px); text-decoration: none; color: white;
+}
 .navbar h1 { font-size: 1.15rem; font-weight: 700; white-space: nowrap; margin: 0; }
 .navbar .nav-links { display: flex; gap: 0.75rem; align-items: center; flex-wrap: nowrap; }
 .navbar .nav-links a {
@@ -125,11 +137,11 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     white-space: nowrap; padding: 0.35rem 0.55rem; border-radius: 999px;
     transition: background-color 0.2s ease;
 }
-.navbar .nav-links a:hover {
+.navbar .nav-links a:hover,
+.navbar .nav-links a.active {
     background-color: rgba(255,255,255,0.16); text-decoration: none;
 }
 
-/* Principal Navbar */
 .admin-navbar {
     background-color: var(--deped-blue); color: white;
     border-bottom: 4px solid var(--deped-yellow);
@@ -169,10 +181,10 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
 
 .dashboard-container {
     display: grid;
-    grid-template-columns: 1.3fr 0.9fr;
-    gap: 1.5rem;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 1rem;
     width: min(1400px, 95%);
-    margin: 2rem auto 3rem;
+    margin: 1.25rem auto 2rem;
     align-items: start;
 }
 
@@ -186,8 +198,15 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     background: var(--bg-white);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: 1.25rem;
+    padding: 1rem 1.1rem;
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+.compose-card {
+    border-top: 4px solid var(--deped-yellow);
+    background: linear-gradient(180deg, #ffffff 0%, #fefcf5 100%);
+}
+.inbox-card {
+    border-top: 4px solid var(--deped-blue);
 }
 
 .highlighted-card {
@@ -215,13 +234,167 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
 .welcome-banner {
     background: linear-gradient(135deg, var(--deped-blue), #0f5ef7);
     color: white;
-    padding: 1.5rem;
+    padding: 1.2rem 1.3rem;
     border-radius: 16px;
     box-shadow: 0 10px 26px rgba(0, 56, 168, 0.16);
+    grid-column: 1 / -1;
 }
 
-.welcome-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.35rem; }
-.welcome-subtitle { font-size: 0.92rem; color: #dbeafe; }
+.welcome-title { font-size: 1.28rem; font-weight: 700; margin-bottom: 0.25rem; }
+.welcome-subtitle { font-size: 0.9rem; color: #dbeafe; }
+
+/* =========================================
+       MESSAGES AND NOTIFICATIONS
+========================================= */
+
+.banner-top {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.back-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 0.9rem; border-radius: 999px;
+    background: rgba(255,255,255,0.16); color: white;
+    border: 1px solid rgba(255,255,255,0.25); text-decoration: none;
+    font-size: 0.85rem; font-weight: 700; transition: all 0.2s ease;
+}
+.back-btn:hover {
+    background: rgba(255,255,255,0.24); transform: translateY(-1px);
+    text-decoration: none; color: white;
+}
+.page-pill {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.4rem 0.8rem; border-radius: 999px;
+    background: rgba(255,255,255,0.15); color: #e0ecff; border: 1px solid rgba(255,255,255,0.25);
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+.message-list, .notification-list {
+    display: flex; flex-direction: column; gap: 0.7rem;
+}
+.message-item, .notification-item {
+    background: linear-gradient(145deg, #f8fbff, #f8fafc);
+    border: 1px solid #e2e8f0; border-left: 4px solid var(--deped-blue);
+    border-radius: 12px; padding: 0.9rem 1rem;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex; align-items: flex-start; gap: 0.75rem;
+}
+.message-item:hover, .notification-item:hover {
+    transform: translateY(-1px); box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+}
+.message-item.unread {
+    border-left-color: var(--deped-yellow);
+    background: linear-gradient(145deg, #fffcf0, #fefce8);
+}
+.message-meta {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;
+    margin-bottom: 0.3rem; color: var(--text-muted); font-size: 0.84rem;
+}
+.notification-item strong {
+    display: block; color: var(--deped-blue); margin-bottom: 0.2rem;
+}
+.notification-content { flex: 1; }
+.notification-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2rem; height: 2rem; border-radius: 999px;
+    background: #e8f1ff; color: var(--deped-blue); font-weight: 700; flex-shrink: 0;
+}
+.notification-time {
+    font-size: 0.75rem; color: var(--text-muted); white-space: nowrap;
+    padding-left: 0.4rem;
+}
+.message-item p, .notification-item p {
+    color: #334155; font-size: 0.92rem; margin: 0;
+}
+.notification-summary-card {
+    border-top: 4px solid var(--safe-green);
+    background: linear-gradient(180deg, #ffffff 0%, #f7fff9 100%);
+    padding: 0.9rem 1rem;
+}
+.notification-summary {
+    display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;
+}
+.summary-label {
+    font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem;
+}
+.summary-count {
+    font-size: 1rem; font-weight: 700; color: var(--deped-blue);
+}
+.summary-chip {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.38rem 0.7rem; border-radius: 999px;
+    background: #dcfce7; color: #166534; font-size: 0.78rem; font-weight: 700;
+}
+.message-form {
+    display: flex; flex-direction: column; gap: 0.65rem;
+}
+.message-form label {
+    margin-bottom: 0; color: #475569; text-transform: none; letter-spacing: 0.01em;
+    font-size: 0.72rem;
+}
+.message-form input,
+.message-form textarea {
+    width: 100%; border: 1px solid #cbd5e1; border-radius: 10px;
+    padding: 0.75rem 0.9rem; background: #fff; box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.message-form textarea {
+    min-height: 100px; resize: vertical;
+}
+.message-form .btn-primary {
+    width: auto; align-self: flex-start; margin-top: 0.1rem; padding: 0.68rem 1rem;
+}
+.message-form .btn-primary:hover {
+    transform: translateY(-1px); box-shadow: 0 7px 14px rgba(0, 56, 168, 0.14);
+}
+
+/* =========================================
+     MESSAGES LAYOUT FOR PRINCIPAL
+========================================= */
+
+/* Navbar with Back Button */
+.workspace-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 2rem;
+    background: var(--deped-blue);
+    color: white;
+}
+.back-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+/* Layout Grid */
+.msg-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Card Styling */
+.msg-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+.inbox-item {
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+
 
 .status-badge {
     display: inline-block; padding: 0.35rem 0.75rem; border-radius: 9999px;
@@ -577,3 +750,4 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     .admin-navbar { flex-direction: column; align-items: flex-start; }
     .admin-nav-links { width: 100%; justify-content: flex-start; }
 }
+

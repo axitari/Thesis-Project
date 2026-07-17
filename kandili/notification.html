@@ -10,10 +10,13 @@
 
     <nav class="navbar">
         <div class="navbar-brand">
-            <h1>Kandili Workspace</h1>
+            <div class="navbar-title-group">
+                <a href="#" class="nav-back-btn" onclick="window.history.back(); return false;" aria-label="Go back">←</a>
+                <h1>Kandili Workspace</h1>
+            </div>
             <div class="nav-links">
-                <a href="message.html">Messages</a>
-                <a href="notification.html">Notifications</a>
+                <a href="teacherdashboard.html">Dashboard</a>
+                <a href="notification.html">Messages</a>
                 <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
             </div>
         </div>
@@ -21,24 +24,49 @@
 
     <div class="dashboard-container">
         <section class="welcome-banner">
+            <div class="banner-top">
+                <span class="page-pill">Updates</span>
+            </div>
             <h2 class="welcome-title">Notifications</h2>
             <p class="welcome-subtitle">Stay updated with recent actions, approvals, and reminders.</p>
         </section>
 
-        <section class="card">
+        <section class="card notification-summary-card">
+            <div class="notification-summary">
+                <div>
+                    <p class="summary-label">Today</p>
+                    <h3 class="summary-count">3 new updates</h3>
+                </div>
+                <span class="summary-chip">Live</span>
+            </div>
+        </section>
+
+        <section class="card notification-card">
             <h3 class="card-header">Recent Activity</h3>
             <div class="notification-list">
                 <div class="notification-item">
-                    <strong>New workload draft submitted</strong>
-                    <p>Teacher Maria submitted a new eSF7 draft for review.</p>
+                    <div class="notification-icon">✓</div>
+                    <div class="notification-content">
+                        <strong>New workload draft submitted</strong>
+                        <p>Teacher Maria submitted a new eSF7 draft for review.</p>
+                    </div>
+                    <span class="notification-time">Just now</span>
                 </div>
                 <div class="notification-item">
-                    <strong>Approval request updated</strong>
-                    <p>Your principal reviewed the pending allocation request.</p>
+                    <div class="notification-icon">⏳</div>
+                    <div class="notification-content">
+                        <strong>Approval request updated</strong>
+                        <p>Your principal reviewed the pending allocation request.</p>
+                    </div>
+                    <span class="notification-time">12m ago</span>
                 </div>
                 <div class="notification-item">
-                    <strong>System reminder</strong>
-                    <p>Please complete your profile updates before the next review cycle.</p>
+                    <div class="notification-icon">!</div>
+                    <div class="notification-content">
+                        <strong>System reminder</strong>
+                        <p>Please complete your profile updates before the next review cycle.</p>
+                    </div>
+                    <span class="notification-time">1h ago</span>
                 </div>
             </div>
         </section>
