@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Activity History</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-title-group">
+                <a href="#" class="nav-back-btn" onclick="window.history.back(); return false;" aria-label="Go back">←</a>
+                <h1>Kandili Workspace</h1>
+            </div>
+            <div class="nav-links">
+                <a href="teacherdashboard.html">Dashboard</a>
+                <a href="notification.html">Notifications</a>
+                <a href="message.html">Messages</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="history-wrapper">
+        <section class="history-banner">
+            <div class="banner-top">
+                <span class="page-pill">History</span>
+            </div>
+            <h2 class="welcome-title">Activity History</h2>
+            <p class="welcome-subtitle">Track approvals, profile changes, and submissions in one place.</p>
+        </section>
+
+        <section class="card history-search-card">
+            <div class="history-search-row">
+                <input type="text" id="searchInput" class="history-search-input" placeholder="Search by action, user, or date">
+                <select id="filterType" class="history-select">
+                    <option value="all">All activities</option>
+                    <option value="approval">Approvals</option>
+                    <option value="update">Updates</option>
+                    <option value="submission">Submissions</option>
+                </select>
+                <button type="button" onclick="filterLogs()" class="btn-primary history-filter-btn">Search</button>
+                <button type="button" onclick="resetLogs()" class="btn-outline history-reset-btn">Reset</button>
+            </div>
+
+            <div id="historyList" class="history-list">
+                <div class="history-item" data-category="approval" data-status="approved" data-keywords="principal approved sf7 submission ancillary workload 2026 q3">
+                    <div class="history-item-main">
+                        <strong>Principal approved SF7 submission</strong>
+                        <div class="history-item-meta">Ref: Ancillary Workload 2026-Q3 • Principal Office</div>
+                    </div>
+                    <span class="history-badge badge-approve">Approved</span>
+                    <div class="history-date">July 17, 2026</div>
+                </div>
+
+                <div class="history-item" data-category="update" data-status="updated" data-keywords="user profile updated system modification admin july 16">
+                    <div class="history-item-main">
+                        <strong>User profile updated</strong>
+                        <div class="history-item-meta">System modification by Admin • Account settings</div>
+                    </div>
+                    <span class="history-badge badge-update">Update</span>
+                    <div class="history-date">July 16, 2026</div>
+                </div>
+
+                <div class="history-item" data-category="submission" data-status="submitted" data-keywords="ancillary summary submitted teacher juan submission july 15">
+                    <div class="history-item-main">
+                        <strong>Ancillary summary submitted</strong>
+                        <div class="history-item-meta">Action performed by Teacher Juan • Summary packet</div>
+                    </div>
+                    <span class="history-badge badge-submit">Submit</span>
+                    <div class="history-date">July 15, 2026</div>
+                </div>
+
+                <div class="history-item" data-category="approval" data-status="review" data-keywords="reallocation request reviewed principal workload review july 14">
+                    <div class="history-item-main">
+                        <strong>Reallocation request reviewed</strong>
+                        <div class="history-item-meta">Reviewed by Principal • Pending assignment review</div>
+                    </div>
+                    <span class="history-badge badge-update">Review</span>
+                    <div class="history-date">July 14, 2026</div>
+                </div>
+            </div>
+
+            <div id="historyEmpty" class="history-empty" hidden>No matching activity found.</div>
+        </section>
+    </div>
+
+    <script>
+        function filterLogs() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            const type = document.getElementById('filterType').value;
+            const items = document.querySelectorAll('.history-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const text = (item.dataset.keywords || '') + ' ' + item.textContent.toLowerCase();
+                const matchesText = text.includes(input);
+                const matchesType = type === 'all' || item.dataset.category === type;
+                const shouldShow = matchesText && matchesType;
+                item.style.display = shouldShow ? 'flex' : 'none';
+                if (shouldShow) visibleCount++;
+            });
+
+            document.getElementById('historyEmpty').hidden = visibleCount !== 0;
+        }
+
+        function resetLogs() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterType').value = 'all';
+            document.querySelectorAll('.history-item').forEach(item => item.style.display = 'flex');
+            document.getElementById('historyEmpty').hidden = true;
+        }
+
+        document.getElementById('searchInput').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') filterLogs();
+        });
+    </script>
+</body>
+</html>
