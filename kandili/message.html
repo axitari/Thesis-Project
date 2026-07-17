@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Messages</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="message.html">Messages</a>
+                <a href="notification.html">Notifications</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <section class="welcome-banner">
+            <h2 class="welcome-title">Messages Center</h2>
+            <p class="welcome-subtitle">Keep communication flowing between teachers, principals, and admins.</p>
+        </section>
+
+        <section class="card">
+            <h3 class="card-header">Inbox</h3>
+            <div class="message-list">
+                <div class="message-item unread">
+                    <div class="message-meta">
+                        <strong>Principal's Office</strong>
+                        <span>09:20 AM</span>
+                    </div>
+                    <p>Please confirm your workload draft before the end of the day.</p>
+                </div>
+                <div class="message-item">
+                    <div class="message-meta">
+                        <strong>Admin Office</strong>
+                        <span>Yesterday</span>
+                    </div>
+                    <p>Your profile information was updated successfully.</p>
+                </div>
+                <div class="message-item">
+                    <div class="message-meta">
+                        <strong>School HR</strong>
+                        <span>Mon</span>
+                    </div>
+                    <p>Reminder: submit your updated ancillary assignment summary.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h3 class="card-header">Compose Message</h3>
+            <form class="message-form">
+                <label for="recipient">To</label>
+                <input id="recipient" type="text" value="All Teachers" />
+
+                <label for="subject">Subject</label>
+                <input id="subject" type="text" placeholder="New reminder" />
+
+                <label for="message">Message</label>
+                <textarea id="message" placeholder="Write your message here..."></textarea>
+
+                <button type="submit" class="btn-primary btn-inline">Send Message</button>
+            </form>
+        </section>
+    </div>
+
+</body>
+</html>
