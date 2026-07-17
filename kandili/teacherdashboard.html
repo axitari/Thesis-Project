@@ -122,20 +122,58 @@
         <aside class="dashboard-column">
             <section class="card">
                 <h3 class="card-header">Weekly Calendar Overview</h3>
-                <p class="card-subtitle">Visual representation of your logged eSF7 hours.</p>
+                <div class="calendar-legend">
+                    <span class="legend-chip teaching">Teaching</span>
+                    <span class="legend-chip admin">Admin</span>
+                </div>
+                <p class="card-subtitle">A compact snapshot of your teaching and ancillary schedule.</p>
 
                 <div class="calendar-grid">
-                    <div class="cal-header">Mon</div>
-                    <div class="cal-header">Tue</div>
-                    <div class="cal-header">Wed</div>
-                    <div class="cal-header">Thu</div>
-                    <div class="cal-header">Fri</div>
-
-                    <div class="cal-block-teach cal-block-wide">
-                        Grade 2 - Sampaguita<br><span>08:00 AM - 02:00 PM (6 hrs)</span>
+                    <div class="calendar-day">
+                        <div class="day-label">Mon</div>
+                        <div class="cal-event teaching">
+                            <strong>Grade 2 Math</strong>
+                            <span>08:00–02:00</span>
+                        </div>
                     </div>
-                    <div class="cal-block-admin cal-block-span">
-                        SDRRM Duties<br><span>03:00 PM - 04:40 PM</span>
+                    <div class="calendar-day">
+                        <div class="day-label">Tue</div>
+                        <div class="cal-event teaching">
+                            <strong>Grade 3 English</strong>
+                            <span>08:00–11:00</span>
+                        </div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-label">Wed</div>
+                        <div class="cal-event teaching">
+                            <strong>Grade 2 Science</strong>
+                            <span>08:00–12:00</span>
+                        </div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-label">Thu</div>
+                        <div class="cal-event admin">
+                            <strong>SDRRM Duty</strong>
+                            <span>03:00–04:40</span>
+                        </div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-label">Fri</div>
+                        <div class="cal-event admin">
+                            <strong>Grade Chair</strong>
+                            <span>01:00–02:30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calendar-summary">
+                    <div class="calendar-summary-item">
+                        <span class="summary-label">Teaching</span>
+                        <strong class="summary-value">22 hrs</strong>
+                    </div>
+                    <div class="calendar-summary-item">
+                        <span class="summary-label">Admin</span>
+                        <strong class="summary-value">4 hrs</strong>
                     </div>
                 </div>
             </section>
