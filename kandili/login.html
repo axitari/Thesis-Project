@@ -15,19 +15,25 @@
             <p>Access your Kandili dashboard</p>
         </div>
         
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">DepEd Email</label>
-                <input type="email" id="email" placeholder="juan.delacruz@deped.gov.ph" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••" required>
-            </div>
+       <section class="login-card">
+          <h3>Sign in</h3>
+          <form id="loginForm">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="name@school.edu" />
 
-            <button type="submit" class="btn-primary">Log In</button>
-        </form>
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Enter password" />
+
+            <label for="role">Role</label>
+            <select id="role" name="role">
+              <option value="teacherdashboard.html">Teacher</option>
+              <option value="principaldashboard.html">Principal</option>
+              <option value="admindashboard.html">Admin</option>
+            </select>
+
+            <button type="submit" class="btn-primary">Login</button>
+          </form>
+        </section>
 
         <div class="footer-text">
             <p>Don't have an account? <a href="register.html">Sign up here.</a></p>
