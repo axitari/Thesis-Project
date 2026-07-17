@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Notifications</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="message.html">Messages</a>
+                <a href="notification.html">Notifications</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <section class="welcome-banner">
+            <h2 class="welcome-title">Notifications</h2>
+            <p class="welcome-subtitle">Stay updated with recent actions, approvals, and reminders.</p>
+        </section>
+
+        <section class="card">
+            <h3 class="card-header">Recent Activity</h3>
+            <div class="notification-list">
+                <div class="notification-item">
+                    <strong>New workload draft submitted</strong>
+                    <p>Teacher Maria submitted a new eSF7 draft for review.</p>
+                </div>
+                <div class="notification-item">
+                    <strong>Approval request updated</strong>
+                    <p>Your principal reviewed the pending allocation request.</p>
+                </div>
+                <div class="notification-item">
+                    <strong>System reminder</strong>
+                    <p>Please complete your profile updates before the next review cycle.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
