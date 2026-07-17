@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Educator Registration</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="auth-body">
+
+   <div class="auth-card register-card" style="max-width: 650px;">
+        
+        <div class="auth-header">
+            <h2>Kandili Registration</h2>
+            <p>Official DepEd Workload & Wellness Portal</p>
+        </div>
+        
+        <form id="registerForm">
+            
+            <!-- Personal Info Row -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" required>
+                </div>
+            </div>
+
+            <!-- Account Credentials -->
+            <div class="form-group">
+                <label for="email"Email</label>
+                <input type="email" id="email" placeholder="juan.delacruz@deped.gov.ph" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <!-- Assignment Row -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="division">DepEd Division</label>
+                    <select id="division" required>
+                        <option value="" disabled selected>Select Division...</option>
+                        <option value="Iloilo City">Division of Iloilo City</option>
+                        <option value="Iloilo Province">Division of Iloilo Province</option>
+                        <option value="Guimaras">Division of Guimaras</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="school">Assigned School</label>
+                    <select id="school" required>
+                        <option value="" disabled selected>Select School...</option>
+                        <option value="WVSU ILS">Raul O.V. Causing Memorial School</option>
+                        <option value="ICNHS">Lopez Jaena Elementary School</option>
+                        <option value="SPED">San Miguel Elementary School</option>
+                        <option value="Other">Other / Not Listed</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- System Role -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="role">System Role</label>
+                    <select id="role">
+                        <option value="Teacher">Teacher</option>
+                        <option value="Principal">Principal / School Head</option>
+                        <option value="Master Teacher">Master Teacher</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teachingLevel">Teaching Level</label>
+                    <select id="teachingLevel">
+                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
+                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Create Educator Profile</button>
+            
+        </form>
+
+        <div class="footer-text">
+            <p>Already have an account? <a href="login.html">Log in here.</a></p>
+        </div>
+        
+    </div>
+
+</body>
+</html>

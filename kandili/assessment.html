@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Baseline Assessment</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- Wider card to comfortably fit the survey questions -->
+    <div class="auth-card" style="max-width: 750px; border-top: 6px solid #10b981;"> <!-- Green stripe for "Wellness" -->
+        
+        <div class="auth-header">
+            <h2>Initial Wellness Baseline</h2>
+            <p>Please complete this quick assessment to initialize your dashboard.</p>
+        </div>
+        
+        <form id="assessmentForm">
+            
+            <!-- SECTION 1: MBI-ES -->
+            <h3 style="color: #0038A8; font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 2px solid #e1effe; padding-bottom: 0.5rem;">
+                Part 1: Educator Burnout Inventory
+            </h3>
+            
+            <div class="form-group">
+                <label>1. I feel emotionally drained from my work.</label>
+                <select required>
+                    <option value="" disabled selected>Select frequency...</option>
+                    <option value="0">Never</option>
+                    <option value="1">A few times a year</option>
+                    <option value="2">Once a month or less</option>
+                    <option value="3">A few times a month</option>
+                    <option value="4">Once a week</option>
+                    <option value="5">A few times a week</option>
+                    <option value="6">Every day</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>2. I feel fatigued when I get up in the morning and have to face another day on the job.</label>
+                <select required>
+                    <option value="" disabled selected>Select frequency...</option>
+                    <option value="0">Never</option>
+                    <option value="1">A few times a year</option>
+                    <option value="2">Once a month</option>
+                    <option value="3">A few times a month</option>
+                    <option value="4">Once a week</option>
+                    <option value="5">A few times a week</option>
+                    <option value="6">Every day</option>
+                </select>
+            </div>
+
+            <br>
+
+            <!-- SECTION 2: NASA-TLX -->
+            <h3 style="color: #0038A8; font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 2px solid #e1effe; padding-bottom: 0.5rem;">
+                Part 2: Task Load Index (NASA-TLX)
+            </h3>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem;">
+                Based on your typical week, please rate the following demands.
+            </p>
+
+            <div class="form-group">
+                <label>Mental Demand (How much thinking, deciding, and calculating is required?)</label>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">LOW</span>
+                    <input type="range" min="1" max="100" value="50" style="flex: 1; cursor: pointer;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">HIGH</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Temporal Demand (How much time pressure do you feel during the week?)</label>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">LOW</span>
+                    <input type="range" min="1" max="100" value="50" style="flex: 1; cursor: pointer;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">HIGH</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Frustration Level (How stressed or annoyed do you feel during your tasks?)</label>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">LOW</span>
+                    <input type="range" min="1" max="100" value="50" style="flex: 1; cursor: pointer;">
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">HIGH</span>
+                </div>
+            </div>
+
+            <button type="button" onclick="window.location.href='dashboard.html'" class="btn-primary" style="margin-top: 2rem;">
+                Submit Assessment & Go To Dashboard
+            </button>
+            
+        </form>
+    </div>
+
+</body>
+</html>

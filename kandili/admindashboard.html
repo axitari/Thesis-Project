@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - System Administration</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="#">User Management</a>
+                <a href="#">Global Variables</a>
+                <a href="login.html">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container admin-dashboard-grid">
+        <div class="admin-column">
+            <section class="welcome-banner admin-welcome">
+                <h2 class="welcome-title">Platform Configuration</h2>
+                <p class="welcome-subtitle">Manage global database variables, thresholds, and algorithm weightings.</p>
+            </section>
+
+            <section class="card card-accent-yellow">
+                <h3 class="card-header">NASA-TLX Base Score Index</h3>
+                <p class="card-desc">Update the default cognitive load weights for standard DepEd ancillary duties. This affects the Burnout Algorithm globally.</p>
+
+                <div class="config-row">
+                    <div>
+                        <strong class="config-label">SDRRM Coordinator</strong>
+                        <div class="config-desc-sub">Disaster risk management & compliance alignment</div>
+                    </div>
+                    <input type="number" value="85">
+                </div>
+
+                <div class="config-row">
+                    <div>
+                        <strong class="config-label">Grade Level Chairperson</strong>
+                        <div class="config-desc-sub">Coordination of grade-level teachers & resource loading</div>
+                    </div>
+                    <input type="number" value="60">
+                </div>
+
+                <div class="config-row">
+                    <div>
+                        <strong class="config-label">School Paper Adviser</strong>
+                        <div class="config-desc-sub">Journalism oversight and public relations management</div>
+                    </div>
+                    <input type="number" value="75">
+                </div>
+
+                <button class="btn-primary admin-action-btn">Save Global Weights</button>
+            </section>
+
+            <section class="card card-accent-green">
+                <h3 class="card-header">Statutory & Intervention Parameters</h3>
+                <p class="card-desc">Control parameters governing the split Operations vs. Wellness execution loop.</p>
+
+                <div class="config-row">
+                    <span class="config-label">RA 4670 Max Teaching Hours (Weekly)</span>
+                    <input type="number" value="30">
+                </div>
+                <div class="config-row">
+                    <span class="config-label">MBI-ES High Exhaustion Multiplier Threshold</span>
+                    <input type="number" value="1.50" step="0.05">
+                </div>
+                <div class="config-row">
+                    <span class="config-label">Default Meditation Deployment Protocol ID</span>
+                    <input type="number" value="88">
+                </div>
+            </section>
+        </div>
+
+        <div class="admin-column">
+            <section class="card card-accent-blue">
+                <h3 class="card-header">Supabase DB Status</h3>
+
+                <div class="db-row-item">
+                    <span>Connection Status:</span>
+                    <span class="text-success font-weight-bold">Active & Secure</span>
+                </div>
+                <div class="db-row-item">
+                    <span>Registered School Nodes:</span>
+                    <span class="db-val-bold">42</span>
+                </div>
+                <div class="db-row-item">
+                    <span>Active Gateway Sessions:</span>
+                    <span class="db-val-bold">14</span>
+                </div>
+            </section>
+
+            <section class="card admin-user-card">
+                <h3 class="card-header">User Accounts & Access Control</h3>
+                <p class="card-desc">Execute security overrides, password resets, and account locks.</p>
+
+                <div class="search-flex-group">
+                    <input type="text" placeholder="Search by Kandili ID..." class="search-input-pad">
+                    <button class="btn-primary admin-find-btn">Find</button>
+                </div>
+
+                <div class="user-inner-card">
+                    <div class="user-card-title">Teacher Maria (ID: KND-7734)</div>
+                    <div class="user-card-meta">Status: Active Node | Allocated School: ROVCMS</div>
+                    <div class="btn-group-flex">
+                        <button class="btn-outline admin-btn-small">Force Password Reset</button>
+                        <button class="btn-outline admin-btn-small admin-btn-danger">Suspend Account</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card terminal-card">
+                <h3 class="card-header">System Audit Log</h3>
+                <p class="card-desc admin-log-desc">Live terminal feed of backend transactions.</p>
+                <div class="terminal-box">
+                    <div class="log-text log-success">[13:42:01] SUCCESS: User KND-7734 authenticated securely via token check.</div>
+                    <div class="log-text log-info">[13:45:12] ACTION: Principal Hilado authorized modified load plan for KND-1102.</div>
+                    <div class="log-text log-warning">[13:50:05] WARNING: Failed login attempt registered for user slot Admin-01.</div>
+                    <div class="log-text log-sys">[14:02:18] SYS: Global NASA-TLX structural matrix weight files synchronized.</div>
+                    <div class="log-text log-sys">[14:05:33] SYS: Supabase database connection verified. Latency: 42ms.</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+</body>
+</html>

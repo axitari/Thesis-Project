@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Log In</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="auth-body">
+
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Access your Kandili dashboard</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">DepEd Email</label>
+                <input type="email" id="email" placeholder="juan.delacruz@deped.gov.ph" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Log In</button>
+        </form>
+
+        <div class="footer-text">
+            <p>Don't have an account? <a href="register.html">Sign up here.</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

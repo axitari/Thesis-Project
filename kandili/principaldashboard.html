@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Principal Approval Feed</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="#">My Profile</a>
+                <a href="#">History</a>
+                <a href="#">Master Calendar</a>
+                <a href="login.html">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <!-- NEW: KPI OVERVIEW BOXES -->
+        <h2 class="section-title">Operations Overview</h2>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-label">Total Faculty Matrix</span>
+                <span class="kpi-value">42 <span style="font-size: 1rem; color: #64748b;">Teachers</span></span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Pending eSF7 Approvals</span>
+                <span class="kpi-value" style="color: #f59e0b;">8 <span style="font-size: 1rem; color: #64748b;">Drafts</span></span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">School-Wide Capacity</span>
+                <span class="kpi-value" style="color: #059669;">114 <span style="font-size: 1rem; color: #64748b;">Free Hrs</span></span>
+            </div>
+            <div class="kpi-card" style="border-bottom: 4px solid #C8102E;">
+                <span class="kpi-label">Critical Burnout Flags</span>
+                <span class="kpi-value" style="color: #C8102E;">2 <span style="font-size: 1rem; color: #64748b;">Alerts</span></span>
+            </div>
+        </div>
+
+        <!-- BA ADVANCED GRAPHS SECTION -->
+        <h2 class="section-title">Advanced Analytics</h2>
+        <div class="graph-grid">
+            <div class="graph-box">
+                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">RA 4670 Capacity Allocation (Hours)</p>
+                <div class="chart-container"><canvas id="capacityChart"></canvas></div>
+            </div>
+            <div class="graph-box">
+                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Faculty Burnout Risk Distribution</p>
+                <div class="chart-container"><canvas id="riskChart"></canvas></div>
+            </div>
+            <div class="graph-box">
+                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Ancillary Complexity Profile (NASA-TLX)</p>
+                <div class="chart-container"><canvas id="radarChart"></canvas></div>
+            </div>
+            <div class="graph-box">
+                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Risk Scatter Plot (Hours vs. MBI-ES)</p>
+                <div class="chart-container"><canvas id="scatterChart"></canvas></div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Pending eSF7 Reallocations</h2>
+
+        <!-- ROW 1: Teacher Carlos -->
+        <div class="teacher-row">
+            
+            <!-- Identified eSF7 with Schedule -->
+            <div class="info-box">
+                <div>
+                    <div class="esf-header">
+                        <div>
+                            <div class="esf-name">Teacher Carlos</div>
+                            <div class="esf-role">Master Teacher I | Grade Level Chair</div>
+                        </div>
+                        <div class="esf-hours">38<span class="hour-limit">/40h</span></div>
+                    </div>
+                    
+                    <!-- NEW: Class Schedule Snippet -->
+                    <div class="schedule-box">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem; color: #0038A8;">Weekly Schedule Matrix</div>
+                        <div class="schedule-item"><span>Grade 6 Math (Sec A)</span> <span>Mon-Wed-Fri 08:00-09:30</span></div>
+                        <div class="schedule-item"><span>Grade 6 Math (Sec B)</span> <span>Tue-Thu 09:00-11:00</span></div>
+                        <div class="schedule-item"><span>Ancillary: Grade Chair</span> <span>Flexible (13 hrs/wk)</span></div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline">Review Full eSF7</button>
+                    <button class="btn btn-primary" style="background-color: #cbd5e1; cursor: not-allowed;">Approve</button>
+                </div>
+            </div>
+
+            <!-- Anonymized Risk -->
+            <div class="info-box" style="border: 2px solid #ef4444;">
+                <div>
+                    <div class="risk-header">
+                        <div class="risk-id">ID: KND-4029</div>
+                        <div class="badge badge-critical">CRITICAL OVERLOAD</div>
+                    </div>
+                    <div class="ai-recommendation" style="border-left-color: #ef4444;">
+                        <strong>Kandili AI Insight:</strong> Severe exhaustion multiplier compounded by high cognitive demand.<br><br>
+                        <strong>Action Required:</strong> Reallocate the 13-hour Grade Chair duty to a profile with >10 hours capacity before approval.
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-danger">Return for Revision & Reassignment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Advanced BA Charts (Crash Prevented) -->
+    <script>
+        Chart.defaults.font.family = 'Segoe UI';
+        Chart.defaults.plugins.legend.display = false;
+
+        new Chart(document.getElementById('capacityChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Teacher I', 'Master', 'Coord.'],
+                datasets: [
+                    { label: 'Utilized', data: [250, 180, 120], backgroundColor: '#0038A8' },
+                    { label: 'Available', data: [80, 20, 10], backgroundColor: '#059669' }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+        });
+
+        new Chart(document.getElementById('riskChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Low', 'Moderate', 'Critical'],
+                datasets: [{ data: [32, 8, 2], backgroundColor: ['#059669', '#f59e0b', '#C8102E'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+        });
+
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Mental', 'Physical', 'Temporal', 'Perform.', 'Effort', 'Frustrat.'],
+                datasets: [{ data: [65, 30, 80, 85, 70, 45], fill: true, backgroundColor: 'rgba(0, 56, 168, 0.2)', borderColor: '#0038A8', pointBackgroundColor: '#0038A8' }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 100, ticks: { display: false } } } }
+        });
+
+        new Chart(document.getElementById('scatterChart'), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Profiles',
+                    data: [{ x: 26, y: 1.0 }, { x: 30, y: 1.1 }, { x: 28, y: 1.0 }, { x: 35, y: 1.25 }, { x: 38, y: 1.5 }],
+                    backgroundColor: '#C8102E', pointRadius: 5
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { min: 20, max: 45 }, y: { min: 0.5, max: 2.0 } } }
+        });
+    </script>
+</body>
+</html>

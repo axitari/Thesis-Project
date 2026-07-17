@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Educator Workload Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="dashboard-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="#">My Profile</a>
+                <a href="#">History</a>
+                <a href="#">Master Calendar</a>
+                <a href="login.html">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-column">
+            <section class="welcome-banner">
+                <h2 class="welcome-title">Welcome back, Teacher</h2>
+                <p class="welcome-subtitle">Teacher I | Class Adviser (Grade 2 - Sampaguita) | ROVCMS</p>
+                <div class="status-badge status-draft">Status: Draft (Pending Submission)</div>
+            </section>
+
+            <div class="alert-box">
+                <div class="alert-title">📩 Message from the Principal's Office</div>
+                <div class="alert-text">
+                    "Please finalize your drafted SF7 workloads for the upcoming quarter by Friday. Ensure all your assigned ancillary duties are logged accurately."
+                </div>
+            </div>
+
+            <section class="card highlighted-card">
+                <h3 class="card-header">
+                    <span>Smart eSF7 Scanner</span>
+                    <span class="ocr-badge">Powered by OCR</span>
+                </h3>
+                <p class="card-desc">Save time by scanning your approved hard copy. Kandili will automatically extract your teaching and ancillary hours to fill the forms below.</p>
+
+                <div class="scanner-dropzone">
+                    <div class="scanner-icon">📸</div>
+                    <div class="scanner-title">Click to Scan or Drag & Drop eSF7</div>
+                    <div class="scanner-hint">Supports PDF, JPG, or Live Camera Capture</div>
+                </div>
+
+                <button class="btn-outline btn-full">Extract Data & Auto-Fill Fields</button>
+            </section>
+
+            <section class="card">
+                <h3 class="card-header">1. Actual Teaching Load (RA 4670)</h3>
+                <form class="form-row">
+                    <div class="form-group flex-2">
+                        <label>Subject & Grade Level</label>
+                        <select required>
+                            <option value="" disabled selected>Select class type...</option>
+                            <option value="Self-Contained">Grades 1-3 (Self-Contained)</option>
+                            <option value="Other">Other Subject</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Minutes / Week</label>
+                        <input type="number" placeholder="e.g., 1800" required>
+                    </div>
+                </form>
+                <button class="btn-primary btn-inline">+ Add Class</button>
+
+                <div class="logged-item">
+                    <div>
+                        <div class="logged-title">Grade 2 - Sampaguita (Self-Contained)</div>
+                        <div class="logged-subtitle">Monday - Friday</div>
+                    </div>
+                    <div>
+                        <div class="logged-value">1,800 mins</div>
+                        <div class="logged-subvalue">30 hrs/week</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3 class="card-header">2. Ancillary & Admin Duties</h3>
+                <form class="form-row">
+                    <div class="form-group flex-2">
+                        <label>Duty Title</label>
+                        <input type="text" placeholder="e.g., SDRRM Coordinator" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hours / Week</label>
+                        <input type="number" placeholder="e.g., 5" required>
+                    </div>
+                </form>
+                <button class="btn-primary btn-inline">+ Add Duty</button>
+
+                <div class="logged-item logged-item-stack">
+                    <div class="logged-item-top">
+                        <div class="logged-title">SDRRM Coordinator</div>
+                        <div class="logged-value">5 hrs/week</div>
+                    </div>
+                    <div class="complexity-row">
+                        <div class="complexity-label">NASA-TLX Complexity</div>
+                        <div class="complexity-score">High (85)</div>
+                        <div class="complexity-bar-bg">
+                            <div class="complexity-bar-fill" style="width: 85%; background-color: #C8102E;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="submit-section">
+                <button class="btn-primary submit-btn">Submit SF7 Workload for Principal Approval</button>
+            </div>
+        </div>
+
+        <aside class="dashboard-column">
+            <section class="card">
+                <h3 class="card-header">Weekly Calendar Overview</h3>
+                <p class="card-subtitle">Visual representation of your logged eSF7 hours.</p>
+
+                <div class="calendar-grid">
+                    <div class="cal-header">Mon</div>
+                    <div class="cal-header">Tue</div>
+                    <div class="cal-header">Wed</div>
+                    <div class="cal-header">Thu</div>
+                    <div class="cal-header">Fri</div>
+
+                    <div class="cal-block-teach cal-block-wide">
+                        Grade 2 - Sampaguita<br><span>08:00 AM - 02:00 PM (6 hrs)</span>
+                    </div>
+                    <div class="cal-block-admin cal-block-span">
+                        SDRRM Duties<br><span>03:00 PM - 04:40 PM</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card risk-panel risk-moderate">
+                <h3 class="card-header">Live Risk Preview</h3>
+                <p class="card-subtitle">This score updates as you build your load.</p>
+
+                <div class="risk-score">68</div>
+                <div class="risk-label">Moderate Overload</div>
+
+                <div class="chart-wrap">
+                    <canvas id="workloadChart"></canvas>
+                </div>
+
+                <div class="analytics-breakdown">
+                    <div class="analytics-row">
+                        <span class="analytics-chip teaching">■ Teaching Load</span>
+                        <span>30 hrs</span>
+                    </div>
+                    <div class="analytics-row">
+                        <span class="analytics-chip ancillary">■ Ancillary Load</span>
+                        <span>5 hrs</span>
+                    </div>
+                    <div class="analytics-row">
+                        <span class="analytics-chip prep">■ Est. Lesson Prep / Checking</span>
+                        <span>10 hrs</span>
+                    </div>
+                    <div class="analytics-row analytics-total">
+                        <span>Total Weekly Demand:</span>
+                        <span>45 hrs / week</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card wellness-card">
+                <h3 class="card-header">My Wellness Baseline</h3>
+                <div class="mbi-container">
+                    <div>
+                        <div class="mbi-label">Emotional Exhaustion</div>
+                        <div class="mbi-value mbi-warning">Moderate</div>
+                    </div>
+                    <div>
+                        <div class="mbi-label">Depersonalization</div>
+                        <div class="mbi-value mbi-success">Low</div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('workloadChart').getContext('2d');
+        const workloadChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Teaching (RA 4670)', 'Ancillary/Admin', 'Lesson Prep / Checking'],
+                datasets: [{
+                    data: [30, 5, 10],
+                    backgroundColor: [
+                        '#0038A8',
+                        '#C8102E',
+                        '#cbd5e1'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + context.label + ': ' + context.raw + ' hrs';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
