@@ -15,8 +15,6 @@
                 <h1>Kandili Workspace</h1>
             </div>
             <div class="nav-links">
-                <a href="teacherdashboard.html">Dashboard</a>
-                <a href="notification.html">Notifications</a>
                 <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
             </div>
         </div>
@@ -29,22 +27,6 @@
             </div>
             <h2 class="welcome-title">Messages Center</h2>
             <p class="welcome-subtitle">Keep communication flowing between teachers, principals, and admins.</p>
-        </section>
-
-        <section class="card compose-card">
-            <h3 class="card-header">Compose Message</h3>
-            <form class="message-form">
-                <label for="recipient">To</label>
-                <input id="recipient" type="text" value="All Teachers" />
-
-                <label for="subject">Subject</label>
-                <input id="subject" type="text" placeholder="New reminder" />
-
-                <label for="message">Message</label>
-                <textarea id="message" placeholder="Write your message here..."></textarea>
-
-                <button type="submit" class="btn-primary btn-inline">Send Message</button>
-            </form>
         </section>
 
         <section class="card inbox-card">
@@ -72,6 +54,22 @@
                     <p>Reminder: submit your updated ancillary assignment summary.</p>
                 </div>
             </div>
+        </section>
+
+        <section class="card compose-card">
+            <h3 class="card-header">Compose Message</h3>
+            <form class="message-form">
+                <label for="recipient">To</label>
+                <input id="recipient" type="text" value="All Teachers" />
+
+                <label for="subject">Subject</label>
+                <input id="subject" type="text" placeholder="New reminder" />
+
+                <label for="message">Message</label>
+                <textarea id="message" placeholder="Write your message here..."></textarea>
+
+                <button type="submit" class="btn-primary btn-inline">Send Message</button>
+            </form>
         </section>
     </div>
 

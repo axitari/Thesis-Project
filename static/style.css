@@ -546,6 +546,9 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
 @media (max-width: 992px) {
     .dashboard-container { grid-template-columns: 1fr; }
     .navbar { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+    .profile-grid { grid-template-columns: 1fr; }
+    .profile-header-card { flex-wrap: wrap; }
+    .profile-actions { margin-left: 0; width: 100%; justify-content: flex-start; }
 }
 
 @media (max-width: 640px) {
@@ -554,6 +557,13 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     .mbi-container { grid-template-columns: 1fr; }
     .logged-item { flex-direction: column; align-items: flex-start; }
     .logged-item-top { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+    .profile-page-shell { width: 94%; margin-top: 1rem; }
+    .profile-header-card { padding: 1.15rem; }
+    .profile-avatar { width: 76px; height: 76px; }
+    .profile-name { font-size: 1.25rem; }
+    .detail-row { flex-direction: column; gap: 0.35rem; }
+    .detail-row strong, .detail-row span { min-width: 0; text-align: left; }
+    .access-item { align-items: flex-start; }
 }
 /* =========================================
    PRINCIPAL DASHBOARD
@@ -961,5 +971,177 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     .history-filter-btn,
     .history-reset-btn {
         width: 100%;
+    }
+}
+
+/* =========================================
+   PROFILE PAGE SPECIFIC STYLES
+   ========================================= */
+
+/* Main Header Banner */
+.profile-header-card {
+    display: flex; 
+    gap: 2rem; 
+    align-items: center;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap; /* Prevents squishing on slightly smaller screens */
+}
+
+/* Avatar Box */
+.profile-avatar {
+    width: 120px; /* Made slightly larger for a photo */
+    height: 120px;
+    background: var(--deped-blue, #1e3a8a);
+    color: white;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    border-radius: 12px; 
+    font-size: 2.5rem; 
+    font-weight: bold;
+    flex-shrink: 0; /* Forces the box to stay its exact size */
+    overflow: hidden; /* Ensures the image doesn't spill out of the rounded corners */
+}
+
+/* Photo Styling */
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps the aspect ratio perfectly scaled */
+    display: block;
+}
+
+/* Two-Column Layout */
+.profile-grid {
+    display: grid; 
+    grid-template-columns: 320px 1fr; /* Slightly wider sidebar to accommodate new data */
+    gap: 1.5rem;
+    align-items: start; /* Prevents the sidebar from stretching vertically if the main content is long */
+}
+
+/* Sidebar Quick Stats */
+.stat-item {
+    margin-bottom: 1.25rem;
+}
+.stat-item:last-child {
+    margin-bottom: 0;
+}
+.stat-item label {
+    display: block; 
+    color: var(--text-muted, #64748b); 
+    font-size: 0.75rem; 
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px; /* Adds a bit of elegance to the labels */
+}
+.stat-item p {
+    margin: 0.25rem 0 0; 
+    font-weight: 600; 
+    font-size: 1rem;
+    color: var(--text-main, #0f172a);
+}
+
+/* Profile Details List (Main Content) */
+.profile-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.info-group-card {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid var(--border-color, #cbd5e1);
+    background: linear-gradient(135deg, #fbfdff 0%, #f8fbff 100%);
+    margin-bottom: 0.9rem;
+}
+
+.info-group-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--deped-blue, #0038A8);
+    margin-bottom: 0.75rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px dashed var(--border-color, #cbd5e1);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-row strong {
+    color: var(--deped-blue, #0038A8);
+    font-size: 0.93rem;
+    min-width: 180px;
+    font-weight: 700;
+}
+
+.detail-row span {
+    color: var(--text-main, #0f172a);
+    font-size: 0.94rem;
+    text-align: right;
+    flex: 1;
+}
+
+.access-box {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 56, 168, 0.14);
+    background: linear-gradient(135deg, #f7fbff 0%, #ffffff 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.access-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+}
+
+.access-item strong {
+    color: var(--deped-blue, #0038A8);
+}
+
+.access-item span {
+    color: var(--text-main, #0f172a);
+}
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 768px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    .profile-header-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .detail-row {
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+    .detail-row strong,
+    .detail-row span {
+        width: 100%; text-align: left;
+    }
+    .access-item {
+        align-items: flex-start;
     }
 }

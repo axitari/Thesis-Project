@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Teacher Profile</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="dashboard-body profile-page-body">
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-title-group">
+                <a href="#" class="nav-back-btn" onclick="window.history.back(); return false;">←</a>
+                <h1>Kandili Workspace</h1>
+            </div>
+            <div class="nav-links">
+                <a href="teacherdashboard.html">Dashboard</a>
+                <a href="message.html">Messages</a>
+                <a href="notification.html">Notifications</a>
+                <a href="history.html">History</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-page-shell">
+        <section class="profile-header-card">
+            <div class="profile-avatar">
+                <img src="../static/placeholder-photo.svg" alt="Profile Photo" class="profile-photo">
+            </div>
+            <div class="profile-summary">
+                <div class="profile-heading">
+                    <h1 class="profile-name">Juan D. Dela Cruz</h1>
+                    <span class="status-badge status-active">Active Account</span>
+                </div>
+                <p class="profile-role">Teacher III</p>
+                <div class="profile-highlights">
+                    <span class="pill">Mathematics</span>
+                    <span class="pill pill-muted">Grade 5 Adviser</span>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="btn-outline btn-small">Update Photo</button>
+                <button class="btn-primary btn-small">Edit Profile</button>
+            </div>
+        </section>
+
+        <div class="profile-grid">
+            <aside class="profile-sidebar">
+                <section class="card profile-card">
+                    <div class="section-heading">
+                        <h3>Employment Stats</h3>
+                        <span class="section-tag">Core Details</span>
+                    </div>
+                    <div class="stat-list">
+                        <div class="stat-item">
+                            <label>DepEd Employee ID</label>
+                            <p>492011</p>
+                        </div>
+                        <div class="stat-item">
+                            <label>Plantilla Item No.</label>
+                            <p>OSEC-DECSB-TCH3-987654</p>
+                        </div>
+                        <div class="stat-item">
+                            <label>PRC License No.</label>
+                            <p>0411223</p>
+                        </div>
+                        <div class="stat-item">
+                            <label>Employment Status</label>
+                            <p>Permanent</p>
+                        </div>
+                        <div class="stat-item">
+                            <label>Years in Service</label>
+                            <p>5 Years</p>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <main class="profile-main">
+                <section class="card profile-card">
+                    <div class="section-heading">
+                        <h3>Teaching Information</h3>
+                        <span class="section-tag">Academic Assignment</span>
+                    </div>
+
+                    <div class="info-group-card">
+                        <div class="info-group-title">Instructional Details</div>
+                        <div class="profile-details-list">
+                            <div class="detail-row">
+                                <strong>Assigned Institution</strong>
+                                <span>Trailblazers Elementary School</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Grade Level / Department</strong>
+                                <span>Intermediate Level - Mathematics</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Advisory Class</strong>
+                                <span>Grade 5 - Mabini</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-group-card">
+                        <div class="info-group-title">Professional Qualifications</div>
+                        <div class="profile-details-list">
+                            <div class="detail-row">
+                                <strong>Highest Educational Attainment</strong>
+                                <span>Bachelor of Elementary Education (West Visayas State University)</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Official Email</strong>
+                                <span>juan.delacruz@deped.gov.ph</span>
+                            </div>
+                            <div class="detail-row">
+                                <strong>Contact Number</strong>
+                                <span>+63 919 876 5432</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-heading">
+                        <h3>System Access & Security</h3>
+                        <span class="section-tag">Confidential</span>
+                    </div>
+
+                    <div class="access-box">
+                        <div class="access-item">
+                            <strong>Last Login</strong>
+                            <span>July 18, 2026, 07:15 AM</span>
+                        </div>
+                        <div class="access-item">
+                            <strong>Role Permissions</strong>
+                            <span>Standard User Access (Submit / View / Edit Own Records)</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions profile-actions-end">
+                        <button class="btn-outline">Review Activity Log</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
