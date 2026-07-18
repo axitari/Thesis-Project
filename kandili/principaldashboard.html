@@ -6,6 +6,23 @@
     <title>Kandili - Principal Approval Feed</title>
     <link rel="stylesheet" href="../static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Specific styles for the directory grid */
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-family: inherit;
+        }
+    </style>
 </head>
 <body>
 
@@ -17,7 +34,7 @@
                 <a href="message.html">Messages</a>
                 <a href="notification.html">Notifications</a>
                 <a href="history.html">History</a>
-                <a href="#">Master Calendar</a>
+                <a href="calendar.html">Master Calendar</a>
                 <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
             </div>
         </div>
@@ -25,7 +42,7 @@
 
     <div class="dashboard-container principal-dashboard">
         
-        <!-- NEW: KPI OVERVIEW BOXES -->
+        <!-- KPI OVERVIEW BOXES -->
         <h2 class="section-title">Operations Overview</h2>
         <div class="kpi-grid">
             <div class="kpi-card">
@@ -67,55 +84,52 @@
             </div>
         </div>
 
-        <h2 class="section-title">Pending eSF7 Reallocations</h2>
-
-        <!-- ROW 1: Teacher Carlos -->
-        <div class="teacher-row">
+        <!-- MANAGEMENT MODULES -->
+        <h2 class="section-title" style="margin-top: 3rem;">Management Modules</h2>
+        
+        <div class="directory-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
             
-            <!-- Identified eSF7 with Schedule -->
-            <div class="info-box">
+            <!-- 1. Master Class Programs -->
+            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #f8fafc;">
                 <div>
-                    <div class="esf-header">
-                        <div>
-                            <div class="esf-name">Teacher Carlos</div>
-                            <div class="esf-role">Master Teacher I | Grade Level Chair</div>
-                        </div>
-                        <div class="esf-hours">38<span class="hour-limit">/40h</span></div>
-                    </div>
-                    
-                    <!-- NEW: Class Schedule Snippet -->
-                    <div class="schedule-box">
-                        <div style="font-weight: 700; margin-bottom: 0.5rem; color: #0038A8;">Weekly Schedule Matrix</div>
-                        <div class="schedule-item"><span>Grade 6 Math (Sec A)</span> <span>Mon-Wed-Fri 08:00-09:30</span></div>
-                        <div class="schedule-item"><span>Grade 6 Math (Sec B)</span> <span>Tue-Thu 09:00-11:00</span></div>
-                        <div class="schedule-item"><span>Ancillary: Grade Chair</span> <span>Flexible (13 hrs/wk)</span></div>
-                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; color: #0038A8;">📁 Master Class Programs</h3>
+                    <p style="margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.95rem;">
+                        Access and review the official class schedules of all 42 faculty members in a centralized directory.
+                    </p>
                 </div>
-                <div class="btn-group">
-                    <button class="btn btn-outline">Review Full eSF7</button>
-                    <button class="btn btn-primary" style="background-color: #cbd5e1; cursor: not-allowed;">Approve</button>
-                </div>
+                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="window.location.href='facultydirectory.html'">
+                    Open Directory
+                </button>
             </div>
 
-            <!-- Anonymized Risk -->
-            <div class="info-box" style="border: 2px solid #ef4444;">
+            <!-- 2. eSF7 Confirmations -->
+            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #f8fafc;">
                 <div>
-                    <div class="risk-header">
-                        <div class="risk-id">ID: KND-4029</div>
-                        <div class="badge badge-critical">CRITICAL OVERLOAD</div>
-                    </div>
-                    <div class="ai-recommendation" style="border-left-color: #ef4444;">
-                        <strong>Kandili AI Insight:</strong> Severe exhaustion multiplier compounded by high cognitive demand.<br><br>
-                        <strong>Action Required:</strong> Reallocate the 13-hour Grade Chair duty to a profile with >10 hours capacity before approval.
-                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; color: #059669;">✅ eSF7 Confirmations</h3>
+                    <p style="margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.95rem;">
+                        Track, review, and manage faculty workloads. Filter between pending drafts and confirmed submissions.
+                    </p>
                 </div>
-                <div class="btn-group">
-                    <button class="btn btn-danger">Return for Revision & Reassignment</button>
-                </div>
+                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem; background-color: #059669; border: none;" onclick="window.location.href='esf7approvals.html'">
+                    View Approvals (8 Pending)
+                </button>
             </div>
+
+            <!-- 3. Burnout Risk Analytics -->
+            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #fcf4f4; border-left: 4px solid #C8102E;">
+                <div>
+                    <h3 style="margin: 0 0 0.5rem 0; color: #C8102E;">⚠️ Burnout Risk Assessments</h3>
+                    <p style="margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.95rem;">
+                        Quantify and monitor faculty burnout risk levels, workload capacity, and cognitive exhaustion metrics.
+                    </p>
+                </div>
+                <button class="btn btn-danger" style="width: 100%; padding: 0.75rem;" onclick="window.location.href='burnoutrisks.html'">
+                    Open Risk Analytics (2 Alerts)
+                </button>
+            </div>
+
         </div>
-    </div>
-
+        
     <!-- Script for Advanced BA Charts (Crash Prevented) -->
     <script>
         Chart.defaults.font.family = 'Segoe UI';

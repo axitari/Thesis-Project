@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Master Calendar</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="dashboard-body">
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-title-group">
+                <a href="#" class="nav-back-btn" onclick="window.history.back(); return false;">←</a>
+                <h1>Kandili Workspace</h1>
+            </div>
+            <div class="nav-links">
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="calendar-shell">
+        <section class="card calendar-main-card">
+            <div class="calendar-header">
+                <div class="month-nav">
+                    <button id="prevMonthBtn" class="btn-outline btn-small" type="button">&lt;</button>
+                    <h2 id="monthLabel">July 2026</h2>
+                    <button id="nextMonthBtn" class="btn-outline btn-small" type="button">&gt;</button>
+                </div>
+                <div class="calendar-actions">
+                    <button id="todayBtn" class="btn-outline btn-small" type="button">Today</button>
+                    <button id="addEventBtn" class="btn-primary btn-small" type="button">+ Add Event</button>
+                </div>
+            </div>
+
+            <div class="calendar-body">
+                <div class="calendar-grid-container">
+                    <div class="calendar-weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div id="calendarGrid" class="calendar-grid"></div>
+                </div>
+
+                <aside class="calendar-sidebar">
+                    <div class="sidebar-card">
+                        <div class="sidebar-card-title">Selected Day</div>
+                        <div id="selectedDateLabel" class="sidebar-date">Select a date</div>
+                        <div id="selectedEvents" class="selected-events-list"></div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <div class="sidebar-card-title">This Month</div>
+                        <div class="stat-row">
+                            <span>Events</span>
+                            <strong id="monthEventCount">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>School</span>
+                            <strong id="schoolCount">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Personal</span>
+                            <strong id="personalCount">0</strong>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <form id="eventForm" class="event-form hidden" novalidate>
+                <div class="field-group">
+                    <label for="eventTitle">Event title</label>
+                    <input id="eventTitle" name="eventTitle" type="text" placeholder="e.g. Parent Conference" required>
+                </div>
+                <div class="field-group">
+                    <label for="eventType">Category</label>
+                    <select id="eventType" name="eventType">
+                        <option value="school">School</option>
+                        <option value="deadline">Deadline</option>
+                        <option value="personal">Personal</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="eventTime">Time</label>
+                    <input id="eventTime" name="eventTime" type="text" placeholder="e.g. 09:00 AM">
+                </div>
+                <div class="field-actions">
+                    <button type="submit" class="btn-primary btn-small">Save Event</button>
+                    <button id="cancelEventBtn" type="button" class="btn-outline btn-small">Cancel</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const events = [
+            { date: '2026-07-03', title: 'Q1 Faculty Meeting', type: 'school', time: '09:00 AM' },
+            { date: '2026-07-18', title: 'Grade Submission', type: 'deadline', time: '05:00 PM' },
+            { date: '2026-07-18', title: 'Parent Conference', type: 'personal', time: '03:00 PM' },
+            { date: '2026-07-22', title: 'Department Planning', type: 'school', time: '08:30 AM' },
+            { date: '2026-07-29', title: 'School Visit', type: 'personal', time: '10:00 AM' }
+        ];
+
+        const calendarGrid = document.getElementById('calendarGrid');
+        const monthLabel = document.getElementById('monthLabel');
+        const selectedDateLabel = document.getElementById('selectedDateLabel');
+        const selectedEvents = document.getElementById('selectedEvents');
+        const monthEventCount = document.getElementById('monthEventCount');
+        const schoolCount = document.getElementById('schoolCount');
+        const personalCount = document.getElementById('personalCount');
+        const eventForm = document.getElementById('eventForm');
+        const eventTitle = document.getElementById('eventTitle');
+        const eventType = document.getElementById('eventType');
+        const eventTime = document.getElementById('eventTime');
+        const addEventBtn = document.getElementById('addEventBtn');
+        const cancelEventBtn = document.getElementById('cancelEventBtn');
+
+        let currentDate = new Date(2026, 6, 1);
+        let selectedDate = new Date(2026, 6, 18);
+
+        function formatDateKey(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatDisplayDate(date) {
+            return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        function getEventsForDate(dateKey) {
+            return events.filter((event) => event.date === dateKey);
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0);
+            const daysInMonth = lastDay.getDate();
+            const firstWeekday = firstDay.getDay();
+            const totalCells = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
+
+            monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            calendarGrid.innerHTML = '';
+
+            const todayKey = formatDateKey(new Date());
+            const selectedKey = formatDateKey(selectedDate);
+            const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+            const monthEvents = events.filter((event) => event.date.startsWith(monthKey));
+            monthEventCount.textContent = monthEvents.length;
+            schoolCount.textContent = monthEvents.filter((e) => e.type === 'school').length;
+            personalCount.textContent = monthEvents.filter((e) => e.type === 'personal').length;
+
+            for (let i = 0; i < totalCells; i += 1) {
+                const dayNumber = i - firstWeekday + 1;
+                const cellDate = new Date(year, month, dayNumber);
+                const isCurrentMonth = cellDate.getMonth() === month;
+                const cellKey = formatDateKey(cellDate);
+                const hasEvents = getEventsForDate(cellKey).length > 0;
+                const isToday = cellKey === todayKey;
+                const isSelected = cellKey === selectedKey;
+
+                const dayEl = document.createElement('div');
+                dayEl.className = `calendar-day${isCurrentMonth ? '' : ' disabled'}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}`;
+                dayEl.innerHTML = `
+                    <div class="date-row">
+                        <span class="date-number">${isCurrentMonth ? cellDate.getDate() : ''}</span>
+                        ${isToday ? '<span class="today-pill">Today</span>' : ''}
+                    </div>
+                `;
+
+                if (isCurrentMonth) {
+                    const eventList = getEventsForDate(cellKey);
+                    eventList.slice(0, 2).forEach((event) => {
+                        const pill = document.createElement('div');
+                        pill.className = `event-pill event-${event.type}`;
+                        pill.textContent = event.title;
+                        pill.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            selectedDate = cellDate;
+                            renderCalendar();
+                            updateSelectedEvents();
+                        });
+                        dayEl.appendChild(pill);
+                    });
+                    if (eventList.length > 2) {
+                        const more = document.createElement('div');
+                        more.className = 'event-pill event-more';
+                        more.textContent = `+${eventList.length - 2} more`;
+                        dayEl.appendChild(more);
+                    }
+                }
+
+                dayEl.addEventListener('click', () => {
+                    if (!isCurrentMonth) return;
+                    selectedDate = cellDate;
+                    renderCalendar();
+                    updateSelectedEvents();
+                });
+
+                calendarGrid.appendChild(dayEl);
+            }
+
+            updateSelectedEvents();
+        }
+
+        function updateSelectedEvents() {
+            const key = formatDateKey(selectedDate);
+            const list = getEventsForDate(key);
+            selectedDateLabel.textContent = formatDisplayDate(selectedDate);
+            if (list.length === 0) {
+                selectedEvents.innerHTML = '<div class="empty-state">No events scheduled for this day.</div>';
+                return;
+            }
+            selectedEvents.innerHTML = list.map((event) => `
+                <div class="detail-card">
+                    <div class="detail-card-title">${event.title}</div>
+                    <div class="detail-card-meta">${event.time || 'All day'} · ${event.type.charAt(0).toUpperCase() + event.type.slice(1)}</div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('prevMonthBtn').addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+            renderCalendar();
+        });
+
+        document.getElementById('nextMonthBtn').addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+            renderCalendar();
+        });
+
+        document.getElementById('todayBtn').addEventListener('click', () => {
+            currentDate = new Date();
+            selectedDate = new Date();
+            renderCalendar();
+        });
+
+        addEventBtn.addEventListener('click', () => {
+            eventTitle.value = '';
+            eventTime.value = '';
+            eventType.value = 'school';
+            eventForm.classList.remove('hidden');
+            eventTitle.focus();
+        });
+
+        cancelEventBtn.addEventListener('click', () => {
+            eventForm.classList.add('hidden');
+        });
+
+        eventForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!eventTitle.value.trim()) return;
+            events.push({
+                date: formatDateKey(selectedDate),
+                title: eventTitle.value.trim(),
+                type: eventType.value,
+                time: eventTime.value.trim() || 'All day'
+            });
+            eventForm.classList.add('hidden');
+            renderCalendar();
+        });
+
+        renderCalendar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Directory - Kandili Workspace</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="principalprofilepage.html">My Profile</a>
+                <a href="message.html">Messages</a>
+                <a href="notification.html">Notifications</a>
+                <a href="history.html">History</a>
+                <a href="calendar.html">Master Calendar</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container" style="display: block;">
+        
+        <div class="directory-header">
+            <div>
+                <button class="btn-outline nav-back" onclick="window.history.back()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+                <h2 class="section-title" style="margin: 0;">Faculty Class Programs Directory</h2>
+            </div>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="🔍 Search by teacher name, grade level, or subject...">
+        
+        <div class="directory-grid">
+            <!-- Directory Item 1 -->
+            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div class="esf-header" style="margin-bottom: 1rem;">
+                    <div>
+                        <div class="esf-name">Beverly Ann C. Matulac</div>
+                        <div class="esf-role">Adviser: Grade 2 - SSES</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+            </div>
+
+            <!-- Directory Item 2 -->
+            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div class="esf-header" style="margin-bottom: 1rem;">
+                    <div>
+                        <div class="esf-name">Maria T. Espineda</div>
+                        <div class="esf-role">Adviser: Grade 2 - Melon</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+            </div>
+
+            <!-- Directory Item 3 -->
+            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div class="esf-header" style="margin-bottom: 1rem;">
+                    <div>
+                        <div class="esf-name">Juan Carlos Silva</div>
+                        <div class="esf-role">Adviser: Grade 2 - Paho</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+            </div>
+
+             <!-- Directory Item 4 -->
+             <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div class="esf-header" style="margin-bottom: 1rem;">
+                    <div>
+                        <div class="esf-name">Anna L. Gaylan</div>
+                        <div class="esf-role">Adviser: Grade 2 - Pinya</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;" onclick="window.open('classprogram.html', '_blank')">📄 View Class Program</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

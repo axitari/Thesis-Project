@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Class Program - Kandili Workspace</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="dashboard-body">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="teacherprofilepage.html">My Profile</a> 
+                <a href="message.html">Messages</a>
+                <a href="notification.html">Notifications</a>
+                <a href="history.html">History</a>
+                <a href="calendar.html">Master Calendar</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="dashboard-container" style="display: block;">
+        
+        <button class="btn-outline nav-back" onclick="window.history.back()">← Back to Dashboard</button>
+
+        <section class="deped-document">
+            
+            <!-- Document Header -->
+            <div class="doc-header">
+                <p>Republic of the Philippines</p>
+                <p>Department of Education</p>
+                <p>REGION VI – WESTERN VISAYAS</p>
+                <p>SCHOOLS DIVISION OF ILOILO</p>
+                <p>SCHOOLS DISTRICT OF BAROTAC VIEJO</p>
+                <p><strong>RAUL O. V. CAUSING MEMORIAL SCHOOL</strong></p>
+                
+                <div class="doc-title" id="document-type">CLASS PROGRAM</div>
+                <p id="section-name">Loading Section...</p>
+                <p id="school-year">School Year 2026 - 2027</p>
+            </div>
+
+            <!-- Demographics row -->
+            <div class="doc-meta">
+                <span id="total-minutes">Total minutes per day: Loading...</span>
+                <span id="demographics">Male: 0 &nbsp;&nbsp;|&nbsp;&nbsp; Female: 0 &nbsp;&nbsp;|&nbsp;&nbsp; Total: 0</span>
+            </div>
+
+            <!-- Schedule Matrix -->
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th style="width: 12%;">Time</th>
+                        <th style="width: 8%;">Min.</th>
+                        <th style="width: 16%;">Monday</th>
+                        <th style="width: 16%;">Tuesday</th>
+                        <th style="width: 16%;">Wednesday</th>
+                        <th style="width: 16%;">Thursday</th>
+                        <th style="width: 16%;">Friday</th>
+                    </tr>
+                </thead>
+                <!-- ID added here so JS can target the body -->
+                <tbody id="matrix-body">
+                    <tr>
+                        <td colspan="7" style="padding: 2rem; color: #64748b;">Loading schedule data...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Signatories -->
+            <div class="doc-footer">
+                <div class="signatory-block">
+                    <p style="text-align: left; margin-bottom: 2rem;">Prepared by:</p>
+                    <div class="signatory-name" id="teacher-name">LOADING...</div>
+                    <div id="teacher-role">Class Adviser</div>
+                </div>
+                
+                <div class="signatory-block">
+                    <p style="text-align: left; margin-bottom: 2rem;">Approved by:</p>
+                    <div class="signatory-name" id="principal-name">JUAN DELA CRUZ</div>
+                    <div>School Principal I</div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Dynamic Rendering Script -->
+    <script>
+        // This is a placeholder for your future Supabase logic
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. In the future, you will fetch data from Supabase here.
+            // const { data, error } = await supabase.from('schedules').select('*').eq('user_id', currentUser.id);
+            
+            // 2. Clear the loading message
+            // const tableBody = document.getElementById('matrix-body');
+            // tableBody.innerHTML = ''; 
+
+            // 3. Loop through the data and build rows dynamically
+            /*
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.start_time} - ${row.end_time}</td>
+                    <td>${row.minutes}</td>
+                    <td>${row.monday_subj}</td>
+                    <td>${row.tuesday_subj}</td>
+                    <td>${row.wednesday_subj}</td>
+                    <td>${row.thursday_subj}</td>
+                    <td>${row.friday_subj}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            */
+        });
+    </script>
+</body>
+</html>
