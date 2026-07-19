@@ -10,7 +10,6 @@ const loginForm = document.getElementById('loginForm');
 // when it was written (e.g. "Teacher", "teacher", "TEACHER" all match).
 const roleToDashboard = {
     'teacher': 'teacherdashboard.html',
-    'master teacher': 'teacherdashboard.html',
     'principal': 'principaldashboard.html',
     'admin': 'admindashboard.html'
 };

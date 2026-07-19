@@ -11,6 +11,25 @@ registerForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
     const role = document.getElementById('role').value;
 
+    // The database's role column is a Postgres enum that ONLY accepts:
+    // 'admin', 'principal', 'teacher'. There is no separate enum value for
+    // Master Teacher — confirmed by querying enum_range() directly — so we
+    // map it down to 'teacher' here. Any future new dropdown option MUST be
+    // added to this map, or the insert below will fail with an invalid enum
+    // value error.
+    const formRoleToEnum = {
+        'Teacher': 'teacher',
+        'Master Teacher': 'teacher',
+        'Principal / School Head': 'principal'
+    };
+    const normalizedRole = formRoleToEnum[role];
+
+    if (!normalizedRole) {
+        console.error(`No enum mapping for role "${role}" — check register.html's role dropdown values against formRoleToEnum.`);
+        alert('Something went wrong with the selected role. Please contact an administrator.');
+        return;
+    }
+
     // NOTE: division/school are collected on this form but the existing
     // "profiles" table (built by teammate) doesn't have matching columns yet
     // (it has "position" and "specialization" instead, which may or may not
@@ -38,23 +57,14 @@ registerForm.addEventListener('submit', async (e) => {
     }
 
     // Step 2: create the profile row.
-    // TODO: confirm with teammate the exact casing/spelling used in the
-    // "role" column (e.g. "Teacher" vs "teacher" vs "TEACHER"). Whatever
-    // value goes in here MUST exactly match what loginLogic.js looks up,
-    // or the post-login redirect will silently fall through to the default.
-    // Normalized to lowercase so it matches the convention already used in
-    // the profiles table (confirmed via testing: stored roles are lowercase,
-    // e.g. "teacher" not "Teacher"). loginLogic.js also normalizes to
-    // lowercase when reading this back, so this is a belt-and-suspenders fix.
-    const normalizedRole = role.trim().toLowerCase();
-
+    // email removed — the profiles table does not have an email column;
+    // email already lives on auth.users and is available via session.user.email
     const { error: profileError } = await window.supabaseClient
         .from('profiles')
         .insert({
             id: userId,
             first_name: firstName,
             last_name: lastName,
-            email: email,
             role: normalizedRole
         });
 

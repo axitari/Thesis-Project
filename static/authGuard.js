@@ -16,7 +16,6 @@
 
 const KANDILI_ROLE_HOME = {
     'teacher': 'teacherdashboard.html',
-    'master teacher': 'teacherdashboard.html',
     'principal': 'principaldashboard.html',
     'admin': 'admindashboard.html'
 };
