@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userEmail = session.user.email;
 
     document.getElementById('display-email').innerText = userEmail;
-
     // 2. Fetch Profile Data from Database
     async function loadProfile() {
         const { data: profile, error } = await window.supabaseClient
