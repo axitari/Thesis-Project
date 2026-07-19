@@ -29,8 +29,9 @@
 
     <div class="dashboard-container">
         <div class="dashboard-column">
+            
             <section class="welcome-banner">
-                <h2 class="welcome-title">Welcome back, Teacher</h2>
+                <h2 class="welcome-title" id="welcome-message">Welcome back, Teacher</h2>
                 <p class="welcome-subtitle">Teacher I | Class Adviser (Grade 2 - Sampaguita) | ROVCMS</p>
                 <div class="status-badge status-draft">Status: Draft (Pending Submission)</div>
             </section>
@@ -267,6 +268,15 @@
                 }
             }
         });
+    </script>
+
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js"></script>
+    <script src="../static/teacherDashboard.js"></script>
+    <script>
+        if (typeof checkAuthAndRole === "function") {
+            checkAuthAndRole('teacher');
+        }
     </script>
 
 </body>

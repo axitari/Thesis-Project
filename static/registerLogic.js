@@ -52,7 +52,8 @@ registerForm.addEventListener('submit', async (e) => {
         .from('profiles')
         .insert({
             id: userId,
-            name: `${firstName} ${lastName}`.trim(),
+            first_name: firstName,
+            last_name: lastName,
             email: email,
             role: normalizedRole
         });
