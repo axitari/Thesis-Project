@@ -32,19 +32,82 @@
             </div>
             <div class="profile-summary">
                 <div class="profile-heading">
-                    <h1 class="profile-name">Juan D. Dela Cruz</h1>
+                    <h1 class="profile-name" id="display-name">Loading Name...</h1>
                     <span class="status-badge status-active">Active Account</span>
                 </div>
-                <p class="profile-role">Teacher III</p>
+                <p class="profile-role" id="display-role">Loading Role...</p>
                 <div class="profile-highlights">
-                    <span class="pill">Mathematics</span>
-                    <span class="pill pill-muted">Grade 5 Adviser</span>
+                    <span class="pill" id="display-department-pill">Department</span>
+                    <span class="pill pill-muted" id="display-advisory-pill">Advisory Class</span>
                 </div>
             </div>
             <div class="profile-actions">
                 <button class="btn-outline btn-small">Update Photo</button>
-                <button class="btn-primary btn-small">Edit Profile</button>
+                <button class="btn-primary btn-small" id="edit-profile-btn">Edit Profile</button>
             </div>
+        </section>
+
+        <!-- The Expanded Hidden Edit Form -->
+        <section class="card profile-card" id="edit-profile-section" style="display: none; margin-bottom: 20px;">
+            <div class="section-heading">
+                <h3>Edit Profile Details</h3>
+            </div>
+            <form id="editProfileForm" class="form-row">
+                <div class="form-group flex-2">
+                    <label>First Name</label>
+                    <input type="text" id="input-firstName" required>
+                </div>
+                <div class="form-group flex-2">
+                    <label>Last Name</label>
+                    <input type="text" id="input-lastName" required>
+                </div>
+                
+                <div class="form-group flex-2">
+                    <label>DepEd Employee ID</label>
+                    <input type="text" id="input-depedId">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Plantilla Item No.</label>
+                    <input type="text" id="input-plantilla">
+                </div>
+                <div class="form-group flex-2">
+                    <label>PRC License No.</label>
+                    <input type="text" id="input-prc">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Employment Status</label>
+                    <input type="text" id="input-status" placeholder="e.g. Permanent">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Years in Service</label>
+                    <input type="number" id="input-years" min="0">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Assigned Institution</label>
+                    <input type="text" id="input-institution">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Department / Subject</label>
+                    <input type="text" id="input-department">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Advisory Class</label>
+                    <input type="text" id="input-advisory">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Educational Attainment</label>
+                    <input type="text" id="input-education">
+                </div>
+                <div class="form-group flex-2">
+                    <label>Contact Number</label>
+                    <input type="text" id="input-contact" placeholder="+63 919 876 5432">
+                </div>
+
+                <div style="width: 100%; display: flex; gap: 10px; margin-top: 15px;">
+                    <button type="submit" class="btn-primary">Save All Changes</button>
+                    <button type="button" class="btn-outline" id="cancel-edit-btn">Cancel</button>
+                </div>
+            </form>
         </section>
 
         <div class="profile-grid">
@@ -57,23 +120,23 @@
                     <div class="stat-list">
                         <div class="stat-item">
                             <label>DepEd Employee ID</label>
-                            <p>492011</p>
+                            <p id="display-deped">Not set</p>
                         </div>
                         <div class="stat-item">
                             <label>Plantilla Item No.</label>
-                            <p>OSEC-DECSB-TCH3-987654</p>
+                            <p id="display-plantilla">Not set</p>
                         </div>
                         <div class="stat-item">
                             <label>PRC License No.</label>
-                            <p>0411223</p>
+                            <p id="display-prc">Not set</p>
                         </div>
                         <div class="stat-item">
                             <label>Employment Status</label>
-                            <p>Permanent</p>
+                            <p id="display-status">Not set</p>
                         </div>
                         <div class="stat-item">
                             <label>Years in Service</label>
-                            <p>5 Years</p>
+                            <p id="display-years">Not set</p>
                         </div>
                     </div>
                 </section>
@@ -91,15 +154,15 @@
                         <div class="profile-details-list">
                             <div class="detail-row">
                                 <strong>Assigned Institution</strong>
-                                <span>Trailblazers Elementary School</span>
+                                <span id="display-institution">Not set</span>
                             </div>
                             <div class="detail-row">
                                 <strong>Grade Level / Department</strong>
-                                <span>Intermediate Level - Mathematics</span>
+                                <span id="display-department">Not set</span>
                             </div>
                             <div class="detail-row">
                                 <strong>Advisory Class</strong>
-                                <span>Grade 5 - Mabini</span>
+                                <span id="display-advisory">Not set</span>
                             </div>
                         </div>
                     </div>
@@ -109,15 +172,15 @@
                         <div class="profile-details-list">
                             <div class="detail-row">
                                 <strong>Highest Educational Attainment</strong>
-                                <span>Bachelor of Elementary Education (West Visayas State University)</span>
+                                <span id="display-education">Not set</span>
                             </div>
                             <div class="detail-row">
                                 <strong>Official Email</strong>
-                                <span>juan.delacruz@deped.gov.ph</span>
+                                <span id="display-email">loading...</span>
                             </div>
                             <div class="detail-row">
                                 <strong>Contact Number</strong>
-                                <span>+63 919 876 5432</span>
+                                <span id="display-contact">Not set</span>
                             </div>
                         </div>
                     </div>
@@ -131,22 +194,24 @@
 
                     <div class="access-box">
                         <div class="access-item">
-                            <strong>Last Login</strong>
-                            <span>July 18, 2026, 07:15 AM</span>
-                        </div>
-                        <div class="access-item">
                             <strong>Role Permissions</strong>
                             <span>Standard User Access (Submit / View / Edit Own Records)</span>
                         </div>
-                    </div>
-
-                    <div class="profile-actions profile-actions-end">
-                        <button class="btn-outline">Review Activity Log</button>
                     </div>
                 </section>
             </main>
         </div>
     </div>
 
+    <!-- Required Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js"></script>
+    <script src="../static/teacherProfile.js"></script>
+    <script>
+        if (typeof checkAuthAndRole === "function") {
+            checkAuthAndRole('teacher');
+        }
+    </script>
 </body>
 </html>
