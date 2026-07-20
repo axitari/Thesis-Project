@@ -13,9 +13,65 @@
         /* Specific styles for the directory grid */
         .directory-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
             margin-bottom: 2rem;
+            align-items: stretch;
+        }
+        .directory-grid > .info-box {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+            overflow: hidden;
+            padding: 1.2rem 1.2rem 1rem;
+            position: relative;
+        }
+        .directory-grid > .info-box::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0038A8, #60a5fa);
+        }
+        .directory-grid .info-box h4,
+        .directory-grid .info-box h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: #0f172a;
+        }
+        .directory-grid .info-box p {
+            line-height: 1.55;
+            margin-bottom: 0.95rem;
+        }
+        .directory-grid .btn {
+            margin-top: auto;
+            border-radius: 8px;
+            width: 100%;
+            padding: 0.8rem 0.9rem;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .directory-grid .info-box > div:first-child {
+            padding-bottom: 0.25rem;
+        }
+        .directory-grid .info-box > div {
+            width: 100%;
+        }
+        .directory-grid .info-box .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.45rem;
+            font-size: 0.95rem;
         }
         .search-bar {
             width: 100%;
@@ -24,6 +80,11 @@
             border-radius: 6px;
             margin-bottom: 1.5rem;
             font-family: inherit;
+        }
+        @media (max-width: 640px) {
+            .directory-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -53,8 +114,8 @@
                 <span class="kpi-value">42 <span style="font-size: 1rem; color: #64748b;">Teachers</span></span>
             </div>
             <div class="kpi-card">
-                <span class="kpi-label">Pending eSF7 Approvals</span>
-                <span class="kpi-value" style="color: #f59e0b;">8 <span style="font-size: 1rem; color: #64748b;">Drafts</span></span>
+                <span class="kpi-label">Missing Pulse Check-ins</span>
+                <span class="kpi-value" style="color: #f59e0b;">5 <span style="font-size: 1rem; color: #64748b;">Teachers</span></span>
             </div>
             <div class="kpi-card">
                 <span class="kpi-label">School-Wide Capacity</span>
@@ -63,6 +124,64 @@
             <div class="kpi-card" style="border-bottom: 4px solid #C8102E;">
                 <span class="kpi-label">Critical Burnout Flags</span>
                 <span class="kpi-value" style="color: #C8102E;">2 <span style="font-size: 1rem; color: #64748b;">Alerts</span></span>
+            </div>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 3rem;">Data Ingestion & Risk Projection</h2>
+        
+        <div class="info-box" style="background-color: #f8fafc; border: 2px dashed #cbd5e1; text-align: center; padding: 2rem; margin-bottom: 1.5rem;">
+            <h3 style="color: #0038A8; margin-bottom: 0.5rem;">📁 Master eSF7 Scanner (Excel & OCR)</h3>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">Upload the master School Form 7 spreadsheet to extract objective workload data for all faculty members at once.</p>
+            <button class="btn btn-primary" style="padding: 0.75rem 2rem; font-weight: bold;">
+                Upload Master Data
+            </button>
+        </div>
+
+        <div class="directory-grid" style="margin-bottom: 3rem;">
+            <div class="info-box" style="background-color: #f8fafc;">
+                <div>
+                    <h4 style="color: #0f172a; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Objective Workload (R.A. 4670)</h4>
+                    <div class="row">
+                        <span style="color: #64748b;">Baseline Teaching</span>
+                        <strong style="color: #0f172a;">360 mins</strong>
+                    </div>
+                    <div class="row">
+                        <span style="color: #64748b;">Avg. Ancillary</span>
+                        <strong style="color: #0f172a;">+120 mins</strong>
+                    </div>
+                    <div class="row" style="margin-top: 0.9rem; padding-top: 0.65rem; border-top: 1px dashed #cbd5e1; font-size: 1.02rem;">
+                        <span style="color: #0f172a; font-weight: bold;">Workload Index</span>
+                        <span style="color: #f59e0b; font-weight: bold;">1.33 (High)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="background-color: #f8fafc;">
+                <div>
+                    <h4 style="color: #0f172a; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Faculty Subjective Pulse</h4>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem;">Aggregated from Weekly Short-Form MBI-EE Check-ins</p>
+                    <div class="row">
+                        <span style="color: #64748b;">Avg. Exhaustion</span>
+                        <strong style="color: #C8102E;">Critical (75%)</strong>
+                    </div>
+                    <div class="row">
+                        <span style="color: #64748b;">Faculty Response Rate</span>
+                        <strong style="color: #059669;">88%</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box" style="background-color: #fcf4f4; border-left: 0;">
+                <div>
+                    <h4 style="color: #b45309; margin-bottom: 0.75rem; border-bottom: 1px solid #fcd34d; padding-bottom: 0.5rem;">⚠️ Logistic Regression Output</h4>
+                    <div class="row">
+                        <span style="color: #64748b;">Acute Burnout Prob.</span>
+                        <strong style="color: #C8102E;">82%</strong>
+                    </div>
+                    <div style="margin-top: 0.9rem; padding: 0.75rem; background-color: #fef3c7; border-radius: 8px; font-size: 0.85rem; color: #92400e; line-height: 1.4;">
+                        <strong>Hidden Risk Flag:</strong> 3 Teachers show High Subjective Exhaustion despite Lawful Workload (< 360m).
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -78,11 +197,11 @@
                 <div class="chart-container"><canvas id="riskChart"></canvas></div>
             </div>
             <div class="graph-box">
-                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Ancillary Complexity Profile (NASA-TLX)</p>
+                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Task Complexity Weights (NASA-TLX Baseline)</p>
                 <div class="chart-container"><canvas id="radarChart"></canvas></div>
             </div>
             <div class="graph-box">
-                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Risk Scatter Plot (Hours vs. MBI-ES)</p>
+                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Risk Scatter Plot (Objective Load vs. Subjective MBI-EE)</p>
                 <div class="chart-container"><canvas id="scatterChart"></canvas></div>
             </div>
         </div>
@@ -92,48 +211,43 @@
         
         <div class="directory-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
             
-            <!-- 1. Master Class Programs -->
             <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #f8fafc;">
                 <div>
                     <h3 style="margin: 0 0 0.5rem 0; color: #0038A8;">📁 Master Class Programs</h3>
-                    <p style="margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.95rem;">
-                        Access and review the official class schedules of all 42 faculty members in a centralized directory.
-                    </p>
+                    <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.95rem;">Access and review the official class schedules of all 42 faculty members in a centralized directory.</p>
                 </div>
-                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="window.location.href='facultydirectory.html'">
-                    Open Directory
-                </button>
+                <button class="btn btn-primary" style="width: 100%; padding: 0.8rem 0.9rem; min-height: 44px;" onclick="window.location.href='facultydirectory.html'">Open Directory</button>
             </div>
 
-            <!-- 2. eSF7 Confirmations -->
+            <!-- 2. Pulse Compliance Tracking (Names Visible - Admin Only) -->
             <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #f8fafc;">
                 <div>
-                    <h3 style="margin: 0 0 0.5rem 0; color: #059669;">✅ eSF7 Confirmations</h3>
-                    <p style="margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.95rem;">
-                        Track, review, and manage faculty workloads. Filter between pending drafts and confirmed submissions.
+                    <h3 style="margin: 0 0 0.5rem 0; color: #059669;">✅ Pulse Compliance</h3>
+                    <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.95rem;">
+                        Track which faculty members have completed their weekly 2-item check-in. (Burnout scores remain hidden here).
                     </p>
                 </div>
-                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem; background-color: #059669; border: none;" onclick="window.location.href='esf7approvals.html'">
-                    View Approvals (8 Pending)
+                <button class="btn btn-primary" style="width: 100%; padding: 0.8rem 0.9rem; min-height: 44px; background-color: #059669; border: none;" onclick="window.location.href='pulsecompliance.html'">
+                    Send Reminders (5 Missing)
                 </button>
             </div>
 
-            <!-- 3. Burnout Risk Analytics -->
+            <!-- 3. Burnout Risk Analytics (Strictly Anonymized) -->
             <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #fcf4f4; border-left: 4px solid #C8102E;">
                 <div>
                     <h3 style="margin: 0 0 0.5rem 0; color: #C8102E;">⚠️ Burnout Risk Assessments</h3>
-                    <p style="margin: 0 0 1.5rem 0; color: #64748b; font-size: 0.95rem;">
-                        Quantify and monitor faculty burnout risk levels, workload capacity, and cognitive exhaustion metrics.
+                    <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.95rem;">
+                        Review predictive risk levels. <strong>Data is fully anonymized using Teacher Codes (e.g., TCH-042)</strong> to ensure R.A. 10173 Data Privacy compliance.
                     </p>
                 </div>
-                <button class="btn btn-danger" style="width: 100%; padding: 0.75rem;" onclick="window.location.href='burnoutrisks.html'">
+                <button class="btn btn-danger" style="width: 100%; padding: 0.8rem 0.9rem; min-height: 44px;" onclick="window.location.href='burnoutrisks.html'">
                     Open Risk Analytics (2 Alerts)
                 </button>
             </div>
-
-        </div>
         
-    <!-- Script for Advanced BA Charts (Crash Prevented) -->
+    </div> 
+        
+    <!-- Script for Advanced BA Charts -->
     <script>
         Chart.defaults.font.family = 'Segoe UI';
         Chart.defaults.plugins.legend.display = false;
@@ -172,7 +286,7 @@
             type: 'scatter',
             data: {
                 datasets: [{
-                    label: 'Profiles',
+                    label: 'Anonymized Profiles (TCH-Codes)',
                     data: [{ x: 26, y: 1.0 }, { x: 30, y: 1.1 }, { x: 28, y: 1.0 }, { x: 35, y: 1.25 }, { x: 38, y: 1.5 }],
                     backgroundColor: '#C8102E', pointRadius: 5
                 }]
