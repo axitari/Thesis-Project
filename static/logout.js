@@ -14,12 +14,22 @@ async function kandiliLogout() {
         return false;
     }
 
-    const { error } = await window.supabaseClient.auth.signOut();
+    try {
+        if (window.supabaseClient?.auth?.signOut) {
+            const { error } = await window.supabaseClient.auth.signOut();
+            if (error) {
+                console.error('Logout failed:', error.message);
+            }
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
 
-    if (error) {
-        console.error("Logout failed:", error.message);
-        alert("Something went wrong logging out: " + error.message);
-        return false;
+    try {
+        localStorage.removeItem('supabase.auth.token');
+        sessionStorage.clear();
+    } catch (error) {
+        console.warn('Could not clear browser storage:', error);
     }
 
     window.location.href = 'login.html';
