@@ -32,8 +32,107 @@
         
         /* Risk Colors Overrides */
         .risk-card--critical { border-top-color: #C8102E !important; }
-        .risk-card-badge:contains('CRITICAL') { background-color: #C8102E !important; }
         .hotlist-badge { background-color: #C8102E !important; }
+        
+        /* Risk card section */
+        .risk-cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 2rem;
+        }
+        .risk-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid transparent;
+            border-radius: 18px;
+            padding: 1.5rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 210px;
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
+        }
+        .risk-card--moderate { border-top-color: #f59e0b; }
+        .risk-card--low { border-top-color: #059669; }
+        .risk-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+        }
+        .risk-card-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: rgba(15, 23, 42, 0.05);
+        }
+        .risk-card-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+        .risk-card--critical .risk-card-badge { background: rgba(200, 16, 46, 0.12); color: #C8102E; }
+        .risk-card--moderate .risk-card-badge { background: rgba(245, 158, 11, 0.12); color: #c2410b; }
+        .risk-card--low .risk-card-badge { background: rgba(5, 150, 105, 0.12); color: #047857; }
+        .risk-card-body {
+            margin: 1.4rem 0 1.2rem;
+        }
+        .risk-card-number {
+            display: block;
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+        }
+        .risk-card-label {
+            display: block;
+            margin-top: 0.55rem;
+            font-size: 0.95rem;
+            color: #475569;
+            font-weight: 600;
+        }
+        .risk-card-action {
+            display: block;
+            margin-top: 0.35rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .risk-card--critical .risk-card-action { color: #C8102E; }
+        .risk-card--moderate .risk-card-action { color: #c2410b; }
+        .risk-card--low .risk-card-action { color: #047857; }
+        .risk-card-btn {
+            align-self: flex-start;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 0.75rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .risk-card-btn:hover {
+            background: rgba(15, 23, 42, 0.03);
+            box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08);
+            transform: translateY(-1px);
+        }
+        .risk-card--critical .risk-card-btn { border-color: #C8102E; color: #C8102E; }
+        .risk-card--moderate .risk-card-btn { border-color: #f59e0b; color: #f59e0b; }
+        .risk-card--low .risk-card-btn { border-color: #059669; color: #059669; }
         
         /* Progress Bars */
         .dept-bar--high { background-color: #C8102E !important; }
@@ -182,7 +281,6 @@
             <div class="theme-nav__title">Principal Dashboard</div>
         </div>
         <div class="theme-nav__actions">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i> Back</button>
             <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
             <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
             <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
@@ -211,12 +309,14 @@
         <!-- ========================================================== -->
         <section class="risk-cards">
             <div class="risk-card risk-card--critical">
-                <div class="risk-card-icon">🚨</div>
-                <div class="risk-card-content">
-                    <span class="risk-card-badge" style="background-color: #C8102E; color: white;">CRITICAL</span>
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">🚨</div>
+                    <span class="risk-card-badge">CRITICAL</span>
+                </div>
+                <div class="risk-card-body">
                     <span class="risk-card-number">2</span>
                     <span class="risk-card-label">High Risk Teachers</span>
-                    <span class="risk-card-action" style="color: #C8102E;">Needs Immediate Action</span>
+                    <span class="risk-card-action">Needs Immediate Action</span>
                 </div>
                 <button class="risk-card-btn" onclick="showTeacherList('critical')">
                     View List <i class="fas fa-arrow-right"></i>
@@ -224,12 +324,14 @@
             </div>
 
             <div class="risk-card risk-card--moderate">
-                <div class="risk-card-icon">⚠️</div>
-                <div class="risk-card-content">
-                    <span class="risk-card-badge" style="background-color: #f59e0b; color: white;">MODERATE</span>
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">⚠️</div>
+                    <span class="risk-card-badge">MODERATE</span>
+                </div>
+                <div class="risk-card-body">
                     <span class="risk-card-number">8</span>
                     <span class="risk-card-label">Moderate Risk Teachers</span>
-                    <span class="risk-card-action" style="color: #b45309;">Review Within 48 Hours</span>
+                    <span class="risk-card-action">Review Within 48 Hours</span>
                 </div>
                 <button class="risk-card-btn" onclick="showTeacherList('moderate')">
                     View List <i class="fas fa-arrow-right"></i>
@@ -237,12 +339,14 @@
             </div>
 
             <div class="risk-card risk-card--low">
-                <div class="risk-card-icon">✅</div>
-                <div class="risk-card-content">
-                    <span class="risk-card-badge" style="background-color: #059669; color: white;">LOW</span>
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">✅</div>
+                    <span class="risk-card-badge">LOW</span>
+                </div>
+                <div class="risk-card-body">
                     <span class="risk-card-number">32</span>
                     <span class="risk-card-label">Low Risk Teachers</span>
-                    <span class="risk-card-action" style="color: #059669;">On Track</span>
+                    <span class="risk-card-action">On Track</span>
                 </div>
                 <button class="risk-card-btn" onclick="showTeacherList('low')">
                     View List <i class="fas fa-arrow-right"></i>
