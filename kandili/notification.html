@@ -5,20 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - Notifications</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="dashboard-body">
 
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <div class="navbar-title-group">
-                <a href="#" class="nav-back-btn" onclick="window.history.back(); return false;" aria-label="Go back">←</a>
-                <h1>Kandili Workspace</h1>
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
             </div>
-            <div class="nav-links">
-                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
-            </div>
+            <div class="theme-nav__title">Notifications</div>
         </div>
-    </nav>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
 
     <div class="dashboard-container">
         <section class="welcome-banner">
@@ -69,6 +74,24 @@
             </div>
         </section>
     </div>
+    <script>
+        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+        const themeNavMenu = document.getElementById('themeNavMenu');
 
+        if (burgerMenuBtn && themeNavMenu) {
+            burgerMenuBtn.addEventListener('click', () => {
+                const isOpen = themeNavMenu.classList.toggle('active');
+                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                    themeNavMenu.classList.remove('active');
+                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
+

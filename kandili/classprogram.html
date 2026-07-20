@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Official Class Program - Kandili Workspace</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,19 +16,21 @@
 <body class="dashboard-body">
 
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <h1>Kandili Workspace</h1>
-            <div class="nav-links">
-                <a href="teacherprofilepage.html">My Profile</a> 
-                <a href="message.html">Messages</a>
-                <a href="notification.html">Notifications</a>
-                <a href="history.html">History</a>
-                <a href="calendar.html">Master Calendar</a>
-                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
             </div>
+            <div class="theme-nav__title">Class Program</div>
         </div>
-    </nav>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
 
     <!-- Main Container -->
     <div class="dashboard-container" style="display: block;">
