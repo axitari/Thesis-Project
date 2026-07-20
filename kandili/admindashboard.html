@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - System Administration</title>
     <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!--Scripts Section -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,227 +14,126 @@
 </head>
 <body class="dashboard-body">
 
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <h1>Kandili Workspace</h1>
+            <div class="nav-links">
+                <a href="message.html">Messages</a>
+                <a href="notification.html">Notifications</a>
+                <a href="#">User Management</a>
+                <a href="#">Global Variables</a>
+                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
             </div>
-            <div class="theme-nav__title">Admin Dashboard</div>
         </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
-            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
-                <i class="fas fa-bars"></i>
-            </button>
+    </nav>
+
+    <div class="dashboard-container admin-dashboard-grid">
+        <div class="admin-column">
+            <section class="welcome-banner admin-welcome">
+                <h2 class="welcome-title">Platform Configuration</h2>
+                <p class="welcome-subtitle">Manage global database variables, thresholds, and algorithm weightings.</p>
+            </section>
+
+            <section class="card card-accent-yellow">
+                <h3 class="card-header">NASA-TLX Base Score Index</h3>
+                <p class="card-desc">Update the default cognitive load weights for standard DepEd ancillary duties. This affects the Burnout Algorithm globally.</p>
+
+                <div class="config-row">
+                    <div>
+                        <strong class="config-label">SDRRM Coordinator</strong>
+                        <div class="config-desc-sub">Disaster risk management & compliance alignment</div>
+                    </div>
+                    <input type="number" value="85">
+                </div>
+
+                <div class="config-row">
+                    <div>
+                        <strong class="config-label">Grade Level Chairperson</strong>
+                        <div class="config-desc-sub">Coordination of grade-level teachers & resource loading</div>
+                    </div>
+                    <input type="number" value="60">
+                </div>
+
+                <div class="config-row">
+                    <div>
+                        <strong class="config-label">School Paper Adviser</strong>
+                        <div class="config-desc-sub">Journalism oversight and public relations management</div>
+                    </div>
+                    <input type="number" value="75">
+                </div>
+
+                <button class="btn-primary admin-action-btn">Save Global Weights</button>
+            </section>
+
+            <section class="card card-accent-green">
+                <h3 class="card-header">Statutory & Intervention Parameters</h3>
+                <p class="card-desc">Control parameters governing the split Operations vs. Wellness execution loop.</p>
+
+                <div class="config-row">
+                    <span class="config-label">RA 4670 Max Teaching Hours (Weekly)</span>
+                    <input type="number" value="30">
+                </div>
+                <div class="config-row">
+                    <span class="config-label">MBI-ES High Exhaustion Multiplier Threshold</span>
+                    <input type="number" value="1.50" step="0.05">
+                </div>
+                <div class="config-row">
+                    <span class="config-label">Default Meditation Deployment Protocol ID</span>
+                    <input type="number" value="88">
+                </div>
+            </section>
         </div>
-        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
-            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="facultydirectory.html"><i class="fas fa-users"></i> User Management</a>
-            <a href="admindashboard.html"><i class="fas fa-globe"></i> Global Variables</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </nav>
-    </header>
 
-    <main class="admin-storyboard">
-        <section class="storyboard-hero">
-            <div>
-                <h1>User Management</h1>
-                <p class="storyboard-hero__text">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
-            </div>
-        </section>
+        <div class="admin-column">
+            <section class="card card-accent-blue">
+                <h3 class="card-header">Supabase DB Status</h3>
 
-        <section class="storyboard-grid">
-            <article class="story-card story-card--large story-card--full">
-              
-                    <div class="dashboard-mock">
-                        <div class="dashboard-mock__top">
-                            <div>
-                                <h3>Faculty Directory & User Management</h3>
-                                <p>Existing teachers | Meanpad and management's workload.</p>
-                            </div>
-                            <button class="btn btn-primary btn-small open-teacher-drawer">+ Add New Teacher</button>
-                        </div>
-                        <div class="dashboard-mock__table">
-                            <div class="table-row table-heading">
-                                <span>TEACHER CODE</span>
-                                <span>NAME</span>
-                                <span>EMAIL</span>
-                                <span>ASSIGNMENT</span>
-                                <span>LOAD(HRS)</span>
-                                <span>STATUS</span>
-                                <span>ACTION</span>
-                            </div>
-                            <div class="table-row">
-                                <span>TCH2026-001</span>
-                                <span>Classvigilta A.</span>
-                                <span>samp@sampagultima.com</span>
-                                <span>Grade 2 – Sampagulta</span>
-                                <span>5</span>
-                                <span class="status-pending">PENDING</span>
-                                <span>...</span>
-                            </div>
-                            <div class="table-row">
-                                <span>TCH2026-002</span>
-                                <span>Sampagultta H.</span>
-                                <span>atashess@gmail.com</span>
-                                <span>Grade 3 – Gold</span>
-                                <span>6</span>
-                                <span class="status-active">ACTIVE</span>
-                                <span>...</span>
-                            </div>
-                            <div class="table-row">
-                                <span>TCH2026-003</span>
-                                <span>Cruz, Sarah J.</span>
-                                 <span>atashess@gmail.com</span>
-                                <span>Grade 3 – Silver</span>
-                                <span>5.5</span>
-                                <span class="status-overload">OVERLOAD</span>
-                                <span>...</span>
-                            </div>
-                        </div>
-                    </div>
-            </article>
-            
-             <article class="story-card story-card--large">
-                <div class="story-card__header">
-                    <div>
-                        <h2>Teacher's Account Status</h2>
-                    </div>
+                <div class="db-row-item">
+                    <span>Connection Status:</span>
+                    <span class="text-success font-weight-bold">Active & Secure</span>
                 </div>
-                <div class="story-card__body">
-                    <div class="dashboard-mock dashboard-mock--compact">
-                        <div class="dashboard-mock__top">
-                            <div>
-                                <h3>Faculty Directory & User Management</h3>
-                                <p>Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
-                            </div>
-                            <button class="btn btn-secondary btn-small open-teacher-drawer">+ Add New Teacher</button>
-                        </div>
-                        <div class="dashboard-mock__table">
-                            <div class="table-row table-heading">
-                                <span>Name</span>
-                                <span>Email</span>
-                                <span>Status</span>
-                            </div>
-                            <div class="table-row">
-                                <span>Cruz, Sarah J.</span>
-                                <span>cruz_svnz@gmail.com</span>
-                                <span>Pending Activation</span>
-                            </div>
-                        </div>
-                        <div class="status-note">Account is ready but awaits activation via email link.</div>
-                    </div>
+                <div class="db-row-item">
+                    <span>Registered School Nodes:</span>
+                    <span class="db-val-bold">42</span>
                 </div>
-            </article>
-            <article class="story-card story-card--wide">
-                <div class="story-card__header">
-                    
-                    <div>
-                        
-                        <h2>System Process</h2>
-                    </div>
+                <div class="db-row-item">
+                    <span>Active Gateway Sessions:</span>
+                    <span class="db-val-bold">14</span>
                 </div>
-                <div class="story-card__body">
-                    <div class="infographic-flow">
-                        <div class="flow-item">
-                            <div class="flow-icon">🗄️</div>
-                            <strong>Kandili Core</strong>
-                            <p>Sarah J. account details saved. Verification email queued and sent automatically.</p>
-                        </div>
-                        <div class="flow-arrow">→</div>
-                        <div class="flow-item">
-                            <div class="flow-icon">✉️</div>
-                            <strong>Sarah J. Cruz</strong>
-                            <p>Activation email sent with secure verification link.</p>
-                        </div>
-                    </div>
-                </div>
-            </article>
+            </section>
 
-           
-        </section>
-    </main>
+            <section class="card admin-user-card">
+                <h3 class="card-header">User Accounts & Access Control</h3>
+                <p class="card-desc">Execute security overrides, password resets, and account locks.</p>
 
-    <div class="drawer-overlay" id="teacherDrawer">
-        <aside class="drawer-panel">
-            <div class="drawer-panel__header">
-                <div>
-                    <p class="storyboard-hero__eyebrow">Admin Enters Teacher Info</p>
-                    <h2>Create New Teacher Account</h2>
-                    <p class="drawer-panel__subtitle">Create new teacher account</p>
+                <div class="search-flex-group">
+                    <input type="text" placeholder="Search by Kandili ID..." class="search-input-pad">
+                    <button class="btn-primary admin-find-btn">Find</button>
                 </div>
-                <button class="drawer-close-btn" id="closeTeacherDrawer" aria-label="Close panel">×</button>
-            </div>
-            <div class="drawer-panel__body">
-                <div class="drawer-field-grid">
-                    <div class="drawer-field">
-                        <label>First Name</label>
-                        <input type="text" value="Sarah J.">
-                    </div>
-                    <div class="drawer-field">
-                        <label>Last Name</label>
-                        <input type="text" value="Cruz">
+
+                <div class="user-inner-card">
+                    <div class="user-card-title">Teacher Maria (ID: KND-7734)</div>
+                    <div class="user-card-meta">Status: Active Node | Allocated School: ROVCMS</div>
+                    <div class="btn-group-flex">
+                        <button class="btn-outline admin-btn-small">Force Password Reset</button>
+                        <button class="btn-outline admin-btn-small admin-btn-danger">Suspend Account</button>
                     </div>
                 </div>
-                <div class="drawer-field">
-                    <label>Official DepEd Email Address</label>
-                    <input type="text" placeholder="Official DepEd Email Address">
+            </section>
+
+            <section class="card terminal-card">
+                <h3 class="card-header">System Audit Log</h3>
+                <p class="card-desc admin-log-desc">Live terminal feed of backend transactions.</p>
+                <div class="terminal-box">
+                    <div class="log-text log-success">[13:42:01] SUCCESS: User KND-7734 authenticated securely via token check.</div>
+                    <div class="log-text log-info">[13:45:12] ACTION: Principal Hilado authorized modified load plan for KND-1102.</div>
+                    <div class="log-text log-warning">[13:50:05] WARNING: Failed login attempt registered for user slot Admin-01.</div>
+                    <div class="log-text log-sys">[14:02:18] SYS: Global NASA-TLX structural matrix weight files synchronized.</div>
+                    <div class="log-text log-sys">[14:05:33] SYS: Supabase database connection verified. Latency: 42ms.</div>
                 </div>
-                <div class="drawer-field">
-                    <label>School & Grade Assignment</label>
-                    <select>
-                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
-                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary btn-block">Save & Send Invitation</button>
-                <button class="btn btn-secondary btn-block">Cancel</button>
-            </div>
-        </aside>
+            </section>
+        </div>
     </div>
-
-    <script>
-        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
-        const themeNavMenu = document.getElementById('themeNavMenu');
-
-        if (burgerMenuBtn && themeNavMenu) {
-            burgerMenuBtn.addEventListener('click', () => {
-                const isOpen = themeNavMenu.classList.toggle('active');
-                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
-                    themeNavMenu.classList.remove('active');
-                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-
-        const teacherDrawer = document.getElementById('teacherDrawer');
-        const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
-        const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
-
-        openTeacherButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                teacherDrawer.classList.add('active');
-            });
-        });
-
-        closeTeacherDrawer.addEventListener('click', () => {
-            teacherDrawer.classList.remove('active');
-        });
-
-        teacherDrawer.addEventListener('click', (event) => {
-            if (event.target === teacherDrawer) {
-                teacherDrawer.classList.remove('active');
-            }
-        });
-    </script>
 
 </body>
 </html>
