@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kandili Workspace | School Management Landing Page</title>
+  <meta name="description" content="Kandili Workspace helps school leaders monitor teacher workload, detect burnout risk, and coordinate school operations with confidence." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="../static/style.css" />
+<script src="../static/landing page burger.json"></script>
+</head>
+<body>
+  <header class="theme-nav">
+    <div class="theme-nav__brand">
+      <div class="theme-nav__logo">
+        <span class="theme-nav__logo-icon"><i class="fas fa-school"></i></span>
+        <span>Kandili</span>
+        <span class="logo-badge">Workspace</span>
+      </div>
+      <div class="theme-nav__title">School Management Platform</div>
+    </div>
+    <div class="theme-nav__actions">
+      <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+      <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+      <a href="#features"><i class="fas fa-cubes"></i> Key System Functionality</a>
+      <a href="#workflow"><i class="fas fa-route"></i> How the System Works</a>
+      <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+      <a href="register.html"><i class="fas fa-user-plus"></i> Register</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <h1>Support teachers better with smart workload and wellness insights.</h1>
+          <p>Kandili Workspace gives school leaders a clear view of teacher workload, burnout risk, and communication needs so decisions are faster, fairer, and more data-driven.</p>
+          <div class="hero-actions">
+            <a class="btn btn-secondary" href="login.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+          </div>
+          <div class="hero-highlights">
+            <span><i class="fas fa-shield-alt"></i> Secure school operations</span>
+            <span><i class="fas fa-chart-line"></i> Live risk monitoring</span>
+            <span><i class="fas fa-users"></i> Team collaboration</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>What the system helps with</h3>
+          <p>Monitor school-wide workload balance, identify high-risk teachers, and guide interventions with confidence.</p>
+          <div class="stat-grid">
+            <div class="stat">
+              <strong>42</strong>
+              <span>Teachers tracked</span>
+            </div>
+            <div class="stat">
+              <strong>88%</strong>
+              <span>Pulse completion</span>
+            </div>
+            <div class="stat">
+              <strong>2</strong>
+              <span>Critical alerts</span>
+            </div>
+            <div class="stat">
+              <strong>5</strong>
+              <span>Pending reminders</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>Key system functionality</h2>
+          <p>Everything needed to manage teacher wellness and school operations in one place.</p>
+        </div>
+
+        <div class="feature-grid">
+         
+
+          <article class="card">
+            <div class="icon-pill"><i class="fas fa-balance-scale"></i></div>
+            <h3>Workload balancing</h3>
+            <p>Review weekly hours, redistribute duties, and recommend fairer assignment plans for overloaded staff.</p>
+          </article>
+           <article class="card">
+            <div class="icon-pill"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3>Burnout risk monitoring</h3>
+            <p>Detect high-risk teachers through workload, exhaustion, and compliance signals so principals can intervene early.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon-pill"><i class="fas fa-user-circle"></i></div>
+            <h3>Teacher profile management</h3>
+            <p>Access teacher records, responsibilities, assignments, and supporting details from a single profile view.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon-pill"><i class="fas fa-envelope"></i></div>
+            <h3>Built-in communication</h3>
+            <p>Send check-ins, reminders, and messages directly to teachers to streamline follow-up and support.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon-pill"><i class="fas fa-calendar-alt"></i></div>
+            <h3>Scheduling and planning</h3>
+            <p>Coordinate calendars, events, and school activities with a centralized view for administrators.</p>
+          </article>
+
+          <article class="card">
+            <div class="icon-pill"><i class="fas fa-file-alt"></i></div>
+            <h3>Reports and analytics</h3>
+            <p>Generate summaries, compare departments, and export data for planning and documentation.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="workflow">
+      <div class="container">
+        <div class="section-title">
+          <h2>How the system works</h2>
+          <p>From data collection to smart action.</p>
+        </div>
+
+        <div class="workflow">
+          <div class="workflow-step">
+            <div class="step-num">1</div>
+            <h3>Collect teacher inputs</h3>
+            <p>Teachers update workload, duties, and wellness signals through the system.</p>
+          </div>
+          <div class="workflow-step">
+            <div class="step-num">2</div>
+            <h3>Analyze and identify risk</h3>
+            <p>The dashboard highlights potential burnout, overload, and compliance concerns instantly.</p>
+          </div>
+          <div class="workflow-step">
+            <div class="step-num">3</div>
+            <h3>Take action</h3>
+            <p>Principals can check in, redistribute duties, and send reminders right from the dashboard.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <h2 style="margin: 0 0 0.4rem;">Ready to improve school operations?</h2>
+            <p style="margin: 0; opacity: 0.95;">Create your account and explore the dashboards built for principals and teachers.</p>
+          </div>
+          <div class="hero-actions" style="margin: 0;">
+            <a class="btn btn-secondary" href="register.html" style="color: var(--primary);"><i class="fas fa-user-plus"></i> Register</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© 2026 Kandili Workspace. Built for school leadership and teacher support.</span>
+    </div>
+  </footer>
+
+  
+</body>
+</html>
