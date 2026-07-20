@@ -40,113 +40,127 @@
         </nav>
     </header>
 
-    <main class="admin-storyboard">
-        <section class="storyboard-hero">
-            <div>
-                <h1>User Management</h1>
-                <p class="storyboard-hero__text">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
+    <main class="dashboard">
+
+        <!-- Welcome Banner -->
+        <section class="welcome-banner">
+            <h1 class="welcome-title"><i class="fas fa-shield-alt"></i> User Management</h1>
+            <p class="welcome-subtitle">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
+        </section>
+
+        <!-- User Management Table -->
+        <section class="admin-table-section">
+            <div class="card card-accent-yellow">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
+                        <p class="card-desc">Existing teachers | Meanpad and management's workload.</p>
+                    </div>
+                    <button class="btn btn-primary btn-small open-teacher-drawer" style="width: auto; padding: 0.6rem 1.2rem; white-space: nowrap;">+ Add New Teacher</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="reallocation-table">
+                        <thead>
+                            <tr>
+                                <th>TEACHER CODE</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>ASSIGNMENT</th>
+                                <th>LOAD (HRS)</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TCH2026-001</td>
+                                <td><span class="admin-teacher-name">Classvigilta A.</span></td>
+                                <td>samp@sampagultima.com</td>
+                                <td>Grade 2 – Sampagulta</td>
+                                <td><span class="admin-load-value">5</span></td>
+                                <td><span class="status-pending">PENDING</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-002</td>
+                                <td><span class="admin-teacher-name">Sampagultta H.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Gold</td>
+                                <td><span class="admin-load-value">6</span></td>
+                                <td><span class="status-active">ACTIVE</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-003</td>
+                                <td><span class="admin-teacher-name">Cruz, Sarah J.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Silver</td>
+                                <td><span class="admin-load-value">5.5</span></td>
+                                <td><span class="status-overload">OVERLOAD</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <section class="storyboard-grid">
-            <article class="story-card story-card--large story-card--full">
-              
-                    <div class="dashboard-mock">
-                        <div class="dashboard-mock__top">
+        <!-- Account Status & System Process Row -->
+        <div class="admin-details-row">
+
+            <!-- Teacher's Account Status Card -->
+            <div class="card card-accent-green">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-check"></i> Teacher's Account Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="admin-status-card">
+                        <div class="admin-status-header">
                             <div>
-                                <h3>Faculty Directory & User Management</h3>
-                                <p>Existing teachers | Meanpad and management's workload.</p>
+                                <h4>Faculty Directory & User Management</h4>
+                                <p class="card-desc">Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
                             </div>
-                            <button class="btn btn-primary btn-small open-teacher-drawer">+ Add New Teacher</button>
+                            <button class="btn btn-secondary btn-small open-teacher-drawer" style="width: auto; padding: 0.5rem 1rem; white-space: nowrap;">+ Add New Teacher</button>
                         </div>
-                        <div class="dashboard-mock__table">
-                            <div class="table-row table-heading">
-                                <span>TEACHER CODE</span>
-                                <span>NAME</span>
-                                <span>EMAIL</span>
-                                <span>ASSIGNMENT</span>
-                                <span>LOAD(HRS)</span>
-                                <span>STATUS</span>
-                                <span>ACTION</span>
-                            </div>
-                            <div class="table-row">
-                                <span>TCH2026-001</span>
-                                <span>Classvigilta A.</span>
-                                <span>samp@sampagultima.com</span>
-                                <span>Grade 2 – Sampagulta</span>
-                                <span>5</span>
-                                <span class="status-pending">PENDING</span>
-                                <span>...</span>
-                            </div>
-                            <div class="table-row">
-                                <span>TCH2026-002</span>
-                                <span>Sampagultta H.</span>
-                                <span>atashess@gmail.com</span>
-                                <span>Grade 3 – Gold</span>
-                                <span>6</span>
-                                <span class="status-active">ACTIVE</span>
-                                <span>...</span>
-                            </div>
-                            <div class="table-row">
-                                <span>TCH2026-003</span>
-                                <span>Cruz, Sarah J.</span>
-                                 <span>atashess@gmail.com</span>
-                                <span>Grade 3 – Silver</span>
-                                <span>5.5</span>
-                                <span class="status-overload">OVERLOAD</span>
-                                <span>...</span>
-                            </div>
+                        <div class="table-wrapper" style="margin-top: 1rem;">
+                            <table class="reallocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cruz, Sarah J.</td>
+                                        <td>cruz_svnz@gmail.com</td>
+                                        <td><span class="status-pending">Pending Activation</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
-            </article>
-            
-             <article class="story-card story-card--large">
-                <div class="story-card__header">
-                    <div>
-                        <h2>Teacher's Account Status</h2>
+                        <div class="status-note">
+                            <i class="fas fa-info-circle"></i> Account is ready but awaits activation via email link.
+                        </div>
                     </div>
                 </div>
-                <div class="story-card__body">
-                    <div class="dashboard-mock dashboard-mock--compact">
-                        <div class="dashboard-mock__top">
-                            <div>
-                                <h3>Faculty Directory & User Management</h3>
-                                <p>Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
-                            </div>
-                            <button class="btn btn-secondary btn-small open-teacher-drawer">+ Add New Teacher</button>
-                        </div>
-                        <div class="dashboard-mock__table">
-                            <div class="table-row table-heading">
-                                <span>Name</span>
-                                <span>Email</span>
-                                <span>Status</span>
-                            </div>
-                            <div class="table-row">
-                                <span>Cruz, Sarah J.</span>
-                                <span>cruz_svnz@gmail.com</span>
-                                <span>Pending Activation</span>
-                            </div>
-                        </div>
-                        <div class="status-note">Account is ready but awaits activation via email link.</div>
-                    </div>
+            </div>
+
+            <!-- System Process Card -->
+            <div class="card card-accent-blue">
+                <div class="card-header">
+                    <h3><i class="fas fa-cogs"></i> System Process</h3>
                 </div>
-            </article>
-            <article class="story-card story-card--wide">
-                <div class="story-card__header">
-                    
-                    <div>
-                        
-                        <h2>System Process</h2>
-                    </div>
-                </div>
-                <div class="story-card__body">
+                <div class="card-body">
                     <div class="infographic-flow">
                         <div class="flow-item">
                             <div class="flow-icon">🗄️</div>
                             <strong>Kandili Core</strong>
                             <p>Sarah J. account details saved. Verification email queued and sent automatically.</p>
                         </div>
-                        <div class="flow-arrow">→</div>
+                        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
                         <div class="flow-item">
                             <div class="flow-icon">✉️</div>
                             <strong>Sarah J. Cruz</strong>
@@ -154,17 +168,18 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
 
-           
-        </section>
+        </div>
+
     </main>
 
+    <!-- Drawer Overlay for Adding New Teacher -->
     <div class="drawer-overlay" id="teacherDrawer">
         <aside class="drawer-panel">
             <div class="drawer-panel__header">
                 <div>
-                    <p class="storyboard-hero__eyebrow">Admin Enters Teacher Info</p>
+                    <p class="drawer-eyebrow">Admin Enters Teacher Info</p>
                     <h2>Create New Teacher Account</h2>
                     <p class="drawer-panel__subtitle">Create new teacher account</p>
                 </div>
@@ -199,6 +214,7 @@
     </div>
 
     <script>
+        // Burger Menu Toggle
         const burgerMenuBtn = document.getElementById('burgerMenuBtn');
         const themeNavMenu = document.getElementById('themeNavMenu');
 
@@ -216,6 +232,7 @@
             });
         }
 
+        // Teacher Drawer Toggle
         const teacherDrawer = document.getElementById('teacherDrawer');
         const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
         const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
@@ -239,3 +256,4 @@
 
 </body>
 </html>
+
