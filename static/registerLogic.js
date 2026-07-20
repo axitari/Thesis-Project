@@ -56,17 +56,25 @@ registerForm.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Step 2: create the profile row.
+    // Step 2: fill in the profile row.
+    // NOTE: a database trigger on auth.users already creates a bare
+    // profiles row (id only, everything else null) the instant signUp()
+    // succeeds — confirmed by testing (every new account showed up in
+    // Table Editor with a real id but null fields before this code even ran).
+    // So this MUST be an update, not an insert — inserting a second row
+    // with the same id collides with the trigger's row and throws
+    // "duplicate key value violates unique constraint profiles_pkey".
+    //
     // email removed — the profiles table does not have an email column;
     // email already lives on auth.users and is available via session.user.email
     const { error: profileError } = await window.supabaseClient
         .from('profiles')
-        .insert({
-            id: userId,
+        .update({
             first_name: firstName,
             last_name: lastName,
             role: normalizedRole
-        });
+        })
+        .eq('id', userId);
 
     if (profileError) {
         console.error("Profile creation failed:", profileError.message);
