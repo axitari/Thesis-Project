@@ -14,126 +14,794 @@
 </head>
 <body class="dashboard-body">
 
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <h1>Kandili Workspace</h1>
-            <div class="nav-links">
-                <a href="message.html">Messages</a>
-                <a href="notification.html">Notifications</a>
-                <a href="#">User Management</a>
-                <a href="#">Global Variables</a>
-                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
             </div>
+            <div class="theme-nav__title">Admin Dashboard</div>
         </div>
-    </nav>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="facultydirectory.html"><i class="fas fa-users"></i> User Management</a>
+            <a href="admindashboard.html"><i class="fas fa-globe"></i> Global Variables</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
 
-    <div class="dashboard-container admin-dashboard-grid">
-        <div class="admin-column">
-            <section class="welcome-banner admin-welcome">
-                <h2 class="welcome-title">Platform Configuration</h2>
-                <p class="welcome-subtitle">Manage global database variables, thresholds, and algorithm weightings.</p>
-            </section>
 
-            <section class="card card-accent-yellow">
-                <h3 class="card-header">NASA-TLX Base Score Index</h3>
-                <p class="card-desc">Update the default cognitive load weights for standard DepEd ancillary duties. This affects the Burnout Algorithm globally.</p>
+    <main class="dashboard">
 
-                <div class="config-row">
+
+        <!-- Welcome Banner -->
+        <section class="welcome-banner">
+            <h1 class="welcome-title"><i class="fas fa-shield-alt"></i> User Management</h1>
+            <p class="welcome-subtitle">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
+        </section>
+
+
+        <!-- User Management Table -->
+        <section class="admin-table-section">
+            <div class="card card-accent-yellow">
+                <div class="card-header">
                     <div>
-                        <strong class="config-label">SDRRM Coordinator</strong>
-                        <div class="config-desc-sub">Disaster risk management & compliance alignment</div>
+                        <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
+                        <p class="card-desc">Existing teachers | Meanpad and management's workload.</p>
                     </div>
-                    <input type="number" value="85">
+                    <button class="btn btn-primary btn-small open-teacher-drawer" style="width: auto; padding: 0.6rem 1.2rem; white-space: nowrap;">+ Add New Teacher</button>
                 </div>
 
-                <div class="config-row">
-                    <div>
-                        <strong class="config-label">Grade Level Chairperson</strong>
-                        <div class="config-desc-sub">Coordination of grade-level teachers & resource loading</div>
+
+                <div class="table-wrapper">
+                    <table class="reallocation-table">
+                        <thead>
+                            <tr>
+                                <th>TEACHER CODE</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>ASSIGNMENT</th>
+                                <th>LOAD (HRS)</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TCH2026-001</td>
+                                <td><span class="admin-teacher-name">Classvigilta A.</span></td>
+                                <td>samp@sampagultima.com</td>
+                                <td>Grade 2 – Sampagulta</td>
+                                <td><span class="admin-load-value">5</span></td>
+                                <td><span class="status-pending">PENDING</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-002</td>
+                                <td><span class="admin-teacher-name">Sampagultta H.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Gold</td>
+                                <td><span class="admin-load-value">6</span></td>
+                                <td><span class="status-active">ACTIVE</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-003</td>
+                                <td><span class="admin-teacher-name">Cruz, Sarah J.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Silver</td>
+                                <td><span class="admin-load-value">5.5</span></td>
+                                <td><span class="status-overload">OVERLOAD</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Account Status & System Process Row -->
+        <div class="admin-details-row">
+
+
+            <!-- Teacher's Account Status Card -->
+            <div class="card card-accent-green">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-check"></i> Teacher's Account Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="admin-status-card">
+                        <div class="admin-status-header">
+                            <div>
+                                <h4>Faculty Directory & User Management</h4>
+                                <p class="card-desc">Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
+                            </div>
+                            <button class="btn btn-secondary btn-small open-teacher-drawer" style="width: auto; padding: 0.5rem 1rem; white-space: nowrap;">+ Add New Teacher</button>
+                        </div>
+                        <div class="table-wrapper" style="margin-top: 1rem;">
+                            <table class="reallocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cruz, Sarah J.</td>
+                                        <td>cruz_svnz@gmail.com</td>
+                                        <td><span class="status-pending">Pending Activation</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="status-note">
+                            <i class="fas fa-info-circle"></i> Account is ready but awaits activation via email link.
+                        </div>
                     </div>
-                    <input type="number" value="60">
                 </div>
+            </div>
 
-                <div class="config-row">
-                    <div>
-                        <strong class="config-label">School Paper Adviser</strong>
-                        <div class="config-desc-sub">Journalism oversight and public relations management</div>
+
+            <!-- System Process Card -->
+            <div class="card card-accent-blue">
+                <div class="card-header">
+                    <h3><i class="fas fa-cogs"></i> System Process</h3>
+                </div>
+                <div class="card-body">
+                    <div class="infographic-flow">
+                        <div class="flow-item">
+                            <div class="flow-icon">🗄️</div>
+                            <strong>Kandili Core</strong>
+                            <p>Sarah J. account details saved. Verification email queued and sent automatically.</p>
+                        </div>
+                        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-item">
+                            <div class="flow-icon">✉️</div>
+                            <strong>Sarah J. Cruz</strong>
+                            <p>Activation email sent with secure verification link.</p>
+                        </div>
                     </div>
-                    <input type="number" value="75">
                 </div>
+            </div>
 
-                <button class="btn-primary admin-action-btn">Save Global Weights</button>
-            </section>
 
-            <section class="card card-accent-green">
-                <h3 class="card-header">Statutory & Intervention Parameters</h3>
-                <p class="card-desc">Control parameters governing the split Operations vs. Wellness execution loop.</p>
-
-                <div class="config-row">
-                    <span class="config-label">RA 4670 Max Teaching Hours (Weekly)</span>
-                    <input type="number" value="30">
-                </div>
-                <div class="config-row">
-                    <span class="config-label">MBI-ES High Exhaustion Multiplier Threshold</span>
-                    <input type="number" value="1.50" step="0.05">
-                </div>
-                <div class="config-row">
-                    <span class="config-label">Default Meditation Deployment Protocol ID</span>
-                    <input type="number" value="88">
-                </div>
-            </section>
         </div>
 
-        <div class="admin-column">
-            <section class="card card-accent-blue">
-                <h3 class="card-header">Supabase DB Status</h3>
 
-                <div class="db-row-item">
-                    <span>Connection Status:</span>
-                    <span class="text-success font-weight-bold">Active & Secure</span>
-                </div>
-                <div class="db-row-item">
-                    <span>Registered School Nodes:</span>
-                    <span class="db-val-bold">42</span>
-                </div>
-                <div class="db-row-item">
-                    <span>Active Gateway Sessions:</span>
-                    <span class="db-val-bold">14</span>
-                </div>
-            </section>
+    </main>
 
-            <section class="card admin-user-card">
-                <h3 class="card-header">User Accounts & Access Control</h3>
-                <p class="card-desc">Execute security overrides, password resets, and account locks.</p>
 
-                <div class="search-flex-group">
-                    <input type="text" placeholder="Search by Kandili ID..." class="search-input-pad">
-                    <button class="btn-primary admin-find-btn">Find</button>
+    <!-- Drawer Overlay for Adding New Teacher -->
+    <div class="drawer-overlay" id="teacherDrawer">
+        <aside class="drawer-panel">
+            <div class="drawer-panel__header">
+                <div>
+                    <p class="drawer-eyebrow">Admin Enters Teacher Info</p>
+                    <h2>Create New Teacher Account</h2>
+                    <p class="drawer-panel__subtitle">Create new teacher account</p>
                 </div>
-
-                <div class="user-inner-card">
-                    <div class="user-card-title">Teacher Maria (ID: KND-7734)</div>
-                    <div class="user-card-meta">Status: Active Node | Allocated School: ROVCMS</div>
-                    <div class="btn-group-flex">
-                        <button class="btn-outline admin-btn-small">Force Password Reset</button>
-                        <button class="btn-outline admin-btn-small admin-btn-danger">Suspend Account</button>
+                <button class="drawer-close-btn" id="closeTeacherDrawer" aria-label="Close panel">×</button>
+            </div>
+            <div class="drawer-panel__body">
+                <div class="drawer-field-grid">
+                    <div class="drawer-field">
+                        <label>First Name</label>
+                        <input type="text" value="Sarah J.">
+                    </div>
+                    <div class="drawer-field">
+                        <label>Last Name</label>
+                        <input type="text" value="Cruz">
                     </div>
                 </div>
-            </section>
-
-            <section class="card terminal-card">
-                <h3 class="card-header">System Audit Log</h3>
-                <p class="card-desc admin-log-desc">Live terminal feed of backend transactions.</p>
-                <div class="terminal-box">
-                    <div class="log-text log-success">[13:42:01] SUCCESS: User KND-7734 authenticated securely via token check.</div>
-                    <div class="log-text log-info">[13:45:12] ACTION: Principal Hilado authorized modified load plan for KND-1102.</div>
-                    <div class="log-text log-warning">[13:50:05] WARNING: Failed login attempt registered for user slot Admin-01.</div>
-                    <div class="log-text log-sys">[14:02:18] SYS: Global NASA-TLX structural matrix weight files synchronized.</div>
-                    <div class="log-text log-sys">[14:05:33] SYS: Supabase database connection verified. Latency: 42ms.</div>
+                <div class="drawer-field">
+                    <label>Official DepEd Email Address</label>
+                    <input type="text" placeholder="Official DepEd Email Address">
                 </div>
-            </section>
-        </div>
+                <div class="drawer-field">
+                    <label>School & Grade Assignment</label>
+                    <select>
+                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
+                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block">Save & Send Invitation</button>
+                <button class="btn btn-secondary btn-block">Cancel</button>
+            </div>
+        </aside>
     </div>
+
+
+    <script>
+        // Burger Menu Toggle
+        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+        const themeNavMenu = document.getElementById('themeNavMenu');
+
+
+        if (burgerMenuBtn && themeNavMenu) {
+            burgerMenuBtn.addEventListener('click', () => {
+                const isOpen = themeNavMenu.classList.toggle('active');
+                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+
+            document.addEventListener('click', (event) => {
+                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                    themeNavMenu.classList.remove('active');
+                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+
+        // Teacher Drawer Toggle
+        const teacherDrawer = document.getElementById('teacherDrawer');
+        const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
+        const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
+
+
+        openTeacherButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                teacherDrawer.classList.add('active');
+            });
+        });
+
+
+        closeTeacherDrawer.addEventListener('click', () => {
+            teacherDrawer.classList.remove('active');
+        });
+
+
+        teacherDrawer.addEventListener('click', (event) => {
+            if (event.target === teacherDrawer) {
+                teacherDrawer.classList.remove('active');
+            }
+        });
+    </script>
+
 
 </body>
 </html>
+
+
+<body class="dashboard-body">
+
+
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Admin Dashboard</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="facultydirectory.html"><i class="fas fa-users"></i> User Management</a>
+            <a href="admindashboard.html"><i class="fas fa-globe"></i> Global Variables</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+
+    <main class="dashboard">
+
+
+        <!-- Welcome Banner -->
+        <section class="welcome-banner">
+            <h1 class="welcome-title"><i class="fas fa-shield-alt"></i> User Management</h1>
+            <p class="welcome-subtitle">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
+        </section>
+
+
+        <!-- User Management Table -->
+        <section class="admin-table-section">
+            <div class="card card-accent-yellow">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
+                        <p class="card-desc">Existing teachers | Meanpad and management's workload.</p>
+                    </div>
+                    <button class="btn btn-primary btn-small open-teacher-drawer" style="width: auto; padding: 0.6rem 1.2rem; white-space: nowrap;">+ Add New Teacher</button>
+                </div>
+
+
+                <div class="table-wrapper">
+                    <table class="reallocation-table">
+                        <thead>
+                            <tr>
+                                <th>TEACHER CODE</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>ASSIGNMENT</th>
+                                <th>LOAD (HRS)</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TCH2026-001</td>
+                                <td><span class="admin-teacher-name">Classvigilta A.</span></td>
+                                <td>samp@sampagultima.com</td>
+                                <td>Grade 2 – Sampagulta</td>
+                                <td><span class="admin-load-value">5</span></td>
+                                <td><span class="status-pending">PENDING</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-002</td>
+                                <td><span class="admin-teacher-name">Sampagultta H.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Gold</td>
+                                <td><span class="admin-load-value">6</span></td>
+                                <td><span class="status-active">ACTIVE</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-003</td>
+                                <td><span class="admin-teacher-name">Cruz, Sarah J.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Silver</td>
+                                <td><span class="admin-load-value">5.5</span></td>
+                                <td><span class="status-overload">OVERLOAD</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Account Status & System Process Row -->
+        <div class="admin-details-row">
+
+
+            <!-- Teacher's Account Status Card -->
+            <div class="card card-accent-green">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-check"></i> Teacher's Account Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="admin-status-card">
+                        <div class="admin-status-header">
+                            <div>
+                                <h4>Faculty Directory & User Management</h4>
+                                <p class="card-desc">Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
+                            </div>
+                            <button class="btn btn-secondary btn-small open-teacher-drawer" style="width: auto; padding: 0.5rem 1rem; white-space: nowrap;">+ Add New Teacher</button>
+                        </div>
+                        <div class="table-wrapper" style="margin-top: 1rem;">
+                            <table class="reallocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cruz, Sarah J.</td>
+                                        <td>cruz_svnz@gmail.com</td>
+                                        <td><span class="status-pending">Pending Activation</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="status-note">
+                            <i class="fas fa-info-circle"></i> Account is ready but awaits activation via email link.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- System Process Card -->
+            <div class="card card-accent-blue">
+                <div class="card-header">
+                    <h3><i class="fas fa-cogs"></i> System Process</h3>
+                </div>
+                <div class="card-body">
+                    <div class="infographic-flow">
+                        <div class="flow-item">
+                            <div class="flow-icon">🗄️</div>
+                            <strong>Kandili Core</strong>
+                            <p>Sarah J. account details saved. Verification email queued and sent automatically.</p>
+                        </div>
+                        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-item">
+                            <div class="flow-icon">✉️</div>
+                            <strong>Sarah J. Cruz</strong>
+                            <p>Activation email sent with secure verification link.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+    <!-- Drawer Overlay for Adding New Teacher -->
+    <div class="drawer-overlay" id="teacherDrawer">
+        <aside class="drawer-panel">
+            <div class="drawer-panel__header">
+                <div>
+                    <p class="drawer-eyebrow">Admin Enters Teacher Info</p>
+                    <h2>Create New Teacher Account</h2>
+                    <p class="drawer-panel__subtitle">Create new teacher account</p>
+                </div>
+                <button class="drawer-close-btn" id="closeTeacherDrawer" aria-label="Close panel">×</button>
+            </div>
+            <div class="drawer-panel__body">
+                <div class="drawer-field-grid">
+                    <div class="drawer-field">
+                        <label>First Name</label>
+                        <input type="text" value="Sarah J.">
+                    </div>
+                    <div class="drawer-field">
+                        <label>Last Name</label>
+                        <input type="text" value="Cruz">
+                    </div>
+                </div>
+                <div class="drawer-field">
+                    <label>Official DepEd Email Address</label>
+                    <input type="text" placeholder="Official DepEd Email Address">
+                </div>
+                <div class="drawer-field">
+                    <label>School & Grade Assignment</label>
+                    <select>
+                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
+                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block">Save & Send Invitation</button>
+                <button class="btn btn-secondary btn-block">Cancel</button>
+            </div>
+        </aside>
+    </div>
+
+
+    <script>
+        // Burger Menu Toggle
+        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+        const themeNavMenu = document.getElementById('themeNavMenu');
+
+
+        if (burgerMenuBtn && themeNavMenu) {
+            burgerMenuBtn.addEventListener('click', () => {
+                const isOpen = themeNavMenu.classList.toggle('active');
+                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+
+            document.addEventListener('click', (event) => {
+                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                    themeNavMenu.classList.remove('active');
+                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+
+        // Teacher Drawer Toggle
+        const teacherDrawer = document.getElementById('teacherDrawer');
+        const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
+        const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
+
+
+        openTeacherButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                teacherDrawer.classList.add('active');
+            });
+        });
+
+
+        closeTeacherDrawer.addEventListener('click', () => {
+            teacherDrawer.classList.remove('active');
+        });
+
+
+        teacherDrawer.addEventListener('click', (event) => {
+            if (event.target === teacherDrawer) {
+                teacherDrawer.classList.remove('active');
+            }
+        });
+    </script>
+
+
+</body>
+</html>
+
+
+<body class="dashboard-body">
+
+
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Admin Dashboard</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="facultydirectory.html"><i class="fas fa-users"></i> User Management</a>
+            <a href="admindashboard.html"><i class="fas fa-globe"></i> Global Variables</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+
+    <main class="dashboard">
+
+
+        <!-- Welcome Banner -->
+        <section class="welcome-banner">
+            <h1 class="welcome-title"><i class="fas fa-shield-alt"></i> User Management</h1>
+            <p class="welcome-subtitle">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
+        </section>
+
+
+        <!-- User Management Table -->
+        <section class="admin-table-section">
+            <div class="card card-accent-yellow">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
+                        <p class="card-desc">Existing teachers | Meanpad and management's workload.</p>
+                    </div>
+                    <button class="btn btn-primary btn-small open-teacher-drawer" style="width: auto; padding: 0.6rem 1.2rem; white-space: nowrap;">+ Add New Teacher</button>
+                </div>
+
+
+                <div class="table-wrapper">
+                    <table class="reallocation-table">
+                        <thead>
+                            <tr>
+                                <th>TEACHER CODE</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>ASSIGNMENT</th>
+                                <th>LOAD (HRS)</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TCH2026-001</td>
+                                <td><span class="admin-teacher-name">Classvigilta A.</span></td>
+                                <td>samp@sampagultima.com</td>
+                                <td>Grade 2 – Sampagulta</td>
+                                <td><span class="admin-load-value">5</span></td>
+                                <td><span class="status-pending">PENDING</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-002</td>
+                                <td><span class="admin-teacher-name">Sampagultta H.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Gold</td>
+                                <td><span class="admin-load-value">6</span></td>
+                                <td><span class="status-active">ACTIVE</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>TCH2026-003</td>
+                                <td><span class="admin-teacher-name">Cruz, Sarah J.</span></td>
+                                <td>atashess@gmail.com</td>
+                                <td>Grade 3 – Silver</td>
+                                <td><span class="admin-load-value">5.5</span></td>
+                                <td><span class="status-overload">OVERLOAD</span></td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Account Status & System Process Row -->
+        <div class="admin-details-row">
+
+
+            <!-- Teacher's Account Status Card -->
+            <div class="card card-accent-green">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-check"></i> Teacher's Account Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="admin-status-card">
+                        <div class="admin-status-header">
+                            <div>
+                                <h4>Faculty Directory & User Management</h4>
+                                <p class="card-desc">Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
+                            </div>
+                            <button class="btn btn-secondary btn-small open-teacher-drawer" style="width: auto; padding: 0.5rem 1rem; white-space: nowrap;">+ Add New Teacher</button>
+                        </div>
+                        <div class="table-wrapper" style="margin-top: 1rem;">
+                            <table class="reallocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cruz, Sarah J.</td>
+                                        <td>cruz_svnz@gmail.com</td>
+                                        <td><span class="status-pending">Pending Activation</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="status-note">
+                            <i class="fas fa-info-circle"></i> Account is ready but awaits activation via email link.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- System Process Card -->
+            <div class="card card-accent-blue">
+                <div class="card-header">
+                    <h3><i class="fas fa-cogs"></i> System Process</h3>
+                </div>
+                <div class="card-body">
+                    <div class="infographic-flow">
+                        <div class="flow-item">
+                            <div class="flow-icon">🗄️</div>
+                            <strong>Kandili Core</strong>
+                            <p>Sarah J. account details saved. Verification email queued and sent automatically.</p>
+                        </div>
+                        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="flow-item">
+                            <div class="flow-icon">✉️</div>
+                            <strong>Sarah J. Cruz</strong>
+                            <p>Activation email sent with secure verification link.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+    <!-- Drawer Overlay for Adding New Teacher -->
+    <div class="drawer-overlay" id="teacherDrawer">
+        <aside class="drawer-panel">
+            <div class="drawer-panel__header">
+                <div>
+                    <p class="drawer-eyebrow">Admin Enters Teacher Info</p>
+                    <h2>Create New Teacher Account</h2>
+                    <p class="drawer-panel__subtitle">Create new teacher account</p>
+                </div>
+                <button class="drawer-close-btn" id="closeTeacherDrawer" aria-label="Close panel">×</button>
+            </div>
+            <div class="drawer-panel__body">
+                <div class="drawer-field-grid">
+                    <div class="drawer-field">
+                        <label>First Name</label>
+                        <input type="text" value="Sarah J.">
+                    </div>
+                    <div class="drawer-field">
+                        <label>Last Name</label>
+                        <input type="text" value="Cruz">
+                    </div>
+                </div>
+                <div class="drawer-field">
+                    <label>Official DepEd Email Address</label>
+                    <input type="text" placeholder="Official DepEd Email Address">
+                </div>
+                <div class="drawer-field">
+                    <label>School & Grade Assignment</label>
+                    <select>
+                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
+                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block">Save & Send Invitation</button>
+                <button class="btn btn-secondary btn-block">Cancel</button>
+            </div>
+        </aside>
+    </div>
+
+
+    <script>
+        // Burger Menu Toggle
+        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+        const themeNavMenu = document.getElementById('themeNavMenu');
+
+
+        if (burgerMenuBtn && themeNavMenu) {
+            burgerMenuBtn.addEventListener('click', () => {
+                const isOpen = themeNavMenu.classList.toggle('active');
+                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+
+            document.addEventListener('click', (event) => {
+                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                    themeNavMenu.classList.remove('active');
+                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+
+        // Teacher Drawer Toggle
+        const teacherDrawer = document.getElementById('teacherDrawer');
+        const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
+        const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
+
+
+        openTeacherButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                teacherDrawer.classList.add('active');
+            });
+        });
+
+
+        closeTeacherDrawer.addEventListener('click', () => {
+            teacherDrawer.classList.remove('active');
+        });
+
+
+        teacherDrawer.addEventListener('click', (event) => {
+            if (event.target === teacherDrawer) {
+                teacherDrawer.classList.remove('active');
+            }
+        });
+    </script>
+
+
+</body>
+</html>
+
+
+
