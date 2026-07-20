@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - Teacher Profile</title>
     <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
     <script src="../static/logout.js"></script>
@@ -206,15 +207,8 @@
         </div>
     </div>
 
-    <!-- Required Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js"></script>
+    
     <script src="../static/teacherProfile.js"></script>
-    <script>
-        if (typeof checkAuthAndRole === "function") {
-            checkAuthAndRole('teacher');
-        }
-    </script>
+    
 </body>
 </html>
