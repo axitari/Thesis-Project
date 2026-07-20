@@ -1,0 +1,10 @@
+    
+    const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+    const themeNavMenu = document.getElementById('themeNavMenu');
+
+    if (burgerMenuBtn && themeNavMenu) {
+      burgerMenuBtn.addEventListener('click', () => {
+        const isOpen = themeNavMenu.classList.toggle('active');
+        burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+    }

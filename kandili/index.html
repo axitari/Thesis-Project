@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="../static/style.css" />
+<script src="../static/landing page burger.json"></script>
 </head>
 <body>
   <header class="theme-nav">
@@ -160,7 +161,7 @@
             <p style="margin: 0; opacity: 0.95;">Create your account and explore the dashboards built for principals and teachers.</p>
           </div>
           <div class="hero-actions" style="margin: 0;">
-            <a class="btn btn-secondary" href="register.html" style="color: var(--primary);"><i class="fas fa-user-plus"></i> Create Account</a>
+            <a class="btn btn-secondary" href="register.html" style="color: var(--primary);"><i class="fas fa-user-plus"></i> Register</a>
           </div>
         </div>
       </div>
@@ -173,16 +174,6 @@
     </div>
   </footer>
 
-  <script>
-    const burgerMenuBtn = document.getElementById('burgerMenuBtn');
-    const themeNavMenu = document.getElementById('themeNavMenu');
-
-    if (burgerMenuBtn && themeNavMenu) {
-      burgerMenuBtn.addEventListener('click', () => {
-        const isOpen = themeNavMenu.classList.toggle('active');
-        burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
-      });
-    }
-  </script>
+  
 </body>
 </html>
