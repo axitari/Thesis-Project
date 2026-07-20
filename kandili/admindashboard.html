@@ -41,6 +41,52 @@
         </nav>
     </header>
 
+    <section class="risk-cards">
+    <div class="risk-card risk-card--critical">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">🚨</div>
+            <span class="risk-card-badge">OVERLOADED</span>
+        </div>
+        <div class="risk-card-body">
+            <span class="risk-card-number">2</span>
+            <span class="risk-card-label">Overloaded Teachers</span>
+            <span class="risk-card-action">Requires Reallocation</span>
+        </div>
+        <button class="risk-card-btn" onclick="showTeacherList('overloaded')">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="risk-card risk-card--moderate">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">⚠️</div>
+            <span class="risk-card-badge">MAXIMIZED</span>
+        </div>
+        <div class="risk-card-body">
+            <span class="risk-card-number">8</span>
+            <span class="risk-card-label">At Capacity Teachers</span>
+            <span class="risk-card-action">Monitor Assignment</span>
+        </div>
+        <button class="risk-card-btn" onclick="showTeacherList('maximized')">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="risk-card risk-card--low">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">✅</div>
+            <span class="risk-card-badge">OPTIMAL</span>
+        </div>
+        <div class="risk-card-body">
+            <span class="risk-card-number">32</span>
+            <span class="risk-card-label">Optimal Load Teachers</span>
+            <span class="risk-card-action">Well Balanced</span>
+        </div>
+        <button class="risk-card-btn" onclick="showTeacherList('optimal')">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</section>
 
     <main class="dashboard">
 
@@ -111,7 +157,7 @@
             </div>
         </section>
 
-
+<h4>Faculty Workload Distribution & Compliance analytics</h4>
         <!-- Account Status & System Process Row -->
         <div class="admin-details-row">
 
@@ -119,37 +165,27 @@
             <!-- Teacher's Account Status Card -->
             <div class="card card-accent-green">
                 <div class="card-header">
-                    <h3><i class="fas fa-user-check"></i> Teacher's Account Status</h3>
+                    <h3><i class="fas fa-user-check"></i> Teaching load Breakdown</h3>
                 </div>
                 <div class="card-body">
                     <div class="admin-status-card">
                         <div class="admin-status-header">
-                            <div>
-                                <h4>Faculty Directory & User Management</h4>
-                                <p class="card-desc">Teacher | Class Advisor (Grade 2 – Sampagulta) | ROVCMS</p>
-                            </div>
-                            <button class="btn btn-secondary btn-small open-teacher-drawer" style="width: auto; padding: 0.5rem 1rem; white-space: nowrap;">+ Add New Teacher</button>
                         </div>
                         <div class="table-wrapper" style="margin-top: 1rem;">
                             <table class="reallocation-table">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
+                                        <th>6hrs</th>
+                                        <th>Teaching load</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Cruz, Sarah J.</td>
-                                        <td>cruz_svnz@gmail.com</td>
-                                        <td><span class="status-pending">Pending Activation</span></td>
+                                        <td>2hrs</td>
+                                        <td>Ancillary duties</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="status-note">
-                            <i class="fas fa-info-circle"></i> Account is ready but awaits activation via email link.
                         </div>
                     </div>
                 </div>
@@ -159,23 +195,29 @@
             <!-- System Process Card -->
             <div class="card card-accent-blue">
                 <div class="card-header">
-                    <h3><i class="fas fa-cogs"></i> System Process</h3>
+                    <h3><i class="fas fa-cogs"></i> Pending eSF7 Approval Queue</h3>
                 </div>
-                <div class="card-body">
-                    <div class="infographic-flow">
-                        <div class="flow-item">
-                            <div class="flow-icon">🗄️</div>
-                            <strong>Kandili Core</strong>
-                            <p>Sarah J. account details saved. Verification email queued and sent automatically.</p>
-                        </div>
-                        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
-                        <div class="flow-item">
-                            <div class="flow-icon">✉️</div>
-                            <strong>Sarah J. Cruz</strong>
-                            <p>Activation email sent with secure verification link.</p>
-                        </div>
-                    </div>
-                </div>
+              <table class="reallocation-table">
+                                <thead>
+                                    <tr>
+                                        <th>no.</th>
+                                        <th>Grade</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Grade 1</td>
+                                        <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.</td>
+                                        <td>Grade 3</td>
+                                        <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
             </div>
 
 
