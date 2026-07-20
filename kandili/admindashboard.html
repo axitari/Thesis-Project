@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - System Administration</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!--Scripts Section -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -14,18 +15,30 @@
 </head>
 <body class="dashboard-body">
 
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <h1>Kandili Workspace</h1>
-            <div class="nav-links">
-                <a href="message.html">Messages</a>
-                <a href="notification.html">Notifications</a>
-                <a href="#">User Management</a>
-                <a href="#">Global Variables</a>
-                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
             </div>
+            <div class="theme-nav__title">Admin Dashboard</div>
         </div>
-    </nav>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="facultydirectory.html"><i class="fas fa-users"></i> User Management</a>
+            <a href="admindashboard.html"><i class="fas fa-globe"></i> Global Variables</a>
+            <a href="../static/logout.js" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
 
     <div class="dashboard-container admin-dashboard-grid">
         <div class="admin-column">
@@ -134,6 +147,25 @@
             </section>
         </div>
     </div>
+
+    <script>
+        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+        const themeNavMenu = document.getElementById('themeNavMenu');
+
+        if (burgerMenuBtn && themeNavMenu) {
+            burgerMenuBtn.addEventListener('click', () => {
+                const isOpen = themeNavMenu.classList.toggle('active');
+                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                    themeNavMenu.classList.remove('active');
+                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>
