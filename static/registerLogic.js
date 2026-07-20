@@ -11,79 +11,41 @@ registerForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
     const role = document.getElementById('role').value;
 
-    // The database's role column is a Postgres enum that ONLY accepts:
-    // 'admin', 'principal', 'teacher'. There is no separate enum value for
-    // Master Teacher — confirmed by querying enum_range() directly — so we
-    // map it down to 'teacher' here. Any future new dropdown option MUST be
-    // added to this map, or the insert below will fail with an invalid enum
-    // value error.
+    // Maps the frontend HTML value attributes to the database ENUM values
     const formRoleToEnum = {
         'Teacher': 'teacher',
         'Master Teacher': 'teacher',
-        'Principal / School Head': 'principal'
+        'Principal': 'principal'
     };
     const normalizedRole = formRoleToEnum[role];
 
     if (!normalizedRole) {
-        console.error(`No enum mapping for role "${role}" — check register.html's role dropdown values against formRoleToEnum.`);
+        console.error(`No enum mapping for role "${role}" — check register.html dropdown values.`);
         alert('Something went wrong with the selected role. Please contact an administrator.');
         return;
     }
 
-    // NOTE: division/school are collected on this form but the existing
-    // "profiles" table (built by teammate) doesn't have matching columns yet
-    // (it has "position" and "specialization" instead, which may or may not
-    // be meant for this). Not inserting them for now — revisit once that's
-    // confirmed, otherwise this data is silently dropped just like before.
-
-    // Step 1: create the actual login credentials in Supabase Auth
+    // Pass all profile data as secure registration metadata to the Auth signup
     const { data, error } = await window.supabaseClient.auth.signUp({
         email: email,
         password: password,
+        options: {
+            data: {
+                first_name: firstName,
+                last_name: lastName,
+                role: normalizedRole
+            }
+        }
     });
 
     if (error) {
         console.error("Registration failed:", error.message);
-        alert("Error: " + error.message);
+        alert("Registration Error: " + error.message);
         return;
     }
 
-    const userId = data.user ? data.user.id : null;
-
-    if (!userId) {
-        console.error("Sign up succeeded but no user id was returned.");
-        alert("Account created, but we couldn't finish setting up your profile. Please contact an administrator.");
-        return;
-    }
-
-    // Step 2: fill in the profile row.
-    // NOTE: a database trigger on auth.users already creates a bare
-    // profiles row (id only, everything else null) the instant signUp()
-    // succeeds — confirmed by testing (every new account showed up in
-    // Table Editor with a real id but null fields before this code even ran).
-    // So this MUST be an update, not an insert — inserting a second row
-    // with the same id collides with the trigger's row and throws
-    // "duplicate key value violates unique constraint profiles_pkey".
-    //
-    // email removed — the profiles table does not have an email column;
-    // email already lives on auth.users and is available via session.user.email
-    const { error: profileError } = await window.supabaseClient
-        .from('profiles')
-        .update({
-            first_name: firstName,
-            last_name: lastName,
-            role: normalizedRole
-        })
-        .eq('id', userId);
-
-    if (profileError) {
-        console.error("Profile creation failed:", profileError.message);
-        alert("Account created, but profile setup failed: " + profileError.message + "\nPlease contact an administrator.");
-        return;
-    }
-
-    console.log("Registration successful!", data);
-    alert("Success! Check your email for a confirmation link, or go log in if email confirmation is disabled.");
+    console.log("Registration successful! Backend trigger handling profile creation.", data);
+    alert("Success! Account successfully created. You may now log in.");
 
     window.location.href = "login.html";
 });
