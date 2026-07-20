@@ -1,316 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Principal Approval Feed</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kandili Workspace - Principal Dashboard</title>
     <link rel="stylesheet" href="../static/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
-    <script src="../static/logout.js"></script>
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Kandili Brand Color Overrides for Mylene's CSS -->
     <style>
-        /* Specific styles for the directory grid */
-        .directory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-            align-items: stretch;
-        }
-        .directory-grid > .info-box {
-            height: 100%;
+        /* Primary Blue & Red Integration */
+        .navbar { border-bottom: 3px solid #0038A8 !important; }
+        .logo-badge { background-color: #0038A8 !important; color: #ffffff !important; }
+        .module-btn--upload { background-color: #0038A8 !important; color: white !important; }
+        
+        /* Risk Colors Overrides */
+        .risk-card--critical { border-top-color: #C8102E !important; }
+        .risk-card-badge:contains('CRITICAL') { background-color: #C8102E !important; }
+        .hotlist-badge { background-color: #C8102E !important; }
+        
+        /* Progress Bars */
+        .dept-bar--high { background-color: #C8102E !important; }
+        .dept-bar--moderate { background-color: #f59e0b !important; }
+        .dept-bar--low { background-color: #059669 !important; }
+        
+        /* Buttons */
+        .action-btn--simulate { background-color: #0038A8 !important; color: white !important; border: none; border-radius: 4px; padding: 4px 8px;}
+        .reallocation-btn--apply { background-color: #059669 !important; color: white !important; border: none;}
+        .reallocation-btn--report { border: 1px solid #0038A8 !important; color: #0038A8 !important;}
+
+        /* Theme-matched top navigation */
+        body { margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif; background: #f8fafc; }
+        .theme-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: space-between;
-            box-sizing: border-box;
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
-            overflow: hidden;
-            padding: 1.2rem 1.2rem 1rem;
-            position: relative;
+            gap: 1rem;
+            padding: 0.95rem 1.25rem;
+            background: linear-gradient(135deg, #0038A8 0%, #0f5ef7 100%);
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(0, 56, 168, 0.18);
         }
-        .directory-grid > .info-box::before {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto 0;
-            height: 4px;
-            background: linear-gradient(90deg, #0038A8, #60a5fa);
+        .theme-nav__brand { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
+        .theme-nav__logo { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 800; font-size: 1rem; letter-spacing: 0.02em; }
+        .theme-nav__logo-icon { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 999px; background: rgba(255,255,255,0.18); }
+        .theme-nav__title { font-size: 0.95rem; font-weight: 600; color: #dbeafe; }
+        .theme-nav__actions { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+        .theme-nav__date, .theme-nav__refresh, .theme-nav__menu-btn {
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border-radius: 999px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
         }
-        .directory-grid > .info-box.no-top-line::before {
-            display: none;
+        .theme-nav__refresh:hover, .theme-nav__menu-btn:hover {
+            background: rgba(255,255,255,0.24);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.16);
+            transform: translateY(-2px);
         }
-        .management-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .management-grid > .info-box::before {
-            display: none;
-        }
-        .management-grid .btn {
-            width: 100%;
-            min-height: 48px;
-            padding: 0.85rem 1rem;
-            font-size: 0.95rem;
-        }
-        .directory-grid .info-box h4,
-        .directory-grid .info-box h3 {
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-            color: #0f172a;
-        }
-        .directory-grid .info-box p {
-            line-height: 1.55;
-            margin-bottom: 0.95rem;
-        }
-        .directory-grid .btn {
-            margin-top: auto;
+        .theme-nav__menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 0.8rem;
             border-radius: 8px;
-            width: 100%;
-            padding: 0.8rem 0.9rem;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .directory-grid .info-box > div:first-child {
-            padding-bottom: 0.25rem;
-        }
-        .directory-grid .info-box > div {
-            width: 100%;
-        }
-        .directory-grid .info-box .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.45rem;
+            text-decoration: none;
+            color: #0f172a;
             font-size: 0.95rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
-        .search-bar {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            font-family: inherit;
+        .theme-nav__menu a:hover {
+            background: #eff6ff;
+            color: #0038A8;
+            transform: translateX(2px);
+        }
+        .theme-nav__menu-btn { display: inline-flex; align-items: center; justify-content: center; width: 2.45rem; height: 2.45rem; padding: 0; }
+        .theme-nav__menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 1.25rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-width: 220px;
+            padding: 0.6rem;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 16px 35px rgba(15, 23, 42, 0.18);
+            border: 1px solid #e2e8f0;
+        }
+        .theme-nav__menu.active { display: flex; }
+        .theme-nav__menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .theme-nav__menu a:hover {
+            background: #eff6ff;
+            color: #0038A8;
+        }
+        .theme-nav__menu a.logout-link { color: #C8102E; }
+        .theme-nav__menu a.logout-link:hover { background: #fef2f2; color: #b91c1c; }
+
+        /* Hover polish for cards and buttons */
+        .risk-card, .module-card, .chart-card, .teacher-card, .info-box, .graph-box, .kpi-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .risk-card:hover, .module-card:hover, .chart-card:hover, .teacher-card:hover, .info-box:hover, .graph-box:hover, .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+            border-color: rgba(0, 56, 168, 0.24);
+        }
+        .risk-card-btn, .module-btn, .btn, .action-btn--simulate, .reallocation-btn--apply, .reallocation-btn--report {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        .risk-card-btn:hover, .module-btn:hover, .btn:hover, .action-btn--simulate:hover, .reallocation-btn--apply:hover, .reallocation-btn--report:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 56, 168, 0.14);
         }
         @media (max-width: 640px) {
-            .directory-grid {
-                grid-template-columns: 1fr;
-            }
+            .theme-nav { padding: 0.85rem 1rem; }
+            .theme-nav__title { display: none; }
+            .theme-nav__date { display: none; }
+            .theme-nav__menu { right: 0.85rem; left: 0.85rem; min-width: auto; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <h1>Kandili Workspace</h1>
-            <div class="nav-links">
-                <a href="principalprofilepage.html">My Profile</a>
-                <a href="message.html">Messages</a>
-                <a href="notification.html">Notifications</a>
-                <a href="history.html">History</a>
-                <a href="calendar.html">Master Calendar</a>
-                <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+    <!-- ============================================================ -->
+    <!-- TOP NAVIGATION BAR                                           -->
+    <!-- ============================================================ -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
             </div>
+            <div class="theme-nav__title">Principal Dashboard</div>
         </div>
-    </nav>
-
-    <div class="dashboard-container principal-dashboard">
-        
-        <!-- KPI OVERVIEW BOXES -->
-        <h2 class="section-title">Operations Overview</h2>
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <span class="kpi-label">Total Faculty Matrix</span>
-                <span class="kpi-value">42 <span style="font-size: 1rem; color: #64748b;">Teachers</span></span>
-            </div>
-            <div class="kpi-card">
-                <span class="kpi-label">Missing Pulse Check-ins</span>
-                <span class="kpi-value" style="color: #f59e0b;">5 <span style="font-size: 1rem; color: #64748b;">Teachers</span></span>
-            </div>
-            <div class="kpi-card">
-                <span class="kpi-label">School-Wide Capacity</span>
-                <span class="kpi-value" style="color: #059669;">114 <span style="font-size: 1rem; color: #64748b;">Free Hrs</span></span>
-            </div>
-            <div class="kpi-card" style="border-bottom: 4px solid #C8102E;">
-                <span class="kpi-label">Critical Burnout Flags</span>
-                <span class="kpi-value" style="color: #C8102E;">2 <span style="font-size: 1rem; color: #64748b;">Alerts</span></span>
-            </div>
-        </div>
-
-        <h2 class="section-title" style="margin-top: 3rem;">Data Ingestion & Risk Projection</h2>
-        
-        <div class="info-box" style="background-color: #f8fafc; border: 2px dashed #cbd5e1; text-align: center; padding: 2rem; margin-bottom: 1.5rem;">
-            <h3 style="color: #0038A8; margin-bottom: 0.5rem;">📁 Master eSF7 Scanner (Excel & OCR)</h3>
-            <p style="color: #64748b; margin-bottom: 1.5rem;">Upload the master School Form 7 spreadsheet to extract objective workload data for all faculty members at once.</p>
-            <button class="btn btn-primary" style="padding: 0.75rem 2rem; font-weight: bold;">
-                Upload Master Data
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false">
+                <i class="fas fa-bars"></i>
             </button>
         </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="principaldashboard.html"><i class="fas fa-chart-line"></i> Principal Dashboard</a>
+            <a href="principalprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="history.html"><i class="fas fa-history"></i> History</a>
+            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
+            <a href="facultydirectory.html"><i class="fas fa-address-book"></i> Faculty Directory</a>
+            <a href="login.html" class="logout-link" onclick="return confirm('Are you sure you want to log out?');"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+        </nav>
+    </header>
 
-        <div class="directory-grid" style="margin-bottom: 3rem;">
-            <div class="info-box" style="background-color: #f8fafc;">
-                <div>
-                    <h4 style="color: #0f172a; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Objective Workload (R.A. 4670)</h4>
-                    <div class="row">
-                        <span style="color: #64748b;">Baseline Teaching</span>
-                        <strong style="color: #0f172a;">360 mins</strong>
-                    </div>
-                    <div class="row">
-                        <span style="color: #64748b;">Avg. Ancillary</span>
-                        <strong style="color: #0f172a;">+120 mins</strong>
-                    </div>
-                    <div class="row" style="margin-top: 0.9rem; padding-top: 0.65rem; border-top: 1px dashed #cbd5e1; font-size: 1.02rem;">
-                        <span style="color: #0f172a; font-weight: bold;">Workload Index</span>
-                        <span style="color: #f59e0b; font-weight: bold;">1.33 (High)</span>
-                    </div>
-                </div>
-            </div>
+    <!-- ============================================================ -->
+    <!-- MAIN DASHBOARD CONTENT                                       -->
+    <!-- ============================================================ -->
+    <main class="dashboard">
 
-            <div class="info-box" style="background-color: #f8fafc;">
-                <div>
-                    <h4 style="color: #0f172a; margin-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Faculty Subjective Pulse</h4>
-                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem;">Aggregated from Weekly Short-Form MBI-EE Check-ins</p>
-                    <div class="row">
-                        <span style="color: #64748b;">Avg. Exhaustion</span>
-                        <strong style="color: #C8102E;">Critical (75%)</strong>
-                    </div>
-                    <div class="row">
-                        <span style="color: #64748b;">Faculty Response Rate</span>
-                        <strong style="color: #059669;">88%</strong>
-                    </div>
+        <!-- ========================================================== -->
+        <!-- SECTION 1: RISK CARDS (TOP ALERTS)                         -->
+        <!-- ========================================================== -->
+        <section class="risk-cards">
+            <div class="risk-card risk-card--critical">
+                <div class="risk-card-icon">🚨</div>
+                <div class="risk-card-content">
+                    <span class="risk-card-badge" style="background-color: #C8102E; color: white;">CRITICAL</span>
+                    <span class="risk-card-number">2</span>
+                    <span class="risk-card-label">High Risk Teachers</span>
+                    <span class="risk-card-action" style="color: #C8102E;">Needs Immediate Action</span>
                 </div>
-            </div>
-            
-            <div class="info-box no-top-line" style="background-color: #fcf4f4; border-left: 0;">
-                <div>
-                    <h4 style="color: #b45309; margin-bottom: 0.75rem; border-bottom: 1px solid #fcd34d; padding-bottom: 0.5rem;">⚠️ Logistic Regression Output</h4>
-                    <div class="row">
-                        <span style="color: #64748b;">Acute Burnout Prob.</span>
-                        <strong style="color: #C8102E;">82%</strong>
-                    </div>
-                    <div style="margin-top: 0.9rem; padding: 0.75rem; background-color: #fef3c7; border-radius: 8px; font-size: 0.85rem; color: #92400e; line-height: 1.4;">
-                        <strong>Hidden Risk Flag:</strong> 3 Teachers show High Subjective Exhaustion despite Lawful Workload (< 360m).
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- BA ADVANCED GRAPHS SECTION -->
-        <h2 class="section-title">Advanced Analytics</h2>
-        <div class="graph-grid">
-            <div class="graph-box">
-                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">RA 4670 Capacity Allocation (Hours)</p>
-                <div class="chart-container"><canvas id="capacityChart"></canvas></div>
-            </div>
-            <div class="graph-box">
-                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Faculty Burnout Risk Distribution</p>
-                <div class="chart-container"><canvas id="riskChart"></canvas></div>
-            </div>
-            <div class="graph-box">
-                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Task Complexity Weights (NASA-TLX Baseline)</p>
-                <div class="chart-container"><canvas id="radarChart"></canvas></div>
-            </div>
-            <div class="graph-box">
-                <p style="font-size: 0.95rem; font-weight: 700; color: #0038A8;">Risk Scatter Plot (Objective Load vs. Subjective MBI-EE)</p>
-                <div class="chart-container"><canvas id="scatterChart"></canvas></div>
-            </div>
-        </div>
-
-        <!-- MANAGEMENT MODULES -->
-        <h2 class="section-title" style="margin-top: 3rem;">Management Modules</h2>
-        
-        <div class="management-grid">
-            
-            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #f8fafc;">
-                <div>
-                    <h3 style="margin: 0 0 0.5rem 0; color: #0038A8;">📁 Master Class Programs</h3>
-                    <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.95rem;">Access and review the official class schedules of all 42 faculty members in a centralized directory.</p>
-                </div>
-                <button class="btn btn-primary" onclick="window.location.href='facultydirectory.html'">Open Directory</button>
-            </div>
-
-            <!-- 2. Pulse Compliance Tracking (Names Visible - Admin Only) -->
-            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #f8fafc;">
-                <div>
-                    <h3 style="margin: 0 0 0.5rem 0; color: #059669;">✅ Pulse Compliance</h3>
-                    <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.95rem;">
-                        Track which faculty members have completed their weekly 2-item check-in. (Burnout scores remain hidden here).
-                    </p>
-                </div>
-                <button class="btn btn-primary" style="background-color: #059669; border: none;" onclick="window.location.href='pulsecompliance.html'">
-                    Send Reminders (5 Missing)
+                <button class="risk-card-btn" onclick="showTeacherList('critical')">
+                    View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
 
-            <!-- 3. Burnout Risk Analytics (Strictly Anonymized) -->
-            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; background-color: #fcf4f4; border-left: 4px solid #C8102E;">
-                <div>
-                    <h3 style="margin: 0 0 0.5rem 0; color: #C8102E;">⚠️ Burnout Risk Assessments</h3>
-                    <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.95rem;">
-                        Review predictive risk levels. <strong>Data is fully anonymized using Teacher Codes (e.g., TCH-042)</strong> to ensure R.A. 10173 Data Privacy compliance.
-                    </p>
+            <div class="risk-card risk-card--moderate">
+                <div class="risk-card-icon">⚠️</div>
+                <div class="risk-card-content">
+                    <span class="risk-card-badge" style="background-color: #f59e0b; color: white;">MODERATE</span>
+                    <span class="risk-card-number">8</span>
+                    <span class="risk-card-label">Moderate Risk Teachers</span>
+                    <span class="risk-card-action" style="color: #b45309;">Review Within 48 Hours</span>
                 </div>
-                <button class="btn btn-danger" onclick="window.location.href='burnoutrisks.html'">
-                    Open Risk Analytics (2 Alerts)
+                <button class="risk-card-btn" onclick="showTeacherList('moderate')">
+                    View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
-        
-    </div> 
-        
-    <!-- Script for Advanced BA Charts -->
+
+            <div class="risk-card risk-card--low">
+                <div class="risk-card-icon">✅</div>
+                <div class="risk-card-content">
+                    <span class="risk-card-badge" style="background-color: #059669; color: white;">LOW</span>
+                    <span class="risk-card-number">32</span>
+                    <span class="risk-card-label">Low Risk Teachers</span>
+                    <span class="risk-card-action" style="color: #059669;">On Track</span>
+                </div>
+                <button class="risk-card-btn" onclick="showTeacherList('low')">
+                    View List <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================== -->
+        <!-- SECTION 2: RISK DISTRIBUTION CHART + SCATTER PLOT          -->
+        <!-- ========================================================== -->
+        <section class="charts-row">
+
+            <!-- Risk Distribution Bar Chart -->
+            <div class="chart-card chart-card--distribution">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-bar" style="color: #0038A8;"></i> Faculty Burnout Risk Distribution</h3>
+                    <span class="chart-target">Target: >80% Low Risk</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="riskDistributionChart"></canvas>
+                </div>
+                <div class="chart-footer">
+                    <span class="chart-update">Updated: July 20, 2026</span>
+                </div>
+            </div>
+
+            <!-- Scatter Plot -->
+            <div class="chart-card chart-card--scatter">
+                <div class="chart-header">
+                    <h3><i class="fas fa-dot-circle" style="color: #0038A8;"></i> Workload vs. Exhaustion</h3>
+                    <span class="chart-legend">
+                        <span class="legend-dot legend-dot--normal" style="color: #0038A8;">●</span> Teacher
+                        <span class="legend-dot legend-dot--high" style="color: #C8102E;">■</span> High Risk
+                    </span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="scatterPlot"></canvas>
+                </div>
+                <div class="chart-footer">
+                    <span class="chart-mandated">── R.A. 4670 Mandated Max (40 hrs)</span>
+                    <button class="chart-export-btn"><i class="fas fa-download"></i> Export Data</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================================== -->
+        <!-- SECTION 3: HIGH RISK HOTLIST + DEPARTMENT COMPARISON       -->
+        <!-- ========================================================== -->
+        <section class="hotlist-row">
+
+            <!-- High Risk Teacher Hotlist -->
+            <div class="hotlist-card">
+                <div class="hotlist-header">
+                    <h3><i class="fas fa-exclamation-triangle" style="color: #C8102E;"></i> High Risk Teacher Hotlist</h3>
+                    <span class="hotlist-badge" style="color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">2 Alerts</span>
+                </div>
+
+                <div class="hotlist-items">
+                    <!-- Teacher 1 -->
+                    <div class="hotlist-item hotlist-item--critical">
+                        <div class="hotlist-item-left">
+                            <span class="hotlist-code" style="color: #C8102E; font-weight: bold;">TCH-042</span>
+                            <span class="hotlist-risk-score" style="background-color: #fff1f2; color: #be123c; padding: 2px 6px; border-radius: 4px;">92</span>
+                            <span class="hotlist-details">
+                                <span class="hotlist-subject">Grade 9 Math</span>
+                                <span class="hotlist-duties">6 committees · 52 hrs/wk</span>
+                            </span>
+                        </div>
+                        <div class="hotlist-item-right">
+                            <button class="hotlist-btn hotlist-btn--profile" onclick="viewProfile('TCH-042')">
+                                <i class="fas fa-user"></i> Profile
+                            </button>
+                            <button class="hotlist-btn hotlist-btn--checkin" onclick="sendCheckIn('TCH-042')">
+                                <i class="fas fa-paper-plane"></i> Check-in
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Teacher 2 -->
+                    <div class="hotlist-item hotlist-item--critical">
+                        <div class="hotlist-item-left">
+                            <span class="hotlist-code" style="color: #C8102E; font-weight: bold;">TCH-018</span>
+                            <span class="hotlist-risk-score" style="background-color: #fff1f2; color: #be123c; padding: 2px 6px; border-radius: 4px;">85</span>
+                            <span class="hotlist-details">
+                                <span class="hotlist-subject">Grade 7 Science</span>
+                                <span class="hotlist-duties">DepEd Coordinator · 48 hrs/wk</span>
+                            </span>
+                        </div>
+                        <div class="hotlist-item-right">
+                            <button class="hotlist-btn hotlist-btn--profile" onclick="viewProfile('TCH-018')">
+                                <i class="fas fa-user"></i> Profile
+                            </button>
+                            <button class="hotlist-btn hotlist-btn--checkin" onclick="sendCheckIn('TCH-018')">
+                                <i class="fas fa-paper-plane"></i> Check-in
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Teacher 3 (Hidden Risk) -->
+                    <div class="hotlist-item hotlist-item--hidden">
+                        <div class="hotlist-item-left">
+                            <span class="hotlist-code" style="color: #b45309; font-weight: bold;">TCH-007</span>
+                            <span class="hotlist-risk-score" style="background-color: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 4px;">78</span>
+                            <span class="hotlist-details">
+                                <span class="hotlist-subject">Grade 10 English</span>
+                                <span class="hotlist-duties">3 committees · 38 hrs/wk</span>
+                            </span>
+                        </div>
+                        <div class="hotlist-item-right">
+                            <button class="hotlist-btn hotlist-btn--profile" onclick="viewProfile('TCH-007')">
+                                <i class="fas fa-user"></i> Profile
+                            </button>
+                            <button class="hotlist-btn hotlist-btn--checkin" onclick="sendCheckIn('TCH-007')">
+                                <i class="fas fa-paper-plane"></i> Check-in
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden Risk Flag -->
+                <div class="hotlist-hidden-flag" style="background-color: #fffbeb; border: 1px solid #fde68a; padding: 1rem; border-radius: 6px; margin-top: 1rem;">
+                    <i class="fas fa-flag" style="color: #d97706;"></i>
+                    <span style="color: #92400e;"><strong>Hidden Risk Flag:</strong> 3 Teachers show High Subjective Exhaustion despite Lawful Workload (&lt;40 hrs).</span>
+                    <button class="hotlist-hidden-btn" style="background: none; border: none; color: #d97706; font-weight: bold; cursor: pointer;" onclick="showHiddenRisk()">View These Teachers →</button>
+                </div>
+            </div>
+
+            <!-- Department Comparison + Pulse Compliance -->
+            <div class="side-cards">
+
+                <!-- Department Comparison -->
+                <div class="side-card side-card--dept">
+                    <h3><i class="fas fa-building" style="color: #0038A8;"></i> Department Comparison</h3>
+                    <div class="dept-bars">
+                        <!-- Bars styled via the CSS override block above -->
+                        <div class="dept-item">
+                            <span class="dept-name">Math</span>
+                            <div class="dept-bar-track">
+                                <div class="dept-bar-fill dept-bar--high" style="width:68%;"></div>
+                            </div>
+                            <span class="dept-percent">68% (High)</span>
+                        </div>
+                        <div class="dept-item">
+                            <span class="dept-name">Filipino</span>
+                            <div class="dept-bar-track">
+                                <div class="dept-bar-fill dept-bar--high" style="width:61%;"></div>
+                            </div>
+                            <span class="dept-percent">61% (High)</span>
+                        </div>
+                        <div class="dept-item">
+                            <span class="dept-name">Science</span>
+                            <div class="dept-bar-track">
+                                <div class="dept-bar-fill dept-bar--moderate" style="width:52%;"></div>
+                            </div>
+                            <span class="dept-percent">52% (Mod)</span>
+                        </div>
+                        <div class="dept-item">
+                            <span class="dept-name">English</span>
+                            <div class="dept-bar-track">
+                                <div class="dept-bar-fill dept-bar--moderate" style="width:45%;"></div>
+                            </div>
+                            <span class="dept-percent">45% (Mod)</span>
+                        </div>
+                        <div class="dept-item">
+                            <span class="dept-name">MAPEH</span>
+                            <div class="dept-bar-track">
+                                <div class="dept-bar-fill dept-bar--low" style="width:38%;"></div>
+                            </div>
+                            <span class="dept-percent">38% (Low)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pulse Compliance -->
+                <div class="side-card side-card--pulse">
+                    <h3><i class="fas fa-heartbeat" style="color: #059669;"></i> Pulse Compliance</h3>
+                    <div class="pulse-stats">
+                        <div class="pulse-stat">
+                            <span class="pulse-number" style="color: #059669;">37</span>
+                            <span class="pulse-label">Completed</span>
+                            <span class="pulse-detail">/ 42 (88%)</span>
+                        </div>
+                        <div class="pulse-stat pulse-stat--missing">
+                            <span class="pulse-number" style="color: #C8102E;">5</span>
+                            <span class="pulse-label">Missing</span>
+                            <span class="pulse-detail">(12%)</span>
+                        </div>
+                    </div>
+                    <button class="pulse-remind-btn" onclick="sendReminders()" style="background-color: #0038A8; color: white; border: none; padding: 8px; border-radius: 4px; width: 100%; margin: 10px 0;">
+                        <i class="fas fa-bell"></i> Send Reminders (5 Missing)
+                    </button>
+                    <div class="pulse-exhaustion">
+                        <span class="pulse-exhaustion-label">Avg. Exhaustion:</span>
+                        <span class="pulse-exhaustion-value pulse-exhaustion--critical" style="color: #C8102E; font-weight: bold;">75% (Critical)</span>
+                        <span class="pulse-exhaustion-change"><i class="fas fa-arrow-up" style="color:#C8102E;"></i> +12% from last week</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================== -->
+        <!-- SECTION 4: DATA-DRIVEN RECOMMENDATIONS (Objective 4)       -->
+        <!-- ========================================================== -->
+        <section class="recommendations">
+            <div class="recommendations-header">
+                <h2><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> Data-Driven Recommendations</h2>
+                <span class="recommendations-subtitle">Based on workload balancing analysis</span>
+            </div>
+
+            <!-- Reallocation Table -->
+            <div class="reallocation-card">
+                <h4><i class="fas fa-exchange-alt" style="color: #0038A8;"></i> Recommended Reallocation</h4>
+                <p class="reallocation-intro">TCH-042 is overloaded (52 hrs/week). Consider redistributing:</p>
+
+                <div class="table-wrapper">
+                    <table class="reallocation-table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Current Holder</th>
+                                <th>Suggested Transfer</th>
+                                <th>Impact</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Grade 9 Advisory</td>
+                                <td><span class="teacher-tag teacher-tag--high" style="color: #C8102E; font-weight: bold;">TCH-042 (High)</span></td>
+                                <td><span class="teacher-tag teacher-tag--low" style="color: #059669;">TCH-015 (Low)</span></td>
+                                <td><span class="impact-badge impact-badge--positive" style="color: #059669; font-weight: bold;">-8 hrs</span></td>
+                                <td><button class="action-btn action-btn--simulate" onclick="simulateReallocation()">Simulate</button></td>
+                            </tr>
+                            <tr>
+                                <td>Sports Fest Committee</td>
+                                <td><span class="teacher-tag teacher-tag--high" style="color: #C8102E; font-weight: bold;">TCH-042 (High)</span></td>
+                                <td><span class="teacher-tag teacher-tag--low" style="color: #059669;">TCH-033 (Low)</span></td>
+                                <td><span class="impact-badge impact-badge--positive" style="color: #059669; font-weight: bold;">-5 hrs</span></td>
+                                <td><button class="action-btn action-btn--simulate" onclick="simulateReallocation()">Simulate</button></td>
+                            </tr>
+                            <tr>
+                                <td>Grade 7 Homeroom</td>
+                                <td><span class="teacher-tag teacher-tag--moderate" style="color: #d97706; font-weight: bold;">TCH-018 (Mod)</span></td>
+                                <td><span class="teacher-tag teacher-tag--low" style="color: #059669;">TCH-029 (Low)</span></td>
+                                <td><span class="impact-badge impact-badge--positive" style="color: #059669; font-weight: bold;">-6 hrs</span></td>
+                                <td><button class="action-btn action-btn--simulate" onclick="simulateReallocation()">Simulate</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="reallocation-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <button class="reallocation-btn reallocation-btn--apply" onclick="applyReallocation()" style="padding: 8px 16px; border-radius: 4px;">
+                        <i class="fas fa-check-circle"></i> Apply in Simulator
+                    </button>
+                    <button class="reallocation-btn reallocation-btn--report" onclick="generateReport()" style="padding: 8px 16px; border-radius: 4px; background: transparent;">
+                        <i class="fas fa-file-pdf"></i> Generate Report
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================== -->
+        <!-- SECTION 5: MANAGEMENT MODULES (FOOTER NAV)                 -->
+        <!-- ========================================================== -->
+        <section class="management-modules">
+            <div class="module-card">
+                <div class="module-icon">📁</div>
+                <div class="module-content">
+                    <h4>Master Class Programs</h4>
+                    <p>Access and review official class schedules of all 42 faculty members</p>
+                </div>
+                <button class="module-btn" onclick="openDirectory()">
+                    Open Directory <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="module-card">
+                <div class="module-icon">📊</div>
+                <div class="module-content">
+                    <h4>Risk Assessments</h4>
+                    <p>Review predictive risk levels. Fully anonymized with Teacher Codes</p>
+                    <span class="module-privacy"><i class="fas fa-shield-alt" style="color: #059669;"></i> R.A. 10173 Compliant</span>
+                </div>
+                <button class="module-btn" onclick="openAnalytics()">
+                    Open Analytics <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="module-card" style="border: 2px solid #0038A8;">
+                <div class="module-icon">📤</div>
+                <div class="module-content">
+                    <h4>Data Ingestion</h4>
+                    <p>Upload Master eSF7 spreadsheet to extract objective workload data</p>
+                    <span class="module-update">Last Upload: 07/20/2026</span>
+                </div>
+                <button class="module-btn module-btn--upload" onclick="uploadData()" style="padding: 8px; border: none; border-radius: 4px;">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload New Data
+                </button>
+            </div>
+
+            <div class="module-card">
+                <div class="module-icon">⚙️</div>
+                <div class="module-content">
+                    <h4>System Controls</h4>
+                    <p>Export full reports and monitor system health</p>
+                    <span class="module-health"><i class="fas fa-check-circle" style="color:#059669;"></i> System Health: OK</span>
+                    <span class="module-response">Response Time: 0.8s</span>
+                </div>
+                <button class="module-btn" onclick="exportReport()">
+                    <i class="fas fa-download"></i> Export PDF
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                       -->
+    <!-- ============================================================ -->
+    <footer class="dashboard-footer">
+        <span>© 2026 Kandili Workspace. All rights reserved.</span>
+        <span style="color: #059669; font-weight: bold;">Data Privacy: ✅ R.A. 10173 Compliant</span>
+        <span>Version 2.1.0</span>
+    </footer>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
     <script>
-        Chart.defaults.font.family = 'Segoe UI';
-        Chart.defaults.plugins.legend.display = false;
+        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+        const themeNavMenu = document.getElementById('themeNavMenu');
 
-        new Chart(document.getElementById('capacityChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Teacher I', 'Master', 'Coord.'],
-                datasets: [
-                    { label: 'Utilized', data: [250, 180, 120], backgroundColor: '#0038A8' },
-                    { label: 'Available', data: [80, 20, 10], backgroundColor: '#059669' }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
-        });
+        if (burgerMenuBtn && themeNavMenu) {
+            burgerMenuBtn.addEventListener('click', () => {
+                const isOpen = themeNavMenu.classList.toggle('active');
+                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            });
 
-        new Chart(document.getElementById('riskChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Low', 'Moderate', 'Critical'],
-                datasets: [{ data: [32, 8, 2], backgroundColor: ['#059669', '#f59e0b', '#C8102E'] }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
-        });
-
-        new Chart(document.getElementById('radarChart'), {
-            type: 'radar',
-            data: {
-                labels: ['Mental', 'Physical', 'Temporal', 'Perform.', 'Effort', 'Frustrat.'],
-                datasets: [{ data: [65, 30, 80, 85, 70, 45], fill: true, backgroundColor: 'rgba(0, 56, 168, 0.2)', borderColor: '#0038A8', pointBackgroundColor: '#0038A8' }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 100, ticks: { display: false } } } }
-        });
-
-        new Chart(document.getElementById('scatterChart'), {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Anonymized Profiles (TCH-Codes)',
-                    data: [{ x: 26, y: 1.0 }, { x: 30, y: 1.1 }, { x: 28, y: 1.0 }, { x: 35, y: 1.25 }, { x: 38, y: 1.5 }],
-                    backgroundColor: '#C8102E', pointRadius: 5
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, scales: { x: { min: 20, max: 45 }, y: { min: 0.5, max: 2.0 } } }
-        });
+            document.addEventListener('click', (event) => {
+                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                    themeNavMenu.classList.remove('active');
+                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
     </script>
+
 </body>
 </html>
