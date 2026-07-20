@@ -144,6 +144,8 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
 
 /* Principal-style theme navigation */
 .theme-nav {
+    position: relative;
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -2803,6 +2805,277 @@ body.auth-body {
 @media (max-width: 600px) {
     .form-row, .checkbox-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+            ADMIN DASHBOARD STYLES
+   ========================================= */
+
+/* Admin table section - wraps card containing table */
+.admin-table-section .card-header h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+.admin-table-section .card-header p {
+    font-size: 0.8rem;
+    margin: 0.25rem 0 0 0;
+}
+
+/* Two-column row for admin details */
+.admin-details-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Status note under account status */
+.status-note {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #78350f;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Status styling for badges */
+.status-pending {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+.status-active {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* Admin status card improvement */
+.admin-status-card .admin-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.admin-status-card .admin-status-header h4 {
+    font-size: 0.95rem;
+    color: var(--deped-blue);
+    margin-bottom: 0.25rem;
+}
+.admin-status-card .admin-status-header p {
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* Infographic flow (system process) */
+.infographic-flow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    flex-wrap: wrap;
+}
+.infographic-flow .flow-item {
+    flex: 1;
+    min-width: 180px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+}
+.infographic-flow .flow-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+.infographic-flow .flow-item strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--deped-blue);
+    margin-bottom: 0.3rem;
+}
+.infographic-flow .flow-item p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+}
+.infographic-flow .flow-arrow {
+    font-size: 1.5rem;
+    color: var(--deped-blue);
+    flex-shrink: 0;
+}
+
+/* Drawer overlay for admin */
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 2000;
+    display: none;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+.drawer-overlay.active {
+    display: flex;
+}
+.drawer-panel {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    box-shadow: -8px 0 30px rgba(15, 23, 42, 0.15);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.drawer-panel__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+.drawer-panel__header h2 {
+    font-size: 1.1rem;
+    color: var(--deped-blue);
+    margin-bottom: 0.25rem;
+}
+.drawer-panel__subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.drawer-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.drawer-close-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+.drawer-panel__body {
+    padding: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+}
+.drawer-field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.drawer-field {
+    margin-bottom: 1rem;
+}
+.drawer-field label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+}
+.drawer-field input,
+.drawer-field select {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: #f8fafc;
+    transition: border-color 0.2s, background 0.2s;
+}
+.drawer-field input:focus,
+.drawer-field select:focus {
+    outline: none;
+    border-color: var(--deped-blue);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.1);
+}
+.drawer-panel__body .btn-secondary {
+    width: 100%;
+    padding: 0.75rem;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    transition: all 0.2s;
+}
+.drawer-panel__body .btn-secondary:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+.drawer-eyebrow {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+}
+
+/* Admin teacher name in table */
+.admin-teacher-name {
+    font-weight: 600;
+    color: #0f172a;
+}
+.admin-load-value {
+    font-weight: 700;
+    color: var(--deped-blue);
+}
+
+/* Responsive for admin details */
+@media (max-width: 768px) {
+    .admin-details-row {
+        grid-template-columns: 1fr;
+    }
+    .drawer-field-grid {
+        grid-template-columns: 1fr;
+    }
+    .infographic-flow {
+        flex-direction: column;
+    }
+    .infographic-flow .flow-arrow {
+        transform: rotate(90deg);
     }
 }
 
