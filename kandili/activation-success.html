@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Activated &bull; Kandili Workspace</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <div class="brand-logo">
+                <i class="fas fa-shield-alt"></i> Kandili [Workspace]
+            </div>
+            <h1>Account Activated!</h1>
+            <p>Your account has been successfully set up.</p>
+        </div>
+
+        <!-- Stepper (All Completed) -->
+        <div class="stepper">
+            <div class="step completed">
+                <div class="step-number"><i class="fas fa-check" style="font-size: 0.65rem;"></i></div>
+                <span>Account Info</span>
+            </div>
+            <div class="step completed">
+                <div class="step-number"><i class="fas fa-check" style="font-size: 0.65rem;"></i></div>
+                <span>Set Password</span>
+            </div>
+            <div class="step active">
+                <div class="step-number"><i class="fas fa-check" style="font-size: 0.65rem;"></i></div>
+                <span>Complete</span>
+            </div>
+        </div>
+
+        <!-- Success Message Body -->
+        <div class="auth-form" style="text-align: center; padding: 2.5rem 2rem;">
+            
+            <div class="success-icon-wrapper" style="margin-bottom: 1.5rem;">
+                <div style="width: 64px; height: 64px; background: rgba(16, 185, 129, 0.1); border: 2px solid var(--success, #10b981); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: var(--success, #10b981); font-size: 1.75rem;">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-main, #f8fafc);">You're all set!</h2>
+            <p style="color: var(--text-muted, #94a3b8); font-size: 0.9rem; line-height: 1.5; margin-bottom: 2rem;">
+                You can now log in to <strong style="color: var(--text-main, #f8fafc);">Kandili Workspace</strong> using your newly created secure password and official DepEd email.
+            </p>
+
+            <!-- Action Button -->
+            <a href="login.html" class="btn-submit" style="text-decoration: none; margin-bottom: 1.5rem;">
+                <i class="fas fa-key"></i> Log In Now
+            </a>
+
+            <!-- Redirect Notice Box -->
+            <div style="background: rgba(0, 56, 168, 0.1); border: 1px solid rgba(0, 56, 168, 0.3); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-muted, #94a3b8); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-info-circle" style="color: var(--primary, #0038A8);"></i>
+                <span>You'll be redirected to the login page in <strong id="countdown" style="color: var(--text-main, #f8fafc);">5</strong> seconds...</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Automatic redirection countdown timer (5 seconds)
+        let timeLeft = 5;
+        const countdownElement = document.getElementById('countdown');
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                window.location.href = 'login.html'; // Adjust target login route as needed
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

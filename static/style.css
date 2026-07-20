@@ -2762,3 +2762,408 @@ body { margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif; background: #f8f
     margin-bottom: 1.5rem;
     display: inline-block;
 }
+
+/* =========================================
+              SET UP PASSWORD
+   ========================================= */
+
+.auth-header {
+    padding: 2.75rem 2rem 2.25rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #0038A8 0%, #002880 100%);
+    color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.brand-logo {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.85);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.brand-logo i {
+    color: #60a5fa;
+}
+
+.auth-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.auth-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.925rem;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+}
+
+:root {
+    --primary: #0038A8;
+    --primary-hover: #002d88;
+    --accent-crimson: #C8102E;
+    --bg-light: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #cbd5e1;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body.auth-body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 650px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Deep Blue Header Styling */
+.auth-header {
+    padding: 2.25rem 2rem 1.75rem 2rem;
+    text-align: center;
+    background-color: var(--primary);
+    color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.brand-logo i {
+    color: #ffffff;
+}
+
+.auth-header h1 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #ffffff;
+}
+
+.auth-header p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.875rem;
+}
+
+/* Stepper UI */
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    background: #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.step.completed .step-number {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+.step.active .step-number {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.step-number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    background: white;
+}
+
+.step.active {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* Form Body */
+.auth-form {
+    padding: 2rem;
+}
+
+.info-box {
+    background: rgba(0, 56, 168, 0.04);
+    border: 1px solid rgba(0, 56, 168, 0.15);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-box h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.info-grid span:nth-child(odd) {
+    color: var(--text-muted);
+}
+
+.form-section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.auth-form label {
+    display: block;
+    font-size: 0.825rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+/* Crimson Red Asterisk */
+.required-star {
+    color: var(--accent-crimson);
+    font-weight: 700;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"],
+.auth-form input[type="tel"] {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.15);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.password-toggle:hover {
+    color: var(--text-main);
+}
+
+/* Password Strength Meter */
+.strength-meter-container {
+    margin-top: 0.5rem;
+}
+
+.strength-bars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    height: 4px;
+    margin-bottom: 0.4rem;
+}
+
+.strength-bar {
+    background: var(--border-color);
+    border-radius: 2px;
+    transition: background 0.3s ease;
+}
+
+.strength-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+}
+
+.requirements-hint {
+    font-size: 0.7rem; 
+    color: var(--text-muted);
+}
+
+.form-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 1.5rem 0;
+}
+
+/* Checkboxes Grid for Roles */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    cursor: pointer;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.roles-group {
+    margin-bottom: 0.5rem;
+}
+
+.helper-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+/* Submit Button */
+.btn-submit {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.875rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-submit:hover {
+    background: var(--primary-hover);
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+
+.auth-header.login-header {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.auth-header.login-header .brand-logo {
+    background: transparent;
+    padding: 0;
+    color: var(--primary);
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.auth-header.login-header h1 {
+    color: var(--text-main);
+}
+
+.auth-header.login-header p {
+    color: var(--text-muted);
+}
