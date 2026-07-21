@@ -7,19 +7,24 @@
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        <!--Scripts Section -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../static/logout.js"></script>
+    <script src="../static/principalDashboard.js"></script>
 
     <style>
+        /* Header & Navigation */
         .directory-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 1.5rem;
             margin-bottom: 2rem;
-            flex-wrap: wrap;
+        }
+
+        .directory-header-top {
+            display: flex;
+            align-items: center;
             gap: 1rem;
         }
 
@@ -30,6 +35,32 @@
             margin: 0;
         }
 
+        .back-button {
+            padding: 0.6rem 1rem;
+            background-color: #f8fafc;
+            color: #0038A8;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #0038A8;
+            color: #ffffff;
+            border-color: #0038A8;
+            box-shadow: 0 4px 12px rgba(0, 56, 168, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+        }
+
+        /* Search Bar */
         .search-bar {
             width: 100%;
             max-width: 500px;
@@ -38,10 +69,9 @@
             border-radius: 8px;
             font-family: inherit;
             font-size: 0.95rem;
-            margin-bottom: 1.5rem;
             background-color: #ffffff;
-            transition: all 0.2s ease;
             color: #0f172a;
+            transition: all 0.2s ease;
         }
 
         .search-bar::placeholder {
@@ -55,13 +85,14 @@
             background-color: #f8fbff;
         }
 
+        /* Grid Layout */
         .directory-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
-            margin-top: 1rem;
         }
 
+        /* Faculty Card */
         .faculty-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -69,7 +100,6 @@
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             height: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -82,6 +112,7 @@
         }
 
         .faculty-info {
+            flex: 1;
             margin-bottom: 1.5rem;
         }
 
@@ -98,6 +129,7 @@
             line-height: 1.5;
         }
 
+        /* Action Button */
         .faculty-action {
             width: 100%;
             padding: 0.65rem 1rem;
@@ -110,7 +142,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            display: inline-block;
             text-align: center;
             margin-top: auto;
         }
@@ -125,9 +156,11 @@
             transform: translateY(0);
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .directory-header {
+            .directory-header-top {
                 flex-direction: column;
+                align-items: flex-start;
             }
 
             .directory-grid {
@@ -136,6 +169,10 @@
 
             .search-bar {
                 max-width: 100%;
+            }
+
+            .directory-header h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -158,18 +195,15 @@
             <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
     </header>
-    </header>
 
-    <div class="dashboard-container" style="display: block;">
-        
+    <div class="dashboard-container">
         <div class="directory-header">
-            <div>
-                <button class="btn-outline nav-back" onclick="window.history.back()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+            <div class="directory-header-top">
+                <button class="back-button" onclick="window.history.back()">← Back to Dashboard</button>
                 <h2>Faculty Class Programs Directory</h2>
             </div>
+            <input type="text" class="search-bar" placeholder="🔍 Search by teacher name, grade level, or subject...">
         </div>
-
-        <input type="text" class="search-bar" placeholder="🔍 Search by teacher name, grade level, or subject...">
         
         <div class="directory-grid">
             <!-- Faculty Item 1 -->
@@ -211,16 +245,10 @@
 
     </div>
 
-    <!-- Supabase & Auth Security Stack -->
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js"></script>
-    <script src="../static/logout.js"></script>
-    <script src="../static/principalDashboard.js"></script>
     <script>
         if (typeof checkAuthAndRole === "function") {
             checkAuthAndRole('principal'); 
         }
     </script>
-    
 </body>
 </html>
