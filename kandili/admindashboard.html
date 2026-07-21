@@ -102,25 +102,25 @@
             </div>
         </section>
 
-<!-- FACULTY DIRECTORY SECTION -->
+<!-- FACULTY DIRECTORY & USER MANAGEMENT SECTION -->
 <div class="directory-section">
-    <!-- Header with Flexbox to align button to the right -->
+    <!-- Header with Button -->
     <div class="directory-header">
         <div class="directory-title-block">
             <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
-            <p>Existing teachers | Manage load and assignments.</p>
+            <p>Manage existing teachers, assignments, and workload distribution.</p>
         </div>
         <button class="btn-add-teacher"><i class="fas fa-plus"></i> Add New Teacher</button>
     </div>
 
-    <!-- Scrollable Table Container -->
+    <!-- Faculty Table -->
     <div class="table-container">
         <table class="dashboard-table">
             <thead>
                 <tr>
                     <th>Teacher Code</th>
                     <th>Name</th>
-                    <th>Email</th>
+                    <th>Role</th>
                     <th>Assignment</th>
                     <th>Load (Hrs)</th>
                     <th>Status</th>
@@ -128,7 +128,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Maximized Row Example -->
+                <!-- Sample Row 1 -->
                 <tr>
                     <td class="text-muted">TCH2026-001</td>
                     <td class="font-medium name-cell">Kafka, Ma. Lyn</td>
@@ -139,7 +139,7 @@
                     <td><button class="btn-manage">Manage</button></td>
                 </tr>
                 
-                <!-- Optimal Row Example -->
+                <!-- Sample Row 2 -->
                 <tr>
                     <td class="text-muted">TCH2026-003</td>
                     <td class="font-medium name-cell">Mcfly, Marty</td>
@@ -156,21 +156,20 @@
 
 <!-- ADD NEW TEACHER MODAL (CENTERED & SCROLLABLE) -->
 <div class="modal-overlay" id="teacherDrawer">
-    <div class="modal-content">
+    <div class="modal-container">
         
         <!-- Header -->
         <div class="modal-header">
             <div>
                 <span class="modal-subtitle">Admin Enters Teacher Info</span>
-                <h4>Create New Teacher Account</h4>
-                <p class="modal-desc">Create new teacher account</p>
+                <h2>Create New Teacher Account</h2>
             </div>
-            <button class="btn-close-modal" id="closeTeacherDrawer" aria-label="Close panel">&times;</button>
+            <button class="modal-close-icon" id="closeTeacherDrawer" aria-label="Close panel">&times;</button>
         </div>
         
-        <!-- Body (Added scrollable wrapper for taller forms) -->
-        <div class="modal-body scrollable-body">
-            
+        <!-- Body -->
+        <div class="modal-body">
+        
             <!-- Teacher Basic Information -->
             <div class="section-title">📋 Teacher Basic Information</div>
             
@@ -221,14 +220,14 @@
             <div class="form-group">
                 <label>Generic Password <span class="required-star">*</span></label>
                 <div class="password-row">
-                    <input type="text" id="teacherPassword" placeholder="Enter or generate a password" readonly style="background: #f1f5f9;">
+                    <input type="text" id="teacherPassword" placeholder="Enter or generate a password" readonly>
                     <button type="button" class="btn-generate" id="generatePasswordBtn">🔄 Generate</button>
                 </div>
             </div>
             
             <div class="form-group">
                 <label>Teacher Code</label>
-                <input type="text" id="teacherCode" readonly style="background: #f1f5f9; color: #475569; font-weight: 600;">
+                <input type="text" id="teacherCode" readonly>
                 <span class="field-hint">Auto-generated</span>
             </div>
             
@@ -243,9 +242,9 @@
             </div>
 
             <!-- Buttons -->
-            <div class="modal-actions-vertical">
-                <button class="btn-save-full" id="createTeacherAccountBtn">✅ Create Account</button>
-                <button class="btn-cancel-full" id="cancelTeacherDrawerBtn">✗ Cancel</button>
+            <div class="modal-actions">
+                <button class="btn-primary" id="createTeacherAccountBtn">✅ Create Account</button>
+                <button class="btn-outline" id="cancelTeacherDrawerBtn">✗ Cancel</button>
             </div>
             
         </div>
