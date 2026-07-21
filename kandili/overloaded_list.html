@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overloaded Teachers &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+<!-- TOP NAVIGATION BAR -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <!-- New Back Arrow -->
+            <a href="admindashboard.html" class="nav-back-arrow" title="Back to Dashboard">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">System Administration</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 21, 2026</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        
+        <!-- PAGE HEADER -->
+<div class="page-header beautified-header">
+            <div class="header-main">
+                <div class="title-wrapper">
+                    <div class="header-icon-box">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="header-text-wrapper">
+                        <h1>Overloaded Teachers List</h1>
+                        <p>Elementary faculty flagged for immediate workload reallocation based on <strong>total workload hours</strong>.</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-outline"><i class="fas fa-download"></i> Export Report</button>
+                    <button class="btn-red"><i class="fas fa-random"></i> Bulk Reallocate</button>
+                </div>
+            </div>
+        </div>
+
+    <main class="dashboard overloaded-page">
+
+        <!-- FILTERS & SEARCH -->
+        <div class="table-toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search by name, ID, or grade level...">
+            </div>
+            <div class="filter-group">
+                <select class="filter-dropdown">
+                    <option value="">All Elementary Grades</option>
+                    <option value="primary">Primary (Grades 1-3)</option>
+                    <option value="intermediate">Intermediate (Grades 4-6)</option>
+                </select>
+                <select class="filter-dropdown">
+                    <option value="">Sort by: Risk Score (High-Low)</option>
+                    <option value="hours">Sort by: Total Hours</option>
+                    <option value="name">Sort by: Name A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- OVERLOADED TEACHERS TABLE -->
+        <section class="content-card no-margin">
+            <div class="data-table-wrapper">
+                <table class="data-table admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID Number</th>
+                            <th>Faculty Name</th>
+                            <th>Department</th>
+                            <th>Total Load (Hrs)</th>
+                            <th>Risk Score Index</th>
+                            <th>Status Flag</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Record 1 (Severe) -->
+                        <tr class="row-severe">
+                            <td class="cell-id">TCH-088</td>
+                            <td class="cell-name">
+                                <strong>Reyes, Maria Elena</strong>
+                                <span class="sub-text">Adviser - Grade 5</span>
+                            </td>
+                            <td>Elementary</td>
+                            <td><span class="metric-high">48 hrs</span></td>
+                            <td>
+                                <div class="risk-score-cell">
+                                    <span class="score-value text-red">88</span><span class="score-max">/100</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-critical">Critical Overload</span></td>
+                            <td>
+                                <button class="btn-action open-reco-modal" data-id="TCH-088" data-name="Reyes, Maria Elena" data-score="88"><i class="fas fa-magic"></i> Generate Reco</button>
+                            </td>
+                        </tr>
+
+                        <!-- Record 2 (Moderate) -->
+                        <tr>
+                            <td class="cell-id">TCH-102</td>
+                            <td class="cell-name">
+                                <strong>Bautista, Mark J.</strong>
+                                <span class="sub-text">Subject Teacher - Science (Grades 4-6)</span>
+                            </td>
+                            <td>Elementary</td>
+                            <td><span class="metric-med">42 hrs</span></td>
+                            <td>
+                                <div class="risk-score-cell">
+                                    <span class="score-value text-orange">75</span><span class="score-max">/100</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-warning">High Risk</span></td>
+                            <td>
+                                <button class="btn-action open-reco-modal" data-id="TCH-102" data-name="Bautista, Mark J." data-score="75"><i class="fas fa-magic"></i> Generate Reco</button>
+                            </td>
+                        </tr>
+
+                        <!-- Record 3 (Moderate) -->
+                        <tr>
+                            <td class="cell-id">TCH-045</td>
+                            <td class="cell-name">
+                                <strong>Cruz, Sarah J.</strong>
+                                <span class="sub-text">Adviser - Grade 2</span>
+                            </td>
+                            <td>Elementary</td>
+                            <td><span class="metric-med">45 hrs</span></td>
+                            <td>
+                                <div class="risk-score-cell">
+                                    <span class="score-value text-orange">72</span><span class="score-max">/100</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-warning">High Risk</span></td>
+                            <td>
+                                <button class="btn-action open-reco-modal" data-id="TCH-045" data-name="Cruz, Sarah J." data-score="72"><i class="fas fa-magic"></i> Generate Reco</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- PAGINATION -->
+            <div class="pagination-row">
+                <span class="pagination-info">Showing 1 to 3 of 3 overloaded faculty (Elementary)</span>
+                <div class="pagination-controls">
+                    <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn disabled"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- RECOMMENDATION MODAL POP-UP                                  -->
+        <!-- ============================================================ -->
+        <div id="recommendationModal" class="modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2><i class="fas fa-robot"></i> System Generated Recommendations</h2>
+                    <button class="modal-close-icon">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <!-- Target Info -->
+                    <div class="modal-target-info">
+                        <div>
+                            <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Target Faculty</span>
+                            <div style="font-weight: 700; color: #1e293b; font-size: 1.1rem;" id="modalTeacherName">Reyes, Maria Elena</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Risk Index</span>
+                            <div style="font-weight: 800; color: #e11d48; font-size: 1.1rem;"><span id="modalRiskScore">88</span>/100</div>
+                        </div>
+                    </div>
+
+                    <!-- Split Recommendations -->
+                    <div class="reco-split-grid">
+                        <!-- 1. Workload Reco -->
+                        <div class="reco-box box-blue">
+                            <div class="reco-box-header">
+                                <i class="fas fa-tasks"></i> Workload Adjustment
+                            </div>
+                            <div class="reco-box-content">
+                                <p><strong>Identified Issue:</strong> Ancillary load exceeds maximum threshold by 5 hours.</p>
+                                <p><strong>Suggested Action:</strong> Temporarily reallocate "SDRRM Coordinator" duties to an available faculty member with a risk index below 40.</p>
+                                <p style="color: #0369a1; font-weight: 600; margin-top: 8px;"><i class="fas fa-arrow-down"></i> Projected Risk Drop: -12 pts</p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Burnout Reco -->
+                        <div class="reco-box box-rose">
+                            <div class="reco-box-header">
+                                <i class="fas fa-fire-alt"></i> Burnout / Wellness Action
+                            </div>
+                            <div class="reco-box-content">
+                                <p><strong>Identified Issue:</strong> Severe emotional exhaustion metrics detected in recent pulse check.</p>
+                                <p><strong>Suggested Action:</strong> Approve a 2-day wellness leave and trigger an automated check-in prompt from the guidance counselor.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Routing Confirmation (Privacy Feature) -->
+                    <div class="routing-confirmation">
+                        <h4><i class="fas fa-share-alt"></i> Notification Routing Protocol</h4>
+                        <ul class="routing-list">
+                            <li>
+                                <i class="fas fa-chalkboard-teacher" style="color: #10b981;"></i>
+                                <div><strong>Send to Teacher:</strong> Will receive full recommendations including personal details and wellness actions.</div>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-secret" style="color: #8b5cf6;"></i>
+                                <div><strong>Send to Principal:</strong> <span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace;">Anonymized</span> Will only receive the generated action plan linked to code <strong id="modalTeacherCode">TCH-088</strong> to protect identity.</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-outline modal-cancel-btn">Cancel</button>
+                    <button class="btn-blue"><i class="fas fa-paper-plane"></i> Confirm & Send Routing</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Simple JavaScript to handle Modal opening and closing
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('recommendationModal');
+            const openBtns = document.querySelectorAll('.open-reco-modal');
+            const closeBtnIcon = document.querySelector('.modal-close-icon');
+            const cancelBtn = document.querySelector('.modal-cancel-btn');
+
+            // Dynamic fields inside modal
+            const mName = document.getElementById('modalTeacherName');
+            const mScore = document.getElementById('modalRiskScore');
+            const mCode = document.getElementById('modalTeacherCode');
+
+            // Open modal and populate data
+            openBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = btn.getAttribute('data-id');
+                    const name = btn.getAttribute('data-name');
+                    const score = btn.getAttribute('data-score');
+                    
+                    mName.textContent = name;
+                    mScore.textContent = score;
+                    mCode.textContent = id;
+                    
+                    modal.classList.add('active');
+                });
+            });
+
+            // Close modal functions
+            const closeModal = () => modal.classList.remove('active');
+            closeBtnIcon.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            
+            // Close if clicking outside the container
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) closeModal();
+            });
+        });
+    </script>
+</body>
+</html>
