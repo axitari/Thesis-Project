@@ -238,29 +238,73 @@
                 <button class="drawer-close-btn" id="closeTeacherDrawer" aria-label="Close panel">×</button>
             </div>
             <div class="drawer-panel__body">
+                <!-- Teacher Basic Information -->
+                <div class="drawer-section-title">📋 Teacher Basic Information</div>
                 <div class="drawer-field-grid">
                     <div class="drawer-field">
-                        <label>First Name</label>
-                        <input type="text" value="Sarah J.">
+                        <label>First Name <span class="required-star">*</span></label>
+                        <input type="text" id="teacherFirstName" placeholder="e.g. Sarah">
                     </div>
                     <div class="drawer-field">
-                        <label>Last Name</label>
-                        <input type="text" value="Cruz">
+                        <label>Last Name <span class="required-star">*</span></label>
+                        <input type="text" id="teacherLastName" placeholder="e.g. Cruz">
                     </div>
                 </div>
                 <div class="drawer-field">
-                    <label>Official DepEd Email Address</label>
-                    <input type="text" placeholder="Official DepEd Email Address">
+                    <label>Email <span class="required-star">*</span></label>
+                    <input type="email" id="teacherEmail" placeholder="cruz_svnz@gmail.com">
+                </div>
+                <div class="drawer-field-grid">
+                    <div class="drawer-field">
+                        <label>School <span class="required-star">*</span></label>
+                        <select id="teacherSchool">
+                            <option value="" disabled selected>Select School...</option>
+                            <option value="ROVCMS">ROVCMS</option>
+                            <option value="LJES">LJES</option>
+                            <option value="SMES">SMES</option>
+                        </select>
+                    </div>
+                    <div class="drawer-field">
+                        <label>Grade Level <span class="required-star">*</span></label>
+                        <select id="teacherGradeLevel">
+                            <option value="" disabled selected>Select Grade Level...</option>
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Account Credentials Section -->
+                <hr class="drawer-divider">
+                <div class="drawer-section-title">🔐 Account Credentials</div>
+                <div class="drawer-field">
+                    <label>Generic Password <span class="required-star">*</span></label>
+                    <div class="drawer-password-row">
+                        <input type="text" id="teacherPassword" placeholder="Enter or generate a password" readonly style="background: #f1f5f9;">
+                        <button type="button" class="btn btn-outline drawer-generate-btn" id="generatePasswordBtn">🔄 Generate</button>
+                    </div>
                 </div>
                 <div class="drawer-field">
-                    <label>School & Grade Assignment</label>
-                    <select>
-                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
-                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
-                    </select>
+                    <label>Teacher Code</label>
+                    <input type="text" id="teacherCode" readonly style="background: #f1f5f9; color: #475569; font-weight: 600;">
+                    <span style="font-size: 0.72rem; color: #64748b; margin-top: 0.2rem; display: block;">Auto-generated</span>
                 </div>
-                <button class="btn btn-primary btn-block">Save & Send Invitation</button>
-                <button class="btn btn-secondary btn-block">Cancel</button>
+                <div class="drawer-password-info">
+                    <div class="drawer-password-info-header">💡 Password Requirements:</div>
+                    <ul class="drawer-password-info-list">
+                        <li>At least 8 characters</li>
+                        <li>Contains uppercase and lowercase letters</li>
+                        <li>Contains at least one number</li>
+                        <li>Contains at least one special character</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-primary btn-block" id="createTeacherAccountBtn">✅ Create Account</button>
+                <button class="btn btn-secondary btn-block" id="cancelTeacherDrawerBtn">✗ Cancel</button>
             </div>
         </aside>
     </div>
