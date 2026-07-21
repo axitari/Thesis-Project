@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Educator Workload Dashboard</title>
+    <title>Teacher Dashboard &bull; Kandili Workspace</title>
+   
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+    <!-- External Stylesheet (Shared) -->
     <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <!--Scripts Section -->
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-   <script src="../static/supabaseClient.js"></script>
-   <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
-   <script src="../static/logout.js"></script>
-
 </head>
-<body class="dashboard-body">
+<body>
 
+
+    <!-- ============================================================ -->
+    <!-- TOP NAVIGATION BAR                                           -->
+    <!-- ============================================================ -->
     <header class="theme-nav">
         <div class="theme-nav__brand">
             <div class="theme-nav__logo">
@@ -34,267 +35,498 @@
             </button>
         </div>
         <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Principal Dashboard</a>
             <a href="teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
             <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
             <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
             <a href="history.html"><i class="fas fa-history"></i> History</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
+            <a href="facultydirectory.html"><i class="fas fa-address-book"></i> Faculty Directory</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
         </nav>
     </header>
 
-    <div class="dashboard-container">
-        <div class="dashboard-column">
-            
-            <section class="welcome-banner">
-                <h2 class="welcome-title" id="welcome-message">Welcome back, Teacher</h2>
-                <p class="welcome-subtitle">Teacher I | Class Adviser (Grade 2 - Sampaguita) | ROVCMS</p>
-                <div class="status-badge status-draft">Status: Draft (Pending Submission)</div>
-            </section>
 
-            <div class="alert-box">
-                <div class="alert-title">📩 Message from the Principal's Office</div>
-                <div class="alert-text">
-                    "Please finalize your drafted SF7 workloads for the upcoming quarter by Friday. Ensure all your assigned ancillary duties are logged accurately."
+    <main class="dashboard">
+
+
+        <!-- WELCOME HEADER -->
+        <div class="welcome-header">
+            <h1>👋 Welcome back, Sarah J. Cruz</h1>
+            <p>Teacher | Class Adviser | ROVCMS</p>
+        </div>
+
+
+        <!-- WELLNESS ALERT -->
+        <div class="alert-banner">
+            <div class="alert-text">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                <strong>Wellness Check-in Reminder:</strong> You haven't completed your weekly pulse check-in. This helps us monitor your wellbeing.
+            </div>
+            <button class="alert-btn">Complete Check-in &rarr;</button>
+        </div>
+
+
+        <!-- ============================================================ -->
+        <!-- SECTION: CLASS PROFILE & DEMOGRAPHICS                        -->
+        <!-- ============================================================ -->
+        <section class="content-card">
+            <div class="card-title"><i class="fas fa-users"></i> Class Profile & Demographics</div>
+           
+            <div class="profile-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+               
+                <!-- 1: Section Info -->
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Section Information</h4>
+                    <div class="info-row"><span>Section:</span> <span>Grade 2 - A</span></div>
+                    <div class="info-row"><span>Room:</span> <span>Room 204</span></div>
+                    <div class="info-row"><span>Adviser:</span> <span>Sarah J. Cruz</span></div>
+                    <div class="info-row"><span>SY:</span> <span>2025-2026</span></div>
+                    <div class="info-row"><span>Semester:</span> <span>1st</span></div>
+                </div>
+
+
+                <!-- 2: Demographics -->
+                <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <h4><i class="fas fa-chart-pie"></i> Student Demographics</h4>
+                   
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5rem;">
+                        <div style="text-align: left;">
+                            <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary, #0038A8); line-height: 1;">42</div>
+                            <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Total</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 600; color: #3b82f6; line-height: 1;">22</div>
+                            <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Boys</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 600; color: #ec4899; line-height: 1;">20</div>
+                            <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Girls</div>
+                        </div>
+                    </div>
+
+
+                    <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.4rem; font-weight: 500;">
+                            <span>52%</span>
+                            <span>48%</span>
+                        </div>
+                        <div style="height: 8px; width: 100%; background: #e2e8f0; border-radius: 4px; display: flex; overflow: hidden;">
+                            <div style="width: 52%; background: #3b82f6;"></div>
+                            <div style="width: 48%; background: #ec4899;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 3: Quick Stats -->
+                <div class="info-box">
+                    <h4><i class="fas fa-bolt"></i> Quick Stats</h4>
+                    <div class="info-row"><span><i class="fas fa-medal" style="color: #f59e0b;"></i> Honor Students:</span> <span>5</span></div>
+                    <div class="info-row"><span><i class="fas fa-star" style="color: #10b981;"></i> Sp. Needs:</span> <span>2</span></div>
+                    <div class="info-row"><span><i class="fas fa-calendar-check" style="color: #3b82f6;"></i> Attendance:</span> <span>89%</span></div>
+                    <div class="info-row"><span><i class="fas fa-book" style="color: #8b5cf6;"></i> Subjects:</span> <span>8</span></div>
+                </div>
+
+
+                <!-- 4: Weekly Task Breakdown -->
+                <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <h4><i class="fas fa-layer-group"></i> Weekly Task Breakdown</h4>
+                   
+                    <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
+                                <span style="font-weight: 600; color: #334155;"><i class="fas fa-chalkboard" style="color: #3b82f6; margin-right: 5px;"></i> Core Teaching (8 Subjects)</span>
+                                <span style="color: #64748b; font-weight: 700;">22 hrs</span>
+                            </div>
+                            <div style="height: 8px; width: 100%; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 81%; background: #3b82f6; height: 100%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
+                                <span style="font-weight: 600; color: #334155;"><i class="fas fa-folder-open" style="color: #f59e0b; margin-right: 5px;"></i> Ancillary & Advising</span>
+                                <span style="color: #64748b; font-weight: 700;">5 hrs</span>
+                            </div>
+                            <div style="height: 8px; width: 100%; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 19%; background: #f59e0b; height: 100%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+
+
+                        <div style="border-top: 1px dashed #cbd5e1; padding-top: 0.8rem; margin-top: -0.2rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; color: #1e293b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Logged</span>
+                            <span style="font-size: 1.1rem; font-weight: 800; color: var(--primary, #0038A8);">27 hrs</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- FOOTER ROW -->
+                <div style="grid-column: 1 / -1; padding-top: 1rem; border-top: 1px dashed #cbd5e1; display: flex; justify-content: flex-end; align-items: center; font-size: 0.9rem;">
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <a href="classprogram.html" class="btn-blue" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-calendar-alt"></i> View Class Program
+                        </a>
+                        <span style="color: #f59e0b; font-weight: 600; border-left: 1px solid #cbd5e1; padding-left: 1.5rem;">
+                            <i class="fas fa-tasks"></i> Workload: 68 (Mod)
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================ -->
+        <!-- SECTION: WORKLOAD & RISK INTELLIGENCE                        -->
+        <!-- ============================================================ -->
+        <div class="section-header-custom">
+            <h3><i class="fas fa-brain"></i> Workload & Risk Intelligence</h3>
+            <p>Objectives 1, 2, & 4</p>
+        </div>
+
+
+        <div class="intel-grid">
+           
+            <!-- RISK STATUS & TREND -->
+            <div class="content-card intel-card">
+                <h4><i class="fas fa-crosshairs"></i> Workload Status & Trends</h4>
+               
+                <div class="risk-indicator-box">
+                    <div class="risk-indicator-header">
+                        <span class="risk-score-main">Risk Score: 68</span>
+                        <span class="risk-status-badge"><i class="fas fa-exclamation-triangle"></i> Moderate Overload</span>
+                    </div>
+                    <div class="risk-bar-bg">
+                        <div class="risk-bar-fill"></div>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h5 class="contributors-title">Risk Contributors:</h5>
+                    <div class="contributors-list">
+                        <div><i class="fas fa-check-circle" style="color: #10b981; margin-right: 8px;"></i> Teaching load is within limit</div>
+                        <div><i class="fas fa-exclamation-circle" style="color: #f59e0b; margin-right: 8px;"></i> Ancillary load exceeds recommended limits</div>
+                        <div><i class="fas fa-exclamation-circle" style="color: #f59e0b; margin-right: 8px;"></i> Prep time ratio is insufficient</div>
+                    </div>
                 </div>
             </div>
 
-            <section class="card highlighted-card">
-                <h3 class="card-header">
-                    <span>Smart eSF7 Scanner</span>
-                    <span class="ocr-badge">Powered by OCR</span>
+
+            <!-- RECOMMENDATIONS -->
+            <div class="content-card intel-card reco-card">
+                <h4><i class="fas fa-bullseye"></i> Targeted Recommendations</h4>
+               
+                <div class="reco-list">
+                    <div class="reco-item">
+                        <i class="fas fa-star reco-icon" style="color: #f59e0b;"></i>
+                        <div><strong>HIGH PRIORITY:</strong> Reduce ancillary load by 2-3 hrs/week. (Currently 5 hrs above department average).</div>
+                    </div>
+                    <div class="reco-item">
+                        <i class="fas fa-random reco-icon" style="color: #3b82f6;"></i>
+                        <div>Transfer <em>SDRRM Coordinator</em> duties to TCH-015 (currently at 32 hrs total workload).</div>
+                    </div>
+                    <div class="reco-item">
+                        <i class="fas fa-chart-line reco-icon" style="color: #10b981;"></i>
+                        <div><strong>Projected Impact:</strong> Risk score would drop to 58 (Low Risk).</div>
+                    </div>
+                </div>
+
+
+                <div class="action-row">
+                    <button class="btn-blue">Request Adjustment</button>
+                </div>
+            </div>
+           
+        </div>
+
+
+ <!-- ============================================================ -->
+        <!-- SECTION: BURNOUT ANALYTICS & ASSESSMENT                      -->
+        <!-- ============================================================ -->
+        <div class="section-header-custom">
+            <h3><i class="fas fa-fire-alt" style="color: #e11d48;"></i> Burnout Analytics</h3>
+            <p>Burnout Risk Quantification & Tracking</p>
+        </div>
+
+
+        <section class="content-card burnout-card">
+            <div class="burnout-container">
+               
+                <!-- Left Side: Analytics Summary -->
+                <div class="burnout-col">
+                    <h4 class="burnout-title">
+                        <i class="fas fa-chart-pie"></i> Quantified Risk Profile
+                    </h4>
+                    <p class="burnout-desc">
+                        This analytics module measures emotional exhaustion, depersonalization, and personal accomplishment levels to accurately quantify your current burnout risk index.
+                    </p>
+                   
+                    <div class="risk-index-wrapper">
+                        <div class="risk-index-box">
+                            <div class="risk-index-value">72<span class="risk-index-max">/100</span></div>
+                            <div class="risk-index-label">Risk Index</div>
+                        </div>
+                       
+                        <div class="assessment-meta">
+                            <div><i class="fas fa-history" style="color: #94a3b8; width: 20px;"></i> <strong>Last Assessment:</strong> June 15, 2026</div>
+                            <div><i class="fas fa-clock" style="color: #e11d48; width: 20px;"></i> <strong>Next Due:</strong> <span style="color: #e11d48; font-weight: 600;">July 15, 2026</span> (Overdue)</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Right Side: Action Box -->
+                <div class="burnout-col burnout-action-box">
+                    <h5 class="burnout-action-title">Periodic Burnout Assessment</h5>
+                    <p class="burnout-action-desc">
+                        Complete your standardized assessment to update your quantified risk score. The system relies on this data to adjust your workload recommendations accurately.
+                    </p>
+                    <div class="action-row no-border">
+                        <button class="btn-blue"><i class="fas fa-clipboard-check"></i> Take Assessment</button>
+                        <button class="btn-outline"><i class="fas fa-chart-line"></i> View Full Analytics</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+       
+        <!-- ============================================================ -->
+        <!-- SECTION: WELLNESS BASELINE & WORKLOAD COMPARISON             -->
+        <!-- ============================================================ -->
+        <section class="charts-row">
+            <!-- Wellness -->
+            <div class="content-card no-margin">
+                <div class="card-title"><i class="fas fa-smile"></i> Wellness Baseline</div>
+               
+                <div class="progress-row">
+                    <span class="progress-label wide">Emotional Exhaustion</span>
+                    <div class="progress-track"><div class="progress-fill" style="width: 65%; background: #f59e0b;"></div></div>
+                    <span class="progress-value">65%</span>
+                </div>
+                <div class="progress-row">
+                    <span class="progress-label wide">Depersonalization</span>
+                    <div class="progress-track"><div class="progress-fill" style="width: 30%; background: #10b981;"></div></div>
+                    <span class="progress-value">30%</span>
+                </div>
+                <div class="progress-row">
+                    <span class="progress-label wide">Personal Accomp.</span>
+                    <div class="progress-track"><div class="progress-fill" style="width: 78%; background: #3b82f6;"></div></div>
+                    <span class="progress-value">78%</span>
+                </div>
+            </div>
+
+
+            <!-- Comparison -->
+            <div class="content-card no-margin">
+                <div class="card-title"><i class="fas fa-balance-scale-right"></i> Workload Comparison</div>
+               
+                <div class="progress-row">
+                    <span class="progress-label">Your Total</span>
+                    <div class="progress-track"><div class="progress-fill" style="width: 85%; background: #C8102E;"></div></div>
+                    <span class="progress-value">45 hrs</span>
+                </div>
+                <div class="progress-row">
+                    <span class="progress-label">Dept Avg</span>
+                    <div class="progress-track"><div class="progress-fill" style="width: 75%; background: #64748b;"></div></div>
+                    <span class="progress-value">40 hrs</span>
+                </div>
+                <div class="progress-row">
+                    <span class="progress-label">Dept Min</span>
+                    <div class="progress-track"><div class="progress-fill" style="width: 60%; background: #cbd5e1;"></div></div>
+                    <span class="progress-value">32 hrs</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================ -->
+        <!-- SECTION: WEEKLY CLASS SCHEDULE                               -->
+        <!-- ============================================================ -->
+        <section class="content-card" style="margin-bottom: 2.5rem;">
+            <div class="schedule-header-row">
+                <h3 style="color: #0038A8; font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-calendar-alt"></i> Weekly Class Schedule (Preview)
                 </h3>
-                <p class="card-desc">Save time by scanning your approved hard copy. Kandili will automatically extract your teaching and ancillary hours to fill the forms below.</p>
-
-                <div class="scanner-dropzone">
-                    <div class="scanner-icon">📸</div>
-                    <div class="scanner-title">Click to Scan or Drag & Drop eSF7</div>
-                    <div class="scanner-hint">Supports PDF, JPG, or Live Camera Capture</div>
+                <div class="schedule-meta-badge">
+                    Grade 2 - A &nbsp;|&nbsp; Room 204 &nbsp;|&nbsp; 1st Sem
                 </div>
-
-                <button class="btn-outline btn-full">Extract Data & Auto-Fill Fields</button>
-            </section>
-
-            <section class="card">
-    <h3 class="card-header">1. Actual Teaching Load (RA 4670)</h3>
-    <!-- Added ID to form -->
-    <form class="form-row" id="teachingLoadForm">
-        <div class="form-group flex-2">
-            <label>Subject & Grade Level</label>
-            <!-- Added ID to select -->
-            <select id="subjectCategory" required>
-                <option value="" disabled selected>Select class type...</option>
-                <option value="Self-Contained">Grades 1-3 (Self-Contained)</option>
-                <option value="Other">Other Subject</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Minutes / Week</label>
-            <!-- Added ID to input -->
-            <input type="number" id="minutesPerWeek" placeholder="e.g., 1800" required>
-        </div>
-        <button type="submit" class="btn-primary btn-inline">+ Add Class</button>
-    </form>
-</section>
-
-            <section class="card">
-                <h3 class="card-header">2. Ancillary & Admin Duties</h3>
-                <form class="form-row">
-                    <div class="form-group flex-2">
-                        <label>Duty Title</label>
-                        <input type="text" placeholder="e.g., SDRRM Coordinator" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Hours / Week</label>
-                        <input type="number" placeholder="e.g., 5" required>
-                    </div>
-                </form>
-                <button class="btn-primary btn-inline">+ Add Duty</button>
-
-                <div class="logged-item logged-item-stack">
-                    <div class="logged-item-top">
-                        <div class="logged-title">SDRRM Coordinator</div>
-                        <div class="logged-value">5 hrs/week</div>
-                    </div>
-                    <div class="complexity-row">
-                        <div class="complexity-label">NASA-TLX Complexity</div>
-                        <div class="complexity-score">High (85)</div>
-                        <div class="complexity-bar-bg">
-                            <div class="complexity-bar-fill" style="width: 85%; background-color: #C8102E;"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <div class="submit-section">
-                <button class="btn-primary submit-btn">Submit SF7 Workload for Principal Approval</button>
             </div>
-        </div>
+           
+            <div class="schedule-wrapper">
+                <table class="timetable">
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>MON</th>
+                            <th>TUE</th>
+                            <th>WED</th>
+                            <th>THU</th>
+                            <th>FRI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">08:00 - 10:00</td>
+                            <td>Math<span class="class-tag">G2-A</span></td>
+                            <td>Science<span class="class-tag">G2-A</span></td>
+                            <td>Science<span class="class-tag">G2-A</span></td>
+                            <td>English<span class="class-tag">G2-A</span></td>
+                            <td>Science<span class="class-tag">G2-A</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:30 - 11:30</td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">12:30 - 14:30</td>
+                            <td>ESP/EPP<span class="class-tag">G2-A</span></td>
+                            <td>MAPEH<span class="class-tag">G2-A</span></td>
+                            <td>MTB<span class="class-tag">G2-A</span></td>
+                            <td>Araling Pan.<span class="class-tag">G2-A</span></td>
+                            <td>ESP/EPP<span class="class-tag">G2-A</span></td>
+                        </tr>
+                        <tr class="homeroom-row">
+                            <td class="time-col">14:30 - 15:00</td>
+                            <td colspan="5" class="homeroom-cell">Homeroom / Advisory Period (G2-A)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           
+            <div class="action-row" style="margin-top: 1.5rem;">
+                <button class="btn-outline"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                <button class="btn-outline btn-right"><i class="fas fa-calendar-plus"></i> Export to Master Calendar</button>
+            </div>
+        </section>
 
-        <aside class="dashboard-column">
-            <section class="card">
-                <h3 class="card-header">Official Class Program</h3>
-                <p class="card-subtitle">Cross-reference your assigned matrix before submitting your workload.</p>
-                
-                <button class="btn-outline btn-full" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
-            </section>
-            <section class="card">
-                <h3 class="card-header">Weekly Calendar Overview</h3>
-                <div class="calendar-legend">
-                    <span class="legend-chip teaching">Teaching</span>
-                    <span class="legend-chip admin">Ancillary</span>
-                </div>
-                <p class="card-subtitle">A compact snapshot of your teaching and ancillary schedule.</p>
 
-                <div class="calendar-grid">
-                    <div class="calendar-day">
-                        <div class="day-label">Mon</div>
-                        <div class="cal-event teaching">
-                            <strong>Grade 2 Math</strong>
-                            <span>08:00–02:00</span>
-                        </div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-label">Tue</div>
-                        <div class="cal-event teaching">
-                            <strong>Grade 3 English</strong>
-                            <span>08:00–11:00</span>
-                        </div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-label">Wed</div>
-                        <div class="cal-event teaching">
-                            <strong>Grade 2 Science</strong>
-                            <span>08:00–12:00</span>
-                        </div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-label">Thu</div>
-                        <div class="cal-event admin">
-                            <strong>SDRRM Duty</strong>
-                            <span>03:00–04:40</span>
-                        </div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-label">Fri</div>
-                        <div class="cal-event admin">
-                            <strong>Grade Chair</strong>
-                            <span>01:00–02:30</span>
-                        </div>
-                    </div>
-                </div>
+        <!-- ============================================================ -->
+        <!-- SECTION: OFFICIAL WORKLOAD (eSF7)                            -->
+        <!-- ============================================================ -->
+        <section class="content-card">
+            <div class="card-title">
+                <i class="fas fa-file-signature"></i> Official Workload (From eSF7)
+                <span style="margin-left: auto; font-size: 0.8rem; font-weight: normal; color: #64748b;">Total: 27 hrs/week</span>
+            </div>
+           
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Subject / Task</th>
+                            <th>Grade/Section</th>
+                            <th>Days</th>
+                            <th>Time</th>
+                            <th>Type</th>
+                            <th>Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mathematics</td><td>Grade 2 - A</td><td>MON</td><td>08-12</td><td>Teaching</td><td>4 hrs</td>
+                            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Science</td><td>Grade 2 - A</td><td>TUE</td><td>08-12</td><td>Teaching</td><td>4 hrs</td>
+                            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>English</td><td>Grade 2 - A</td><td>THU</td><td>08-12</td><td>Teaching</td><td>4 hrs</td>
+                            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>SDRRM Coordinator</td><td>Whole School</td><td>-</td><td>-</td><td>Ancillary</td><td style="color: #C8102E; font-weight: 600;">5 hrs</td>
+                            <td><span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-                <div class="calendar-summary">
-                    <div class="calendar-summary-item">
-                        <span class="summary-label">Teaching</span>
-                        <strong class="summary-value">22 hrs</strong>
-                    </div>
-                    <div class="calendar-summary-item">
-                        <span class="summary-label">Ancillary</span>
-                        <strong class="summary-value">4 hrs</strong>
-                    </div>
-                </div>
-            </section>
 
-            <section class="card risk-panel risk-moderate">
-                <h3 class="card-header">Live Risk Preview</h3>
-                <p class="card-subtitle">This score updates as you build your load.</p>
+        <!-- ============================================================ -->
+        <!-- SECTION: ABSENCE REQUESTS                                    -->
+        <!-- ============================================================ -->
+        <section class="content-card">
+            <div class="card-title">
+                <i class="fas fa-calendar-times"></i> Absence Requests
+                <a href="#" style="margin-left: auto; font-size: 0.85rem; color: var(--primary, #0038A8);"><i class="fas fa-plus"></i> Request Leave</a>
+            </div>
+           
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date Requested</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Substitute</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>July 25, 2026</td>
+                            <td>Sick Leave</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td>-</td>
+                            <td style="color: #64748b;">Under review by admin</td>
+                        </tr>
+                        <tr>
+                            <td>July 15, 2026</td>
+                            <td>Personal</td>
+                            <td><span class="status-badge status-confirmed">Approved</span></td>
+                            <td>TCH-015</td>
+                            <td style="color: #64748b;">Covered by Mr. Santos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-                <div class="risk-score">68</div>
-                <div class="risk-label">Moderate Overload</div>
 
-                <div class="chart-wrap">
-                    <canvas id="workloadChart"></canvas>
-                </div>
+    </main>
 
-                <div class="analytics-breakdown">
-                    <div class="analytics-row">
-                        <span class="analytics-chip teaching">■ Teaching Load</span>
-                        <span>30 hrs</span>
-                    </div>
-                    <div class="analytics-row">
-                        <span class="analytics-chip ancillary">■ Ancillary Load</span>
-                        <span>5 hrs</span>
-                    </div>
-                    <div class="analytics-row">
-                        <span class="analytics-chip prep">■ Est. Lesson Prep / Checking</span>
-                        <span>10 hrs</span>
-                    </div>
-                    <div class="analytics-row analytics-total">
-                        <span>Total Weekly Demand:</span>
-                        <span>45 hrs / week</span>
-                    </div>
-                </div>
-            </section>
 
-            <section class="card wellness-card">
-                <h3 class="card-header">My Wellness Baseline</h3>
-                <div class="mbi-container">
-                    <div>
-                        <div class="mbi-label">Emotional Exhaustion</div>
-                        <div class="mbi-value mbi-warning">Moderate</div>
-                    </div>
-                    <div>
-                        <div class="mbi-label">Depersonalization</div>
-                        <div class="mbi-value mbi-success">Low</div>
-                    </div>
-                </div>
-            </section>
-        </aside>
-    </div>
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        <div class="footer-left">&copy; 2026 Kandili Workspace. All rights reserved.</div>
+        <div class="footer-center"><strong>Data Privacy:</strong> <span class="text-green" style="color: #10b981;"><i class="fas fa-check-square"></i> R.A. 10173 Compliant</span></div>
+        <div class="footer-right">Version 2.1.0</div>
+    </footer>
+
 
     <script>
-        const ctx = document.getElementById('workloadChart').getContext('2d');
-        const workloadChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Teaching (RA 4670)', 'Ancillary/Admin', 'Lesson Prep / Checking'],
-                datasets: [{
-                    data: [30, 5, 10],
-                    backgroundColor: [
-                        '#0038A8',
-                        '#C8102E',
-                        '#cbd5e1'
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '75%',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return ' ' + context.label + ': ' + context.raw + ' hrs';
-                            }
-                        }
-                    }
-                }
+        document.addEventListener('DOMContentLoaded', () => {
+            const burgerBtn = document.getElementById('burgerMenuBtn');
+            const navMenu = document.getElementById('themeNavMenu');
+
+
+            if (burgerBtn && navMenu) {
+                burgerBtn.addEventListener('click', () => {
+                    // Toggle the 'active' class on the menu
+                    navMenu.classList.toggle('active');
+                   
+                    // Update accessibility attribute
+                    const isExpanded = burgerBtn.getAttribute('aria-expanded') === 'true';
+                    burgerBtn.setAttribute('aria-expanded', !isExpanded);
+                });
             }
         });
-
-        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
-        const themeNavMenu = document.getElementById('themeNavMenu');
-
-        if (burgerMenuBtn && themeNavMenu) {
-            burgerMenuBtn.addEventListener('click', () => {
-                const isOpen = themeNavMenu.classList.toggle('active');
-                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
-                    themeNavMenu.classList.remove('active');
-                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
     </script>
+<<<<<<< HEAD
+=======
+
 
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js"></script>
@@ -305,5 +537,21 @@
         }
     </script>
     <script src="../static/workloadManager.js"></script>
+
+
+    <!-- Supabase & Auth Security Stack -->
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js"></script>
+    <script src="../static/logout.js"></script>
+    <script>
+        if (typeof checkAuthAndRole === "function") {
+            // Allows logged-in users with valid session
+            checkAuthAndRole('teacher');
+        }
+    </script>
+
+
+>>>>>>> 223cd5e243d57230d26e6432240a1b497534f9cd
 </body>
 </html>
+
