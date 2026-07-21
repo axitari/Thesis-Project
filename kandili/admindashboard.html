@@ -12,6 +12,7 @@
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js" data-allowed-roles="admin"></script>
     <script src="../static/logout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="dashboard-body">
 
@@ -48,6 +49,11 @@
             <h1 class="welcome-title"><i class="fas fa-shield-alt"></i> User Management</h1>
             <p class="welcome-subtitle">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
         </section>
+
+        <div class="workload-section">
+    <h3 class="workload-title">Faculty Workload Overview</h3>
+
+    <div class="summary-cards-grid">
 
         <section class="risk-cards">
             <div class="risk-card risk-card--critical">
@@ -96,217 +102,187 @@
             </div>
         </section>
 
-        <!-- User Management Table -->
-        <section class="admin-table-section">
-            <div class="card card-accent-yellow">
-                <div class="card-header">
-                    <div>
-                        <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
-                        <p class="card-desc">Existing teachers | Meanpad and management's workload.</p>
-                    </div>
-                    <button class="btn btn-primary btn-small open-teacher-drawer" style="width: auto; padding: 0.6rem 1.2rem; white-space: nowrap;">+ Add New Teacher</button>
-                </div>
+<!-- FACULTY DIRECTORY SECTION -->
+<div class="directory-section">
+    <!-- Header with Flexbox to align button to the right -->
+    <div class="directory-header">
+        <div class="directory-title-block">
+            <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
+            <p>Existing teachers | Manage load and assignments.</p>
+        </div>
+        <button class="btn-add-teacher"><i class="fas fa-plus"></i> Add New Teacher</button>
+    </div>
 
-                <div class="table-wrapper">
-                    <table class="reallocation-table">
-                        <thead>
-                            <tr>
-                                <th>TEACHER CODE</th>
-                                <th>NAME</th>
-                                <th>EMAIL</th>
-                                <th>ASSIGNMENT</th>
-                                <th>LOAD (HRS)</th>
-                                <th>STATUS</th>
-                                <th>ACTION</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>TCH2026-001</td>
-                                <td><span class="admin-teacher-name">Classvigilta A.</span></td>
-                                <td>samp@sampagultima.com</td>
-                                <td>Grade 2 – Sampagulta</td>
-                                <td><span class="admin-load-value">5</span></td>
-                                <td><span class="status-pending">PENDING</span></td>
-                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                            </tr>
-                            <tr>
-                                <td>TCH2026-002</td>
-                                <td><span class="admin-teacher-name">Sampagultta H.</span></td>
-                                <td>atashess@gmail.com</td>
-                                <td>Grade 3 – Gold</td>
-                                <td><span class="admin-load-value">6</span></td>
-                                <td><span class="status-active">ACTIVE</span></td>
-                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                            </tr>
-                            <tr>
-                                <td>TCH2026-003</td>
-                                <td><span class="admin-teacher-name">Cruz, Sarah J.</span></td>
-                                <td>atashess@gmail.com</td>
-                                <td>Grade 3 – Silver</td>
-                                <td><span class="admin-load-value">5.5</span></td>
-                                <td><span class="status-overload">OVERLOAD</span></td>
-                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <!-- Scrollable Table Container -->
+    <div class="table-container">
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Teacher Code</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Assignment</th>
+                    <th>Load (Hrs)</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Maximized Row Example -->
+                <tr>
+                    <td class="text-muted">TCH2026-001</td>
+                    <td class="font-medium name-cell">Kafka, Ma. Lyn</td>
+                    <td>TEACHER</td>
+                    <td>English</td>
+                    <td class="text-blue-dark">30.0 hrs</td>
+                    <td><span class="table-badge badge-orange">Maximized</span></td>
+                    <td><button class="btn-manage">Manage</button></td>
+                </tr>
+                
+                <!-- Optimal Row Example -->
+                <tr>
+                    <td class="text-muted">TCH2026-003</td>
+                    <td class="font-medium name-cell">Mcfly, Marty</td>
+                    <td>TEACHER</td>
+                    <td class="text-italic">Not Assigned</td>
+                    <td class="text-blue-dark">0.0 hrs</td>
+                    <td><span class="table-badge badge-green">Optimal</span></td>
+                    <td><button class="btn-manage">Manage</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ADD NEW TEACHER MODAL (CENTERED & SCROLLABLE) -->
+<div class="modal-overlay" id="teacherDrawer">
+    <div class="modal-content">
+        
+        <!-- Header -->
+        <div class="modal-header">
+            <div>
+                <span class="modal-subtitle">Admin Enters Teacher Info</span>
+                <h4>Create New Teacher Account</h4>
+                <p class="modal-desc">Create new teacher account</p>
+            </div>
+            <button class="btn-close-modal" id="closeTeacherDrawer" aria-label="Close panel">&times;</button>
+        </div>
+        
+        <!-- Body (Added scrollable wrapper for taller forms) -->
+        <div class="modal-body scrollable-body">
+            
+            <!-- Teacher Basic Information -->
+            <div class="section-title">📋 Teacher Basic Information</div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name <span class="required-star">*</span></label>
+                    <input type="text" id="teacherFirstName" placeholder="e.g. Sarah">
+                </div>
+                <div class="form-group">
+                    <label>Last Name <span class="required-star">*</span></label>
+                    <input type="text" id="teacherLastName" placeholder="e.g. Cruz">
                 </div>
             </div>
-        </section>
+            
+            <div class="form-group">
+                <label>Email <span class="required-star">*</span></label>
+                <input type="email" id="teacherEmail" placeholder="cruz_svnz@gmail.com">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>School <span class="required-star">*</span></label>
+                    <select id="teacherSchool">
+                        <option value="" disabled selected>Select School...</option>
+                        <option value="ROVCMS">ROVCMS</option>
+                        <option value="LJES">LJES</option>
+                        <option value="SMES">SMES</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Grade Level <span class="required-star">*</span></label>
+                    <select id="teacherGradeLevel">
+                        <option value="" disabled selected>Select Grade Level...</option>
+                        <option value="Grade 1">Grade 1</option>
+                        <option value="Grade 2">Grade 2</option>
+                        <option value="Grade 3">Grade 3</option>
+                        <option value="Grade 4">Grade 4</option>
+                        <option value="Grade 5">Grade 5</option>
+                        <option value="Grade 6">Grade 6</option>
+                    </select>
+                </div>
+            </div>
 
-        <!-- Analytics Section Header -->
-        <div class="section-title-wrapper" style="margin-top: 2rem; margin-bottom: 1rem;">
-            <h4>Faculty Workload Distribution & Compliance Analytics</h4>
+            <!-- Account Credentials Section -->
+            <hr class="modal-divider">
+            <div class="section-title">🔐 Account Credentials</div>
+            
+            <div class="form-group">
+                <label>Generic Password <span class="required-star">*</span></label>
+                <div class="password-row">
+                    <input type="text" id="teacherPassword" placeholder="Enter or generate a password" readonly style="background: #f1f5f9;">
+                    <button type="button" class="btn-generate" id="generatePasswordBtn">🔄 Generate</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Teacher Code</label>
+                <input type="text" id="teacherCode" readonly style="background: #f1f5f9; color: #475569; font-weight: 600;">
+                <span class="field-hint">Auto-generated</span>
+            </div>
+            
+            <div class="password-info">
+                <div class="password-info-header">💡 Password Requirements:</div>
+                <ul class="password-info-list">
+                    <li>At least 8 characters</li>
+                    <li>Contains uppercase and lowercase letters</li>
+                    <li>Contains at least one number</li>
+                    <li>Contains at least one special character</li>
+                </ul>
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-actions-vertical">
+                <button class="btn-save-full" id="createTeacherAccountBtn">✅ Create Account</button>
+                <button class="btn-cancel-full" id="cancelTeacherDrawerBtn">✗ Cancel</button>
+            </div>
+            
         </div>
+    </div>
+</div>
 
-        <!-- Account Status & System Process Row -->
+<!-- NEW: Interactive Analytics Row -->
         <div class="admin-details-row">
 
-            <!-- Teacher's Account Status Card -->
-            <div class="card card-accent-green">
-                <div class="card-header">
-                    <h3><i class="fas fa-user-check"></i> Teaching load Breakdown</h3>
+            <!-- Card 1: Burnout Risk Trendline -->
+            <div class="card card-accent-red">
+                <div class="card-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem;">
+                    <h3 style="color: #b91c1c;"><i class="fas fa-chart-line"></i> Burnout Risk Trend</h3>
+                    <p style="font-size: 0.75rem; color: #64748b; margin: 0.25rem 0 0 0;">Average quantified risk score over the current semester.</p>
                 </div>
-                <div class="card-body">
-                    <div class="admin-status-card">
-                        <div class="admin-status-header">
-                        </div>
-                        <div class="table-wrapper" style="margin-top: 1rem;">
-                            <table class="reallocation-table">
-                                <thead>
-                                    <tr>
-                                        <th>6hrs</th>
-                                        <th>Teaching load</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>2hrs</td>
-                                        <td>Ancillary duties</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="card-body" style="padding-top: 1.5rem; position: relative; height: 300px;">
+                    <!-- The canvas for the Line Chart -->
+                    <canvas id="burnoutTrendChart"></canvas>
                 </div>
             </div>
 
-            <!-- System Process Card -->
+            <!-- Card 2: Load Distribution -->
             <div class="card card-accent-blue">
-                <div class="card-header">
-                    <h3><i class="fas fa-cogs"></i> Pending eSF7 Approval Queue</h3>
+                <div class="card-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem;">
+                    <h3 style="color: #0038A8;"><i class="fas fa-chart-pie"></i> School-Wide Load Distribution</h3>
+                    <p style="font-size: 0.75rem; color: #64748b; margin: 0.25rem 0 0 0;">Ratio of actual teaching hours to ancillary assignments.</p>
                 </div>
-                <div class="card-body">
-                    <table class="reallocation-table">
-                        <thead>
-                            <tr>
-                                <th>no.</th>
-                                <th>Grade</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>Grade 1</td>
-                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Grade 3</td>
-                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-body" style="padding-top: 1.5rem; position: relative; height: 300px; display: flex; justify-content: center;">
+                    <!-- The canvas for the Doughnut Chart -->
+                    <canvas id="loadDistributionChart"></canvas>
                 </div>
             </div>
 
         </div>
 
+        </div>
     </main>
-
-    <!-- Drawer Overlay for Adding New Teacher -->
-    <div class="drawer-overlay" id="teacherDrawer">
-        <aside class="drawer-panel">
-            <div class="drawer-panel__header">
-                <div>
-                    <p class="drawer-eyebrow">Admin Enters Teacher Info</p>
-                    <h2>Create New Teacher Account</h2>
-                    <p class="drawer-panel__subtitle">Create new teacher account</p>
-                </div>
-                <button class="drawer-close-btn" id="closeTeacherDrawer" aria-label="Close panel">×</button>
-            </div>
-            <div class="drawer-panel__body">
-                <!-- Teacher Basic Information -->
-                <div class="drawer-section-title">📋 Teacher Basic Information</div>
-                <div class="drawer-field-grid">
-                    <div class="drawer-field">
-                        <label>First Name <span class="required-star">*</span></label>
-                        <input type="text" id="teacherFirstName" placeholder="e.g. Sarah">
-                    </div>
-                    <div class="drawer-field">
-                        <label>Last Name <span class="required-star">*</span></label>
-                        <input type="text" id="teacherLastName" placeholder="e.g. Cruz">
-                    </div>
-                </div>
-                <div class="drawer-field">
-                    <label>Email <span class="required-star">*</span></label>
-                    <input type="email" id="teacherEmail" placeholder="cruz_svnz@gmail.com">
-                </div>
-                <div class="drawer-field-grid">
-                    <div class="drawer-field">
-                        <label>School <span class="required-star">*</span></label>
-                        <select id="teacherSchool">
-                            <option value="" disabled selected>Select School...</option>
-                            <option value="ROVCMS">ROVCMS</option>
-                            <option value="LJES">LJES</option>
-                            <option value="SMES">SMES</option>
-                        </select>
-                    </div>
-                    <div class="drawer-field">
-                        <label>Grade Level <span class="required-star">*</span></label>
-                        <select id="teacherGradeLevel">
-                            <option value="" disabled selected>Select Grade Level...</option>
-                            <option value="Grade 1">Grade 1</option>
-                            <option value="Grade 2">Grade 2</option>
-                            <option value="Grade 3">Grade 3</option>
-                            <option value="Grade 4">Grade 4</option>
-                            <option value="Grade 5">Grade 5</option>
-                            <option value="Grade 6">Grade 6</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Account Credentials Section -->
-                <hr class="drawer-divider">
-                <div class="drawer-section-title">🔐 Account Credentials</div>
-                <div class="drawer-field">
-                    <label>Generic Password <span class="required-star">*</span></label>
-                    <div class="drawer-password-row">
-                        <input type="text" id="teacherPassword" placeholder="Enter or generate a password" readonly style="background: #f1f5f9;">
-                        <button type="button" class="btn btn-outline drawer-generate-btn" id="generatePasswordBtn">🔄 Generate</button>
-                    </div>
-                </div>
-                <div class="drawer-field">
-                    <label>Teacher Code</label>
-                    <input type="text" id="teacherCode" readonly style="background: #f1f5f9; color: #475569; font-weight: 600;">
-                    <span style="font-size: 0.72rem; color: #64748b; margin-top: 0.2rem; display: block;">Auto-generated</span>
-                </div>
-                <div class="drawer-password-info">
-                    <div class="drawer-password-info-header">💡 Password Requirements:</div>
-                    <ul class="drawer-password-info-list">
-                        <li>At least 8 characters</li>
-                        <li>Contains uppercase and lowercase letters</li>
-                        <li>Contains at least one number</li>
-                        <li>Contains at least one special character</li>
-                    </ul>
-                </div>
-
-                <button class="btn btn-primary btn-block" id="createTeacherAccountBtn">✅ Create Account</button>
-                <button class="btn btn-secondary btn-block" id="cancelTeacherDrawerBtn">✗ Cancel</button>
-            </div>
-        </aside>
-    </div>
     
     <footer class="dashboard-footer">
         <div class="footer-left">
@@ -320,53 +296,137 @@
         </div>
     </footer>
 
-    <script>
-        // Burger Menu Toggle
-        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
-        const themeNavMenu = document.getElementById('themeNavMenu');
+<script>
+    // 1. Burger Menu Toggle (Unchanged)
+    const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+    const themeNavMenu = document.getElementById('themeNavMenu');
 
-        if (burgerMenuBtn && themeNavMenu) {
-            burgerMenuBtn.addEventListener('click', () => {
-                const isOpen = themeNavMenu.classList.toggle('active');
-                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+    if (burgerMenuBtn && themeNavMenu) {
+        burgerMenuBtn.addEventListener('click', () => {
+            const isOpen = themeNavMenu.classList.toggle('active');
+            burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                themeNavMenu.classList.remove('active');
+                burgerMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    // 2. FIXED: Center Modal Toggle Logic
+    // Notice how we are using 'teacherDrawer' here to match your HTML exactly!
+    const teacherModal = document.getElementById('teacherDrawer');
+    const btnAddTeacher = document.querySelector('.btn-add-teacher'); // The main button to open it
+    const btnCloseModal = document.getElementById('closeTeacherDrawer'); // The 'X' button
+    const btnCancelModal = document.getElementById('cancelTeacherDrawerBtn'); // The 'Cancel' button
+
+    if (teacherModal) {
+        // Open modal when "+ Add New Teacher" is clicked
+        if (btnAddTeacher) {
+            btnAddTeacher.addEventListener('click', () => {
+                teacherModal.classList.add('active');
             });
+        }
 
-            document.addEventListener('click', (event) => {
-                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
-                    themeNavMenu.classList.remove('active');
-                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
+        // Reusable close function
+        const closeTeacherModal = () => {
+            teacherModal.classList.remove('active');
+        };
+
+        // Close on 'X' or 'Cancel'
+        if (btnCloseModal) btnCloseModal.addEventListener('click', closeTeacherModal);
+        if (btnCancelModal) btnCancelModal.addEventListener('click', closeTeacherModal);
+        
+        // Close if user clicks the dark background outside the modal
+        window.addEventListener('click', (e) => {
+            if (e.target === teacherModal) {
+                closeTeacherModal();
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- CHART 1: Burnout Risk Trend (Line Chart) ---
+        const trendCtx = document.getElementById('burnoutTrendChart');
+        if (trendCtx) {
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May'],
+                    datasets: [{
+                        label: 'Average Burnout Risk Score',
+                        data: [45, 52, 68, 85, 91], // Example data showing a rising risk
+                        borderColor: '#b91c1c', // Deep red
+                        backgroundColor: 'rgba(185, 28, 28, 0.1)', // Light red fill
+                        borderWidth: 3,
+                        pointBackgroundColor: '#b91c1c',
+                        pointBorderColor: '#ffffff',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.4 // Gives the line a smooth curve
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false } // Hidden for a cleaner look
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100, // Caps the score at 100
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
                 }
             });
         }
 
-        // Teacher Drawer Toggle
-        const teacherDrawer = document.getElementById('teacherDrawer');
-        const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
-        const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
-
-        openTeacherButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                teacherDrawer.classList.add('active');
+        // --- CHART 2: Load Distribution (Doughnut Chart) ---
+        const distCtx = document.getElementById('loadDistributionChart');
+        if (distCtx) {
+            new Chart(distCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Teaching Hours', 'Ancillary Duties', 'Advisory Load'],
+                    datasets: [{
+                        data: [65, 25, 10], // Example distribution percentages
+                        backgroundColor: [
+                            '#0038A8', // Brand Blue
+                            '#facc15', // Brand Yellow
+                            '#94a3b8'  // Slate Gray
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%', // Makes the doughnut thinner and more modern
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: { size: 12, family: "'Inter', sans-serif" },
+                                color: '#475569'
+                            }
+                        }
+                    }
+                }
             });
-        });
-
-        closeTeacherDrawer.addEventListener('click', () => {
-            teacherDrawer.classList.remove('active');
-        });
-
-        teacherDrawer.addEventListener('click', (event) => {
-            if (event.target === teacherDrawer) {
-                teacherDrawer.classList.remove('active');
-            }
-        });
-    </script>
-
-    <!-- Specific functionality scripts for this page -->
-    <script src="../static/adminDashboard.js"></script>
-    <script>
-        if (typeof checkAuthAndRole === "function") {
-            checkAuthAndRole('admin');
         }
-    </script>
+
+    });
+
+</script>
 </body>
 </html>

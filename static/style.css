@@ -3119,6 +3119,157 @@ body.auth-body {
             ADMIN DASHBOARD STYLES
    ========================================= */
 
+body.dashboard-body .welcome-banner {
+    background: linear-gradient(90deg, #103c8b 0%, #2062f0 100%);
+    border-radius: 1px;
+    padding: rem 2.5rem;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+body.dashboard-body .welcome-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #ffffff;
+}
+
+body.dashboard-body .welcome-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 300;
+    opacity: 0.9;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   FACULTY DIRECTORY & TABLE (SCOPED REFINEMENTS)
+   ========================================================================== */
+body.dashboard-body .welcome-banner {
+    background: linear-gradient(90deg, #103c8b 0%, #2062f0 100%);
+    border-radius: 12px; /* Changed from 1px to match your modern cards */
+    padding: 1.5rem 2.5rem; /* Fixed the missing number before 'rem' */
+    color: #ffffff;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+body.dashboard-body .welcome-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #ffffff;
+}
+
+body.dashboard-body .welcome-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 300;
+    opacity: 0.9;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+}
+
+/* Add Teacher Button */
+body.dashboard-body .btn-add-teacher {
+    background: #0038A8;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    white-space: nowrap; /* Prevents button text from wrapping */
+}
+
+body.dashboard-body .btn-add-teacher:hover {
+    background: #002d8a;
+    transform: translateY(-1px);
+}
+
+/* Table Styling */
+body.dashboard-body .table-container {
+    overflow-x: auto; /* Keeps it responsive on smaller screens */
+}
+
+body.dashboard-body .dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+body.dashboard-body .dashboard-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.dashboard-body .dashboard-table td {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem;
+    vertical-align: middle;
+    color: #475569;
+}
+
+body.dashboard-body .dashboard-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* Typography Tweaks for better scannability */
+body.dashboard-body .text-muted { color: #94a3b8; font-family: monospace; }
+body.dashboard-body .font-medium { font-weight: 600; color: #1e293b; text-transform: capitalize; }
+body.dashboard-body .text-blue-dark { font-weight: 700; color: #1e40af; }
+body.dashboard-body .text-italic { font-style: italic; color: #94a3b8; }
+
+/* Status Badges */
+body.dashboard-body .table-badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+body.dashboard-body .badge-orange { background: #fef3c7; color: #b45309; }
+body.dashboard-body .badge-green { background: #dcfce7; color: #166534; }
+body.dashboard-body .badge-red { background: #fee2e2; color: #b91c1c; }
+
+/* Action Button */
+body.dashboard-body .btn-manage {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 0.4rem 1.2rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+body.dashboard-body .btn-manage:hover {
+    background: #1e40af;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* Admin table section - wraps card containing table */
 .admin-table-section .card-header h3 {
     font-size: 1rem;
