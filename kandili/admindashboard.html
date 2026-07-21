@@ -15,7 +15,6 @@
 </head>
 <body class="dashboard-body">
 
-
     <header class="theme-nav">
         <div class="theme-nav__brand">
             <div class="theme-nav__logo">
@@ -44,58 +43,58 @@
 
     <main class="dashboard">
 
-
         <!-- Welcome Banner -->
         <section class="welcome-banner">
             <h1 class="welcome-title"><i class="fas fa-shield-alt"></i> User Management</h1>
             <p class="welcome-subtitle">Track teacher onboarding through invitation creation, account activation, and pending status checks in a clean admin workflow.</p>
         </section>
-<section class="risk-cards">
-    <div class="risk-card risk-card--critical">
-        <div class="risk-card-header">
-            <div class="risk-card-icon">🚨</div>
-            <span class="risk-card-badge">OVERLOADED</span>
-        </div>
-        <div class="risk-card-body">
-            <span class="risk-card-number">2</span>
-            <span class="risk-card-label">Overloaded Teachers</span>
-            <span class="risk-card-action">Requires Reallocation</span>
-        </div>
-        <button class="risk-card-btn" onclick="showTeacherList('overloaded')">
-            View List <i class="fas fa-arrow-right"></i>
-        </button>
-    </div>
 
-    <div class="risk-card risk-card--moderate">
-        <div class="risk-card-header">
-            <div class="risk-card-icon">⚠️</div>
-            <span class="risk-card-badge">MAXIMIZED</span>
-        </div>
-        <div class="risk-card-body">
-            <span class="risk-card-number">8</span>
-            <span class="risk-card-label">At Capacity Teachers</span>
-            <span class="risk-card-action">Monitor Assignment</span>
-        </div>
-        <button class="risk-card-btn" onclick="showTeacherList('maximized')">
-            View List <i class="fas fa-arrow-right"></i>
-        </button>
-    </div>
+        <section class="risk-cards">
+            <div class="risk-card risk-card--critical">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">🚨</div>
+                    <span class="risk-card-badge">OVERLOADED</span>
+                </div>
+                <div class="risk-card-body">
+                    <span class="risk-card-number">2</span>
+                    <span class="risk-card-label">Overloaded Teachers</span>
+                    <span class="risk-card-action">Requires Reallocation</span>
+                </div>
+                <button class="risk-card-btn" onclick="window.location.href='overloaded_list.html'">
+                    View List <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
 
-    <div class="risk-card risk-card--low">
-        <div class="risk-card-header">
-            <div class="risk-card-icon">✅</div>
-            <span class="risk-card-badge">OPTIMAL</span>
-        </div>
-        <div class="risk-card-body">
-            <span class="risk-card-number">32</span>
-            <span class="risk-card-label">Optimal Load Teachers</span>
-            <span class="risk-card-action">Well Balanced</span>
-        </div>
-        <button class="risk-card-btn" onclick="showTeacherList('optimal')">
-            View List <i class="fas fa-arrow-right"></i>
-        </button>
-    </div>
-</section>
+            <div class="risk-card risk-card--moderate">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">⚠️</div>
+                    <span class="risk-card-badge">MAXIMIZED</span>
+                </div>
+                <div class="risk-card-body">
+                    <span class="risk-card-number">8</span>
+                    <span class="risk-card-label">At Capacity Teachers</span>
+                    <span class="risk-card-action">Monitor Assignment</span>
+                </div>
+                <button class="risk-card-btn" onclick="showTeacherList('maximized')">
+                    View List <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="risk-card risk-card--low">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">✅</div>
+                    <span class="risk-card-badge">OPTIMAL</span>
+                </div>
+                <div class="risk-card-body">
+                    <span class="risk-card-number">32</span>
+                    <span class="risk-card-label">Optimal Load Teachers</span>
+                    <span class="risk-card-action">Well Balanced</span>
+                </div>
+                <button class="risk-card-btn" onclick="showTeacherList('optimal')">
+                    View List <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
 
         <!-- User Management Table -->
         <section class="admin-table-section">
@@ -107,7 +106,6 @@
                     </div>
                     <button class="btn btn-primary btn-small open-teacher-drawer" style="width: auto; padding: 0.6rem 1.2rem; white-space: nowrap;">+ Add New Teacher</button>
                 </div>
-
 
                 <div class="table-wrapper">
                     <table class="reallocation-table">
@@ -156,10 +154,13 @@
             </div>
         </section>
 
-<h4>Faculty Workload Distribution & Compliance analytics</h4>
+        <!-- Analytics Section Header -->
+        <div class="section-title-wrapper" style="margin-top: 2rem; margin-bottom: 1rem;">
+            <h4>Faculty Workload Distribution & Compliance Analytics</h4>
+        </div>
+
         <!-- Account Status & System Process Row -->
         <div class="admin-details-row">
-
 
             <!-- Teacher's Account Status Card -->
             <div class="card card-accent-green">
@@ -190,41 +191,39 @@
                 </div>
             </div>
 
-
             <!-- System Process Card -->
             <div class="card card-accent-blue">
                 <div class="card-header">
                     <h3><i class="fas fa-cogs"></i> Pending eSF7 Approval Queue</h3>
                 </div>
-              <table class="reallocation-table">
-                                <thead>
-                                    <tr>
-                                        <th>no.</th>
-                                        <th>Grade</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Grade 1</td>
-                                        <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2.</td>
-                                        <td>Grade 3</td>
-                                        <td><button class="action-btn action-btn--simulate">Manage</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="card-body">
+                    <table class="reallocation-table">
+                        <thead>
+                            <tr>
+                                <th>no.</th>
+                                <th>Grade</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1.</td>
+                                <td>Grade 1</td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                            <tr>
+                                <td>2.</td>
+                                <td>Grade 3</td>
+                                <td><button class="action-btn action-btn--simulate">Manage</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
 
         </div>
 
-
     </main>
-
 
     <!-- Drawer Overlay for Adding New Teacher -->
     <div class="drawer-overlay" id="teacherDrawer">
@@ -309,7 +308,7 @@
         </aside>
     </div>
     
-<footer class="dashboard-footer">
+    <footer class="dashboard-footer">
         <div class="footer-left">
             &copy; 2026 Kandili Workspace. All rights reserved.
         </div>
@@ -319,20 +318,18 @@
         <div class="footer-right">
             Version 2.1.0
         </div>
-</footer>
+    </footer>
 
     <script>
         // Burger Menu Toggle
         const burgerMenuBtn = document.getElementById('burgerMenuBtn');
         const themeNavMenu = document.getElementById('themeNavMenu');
 
-
         if (burgerMenuBtn && themeNavMenu) {
             burgerMenuBtn.addEventListener('click', () => {
                 const isOpen = themeNavMenu.classList.toggle('active');
                 burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
             });
-
 
             document.addEventListener('click', (event) => {
                 if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
@@ -342,12 +339,10 @@
             });
         }
 
-
-// Teacher Drawer Toggle
+        // Teacher Drawer Toggle
         const teacherDrawer = document.getElementById('teacherDrawer');
         const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
         const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
-
 
         openTeacherButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -355,11 +350,9 @@
             });
         });
 
-
         closeTeacherDrawer.addEventListener('click', () => {
             teacherDrawer.classList.remove('active');
         });
-
 
         teacherDrawer.addEventListener('click', (event) => {
             if (event.target === teacherDrawer) {
@@ -368,10 +361,7 @@
         });
     </script>
 
-    <!-- Supabase & Auth Security Stack -->
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js"></script>
-    <script src="../static/logout.js"></script>
+    <!-- Specific functionality scripts for this page -->
     <script src="../static/adminDashboard.js"></script>
     <script>
         if (typeof checkAuthAndRole === "function") {
