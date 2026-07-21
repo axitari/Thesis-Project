@@ -3458,6 +3458,83 @@ body.auth-body {
     margin-bottom: 0.15rem;
 }
 
+/* Drawer Section Title */
+.drawer-section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--deped-blue, #0038A8);
+    margin: 1rem 0 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Drawer Divider */
+.drawer-divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 1.25rem 0;
+}
+
+/* Password Row with Generate Button */
+.drawer-password-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.drawer-password-row input {
+    flex: 1;
+}
+.drawer-generate-btn {
+    width: auto !important;
+    padding: 0.7rem 1rem !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.drawer-generate-btn:hover {
+    background: #eff6ff;
+    border-color: var(--deped-blue);
+    color: var(--deped-blue);
+}
+
+/* Password Requirements Info Box */
+.drawer-password-info {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1.25rem;
+}
+.drawer-password-info-header {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.drawer-password-info-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+.drawer-password-info-list li {
+    margin-bottom: 0.15rem;
+}
+
+/* Required Star Indicator */
+.required-star {
+    color: var(--deped-red, #C8102E);
+    font-weight: 700;
+}
+
 /* Admin teacher name in table */
 .admin-teacher-name {
     font-weight: 600;

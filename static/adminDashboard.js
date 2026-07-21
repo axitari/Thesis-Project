@@ -14,9 +14,159 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // 3. Setup Add Teacher Drawer Form Submission
+    // 3. Setup Drawer Open/Close via body listener
+    setupDrawerToggle();
+
+    // 4. Auto-generate teacher code when drawer opens
+    setupTeacherCodeGeneration();
+
+    // 5. Setup Password Generate button
+    setupPasswordGenerator();
+
+    // 6. Setup Add Teacher Drawer Form Submission
     setupAddTeacherForm();
 });
+
+/* ============================================================
+   DRAWER TOGGLE (Open / Close)
+   ============================================================ */
+function setupDrawerToggle() {
+    const teacherDrawer = document.getElementById('teacherDrawer');
+    const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
+    const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
+    const cancelTeacherDrawerBtn = document.getElementById('cancelTeacherDrawerBtn');
+
+    if (!teacherDrawer) return;
+
+    openTeacherButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            teacherDrawer.classList.add('active');
+            // Auto-generate teacher code when opening
+            generateTeacherCode();
+        });
+    });
+
+    if (closeTeacherDrawer) {
+        closeTeacherDrawer.addEventListener('click', () => {
+            teacherDrawer.classList.remove('active');
+        });
+    }
+
+    if (cancelTeacherDrawerBtn) {
+        cancelTeacherDrawerBtn.addEventListener('click', () => {
+            teacherDrawer.classList.remove('active');
+        });
+    }
+
+    teacherDrawer.addEventListener('click', (event) => {
+        if (event.target === teacherDrawer) {
+            teacherDrawer.classList.remove('active');
+        }
+    });
+}
+
+/* ============================================================
+   TEACHER CODE AUTO-GENERATION
+   ============================================================ */
+function setupTeacherCodeGeneration() {
+    // Generate code on drawer open (handled in setupDrawerToggle)
+}
+
+async function generateTeacherCode() {
+    const teacherCodeInput = document.getElementById('teacherCode');
+    if (!teacherCodeInput) return;
+
+    try {
+        // Fetch existing teachers to determine max code number
+        const { data: profiles, error } = await window.supabaseClient
+            .from('profiles')
+            .select('id')
+            .eq('role', 'teacher');
+
+        const currentYear = new Date().getFullYear(); // e.g. 2026
+        let maxNumber = 0;
+
+        if (!error && profiles && profiles.length > 0) {
+            // Try to find the highest existing teacher code from metadata if available
+            const { data: existingCodes, error: codeError } = await window.supabaseClient
+                .from('profiles')
+                .select('teacher_code')
+                .eq('role', 'teacher')
+                .not('teacher_code', 'is', null);
+
+            if (!codeError && existingCodes) {
+                existingCodes.forEach(item => {
+                    if (item.teacher_code) {
+                        const parts = item.teacher_code.split('-');
+                        if (parts.length === 2) {
+                            const num = parseInt(parts[1], 10);
+                            if (!isNaN(num) && num > maxNumber) {
+                                maxNumber = num;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        const nextNumber = maxNumber + 1;
+        const code = `TCH${currentYear}-${String(nextNumber).padStart(3, '0')}`;
+        teacherCodeInput.value = code;
+    } catch (err) {
+        console.error("Failed to generate teacher code:", err);
+        // Fallback: Use timestamp-based code
+        const fallbackCode = `TCH${new Date().getFullYear()}-${String(Date.now()).slice(-3)}`;
+        teacherCodeInput.value = fallbackCode;
+    }
+}
+
+/* ============================================================
+   PASSWORD GENERATOR
+   ============================================================ */
+function setupPasswordGenerator() {
+    const generateBtn = document.getElementById('generatePasswordBtn');
+    if (!generateBtn) return;
+
+    generateBtn.addEventListener('click', () => {
+        const password = generateSecurePassword();
+        const passwordInput = document.getElementById('teacherPassword');
+        if (passwordInput) {
+            passwordInput.value = password;
+        }
+    });
+}
+
+function generateSecurePassword() {
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+    // Ensure at least one of each required type
+    const requiredChars = [
+        uppercase[Math.floor(Math.random() * uppercase.length)],
+        lowercase[Math.floor(Math.random() * lowercase.length)],
+        numbers[Math.floor(Math.random() * numbers.length)],
+        special[Math.floor(Math.random() * special.length)]
+    ];
+
+    // Fill remaining to meet 12-16 length
+    const allChars = uppercase + lowercase + numbers + special;
+    const remainingLength = Math.floor(Math.random() * 5) + 8; // 8-12 additional chars
+    const randomChars = [];
+    for (let i = 0; i < remainingLength; i++) {
+        randomChars.push(allChars[Math.floor(Math.random() * allChars.length)]);
+    }
+
+    // Combine and shuffle
+    const combined = [...requiredChars, ...randomChars];
+    for (let i = combined.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [combined[i], combined[j]] = [combined[j], combined[i]];
+    }
+
+    return combined.join('');
+}
 
 async function loadFacultyDirectory() {
     try {
@@ -107,59 +257,74 @@ function updateRiskCards(overloaded, maximized, optimal) {
 }
 
 function setupAddTeacherForm() {
-    const drawerPanel = document.getElementById('teacherDrawer');
-    if (!drawerPanel) return;
+    const createAccountBtn = document.getElementById('createTeacherAccountBtn');
+    if (!createAccountBtn) return;
 
-    const saveButton = drawerPanel.querySelector('.btn-primary');
-    const cancelButton = drawerPanel.querySelector('.btn-secondary');
+    createAccountBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
 
-    if (cancelButton) {
-        cancelButton.addEventListener('click', () => {
-            drawerPanel.classList.remove('active');
-        });
-    }
+        // Gather all form fields
+        const firstName = document.getElementById('teacherFirstName')?.value.trim();
+        const lastName = document.getElementById('teacherLastName')?.value.trim();
+        const email = document.getElementById('teacherEmail')?.value.trim();
+        const school = document.getElementById('teacherSchool')?.value;
+        const gradeLevel = document.getElementById('teacherGradeLevel')?.value;
+        const password = document.getElementById('teacherPassword')?.value.trim();
+        const teacherCode = document.getElementById('teacherCode')?.value.trim();
 
-    if (saveButton) {
-        saveButton.addEventListener('click', async (e) => {
-            e.preventDefault();
+        // Validate required fields
+        if (!firstName || !lastName || !email || !school || !gradeLevel || !password) {
+            alert("Please fill in all required fields marked with *.");
+            return;
+        }
 
-            const inputs = drawerPanel.querySelectorAll('input[type="text"]');
-            const select = drawerPanel.querySelector('select');
+        // Validate email format
+        if (!email.includes('@') || !email.includes('.')) {
+            alert("Please enter a valid email address.");
+            return;
+        }
 
-            const firstName = inputs[0]?.value.trim();
-            const lastName = inputs[1]?.value.trim();
-            const email = inputs[2]?.value.trim();
-            const department = select?.value;
+        // Validate password requirements
+        const passwordErrors = [];
+        if (password.length < 8) passwordErrors.push("At least 8 characters");
+        if (!/[A-Z]/.test(password)) passwordErrors.push("Contains uppercase letter");
+        if (!/[a-z]/.test(password)) passwordErrors.push("Contains lowercase letter");
+        if (!/[0-9]/.test(password)) passwordErrors.push("Contains at least one number");
+        if (!/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password)) passwordErrors.push("Contains at least one special character");
 
-            if (!email || !firstName || !lastName) {
-                alert("Please fill in all required fields.");
-                return;
-            }
+        if (passwordErrors.length > 0) {
+            alert("Password requirements not met:\n• " + passwordErrors.join("\n• "));
+            return;
+        }
 
-            saveButton.innerText = "Creating Account...";
-            saveButton.disabled = true;
+        createAccountBtn.innerText = "⏳ Creating Account...";
+        createAccountBtn.disabled = true;
 
+        try {
             // 1. SAVE THE ADMIN'S SESSION SO WE DON'T LOSE IT
             const { data: { session: currentAdminSession } } = await window.supabaseClient.auth.getSession();
 
-            // 2. Create the user
-            const { data, error } = await window.supabaseClient.auth.signUp({
+            // 2. Create the user via Supabase Auth
+            const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
                 email: email,
-                password: "TempPassword2026!", // Temporary onboarding password
+                password: password,
                 options: {
                     data: {
                         first_name: firstName,
                         last_name: lastName,
                         role: 'teacher',
-                        department: department
+                        school: school,
+                        grade_level: gradeLevel,
+                        teacher_code: teacherCode,
+                        department: `${school} - ${gradeLevel}`
                     }
                 }
             });
 
-            if (error) {
-                alert("Failed to create teacher: " + error.message);
-                saveButton.innerText = "Save & Send Invitation";
-                saveButton.disabled = false;
+            if (authError) {
+                alert("Failed to create teacher account: " + authError.message);
+                createAccountBtn.innerText = "✅ Create Account";
+                createAccountBtn.disabled = false;
                 return;
             }
 
@@ -171,19 +336,50 @@ function setupAddTeacherForm() {
                 });
             }
 
-            alert(`Teacher profile created successfully for ${firstName} ${lastName}!`);
-            
-            // Clear input fields
-            inputs.forEach(input => input.value = '');
-            
-            saveButton.innerText = "Save & Send Invitation";
-            saveButton.disabled = false;
-            drawerPanel.classList.remove('active');
+            // 4. Store teacher_code in profiles table if it doesn't have it
+            if (authData?.user?.id) {
+                const { error: updateError } = await window.supabaseClient
+                    .from('profiles')
+                    .update({ 
+                        teacher_code: teacherCode,
+                        school: school,
+                        grade_level: gradeLevel,
+                        first_name: firstName,
+                        last_name: lastName,
+                        department: `${school} - ${gradeLevel}`
+                    })
+                    .eq('id', authData.user.id);
 
-            // 4. Reload full directory under Admin session
+                if (updateError) {
+                    console.warn("Failed to update profile metadata:", updateError.message);
+                }
+            }
+
+            alert(`✅ Teacher account created successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nSchool: ${school}\nGrade Level: ${gradeLevel}\nTeacher Code: ${teacherCode}\nPassword: ${password}`);
+
+            // Clear form fields
+            document.getElementById('teacherFirstName').value = '';
+            document.getElementById('teacherLastName').value = '';
+            document.getElementById('teacherEmail').value = '';
+            document.getElementById('teacherSchool').value = '';
+            document.getElementById('teacherGradeLevel').value = '';
+            document.getElementById('teacherPassword').value = '';
+            // Keep teacher code generated for the next user
+
+            createAccountBtn.innerText = "✅ Create Account";
+            createAccountBtn.disabled = false;
+            document.getElementById('teacherDrawer').classList.remove('active');
+
+            // 5. Reload full directory under Admin session
             await loadFacultyDirectory();
-        });
-    }
+
+        } catch (err) {
+            console.error("Failed to create teacher account:", err);
+            alert("An unexpected error occurred. Please try again.");
+            createAccountBtn.innerText = "✅ Create Account";
+            createAccountBtn.disabled = false;
+        }
+    });
 }
 
 function manageUser(userId) {
