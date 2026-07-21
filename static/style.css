@@ -3134,7 +3134,19 @@ body.auth-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
-    align-items: start;
+    align-items: stretch;
+}
+
+/* Force grid items to stay inside their boundaries */
+.admin-details-row > * {
+    min-width: 0; 
+}
+
+/* Ensure cards stretch fully to match heights */
+.admin-details-row > .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 /* Status note under account status */
@@ -3321,6 +3333,7 @@ body.auth-body {
 .drawer-field input,
 .drawer-field select {
     width: 100%;
+    box-sizing: border-box;
     padding: 0.7rem 0.85rem;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
