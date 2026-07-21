@@ -6,6 +6,7 @@
     <title>Kandili - Messages</title>
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="dashboard-body">
 
@@ -96,17 +97,16 @@
         }
     </script>
 
-    <!-- Supabase & Auth Security Stack -->
+   <!-- Supabase & Auth Security Stack -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js"></script>
     <script src="../static/logout.js"></script>
+    <script src="../static/messageLogic.js"></script>
     <script>
-        if (typeof checkAuthAndRole === "function") {
-            // Allows logged-in users with valid session
-            checkAuthAndRole('teacher'); 
-        }
-    </script>
-
+    if (typeof checkAuthAndRole === "function") {
+        checkAuthAndRole('any'); // 👈 Allows any authenticated user!
+    }
+</script>
 </body>
 </html>
-
