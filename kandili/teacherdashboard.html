@@ -8,7 +8,17 @@
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   
+    
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../static/logout.js"></script>
+    <script src="../static/teacherDashboard.js"></script>
+
     <!-- External Stylesheet (Shared) -->
     <link rel="stylesheet" href="../static/style.css">
 </head>
@@ -303,43 +313,16 @@
             <!-- Wellness -->
             <div class="content-card no-margin">
                 <div class="card-title"><i class="fas fa-smile"></i> Wellness Baseline</div>
-               
-                <div class="progress-row">
-                    <span class="progress-label wide">Emotional Exhaustion</span>
-                    <div class="progress-track"><div class="progress-fill" style="width: 65%; background: #f59e0b;"></div></div>
-                    <span class="progress-value">65%</span>
-                </div>
-                <div class="progress-row">
-                    <span class="progress-label wide">Depersonalization</span>
-                    <div class="progress-track"><div class="progress-fill" style="width: 30%; background: #10b981;"></div></div>
-                    <span class="progress-value">30%</span>
-                </div>
-                <div class="progress-row">
-                    <span class="progress-label wide">Personal Accomp.</span>
-                    <div class="progress-track"><div class="progress-fill" style="width: 78%; background: #3b82f6;"></div></div>
-                    <span class="progress-value">78%</span>
+                <div style="height: 220px; position: relative;">
+                    <canvas id="teacherWellnessChart"></canvas>
                 </div>
             </div>
-
 
             <!-- Comparison -->
             <div class="content-card no-margin">
                 <div class="card-title"><i class="fas fa-balance-scale-right"></i> Workload Comparison</div>
-               
-                <div class="progress-row">
-                    <span class="progress-label">Your Total</span>
-                    <div class="progress-track"><div class="progress-fill" style="width: 85%; background: #C8102E;"></div></div>
-                    <span class="progress-value">45 hrs</span>
-                </div>
-                <div class="progress-row">
-                    <span class="progress-label">Dept Avg</span>
-                    <div class="progress-track"><div class="progress-fill" style="width: 75%; background: #64748b;"></div></div>
-                    <span class="progress-value">40 hrs</span>
-                </div>
-                <div class="progress-row">
-                    <span class="progress-label">Dept Min</span>
-                    <div class="progress-track"><div class="progress-fill" style="width: 60%; background: #cbd5e1;"></div></div>
-                    <span class="progress-value">32 hrs</span>
+                <div style="height: 220px; position: relative;">
+                    <canvas id="teacherWorkloadChart"></canvas>
                 </div>
             </div>
         </section>
