@@ -4504,3 +4504,647 @@ body.auth-body {
         margin-left: 0.5rem;
     }
 }
+
+/* ==========================================================================
+   MAXIMIZED PAGE STYLING (SCOPED TO .maximized-page)
+   ========================================================================== */
+
+/* --- 1. Page Layout & Headers --- */
+.maximized-page .action-btn {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    border-radius: 6px;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.maximized-page .action-btn i {
+    font-size: 0.8rem;
+}
+
+.maximized-page .action-btn:hover {
+    background: #f59e0b; /* Warning orange hover */
+    color: #ffffff;
+    border-color: #f59e0b;
+}
+.maximized-page .page-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.maximized-page .header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.maximized-page .header-icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.maximized-page h1 {
+    margin: 0 0 0.25rem 0;
+    color: #0f172a;
+    font-size: 1.5rem;
+}
+
+.maximized-page p {
+    margin: 0;
+    color: #d97706; /* Warning orange text */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* --- 2. Toolbar & Search --- */
+.maximized-page .table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.maximized-page .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+}
+
+.maximized-page .search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.maximized-page .search-box input {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+.maximized-page .filter-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.maximized-page .filter-dropdown {
+    padding: 0.6rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    background-color: #fff;
+    color: #475569;
+    cursor: pointer;
+}
+
+/* --- 3. Pagination --- */
+.maximized-page .pagination-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.maximized-page .pagination-info {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.maximized-page .pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.maximized-page .page-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    border-radius: 6px;
+    color: #475569;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.maximized-page .page-btn.active {
+    background: #f59e0b; /* Orange active state */
+    color: #fff;
+    border-color: #f59e0b;
+}
+
+.maximized-page .page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8fafc;
+}
+
+/* --- 4. Modal (Capacity Monitoring Review) --- */
+.maximized-page .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.maximized-page .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.maximized-page .modal-container {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.maximized-page .modal-overlay.active .modal-container {
+    transform: translateY(0);
+}
+
+.maximized-page .modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+}
+
+.maximized-page .modal-header h2 {
+    font-size: 1.1rem;
+    color: #0f172a;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.maximized-page .modal-close-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #64748b;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.maximized-page .modal-body {
+    padding: 1.5rem;
+}
+
+.maximized-page .modal-target-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+.maximized-page .reco-split-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.maximized-page .reco-box {
+    border-radius: 8px;
+    padding: 1.25rem;
+}
+
+.maximized-page .reco-box-header {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.maximized-page .reco-box-content p {
+    font-size: 0.85rem;
+    color: #334155;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.5;
+}
+
+.maximized-page .modal-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    background: #f8fafc;
+}
+
+.maximized-page .btn-outline {
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    color: #475569;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.maximized-page .btn-outline:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+/* ==========================================================================
+   OPTIMAL PAGE STYLING (SCOPED TO .optimal-page)
+   ========================================================================== */
+
+/* --- 1. Page Layout & Headers --- */
+.optimal-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.optimal-page .page-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.optimal-page .header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.optimal-page .header-icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.optimal-page h1 {
+    margin: 0 0 0.25rem 0;
+    color: #0f172a;
+    font-size: 1.5rem;
+}
+
+.optimal-page p {
+    margin: 0;
+    color: #059669; /* Success green text */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* --- 2. Toolbar & Search --- */
+.optimal-page .table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.optimal-page .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+}
+
+.optimal-page .search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.optimal-page .search-box input {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+.optimal-page .filter-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.optimal-page .filter-dropdown {
+    padding: 0.6rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    background-color: #fff;
+    color: #475569;
+    cursor: pointer;
+}
+
+/* --- 3. Table Adjustments for Optimal View --- */
+.optimal-page .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 10px; 
+    border: 1px solid #e2e8f0; 
+    overflow: hidden; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
+}
+
+.optimal-page .reallocation-table {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0;         
+    text-align: left;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.optimal-page .reallocation-table th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    padding: 0.85rem 1rem;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+}
+
+.optimal-page .reallocation-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.optimal-page .reallocation-table tr:last-child td {
+    border-bottom: none;
+}
+
+.optimal-page .reallocation-table tbody tr:hover {
+    background-color: #f0fdf4; /* Soft green hover state */
+}
+
+/* Status Badge - Green Theme */
+.optimal-page .badge-optimal {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* Buttons */
+.optimal-page .action-btn {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    border-radius: 6px;
+    color: var(--deped-blue, #0038A8);
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.optimal-page .action-btn:hover {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+}
+
+/* --- 4. Pagination --- */
+.optimal-page .pagination-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.optimal-page .pagination-info {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.optimal-page .pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.optimal-page .page-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    border-radius: 6px;
+    color: #475569;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.optimal-page .page-btn.active {
+    background: #10b981; /* Green active state */
+    color: #fff;
+    border-color: #10b981;
+}
+
+.optimal-page .page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8fafc;
+}
+
+/* --- 5. Modal (Capacity Review) --- */
+.optimal-page .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.optimal-page .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.optimal-page .modal-container {
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.optimal-page .modal-overlay.active .modal-container {
+    transform: translateY(0);
+}
+
+.optimal-page .modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+}
+
+.optimal-page .modal-header h2 {
+    font-size: 1.1rem;
+    color: #0f172a;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.optimal-page .modal-close-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #64748b;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.optimal-page .modal-body {
+    padding: 1.5rem;
+}
+
+.optimal-page .modal-target-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+.optimal-page .reco-split-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.optimal-page .reco-box {
+    border-radius: 8px;
+    padding: 1.25rem;
+}
+
+.optimal-page .reco-box-header {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.optimal-page .reco-box-content p {
+    font-size: 0.85rem;
+    color: #334155;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.5;
+}
+
+.optimal-page .modal-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    background: #f8fafc;
+}
+
+.optimal-page .btn-outline {
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    color: #475569;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.optimal-page .btn-outline:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}

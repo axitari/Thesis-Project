@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimal Teachers &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+<!-- TOP NAVIGATION BAR -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <!-- Back Arrow to Dashboard -->
+            <a href="admindashboard.html" class="nav-back-arrow" title="Back to Dashboard">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">System Administration</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 22, 2026</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <!-- Scoped optimal-page class -->
+    <main class="dashboard optimal-page">
+
+        <!-- PAGE HEADER -->
+        <div class="page-header beautified-header">
+            <div class="header-main">
+                <div class="title-wrapper">
+                    <div class="header-icon-box" style="color: #059669; background: #d1fae5;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="header-text-wrapper">
+                        <h1>Optimal Faculty List</h1>
+                        <p>Elementary faculty with well-balanced workloads. These teachers have <strong>available capacity</strong> for additional assignments if needed.</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-outline"><i class="fas fa-download"></i> Export Roster</button>
+                    <button class="btn-green" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fas fa-plus-circle"></i> Assign New Load</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTERS & SEARCH -->
+        <div class="table-toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search by name, code, or department...">
+            </div>
+            <div class="filter-group">
+                <select class="filter-dropdown">
+                    <option value="">All Departments</option>
+                    <option value="english">English</option>
+                    <option value="gen-ed">General Education</option>
+                </select>
+                <select class="filter-dropdown">
+                    <option value="capacity">Sort by: Available Capacity</option>
+                    <option value="name">Sort by: Name A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- OPTIMAL TEACHERS TABLE -->
+        <section class="content-card no-margin">
+            <div class="data-table-wrapper table-wrapper">
+                <table class="data-table admin-table reallocation-table">
+                    <thead>
+                        <tr>
+                            <th>Teacher Code</th>
+                            <th>Faculty Name</th>
+                            <th>Department / Role</th>
+                            <th>Total Load (Hrs)</th>
+                            <th>Status Flag</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Record 1 -->
+                        <tr>
+                            <td class="cell-id">TCH2026-003</td>
+                            <td class="cell-name teacher-name">
+                                <strong>Mcfly, Marty</strong>
+                                <span class="sub-text">Subject Teacher</span>
+                            </td>
+                            <td>Not Assigned</td>
+                            <td><span class="load-value" style="color: #059669; font-weight: 700;">0.0 hrs</span></td>
+                            <td><span class="badge-optimal">OPTIMAL</span></td>
+                            <td>
+                                <button class="action-btn open-reco-modal" data-id="TCH2026-003" data-name="Mcfly, Marty" data-load="0.0"><i class="fas fa-eye"></i> View Capacity</button>
+                            </td>
+                        </tr>
+
+                        <!-- Record 2 -->
+                        <tr>
+                            <td class="cell-id">TCH2026-004</td>
+                            <td class="cell-name teacher-name">
+                                <strong>Brown, Doctor</strong>
+                                <span class="sub-text">Subject Teacher</span>
+                            </td>
+                            <td>Not Assigned</td>
+                            <td><span class="load-value" style="color: #059669; font-weight: 700;">0.0 hrs</span></td>
+                            <td><span class="badge-optimal">OPTIMAL</span></td>
+                            <td>
+                                <button class="action-btn open-reco-modal" data-id="TCH2026-004" data-name="Brown, Doctor" data-load="0.0"><i class="fas fa-eye"></i> View Capacity</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- PAGINATION -->
+            <div class="pagination-row">
+                <span class="pagination-info">Showing 1 to 10 of 10 optimal faculty</span>
+                <div class="pagination-controls">
+                    <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn disabled"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CAPACITY REVIEW MODAL POP-UP                                 -->
+        <!-- ============================================================ -->
+        <div id="capacityModal" class="modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2><i class="fas fa-chart-pie"></i> Available Capacity Review</h2>
+                    <button class="modal-close-icon">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <!-- Target Info -->
+                    <div class="modal-target-info">
+                        <div>
+                            <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Target Faculty</span>
+                            <div style="font-weight: 700; color: #1e293b; font-size: 1.1rem;" id="modalTeacherName">Mcfly, Marty</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Current Load</span>
+                            <div style="font-weight: 800; color: #059669; font-size: 1.1rem;"><span id="modalCurrentLoad">0.0</span>/30.0 hrs</div>
+                        </div>
+                    </div>
+
+                    <!-- Split Actions -->
+                    <div class="reco-split-grid">
+                        <!-- 1. Available Hours -->
+                        <div class="reco-box" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                            <div class="reco-box-header" style="color: #166534;">
+                                <i class="fas fa-unlock-alt"></i> Ready for Delegation
+                            </div>
+                            <div class="reco-box-content">
+                                <p><strong>Status:</strong> Teacher is well below the maximum workload threshold.</p>
+                                <p><strong>System Action:</strong> This faculty member is an ideal candidate to absorb ancillary duties or relief classes from overloaded peers.</p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Reallocation Shortcut -->
+                        <div class="reco-box" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                            <div class="reco-box-header" style="color: #334155;">
+                                <i class="fas fa-exchange-alt"></i> Reallocation Routing
+                            </div>
+                            <div class="reco-box-content">
+                                <p>Would you like to open the workload assignment interface for this teacher now?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-outline modal-cancel-btn">Close</button>
+                    <button class="btn-green" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fas fa-tasks"></i> Assign Workload</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // JavaScript to handle Modal opening and closing for Optimal List
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('capacityModal');
+            const openBtns = document.querySelectorAll('.open-reco-modal');
+            const closeBtnIcon = document.querySelector('.modal-close-icon');
+            const cancelBtn = document.querySelector('.modal-cancel-btn');
+            const mName = document.getElementById('modalTeacherName');
+            const mLoad = document.getElementById('modalCurrentLoad');
+
+            // Open modal and populate data
+            openBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const name = btn.getAttribute('data-name');
+                    const load = btn.getAttribute('data-load');
+                    mName.textContent = name;
+                    mLoad.textContent = load;
+                    modal.classList.add('active');
+                });
+            });
+
+            // Close modal functions
+            const closeModal = () => modal.classList.remove('active');
+            closeBtnIcon.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            
+            // Close if clicking outside the container
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) closeModal();
+            });
+        });
+    </script>
+</body>
+</html>
