@@ -507,17 +507,34 @@
     </footer>
 
 
-    <script>
+  <script>
+        // ADDED: The missing logout function
+        function kandiliLogout() {
+            // 1. Ask the user to confirm
+            if (confirm("Are you sure you want to log out?")) {
+                
+                // 2. Clear any local storage/session data if you have any
+                // sessionStorage.clear();
+                // localStorage.clear();
+                
+                // 3. Redirect to your login screen (change 'index.html' to your actual login page)
+                window.location.href = "login.html"; 
+            }
+            
+            // Prevents the default <a> tag behavior (jumping to the top of the page)
+            return false; 
+        }
+
+        // Your existing burger menu code
         document.addEventListener('DOMContentLoaded', () => {
             const burgerBtn = document.getElementById('burgerMenuBtn');
             const navMenu = document.getElementById('themeNavMenu');
-
 
             if (burgerBtn && navMenu) {
                 burgerBtn.addEventListener('click', () => {
                     // Toggle the 'active' class on the menu
                     navMenu.classList.toggle('active');
-                   
+                    
                     // Update accessibility attribute
                     const isExpanded = burgerBtn.getAttribute('aria-expanded') === 'true';
                     burgerBtn.setAttribute('aria-expanded', !isExpanded);
