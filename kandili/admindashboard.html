@@ -41,8 +41,6 @@
         </nav>
     </header>
 
-    >
-
     <main class="dashboard">
 
 
@@ -96,7 +94,7 @@
             View List <i class="fas fa-arrow-right"></i>
         </button>
     </div>
-</section
+</section>
 
         <!-- User Management Table -->
         <section class="admin-table-section">
@@ -323,19 +321,17 @@
                 teacherDrawer.classList.remove('active');
             }
         });
-        
-<!-- Supabase & Auth Security Stack -->
+    </script>
+
+    <!-- Supabase & Auth Security Stack -->
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js"></script>
     <script src="../static/logout.js"></script>
     <script src="../static/adminDashboard.js"></script>
     <script>
-    </script>
         if (typeof checkAuthAndRole === "function") {
-            checkAuthAndRole('admin'); 
+            checkAuthAndRole('admin');
         }
     </script>
 </body>
 </html>
-
-
