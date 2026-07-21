@@ -10,8 +10,7 @@
 ## Progress
 
 - [x] Step 1: Plan approved
-- [ ] Step 2: Edit teacherdashboard.html
-- [ ] Step 3: Edit style.css
-- [ ] Step 4: Add inline JS
-- [ ] Step 5: Verify
-
+- [x] Step 2: Edit teacherdashboard.html
+- [x] Step 3: Edit style.css
+- [x] Step 4: Add file upload JS to teacherDashboard.js
+- [x] Step 5: Verify

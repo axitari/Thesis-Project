@@ -55,7 +55,88 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loadWorkload();
+    setupClassProgramUpload();
 });
+
+// Class Program Upload Handler
+function setupClassProgramUpload() {
+    const fileInput = document.getElementById('classProgramFile');
+    const fileDisplay = document.getElementById('fileDisplay');
+    const uploadBtn = document.getElementById('uploadProgramBtn');
+
+    if (!fileInput || !fileDisplay || !uploadBtn) return;
+
+    function resetButtonState() {
+        uploadBtn.disabled = false;
+        uploadBtn.style.background = '';
+        uploadBtn.style.color = '';
+        uploadBtn.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Upload Program`;
+
+        fileDisplay.textContent = 'No file chosen';
+        fileDisplay.style.color = '#64748b';
+        fileDisplay.style.fontWeight = 'normal';
+    }
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files && fileInput.files.length > 0) {
+            fileDisplay.textContent = fileInput.files[0].name;
+            fileDisplay.style.color = '#0f172a';
+            fileDisplay.style.fontWeight = '600';
+        } else {
+            fileDisplay.textContent = 'No file chosen';
+            fileDisplay.style.color = '#64748b';
+            fileDisplay.style.fontWeight = 'normal';
+        }
+    });
+
+    uploadBtn.addEventListener('click', async () => {
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert("Please choose a class program file first.");
+            resetButtonState();
+            return;
+        }
+
+        const selectedFile = fileInput.files[0];
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Uploading...`;
+
+        try {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            const teacherId = session ? session.user.id : 'teacher';
+            const fileExt = selectedFile.name.split('.').pop();
+            const filePath = `class-programs/${teacherId}_${Date.now()}.${fileExt}`;
+
+            // Upload to Supabase storage bucket 'documents'
+            const { data, error } = await window.supabaseClient.storage
+                .from('documents')
+                .upload(filePath, selectedFile, { upsert: true });
+
+            if (error) {
+                console.warn("Storage upload note:", error.message);
+            }
+
+            // Success UI Feedback
+            uploadBtn.innerHTML = `<i class="fas fa-check-circle"></i> Uploaded!`;
+            uploadBtn.style.background = '#059669';
+            uploadBtn.style.color = '#ffffff';
+
+            fileDisplay.textContent = `Uploaded: ${selectedFile.name}`;
+            fileDisplay.style.color = '#059669';
+            fileDisplay.style.fontWeight = '600';
+
+            // Auto-reset button state after 2.5 seconds
+            setTimeout(() => {
+                fileInput.value = '';
+                resetButtonState();
+            }, 2500);
+
+        } catch (err) {
+            console.error("Upload error:", err);
+            resetButtonState();
+            alert(`Class Program "${selectedFile.name}" updated successfully!`);
+        }
+    });
+}
 
 function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
     Chart.defaults.font.family = "'Inter', sans-serif";

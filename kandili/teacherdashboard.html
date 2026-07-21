@@ -531,50 +531,6 @@
                 });
             }
 
-            if (uploadBtn && fileInput && fileDisplay) {
-                uploadBtn.addEventListener('click', function () {
-                    const file = fileInput.files[0];
-                    if (!file) {
-                        alert('Please select a class program file first.');
-                        return;
-                    }
-
-                    // Validate file type (extra client-side check)
-                    const allowedTypes = [
-                        'application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/vnd.ms-excel',
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    ];
-                    if (!allowedTypes.includes(file.type)) {
-                        alert('Invalid file type. Please select a PDF, DOC, DOCX, XLS, or XLSX file.');
-                        return;
-                    }
-
-                    // Simulate upload (in production, upload to Supabase Storage)
-                    const originalText = uploadBtn.innerHTML;
-                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-                    uploadBtn.disabled = true;
-
-                    setTimeout(() => {
-                        uploadBtn.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
-                        uploadBtn.style.background = '#059669';
-                        fileDisplay.textContent = file.name;
-                        fileDisplay.style.color = '#059669';
-
-                        // Reset after 3 seconds
-                        setTimeout(() => {
-                            uploadBtn.innerHTML = originalText;
-                            uploadBtn.style.background = '';
-                            uploadBtn.disabled = false;
-                            fileInput.value = '';
-                            fileDisplay.textContent = 'No file chosen';
-                            fileDisplay.style.color = '';
-                        }, 3000);
-                    }, 1500);
-                });
-            }
         });
 
         // ADDED: The missing logout function
