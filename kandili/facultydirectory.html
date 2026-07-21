@@ -14,26 +14,129 @@
     <script src="../static/logout.js"></script>
 
     <style>
-        .directory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .search-bar {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
         .directory-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .directory-header h2 {
+            color: #0038A8;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 500px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+            color: #0f172a;
+        }
+
+        .search-bar::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #0038A8;
+            box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.1);
+            background-color: #f8fbff;
+        }
+
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .faculty-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .faculty-card:hover {
+            border-color: #0038A8;
+            box-shadow: 0 8px 16px rgba(0, 56, 168, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .faculty-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .faculty-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0038A8;
+            margin-bottom: 0.5rem;
+        }
+
+        .faculty-role {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .faculty-action {
+            width: 100%;
+            padding: 0.65rem 1rem;
+            background-color: #0038A8;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .faculty-action:hover {
+            background-color: #002266;
+            box-shadow: 0 4px 12px rgba(0, 56, 168, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .faculty-action:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .directory-header {
+                flex-direction: column;
+            }
+
+            .directory-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -62,55 +165,47 @@
         <div class="directory-header">
             <div>
                 <button class="btn-outline nav-back" onclick="window.history.back()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
-                <h2 class="section-title" style="margin: 0;">Faculty Class Programs Directory</h2>
+                <h2>Faculty Class Programs Directory</h2>
             </div>
         </div>
 
         <input type="text" class="search-bar" placeholder="🔍 Search by teacher name, grade level, or subject...">
         
         <div class="directory-grid">
-            <!-- Directory Item 1 -->
-            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-                <div class="esf-header" style="margin-bottom: 1rem;">
-                    <div>
-                        <div class="esf-name">Beverly Ann C. Matulac</div>
-                        <div class="esf-role">Adviser: Grade 2 - SSES</div>
-                    </div>
+            <!-- Faculty Item 1 -->
+            <div class="faculty-card">
+                <div class="faculty-info">
+                    <div class="faculty-name">Beverly Ann C. Matulac</div>
+                    <div class="faculty-role">Adviser: Grade 2 - SSES</div>
                 </div>
-                <button class="btn btn-outline" style="width: 100%;" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
             </div>
 
-            <!-- Directory Item 2 -->
-            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-                <div class="esf-header" style="margin-bottom: 1rem;">
-                    <div>
-                        <div class="esf-name">Maria T. Espineda</div>
-                        <div class="esf-role">Adviser: Grade 2 - Melon</div>
-                    </div>
+            <!-- Faculty Item 2 -->
+            <div class="faculty-card">
+                <div class="faculty-info">
+                    <div class="faculty-name">Maria T. Espineda</div>
+                    <div class="faculty-role">Adviser: Grade 2 - Melon</div>
                 </div>
-                <button class="btn btn-outline" style="width: 100%;" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
             </div>
 
-            <!-- Directory Item 3 -->
-            <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-                <div class="esf-header" style="margin-bottom: 1rem;">
-                    <div>
-                        <div class="esf-name">Juan Carlos Silva</div>
-                        <div class="esf-role">Adviser: Grade 2 - Paho</div>
-                    </div>
+            <!-- Faculty Item 3 -->
+            <div class="faculty-card">
+                <div class="faculty-info">
+                    <div class="faculty-name">Juan Carlos Silva</div>
+                    <div class="faculty-role">Adviser: Grade 2 - Paho</div>
                 </div>
-                <button class="btn btn-outline" style="width: 100%;" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
             </div>
 
-             <!-- Directory Item 4 -->
-             <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-                <div class="esf-header" style="margin-bottom: 1rem;">
-                    <div>
-                        <div class="esf-name">Anna L. Gaylan</div>
-                        <div class="esf-role">Adviser: Grade 2 - Pinya</div>
-                    </div>
+            <!-- Faculty Item 4 -->
+            <div class="faculty-card">
+                <div class="faculty-info">
+                    <div class="faculty-name">Anna L. Gaylan</div>
+                    <div class="faculty-role">Adviser: Grade 2 - Pinya</div>
                 </div>
-                <button class="btn btn-outline" style="width: 100%;" onclick="window.open('classprogram.html', '_blank')">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.open('classprogram.html', '_blank')">📄 View Class Program</button>
             </div>
         </div>
 
