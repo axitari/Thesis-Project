@@ -115,5 +115,16 @@
         </div>
 
     </div>
+
+    <!-- Supabase & Auth Security Stack -->
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js"></script>
+    <script src="../static/logout.js"></script>
+    <script>
+        if (typeof checkAuthAndRole === "function") {
+            checkAuthAndRole('principal'); 
+        }
+    </script>
+    
 </body>
 </html>
