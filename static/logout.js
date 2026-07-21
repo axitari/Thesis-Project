@@ -1,37 +1,33 @@
 // static/logout.js
-//
-// Replaces the old pattern of:
-//   <a href="login.html" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
-// which never actually ended the session.
-//
-// New usage in the nav bar:
-//   <a href="#" onclick="return kandiliLogout();">Log Out</a>
-//
-// Requires supabaseClient.js to be loaded first.
 
-async function kandiliLogout() {
-    if (!confirm('Are you sure you want to log out?')) {
-        return false;
-    }
+async function handleLogout(event) {
+    if (event) event.preventDefault();
+
+    const confirmLogout = confirm('Are you sure you want to log out?');
+    if (!confirmLogout) return false;
 
     try {
-        if (window.supabaseClient?.auth?.signOut) {
-            const { error } = await window.supabaseClient.auth.signOut();
-            if (error) {
-                console.error('Logout failed:', error.message);
-            }
+        const { error } = await window.supabaseClient.auth.signOut();
+        if (error) {
+            console.error("Logout error:", error.message);
+            alert("Error signing out: " + error.message);
+        } else {
+            console.log("User successfully logged out.");
         }
-    } catch (error) {
-        console.error('Logout error:', error);
+    } catch (err) {
+        console.error("Unexpected logout failure:", err);
+    } finally {
+        window.location.href = "login.html";
     }
-
-    try {
-        localStorage.removeItem('supabase.auth.token');
-        sessionStorage.clear();
-    } catch (error) {
-        console.warn('Could not clear browser storage:', error);
-    }
-
-    window.location.href = 'login.html';
-    return false; // prevent the <a> tag's default navigation from also firing
 }
+
+// Global window alias so inline onclick="return kandiliLogout(event)" or onclick="kandiliLogout()" works seamlessly
+window.kandiliLogout = handleLogout;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutElements = document.querySelectorAll('#logoutLink, .btn-logout, a[href="login.html"]');
+    logoutElements.forEach(element => {
+        element.removeAttribute('onclick');
+        element.addEventListener('click', handleLogout);
+    });
+});

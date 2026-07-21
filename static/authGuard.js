@@ -1,7 +1,10 @@
 // static/authGuard.js
 
 async function checkAuthAndRole(requiredRole) {
-    // 1. Check if there is an active session
+    // Hide body immediately while checking auth to prevent UI flash
+    document.body.classList.add('protected-page');
+
+    // 1. Check active session
     const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
 
     if (sessionError || !session) {
@@ -12,7 +15,7 @@ async function checkAuthAndRole(requiredRole) {
 
     const userId = session.user.id;
 
-    // 2. Fetch the user's actual role from the profiles table
+    // 2. Fetch role from profiles
     const { data: profile, error: profileError } = await window.supabaseClient
         .from('profiles')
         .select('role')
@@ -25,11 +28,10 @@ async function checkAuthAndRole(requiredRole) {
         return;
     }
 
-    // 3. Check if the user's role matches the required role for this page
+    // 3. Check role authorization
     if (requiredRole !== 'any' && profile.role !== requiredRole) {
-        console.warn(Unauthorized Access. User is a ${profile.role}, required ${requiredRole}.);
+        console.warn(`Unauthorized Access. User is a ${profile.role}, required ${requiredRole}.`);
         
-        // Safety Valve: Kick them to their designated dashboard
         if (profile.role === 'teacher') {
             window.location.href = "teacherdashboard.html";
         } else if (profile.role === 'principal') {
@@ -39,5 +41,10 @@ async function checkAuthAndRole(requiredRole) {
         } else {
             window.location.href = "login.html";
         }
+        return;
     }
+
+    // Verification PASSED! Safe to reveal the page
+    document.body.classList.remove('protected-page');
+    document.body.style.display = 'block';
 }

@@ -3105,3 +3105,8 @@ body.auth-body {
 .fa-spin {
     animation: spin 1s linear infinite;
 }
+
+/* Hide protected content until authGuard completes role verification */
+body.protected-page {
+    display: none;
+}
