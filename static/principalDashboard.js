@@ -86,8 +86,114 @@ async function loadPrincipalDashboardData() {
         // 2. Render Faculty Directory Table
         renderPrincipalFacultyTable(processedTeachers);
 
+        // 3. Render Dynamic Chart.js Analytics
+        renderPrincipalCharts(processedTeachers, {
+            overloadedCount,
+            maximizedCount,
+            optimalCount
+        });
+
     } catch (err) {
         console.error("Failed to render principal workspace:", err);
+    }
+}
+
+let workloadChartInstance = null;
+let distributionChartInstance = null;
+
+function renderPrincipalCharts(teachers, metrics) {
+    if (typeof Chart === 'undefined') return;
+
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#64748b';
+
+    // 1. Faculty Burnout Risk Distribution Bar Chart
+    const distCanvas = document.getElementById('distributionChart');
+    if (distCanvas) {
+        if (distributionChartInstance) distributionChartInstance.destroy();
+
+        distributionChartInstance = new Chart(distCanvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Optimal Load (<25h)', 'Maximized Load (25-30h)', 'Overloaded (>30h)'],
+                datasets: [{
+                    label: 'Teachers Count',
+                    data: [metrics.optimalCount, metrics.maximizedCount, metrics.overloadedCount],
+                    backgroundColor: ['#0038A8', '#f59e0b', '#C8102E'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    // 2. Workload vs. Exhaustion Scatter Plot
+    const scatterCanvas = document.getElementById('workloadChart');
+    if (scatterCanvas) {
+        if (workloadChartInstance) workloadChartInstance.destroy();
+
+        const scatterPoints = teachers.map(t => {
+            const load = parseFloat(t.totalLoadHrs);
+            let state = 'Optimal';
+            if (load > 30) state = 'Overloaded';
+            else if (load >= 25) state = 'Maximized';
+
+            return {
+                x: load,
+                y: Math.min(100, Math.round((load / 35) * 70)),
+                state: state,
+                name: t.fullName
+            };
+        });
+
+        workloadChartInstance = new Chart(scatterCanvas.getContext('2d'), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Teachers',
+                    data: scatterPoints.length > 0 ? scatterPoints : [
+                        { x: 22, y: 15, state: 'Optimal', name: 'TCH-001' },
+                        { x: 38, y: 45, state: 'Maximized', name: 'TCH-002' },
+                        { x: 47, y: 92, state: 'Overloaded', name: 'TCH-003' }
+                    ],
+                    backgroundColor: function(context) {
+                        const state = context.raw?.state;
+                        if (state === 'Overloaded') return '#C8102E';
+                        if (state === 'Maximized') return '#f59e0b';
+                        return '#0038A8';
+                    },
+                    pointRadius: 7,
+                    pointHoverRadius: 9
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                const pt = ctx.raw;
+                                return `${pt.name || 'Teacher'}: Workload ${pt.x} hrs | Exhaustion ${pt.y}% (${pt.state})`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { title: { display: true, text: 'Exhaustion Score (%)' }, min: 0, max: 100 },
+                    x: { title: { display: true, text: 'Workload (Hours / Week)' }, min: 0, max: 55 }
+                }
+            }
+        });
     }
 }
 
