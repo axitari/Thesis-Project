@@ -68,13 +68,34 @@
         </div>
 
 
-        <!-- WELLNESS ALERT -->
-        <div class="alert-banner">
-            <div class="alert-text">
-                <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
-                <strong>Wellness Check-in Reminder:</strong> You haven't completed your weekly pulse check-in. This helps us monitor your wellbeing.
+        <!-- ALERTS & ACTIONS ROW: Wellness Check-in + Class Program Upload -->
+        <div class="alert-banner-row">
+            
+            <!-- WELLNESS ALERT -->
+            <div class="alert-banner">
+                <div class="alert-text">
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                    <strong>Wellness Check-in Reminder:</strong> You haven't completed your weekly pulse check-in. This helps us monitor your wellbeing.
+                </div>
+                <button class="alert-btn">Complete Check-in &rarr;</button>
             </div>
-            <button class="alert-btn">Complete Check-in &rarr;</button>
+
+            <!-- CLASS PROGRAM UPLOAD -->
+            <div class="alert-banner alert-banner--info">
+                <div class="alert-text">
+                    <i class="fas fa-upload" style="margin-right: 8px;"></i>
+                    <strong>Class Program Upload:</strong> Upload your updated class program document for the current semester.
+                </div>
+                <div class="upload-controls">
+                    <label class="upload-btn">
+                        <i class="fas fa-folder-open"></i> Choose File
+                        <input type="file" id="classProgramFile" accept=".pdf,.doc,.docx,.xls,.xlsx" hidden>
+                    </label>
+                    <span class="file-name" id="fileDisplay">No file chosen</span>
+                    <button class="alert-btn alert-btn--blue" id="uploadProgramBtn"><i class="fas fa-cloud-upload-alt"></i> Upload Program</button>
+                </div>
+            </div>
+
         </div>
 
 
@@ -491,6 +512,71 @@
 
 
   <script>
+        // ============================================================
+        // CLASS PROGRAM UPLOAD HANDLING
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('classProgramFile');
+            const fileDisplay = document.getElementById('fileDisplay');
+            const uploadBtn = document.getElementById('uploadProgramBtn');
+
+            if (fileInput && fileDisplay) {
+                // Update displayed filename when user selects a file
+                fileInput.addEventListener('change', function () {
+                    if (this.files && this.files.length > 0) {
+                        fileDisplay.textContent = this.files[0].name;
+                    } else {
+                        fileDisplay.textContent = 'No file chosen';
+                    }
+                });
+            }
+
+            if (uploadBtn && fileInput && fileDisplay) {
+                uploadBtn.addEventListener('click', function () {
+                    const file = fileInput.files[0];
+                    if (!file) {
+                        alert('Please select a class program file first.');
+                        return;
+                    }
+
+                    // Validate file type (extra client-side check)
+                    const allowedTypes = [
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    ];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Invalid file type. Please select a PDF, DOC, DOCX, XLS, or XLSX file.');
+                        return;
+                    }
+
+                    // Simulate upload (in production, upload to Supabase Storage)
+                    const originalText = uploadBtn.innerHTML;
+                    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                    uploadBtn.disabled = true;
+
+                    setTimeout(() => {
+                        uploadBtn.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
+                        uploadBtn.style.background = '#059669';
+                        fileDisplay.textContent = file.name;
+                        fileDisplay.style.color = '#059669';
+
+                        // Reset after 3 seconds
+                        setTimeout(() => {
+                            uploadBtn.innerHTML = originalText;
+                            uploadBtn.style.background = '';
+                            uploadBtn.disabled = false;
+                            fileInput.value = '';
+                            fileDisplay.textContent = 'No file chosen';
+                            fileDisplay.style.color = '';
+                        }, 3000);
+                    }, 1500);
+                });
+            }
+        });
+
         // ADDED: The missing logout function
         function kandiliLogout() {
             // 1. Ask the user to confirm

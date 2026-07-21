@@ -5666,6 +5666,89 @@ hr.modal-divider {
 
 
 /* =========================================
+   ALERT BANNER ROW & CLASS PROGRAM UPLOAD
+   ========================================= */
+
+/* Two-column grid for alert banners */
+.alert-banner-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Info variant (blue theme) for class program upload */
+.alert-banner--info {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 4px solid #3b82f6;
+}
+
+.alert-banner--info .alert-text {
+    color: #1e40af;
+}
+
+/* Upload controls row */
+.upload-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Styled "Choose File" label acting as a button */
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ffffff;
+    border: 1px solid #94a3b8;
+    color: #334155;
+    font-weight: 600;
+    font-size: 0.82rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.upload-btn:hover {
+    background: #f1f5f9;
+    border-color: #64748b;
+}
+
+/* File name display */
+.file-name {
+    font-size: 0.8rem;
+    color: #64748b;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Blue variant of alert-btn for the upload button */
+.alert-btn--blue {
+    background: #3b82f6;
+}
+
+.alert-btn--blue:hover {
+    background: #2563eb;
+}
+
+/* Responsive: stack banners vertically on smaller screens */
+@media (max-width: 768px) {
+    .alert-banner-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .upload-controls {
+        flex-wrap: wrap;
+    }
+}
+
+/* =========================================
    LANDING PAGE STYLES (index.html)
 ========================================= */
 
