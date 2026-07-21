@@ -18,66 +18,87 @@
                 <span>Kandili</span>
                 <span class="logo-badge">Workspace</span>
             </div>
-            <div class="theme-nav__title">Messages</div>
+            <div class="theme-nav__title">Messages <span id="unreadBadge" style="display: none; background: #ef4444; color: white; font-size: 0.75rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 6px;">0</span></div>
         </div>
         <div class="theme-nav__actions">
             <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__refresh" type="button" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
     </header>
 
-    <div class="dashboard-container">
-        <section class="welcome-banner">
-            <div class="banner-top">
-                <span class="page-pill">Inbox</span>
+    <main class="dashboard">
+        <div class="welcome-header">
+            <h1><i class="fas fa-comments" style="color: var(--primary, #0038A8); margin-right: 8px;"></i> Messages Center</h1>
+            <p>Keep communication flowing between teachers, principals, and school leadership.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+            <section class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="tabInboxBtn" class="btn-blue" type="button" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="switchMessageTab('inbox')">
+                            <i class="fas fa-inbox"></i> Received <span id="inboxTabBadge" style="display: none; background: #ef4444; color: white; font-size: 0.7rem; font-weight: 700; padding: 1px 6px; border-radius: 10px; margin-left: 4px;">0</span>
+                        </button>
+                        <button id="tabSentBtn" class="btn-outline" type="button" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="switchMessageTab('sent')">
+                            <i class="fas fa-paper-plane"></i> Sent
+                        </button>
+                    </div>
+                </div>
+                <div class="message-list">
+                    <!-- Messages loaded by messageLogic.js -->
+                </div>
+            </section>
+
+            <section class="content-card">
+                <div class="card-title"><i class="fas fa-paper-plane"></i> Compose Message</div>
+                <form class="message-form" style="margin-top: 1rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <label for="recipient" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #334155;">To (Recipient)</label>
+                        <select id="recipient" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #ffffff; color: #1e293b; cursor: pointer;">
+                            <option value="">-- Select Recipient --</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label for="subject" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #334155;">Subject</label>
+                        <input id="subject" type="text" placeholder="Enter subject here..." style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #ffffff; color: #1e293b;" />
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <label for="message" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #334155;">Message</label>
+                        <textarea id="message" placeholder="Write your message here..." style="width: 100%; min-height: 120px; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; resize: vertical;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-blue" style="width: 100%; border: none; cursor: pointer; padding: 0.85rem; font-size: 0.95rem;"><i class="fas fa-paper-plane"></i> Send Message</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Message Detail Reader Modal -->
+        <div id="messageModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+            <div style="background: #ffffff; width: 100%; max-width: 580px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                <div style="background: #0038A8; color: #ffffff; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600;"><i class="fas fa-envelope-open-text" style="margin-right: 8px;"></i> Message Details</h3>
+                    <button type="button" onclick="closeMessageModal()" style="background: transparent; border: none; color: #ffffff; font-size: 1.2rem; cursor: pointer;"><i class="fas fa-times"></i></button>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <div id="modalSender" style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">From: Principal</div>
+                            <div id="modalRole" style="font-size: 0.85rem; color: #64748b; margin-top: 0.2rem;">School Leadership</div>
+                        </div>
+                        <div id="modalTime" style="font-size: 0.8rem; color: #64748b; text-align: right;">Time</div>
+                    </div>
+                    <div id="modalBody" style="font-size: 0.98rem; line-height: 1.6; color: #334155; white-space: pre-line; background: #f8fafc; padding: 1.25rem; border-radius: 8px; border: 1px solid #e2e8f0; min-height: 120px;">
+                        Message content...
+                    </div>
+                    <div style="margin-top: 1.5rem; text-align: right;">
+                        <button type="button" class="btn-outline" onclick="closeMessageModal()" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 6px; cursor: pointer;">Close</button>
+                    </div>
+                </div>
             </div>
-            <h2 class="welcome-title">Messages Center</h2>
-            <p class="welcome-subtitle">Keep communication flowing between teachers, principals, and admins.</p>
-        </section>
-
-        <section class="card inbox-card">
-            <h3 class="card-header">Inbox</h3>
-            <div class="message-list">
-                <div class="message-item unread">
-                    <div class="message-meta">
-                        <strong>Principal's Office</strong>
-                        <span>09:20 AM</span>
-                    </div>
-                    <p>Please confirm your workload draft before the end of the day.</p>
-                </div>
-                <div class="message-item">
-                    <div class="message-meta">
-                        <strong>Admin Office</strong>
-                        <span>Yesterday</span>
-                    </div>
-                    <p>Your profile information was updated successfully.</p>
-                </div>
-                <div class="message-item">
-                    <div class="message-meta">
-                        <strong>School HR</strong>
-                        <span>Mon</span>
-                    </div>
-                    <p>Reminder: submit your updated ancillary assignment summary.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="card compose-card">
-            <h3 class="card-header">Compose Message</h3>
-            <form class="message-form">
-                <label for="recipient">To</label>
-                <input id="recipient" type="text" value="All Teachers" />
-
-                <label for="subject">Subject</label>
-                <input id="subject" type="text" placeholder="New reminder" />
-
-                <label for="message">Message</label>
-                <textarea id="message" placeholder="Write your message here..."></textarea>
-
-                <button type="submit" class="btn-primary btn-inline">Send Message</button>
-            </form>
-        </section>
-    </div>
+        </div>
+    </main>
     <script>
         const burgerMenuBtn = document.getElementById('burgerMenuBtn');
         const themeNavMenu = document.getElementById('themeNavMenu');
