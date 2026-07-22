@@ -954,6 +954,108 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     .btn-submit, .btn-reset { width: 100%; justify-content: center; }
 }
 
+/* ==========================================================================
+   ASSESSMENT PAGE CONTAINER & CARD FIXES
+   ========================================================================== */
+
+/* Main Container Adjustment */
+.assessment-container {
+    max-width: 1100px;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 0 0 3rem 0;
+    box-sizing: border-box;
+}
+
+/* Card Section Fixes */
+.section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+    margin-bottom: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section h3 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.35rem;
+    color: #0038A8;
+    font-weight: 700;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 0.75rem;
+}
+
+/* Questions Spacing */
+.question {
+    border-top: 1px solid #f1f5f9;
+    padding: 1.25rem 0;
+}
+
+.question:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.question-text {
+    margin-bottom: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Radio Button Options Grid */
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+    min-width: 65px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.option:hover {
+    border-color: #0038A8;
+    background-color: #f0f7ff;
+    color: #0038A8;
+    transform: translateY(-1px);
+}
+
+.option input[type="radio"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    accent-color: #0038A8;
+    cursor: pointer;
+}
+
+/* Highlight Selected Pill */
+.option:has(input[type="radio"]:checked) {
+    background-color: #0038A8;
+    color: #ffffff;
+    border-color: #0038A8;
+    box-shadow: 0 4px 10px rgba(0, 56, 168, 0.2);
+}
+
 /* =========================================
        MESSAGES AND NOTIFICATIONS
 ========================================= */

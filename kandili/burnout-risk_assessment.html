@@ -19,11 +19,11 @@
 <body class="dashboard-body">
 
     <!-- Top Navigation -->
-    <header class="theme-nav">
+<header class="theme-nav">
         <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button" aria-label="Go Back">
+            <a href="javascript:history.back()" class="nav-back-circle-btn" title="Go Back" aria-label="Go Back">
                 <i class="fas fa-arrow-left"></i>
-            </button>
+            </a>
             <div class="theme-nav__logo">
                 <span class="theme-nav__logo-icon">🏫</span>
                 <span>Kandili</span>
@@ -32,8 +32,8 @@
             <div class="theme-nav__title">Faculty Portal &bull; Burnout Assessment</div>
         </div>
         <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 12:35 AM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 1:05 AM</span>
+            <button class="theme-nav__refresh" type="button" onclick="location.reload();"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
     </header>
 
