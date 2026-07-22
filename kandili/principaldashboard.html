@@ -344,6 +344,64 @@
             </div>
         </section>
 
+        <!-- ============================================================ -->
+        <!-- PRINCIPAL DASHBOARD: FACULTY REPORTS MANAGEMENT             -->
+        <!-- ============================================================ -->
+        <section class="content-card principal-reports-card">
+    
+            <!-- Top Header -->
+            <div class="reports-header">
+                <div>
+                    <h3><i class="fas fa-folder-open"></i> Faculty Workload & Diagnostic Reports</h3>
+                    <p>Access administrative workload assignments and privacy-protected burnout diagnostics.</p>
+                </div>
+                
+                <div class="teacher-select-group">
+                    <span class="select-label">SELECT FACULTY:</span>
+                    <select id="facultySelect" class="form-control-sm">
+                        <option value="TCH-015">Lysander Callahan</option>
+                        <option value="TCH-016">Cali Sudalga</option>
+                        <option value="TCH-015">Lander Storm</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- THIS GRID WRAPPER FORCES SIDE-BY-SIDE -->
+            <div class="report-type-grid">
+                
+                <!-- CARD 1 (LEFT) -->
+                <div class="report-type-card">
+                    <div>
+                        <div class="report-card-icon workload-icon">
+                            <i class="fas fa-list-check"></i>
+                        </div>
+                        <span class="report-type-badge badge-identified">IDENTIFIED ADMIN REPORT</span>
+                        <h4>Workload Quantification Report</h4>
+                        <p>Official record of teaching hours, ancillary task distribution, and load score computation for administrative action.</p>
+                    </div>
+                    <button class="btn-primary" id="openWorkloadReportBtn" type="button">
+                        <i class="fas fa-file-invoice"></i> View Workload Report
+                    </button>
+                </div>
+
+                <!-- CARD 2 (RIGHT) -->
+                <div class="report-type-card">
+                    <div>
+                        <div class="report-card-icon burnout-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <span class="report-type-badge badge-anonymized">ANONYMIZED DIAGNOSTIC</span>
+                        <h4>Burnout Diagnostic Report</h4>
+                        <p>Anonymized Maslach Burnout Inventory (MBI) scores and risk categories to evaluate organizational stress trends safely.</p>
+                    </div>
+                    <button class="btn-outline" id="openBurnoutReportBtn" type="button">
+                        <i class="fas fa-shield-alt"></i> View Anonymized Report
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
         <!-- SECTION 5: SYSTEM MODULES -->
         <section class="modules-row">
             <div class="module-card">

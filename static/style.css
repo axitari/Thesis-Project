@@ -1967,6 +1967,87 @@ body { margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif; background: #f8f
     font-weight: 600;
 }
 
+/* ==========================================================================
+   FORCE SIDE-BY-SIDE CARDS
+   ========================================================================== */
+
+/* Main Section Wrapper */
+.principal-reports-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header Flex Box */
+.reports-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Grid Wrapper: Forces 2 Equal Columns Side-by-Side */
+.report-type-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* 2 equal columns */
+    gap: 1.5rem !important;
+    width: 100%;
+}
+
+/* Individual Card Styling */
+.report-type-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* Icons & Badges */
+.report-card-icon {
+    font-size: 1.25rem;
+    color: #0038A8;
+    margin-bottom: 1rem;
+}
+
+.report-type-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.badge-identified { background: #e0e7ff; color: #3730a3; }
+.badge-anonymized { background: #ffe4e6; color: #9f1239; }
+
+.report-type-card h4 {
+    margin: 0.25rem 0 0.5rem 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.report-type-card p {
+    margin: 0 0 1.5rem 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.report-type-card button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+}
+
 /* ========================================================== */
 /* SECTION 5: SYSTEM MODULES (4 COLUMNS)                      */
 /* ========================================================== */
