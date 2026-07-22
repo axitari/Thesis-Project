@@ -418,3 +418,90 @@ function setupAddTeacherForm() {
 function manageUser(userId) {
     alert("User Management for ID: " + userId + "\nThis action opens detail configurations.");
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Auth Guard Check
+    if (typeof checkAuthAndRole === 'function') {
+        checkAuthAndRole('admin');
+    }
+
+    // Modal DOM Elements
+    const editModal = document.getElementById('editProfileModal');
+    const closeBtn = document.getElementById('closeEditProfileModal');
+    const cancelBtn = document.getElementById('cancelEditProfileBtn');
+    const saveBtn = document.getElementById('saveProfileBtn');
+    const addTeacherBtn = document.getElementById('openAddTeacherBtn');
+
+    // Function to Populate and Open Edit Modal
+    const openEditModal = (btn) => {
+        document.getElementById('editTeacherCode').value = btn.getAttribute('data-code');
+        document.getElementById('editFirstName').value = btn.getAttribute('data-firstname');
+        document.getElementById('editLastName').value = btn.getAttribute('data-lastname');
+        document.getElementById('editEmail').value = btn.getAttribute('data-email');
+        document.getElementById('editDepartment').value = btn.getAttribute('data-dept');
+        document.getElementById('editGradeLevel').value = btn.getAttribute('data-grade');
+        document.getElementById('editAncillary').value = btn.getAttribute('data-ancillary') || '';
+
+        editModal.classList.add('active');
+    };
+
+    // Function to Close Modal
+    const closeModal = () => editModal.classList.remove('active');
+
+    // Attach Event Listeners to all Edit Profile Buttons
+    document.querySelectorAll('.btn-edit-profile').forEach(btn => {
+        btn.addEventListener('click', () => openEditModal(btn));
+    });
+
+    // Close Modal Events
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === editModal) closeModal();
+    });
+
+    // Handle Save Profile Action
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            alert('Teacher profile information updated successfully! This will reflect in their system profile.');
+            closeModal();
+        });
+    }
+
+    // Redirect to Add Teacher Modal/Drawer on Admin Dashboard
+    if (addTeacherBtn) {
+        addTeacherBtn.addEventListener('click', () => {
+            window.location.href = 'admindashboard.html#teacherDrawer';
+        });
+    }
+});
+
+// Three-Dots Menu Toggle & Removal Logic
+    document.addEventListener('click', (e) => {
+        const dotsBtn = e.target.closest('.btn-action-dots');
+        
+        // Close any open dropdown if clicking outside
+        document.querySelectorAll('.action-dropdown-wrapper.active').forEach(wrapper => {
+            if (!dotsBtn || wrapper !== dotsBtn.closest('.action-dropdown-wrapper')) {
+                wrapper.classList.remove('active');
+            }
+        });
+
+        // Toggle clicked three-dots menu
+        if (dotsBtn) {
+            const currentWrapper = dotsBtn.closest('.action-dropdown-wrapper');
+            currentWrapper.classList.toggle('active');
+        }
+    });
+
+    // Remove Teacher Handler
+    function confirmRemoveTeacher(btn, teacherCode, teacherName) {
+        if (confirm(`Are you sure you want to remove ${teacherName} (${teacherCode}) from the directory?`)) {
+            const row = btn.closest('tr');
+            if (row) {
+                row.remove();
+            }
+            alert(`${teacherName} has been removed successfully.`);
+        }
+    }

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Faculty Profile Directory &bull; Kandili Workspace</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/admin_directory.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Core Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="admin"></script>
+    <script src="../static/logout.js"></script>
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Navigation Bar -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="theme-nav__back" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">System Administration</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 22, 2026 | 11:58 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container admin-directory-container">
+        
+        <!-- Header Section -->
+        <div class="directory-header">
+            <div class="directory-header-top">
+                <h2>👥 Faculty Profile Directory</h2>
+                <button class="btn-primary" id="openAddTeacherBtn">
+                    <i class="fas fa-user-plus"></i> Add New Teacher
+                </button>
+            </div>
+            
+            <!-- Toolbar & Search Filters -->
+            <div class="admin-directory-toolbar">
+                <input type="text" id="directorySearchInput" class="search-bar" placeholder="🔍 Search teacher by name, code, or email...">
+                <select class="filter-select" id="departmentFilter">
+                    <option value="">All Departments</option>
+                    <option value="English">English</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="Filipino">Filipino</option>
+                </select>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Faculty Data Table -->
+        <div class="table-container">
+            <table class="dashboard-table admin-table">
+                <thead>
+                    <tr>
+                        <th>Teacher Code</th>
+                        <th>Name & Email</th>
+                        <th>Department</th>
+                        <th>Role / Assignment</th>
+                        <th>Teaching Load</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample Row 1 -->
+                    <tr>
+                        <td class="cell-id">TCH2026-001</td>
+                        <td class="cell-name">
+                            <strong>Kafka, Ma. Lyn</strong>
+                            <span class="sub-text">m.kafka@school.edu.ph</span>
+                        </td>
+                        <td>English</td>
+                        <td>Grade 5 & 6 Lead</td>
+                        <td><strong class="text-blue-dark">28.0 hrs</strong></td>
+                        <td><span class="table-badge badge-orange">High Load</span></td>
+                        <td>
+                            <button class="btn-edit-profile" type="button"
+                                    data-code="TCH2026-001" 
+                                    data-firstname="Ma. Lyn" 
+                                    data-lastname="Kafka" 
+                                    data-email="m.kafka@school.edu.ph" 
+                                    data-dept="English" 
+                                    data-grade="Grade 5" 
+                                    data-ancillary="Reading Coordinator">
+                                <i class="fas fa-user-edit"></i> Edit Profile
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Sample Row 2 -->
+                    <tr>
+                        <td class="cell-id">TCH2026-003</td>
+                        <td class="cell-name">
+                            <strong>Mcfly, Marty</strong>
+                            <span class="sub-text">m.mcfly@school.edu.ph</span>
+                        </td>
+                        <td>English</td>
+                        <td>Grade 4 Subject Teacher</td>
+                        <td><strong class="text-blue-dark">20.0 hrs</strong></td>
+                        <td><span class="table-badge badge-green">Optimal</span></td>
+                        <td>
+                            <button class="btn-edit-profile" type="button"
+                                    data-code="TCH2026-003" 
+                                    data-firstname="Marty" 
+                                    data-lastname="Mcfly" 
+                                    data-email="m.mcfly@school.edu.ph" 
+                                    data-dept="English" 
+                                    data-grade="Grade 4" 
+                                    data-ancillary="Reading Club Adviser">
+                                <i class="fas fa-user-edit"></i> Edit Profile
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- EDIT TEACHER PROFILE MODAL -->
+    <div class="modal-overlay" id="editProfileModal">
+        <div class="modal-container modal-container--wide">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-subtitle">System Administration</span>
+                    <h2><i class="fas fa-user-gear"></i> Edit Teacher Information</h2>
+                </div>
+                <button class="modal-close-icon" id="closeEditProfileModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="modal-notice">
+                    💡 Updates made here will immediately reflect on the teacher's profile across Kandili.
+                </div>
+
+                <!-- Basic Profile Fields -->
+                <div class="section-title">👤 Profile Details</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name <span class="required-star">*</span></label>
+                        <input type="text" id="editFirstName">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name <span class="required-star">*</span></label>
+                        <input type="text" id="editLastName">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email Address <span class="required-star">*</span></label>
+                        <input type="email" id="editEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>Teacher Code</label>
+                        <input type="text" id="editTeacherCode" readonly class="readonly-field">
+                    </div>
+                </div>
+
+                <!-- Academic Assignments -->
+                <hr class="modal-divider">
+                <div class="section-title">🏫 Department & Assignment Details</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Department <span class="required-star">*</span></label>
+                        <select id="editDepartment">
+                            <option value="English">English</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Science">Science</option>
+                            <option value="Filipino">Filipino</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Grade Level <span class="required-star">*</span></label>
+                        <select id="editGradeLevel">
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Ancillary Duty / Special Role</label>
+                    <input type="text" id="editAncillary" placeholder="e.g. Reading Program Coordinator">
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" type="button" id="saveProfileBtn"><i class="fas fa-save"></i> Save Changes</button>
+                    <button class="btn-outline" type="button" id="cancelEditProfileBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Script File -->
+    <script src="../static/adminDirectory.js"></script>
+</body>
+</html>

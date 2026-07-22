@@ -122,8 +122,9 @@
 </section>
 
 <!-- FACULTY DIRECTORY & USER MANAGEMENT SECTION -->
+<!-- FACULTY DIRECTORY & USER MANAGEMENT SECTION -->
 <div class="directory-section">
-    <!-- Header with Button -->
+    <!-- Header with Title & Add Teacher Button -->
     <div class="directory-header">
         <div class="directory-title-block">
             <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
@@ -155,7 +156,22 @@
                     <td>English</td>
                     <td class="text-blue-dark">30.0 hrs</td>
                     <td><span class="table-badge badge-orange">Maximized</span></td>
-                    <td><button class="btn-manage">Manage</button></td>
+                    <td class="action-cell">
+                        <div class="action-dropdown-wrapper">
+                            <button class="btn-action-dots" type="button" aria-label="Action Menu">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="action-dropdown-menu">
+                                <button class="dropdown-item" type="button" onclick="window.location.href='admin_facultydirectory.html'">
+                                    <i class="fas fa-user-edit"></i> Edit Profile
+                                </button>
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item item-danger" type="button" onclick="confirmRemoveTeacher(this, 'TCH2026-001', 'Kafka, Ma. Lyn')">
+                                    <i class="fas fa-trash-alt"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 
                 <!-- Sample Row 2 -->
@@ -166,7 +182,22 @@
                     <td class="text-italic">Not Assigned</td>
                     <td class="text-blue-dark">0.0 hrs</td>
                     <td><span class="table-badge badge-green">Optimal</span></td>
-                    <td><button class="btn-manage">Manage</button></td>
+                    <td class="action-cell">
+                        <div class="action-dropdown-wrapper">
+                            <button class="btn-action-dots" type="button" aria-label="Action Menu">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div class="action-dropdown-menu">
+                                <button class="dropdown-item" type="button" onclick="window.location.href='admin_facultydirectory.html'">
+                                    <i class="fas fa-user-edit"></i> Edit Profile
+                                </button>
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item item-danger" type="button" onclick="confirmRemoveTeacher(this, 'TCH2026-003', 'Mcfly, Marty')">
+                                    <i class="fas fa-trash-alt"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -288,7 +319,7 @@
             </div>
         </div>
         <div class="directory-nav-actions">
-            <button class="btn-primary" type="button" onclick="window.location.href='teacher_directory.html'">
+            <button class="btn-primary" type="button" onclick="window.location.href='admin_facultydirectory.html'">
                 <i class="fas fa-users-gear"></i> Open Teacher Directory
             </button>
         </div>
