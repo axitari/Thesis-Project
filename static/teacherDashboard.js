@@ -327,7 +327,6 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
     }
 }
 
-<<<<<<< Updated upstream
 // ============================================================
 // AUTOMATIC WELLNESS CHECK-IN POP-UP
 // ============================================================
@@ -536,7 +535,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-=======
 document.addEventListener('DOMContentLoaded', async () => {
     await initTeacherDashboard();
     setupESF7UploadListener();
@@ -672,4 +670,3 @@ function setupESF7UploadListener() {
         }
     });
 }
->>>>>>> Stashed changes
