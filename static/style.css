@@ -637,6 +637,122 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     border-top: none;
 }
 
+/* ============================================================ */
+/* REQUEST LEAVE MODAL STYLING                                 */
+/* ============================================================ */
+
+/* Modal Container Specific Max-Width for Leave Form */
+#requestLeaveModal .modal-container {
+    max-width: 520px;
+    width: 90%;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Modal Form Groups */
+#requestLeaveModal .form-group {
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+#requestLeaveModal .form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+#requestLeaveModal .form-group input[type="date"],
+#requestLeaveModal .form-group select,
+#requestLeaveModal .form-group textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.9rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #0f172a;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+}
+
+#requestLeaveModal .form-group input[type="date"]:focus,
+#requestLeaveModal .form-group select:focus,
+#requestLeaveModal .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary, #0038A8);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
+}
+
+#requestLeaveModal textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Date Range Two-Column Grid Fix */
+.leave-date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 480px) {
+    .leave-date-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Field Hints */
+#requestLeaveModal .field-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Action Buttons Alignment */
+#requestLeaveModal .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+#requestLeaveModal .btn-primary {
+    background-color: var(--primary, #0038A8);
+    color: #ffffff;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#requestLeaveModal .btn-primary:hover {
+    background-color: #002b80;
+}
+
+#requestLeaveModal .btn-outline {
+    background-color: transparent;
+    color: #64748b;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#requestLeaveModal .btn-outline:hover {
+    background-color: #f8fafc;
+    color: #1e293b;
+    border-color: #94a3b8;
+}
+
 /* =========================================
        MESSAGES AND NOTIFICATIONS
 ========================================= */
