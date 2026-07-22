@@ -201,9 +201,11 @@ function generateSecurePassword() {
     return combined.join('');
 }
 
+// static/adminDashboard.js
+
 async function loadFacultyDirectory() {
     try {
-        // Fetch profiles along with their teaching and ancillary loads
+        // 1. Fetch profiles + relational workload data
         const { data: profiles, error: profileError } = await window.supabaseClient
             .from('profiles')
             .select(`
@@ -212,67 +214,91 @@ async function loadFacultyDirectory() {
                 last_name,
                 role,
                 department,
+                teacher_code,
                 teaching_loads ( minutes_per_week ),
                 ancillary_duties ( hours_per_week )
-            `);
+            `)
+            .eq('role', 'teacher');
 
         if (profileError) {
             console.error("Error fetching faculty profiles:", profileError.message);
             return;
         }
 
-        const tableBody = document.querySelector('.admin-table-section .reallocation-table tbody');
+        // 2. Target the table body in the DOM
+        const tableBody = document.querySelector('.dashboard-table tbody');
         if (!tableBody) return;
 
-        // Clear hardcoded static rows
+        // Clear placeholder rows
         tableBody.innerHTML = '';
 
         let overloadedCount = 0;
         let maximizedCount = 0;
         let optimalCount = 0;
+        let underloadedCount = 0;
 
         profiles.forEach((profile, index) => {
-            // Calculate Total Hours (Teaching Mins -> Hours + Ancillary Hours)
+            // Compute Total Hours (R.A. 4670 Logic)
             const teachingMins = profile.teaching_loads?.reduce((sum, item) => sum + (item.minutes_per_week || 0), 0) || 0;
             const teachingHrs = teachingMins / 60;
             const ancillaryHrs = profile.ancillary_duties?.reduce((sum, item) => sum + parseFloat(item.hours_per_week || 0), 0) || 0;
             
             const totalWorkloadHrs = (teachingHrs + ancillaryHrs).toFixed(1);
 
-            // Determine Workload Status (DepEd RA 4670 Threshold Rules)
+            // Determine Workload Status & UI Badge
             let statusBadge = '';
-            if (totalWorkloadHrs > 30) { // Over DepEd 30-hour limit
-                statusBadge = `<span class="status-overload">OVERLOAD</span>`;
+            if (totalWorkloadHrs > 30) {
+                statusBadge = `<span class="table-badge badge-red">Overload</span>`;
                 overloadedCount++;
-            } else if (totalWorkloadHrs >= 25) {
-                statusBadge = `<span class="status-active">MAXIMIZED</span>`;
+            } else if (totalWorkloadHrs > 28) {
+                statusBadge = `<span class="table-badge badge-orange">Maximized</span>`;
                 maximizedCount++;
-            } else {
-                statusBadge = `<span class="status-pending">OPTIMAL</span>`;
+            } else if (totalWorkloadHrs >= 24) {
+                statusBadge = `<span class="table-badge badge-green">Optimal</span>`;
                 optimalCount++;
+            } else {
+                statusBadge = `<span class="table-badge badge-sky">Underload</span>`;
+                underloadedCount++;
             }
 
-            // Generate Teacher Code ID
-            const teacherCode = `TCH2026-${String(index + 1).padStart(3, '0')}`;
+            // Fallback formatted code if database field is null
+            const tCode = profile.teacher_code || `TCH2026-${String(index + 1).padStart(3, '0')}`;
             const fullName = `${profile.last_name || ''}, ${profile.first_name || 'Faculty'}`;
             const department = profile.department || 'Not Assigned';
+            const roleText = profile.role ? profile.role.toUpperCase() : 'TEACHER';
 
-            // Construct Dynamic HTML Table Row
+            // Generate Table Row
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${teacherCode}</td>
-                <td><span class="admin-teacher-name">${fullName}</span></td>
-                <td>${profile.role ? profile.role.toUpperCase() : 'TEACHER'}</td>
+                <td class="text-muted">${tCode}</td>
+                <td class="font-medium name-cell">${fullName}</td>
+                <td>${roleText}</td>
                 <td>${department}</td>
-                <td><span class="admin-load-value">${totalWorkloadHrs} hrs</span></td>
+                <td class="text-blue-dark">${totalWorkloadHrs} hrs</td>
                 <td>${statusBadge}</td>
-                <td><button class="action-btn action-btn--simulate" onclick="manageUser('${profile.id}')">Manage</button></td>
+                <td class="action-cell">
+                    <div class="action-dropdown-wrapper">
+                        <button class="btn-action-dots" type="button" aria-label="Action Menu">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="action-dropdown-menu">
+                            <button class="dropdown-item" type="button" onclick="window.location.href='admin_facultydirectory.html?id=${profile.id}'">
+                                <i class="fas fa-user-edit"></i> Edit Profile
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item item-danger" type="button" onclick="confirmRemoveTeacher(this, '${tCode}', '${fullName}', '${profile.id}')">
+                                <i class="fas fa-trash-alt"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </td>
             `;
             tableBody.appendChild(row);
         });
 
-        // Update Risk Summary Cards dynamically
-        updateRiskCards(overloadedCount, maximizedCount, optimalCount);
+        if (typeof updateRiskCards === 'function') {
+            updateRiskCards(underloadedCount, optimalCount, maximizedCount, overloadedCount);
+        }
 
     } catch (err) {
         console.error("Failed to load admin directory:", err);
