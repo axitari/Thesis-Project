@@ -71,36 +71,29 @@
         </div>
 
 
-        <!-- ALERTS & ACTIONS ROW: Wellness Check-in + Class Program Upload -->
-        <div class="alert-banner-row">
-            
-            <!-- WELLNESS ALERT -->
-            <div class="alert-banner">
-                <div class="alert-text">
-                    <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
-                    <strong>Wellness Check-in Reminder:</strong> You haven't completed your weekly pulse check-in. This helps us monitor your wellbeing.
-                </div>
-                <button class="alert-btn">Complete Check-in &rarr;</button>
-            </div>
-
-            <!-- CLASS PROGRAM UPLOAD -->
-            <div class="alert-banner alert-banner--info">
-                <div class="alert-text">
-                    <i class="fas fa-upload" style="margin-right: 8px;"></i>
-                    <strong>Class Program Upload:</strong> Upload your updated class program document for the current semester.
-                </div>
-                <div class="upload-controls">
-                    <label class="upload-btn">
-                        <i class="fas fa-folder-open"></i> Choose File
-                        <input type="file" id="classProgramFile" accept=".pdf,.doc,.docx,.xls,.xlsx" hidden>
-                    </label>
-                    <span class="file-name" id="fileDisplay">No file chosen</span>
-                    <button class="alert-btn alert-btn--blue" id="uploadProgramBtn"><i class="fas fa-cloud-upload-alt"></i> Upload Program</button>
-                </div>
-            </div>
-
+<!-- ============================================================ -->
+<!-- ALERTS & ACTIONS ROW: Class Program Upload Only              -->
+<!-- ============================================================ -->
+<div class="alert-banner-row" style="grid-template-columns: 1fr;">
+    
+    <!-- CLASS PROGRAM UPLOAD -->
+    <div class="alert-banner alert-banner--info" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+        
+        <div class="alert-text" style="flex: 1; min-width: 280px;">
+            <i class="fas fa-upload" style="margin-right: 8px;"></i>
+            <strong>Class Program Upload:</strong> Upload your updated class program document for the current semester.
+        </div>
+        
+        <div class="upload-controls" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <label class="upload-btn" style="margin: 0; white-space: nowrap;">
+                <i class="fas fa-folder-open"></i> Choose File
+                <input type="file" id="classProgramFile" accept=".pdf,.doc,.docx,.xls,.xlsx" hidden>
+            </label>
+            <span class="file-name" id="fileDisplay" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">No file chosen</span>
+            <button class="alert-btn alert-btn--blue" id="uploadProgramBtn" style="white-space: nowrap;"><i class="fas fa-cloud-upload-alt"></i> Upload Program</button>
         </div>
 
+    </div>
 
         <!-- ============================================================ -->
         <!-- SECTION: CLASS PROFILE & DEMOGRAPHICS                        -->
@@ -275,6 +268,27 @@
            
         </div>
 
+ <!-- ============================================================ -->
+<!-- MODAL: WELLNESS CHECK-IN POP-UP                             -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="wellnessCheckinModal">
+    <div class="modal-container" style="max-width: 600px; padding: 2rem;">
+        <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+            <h2><i class="fas fa-heartbeat" style="color: #e11d48;"></i> Pulse Check-in</h2>
+            <button class="modal-close-icon" id="wellnessCloseBtn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body" style="padding-top: 1rem;">
+            <!-- Exactly your original alert banner elements inside the modal frame -->
+            <div style="font-size: 0.95rem; line-height: 1.6; color: #334155; margin-bottom: 1.5rem;">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 8px; color: #f59e0b;"></i>
+                <strong>Wellness Check-in Reminder:</strong> You haven't completed your weekly pulse check-in. This helps us monitor your wellbeing.
+            </div>
+            <div class="modal-actions" style="justify-content: flex-end;">
+                <button class="alert-btn" id="completeCheckinBtn" style="width: auto;">Complete Check-in &rarr;</button>
+            </div>
+        </div>
+    </div>
+</div>       
 
  <!-- ============================================================ -->
         <!-- SECTION: BURNOUT ANALYTICS & ASSESSMENT                      -->
@@ -869,4 +883,3 @@
     <script src="../static/workloadManager.js"></script>
 </body>
 </html>
-

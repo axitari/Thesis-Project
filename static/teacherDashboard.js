@@ -326,3 +326,64 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
         });
     }
 }
+
+// ============================================================
+// AUTOMATIC WELLNESS CHECK-IN POP-UP
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const wellnessModal = document.getElementById('wellnessCheckinModal');
+    const wellnessCloseBtn = document.getElementById('wellnessCloseBtn');
+    const submitWellnessBtn = document.getElementById('submitWellnessBtn');
+    const pulseBtns = document.querySelectorAll('.pulse-opt-btn');
+
+    let selectedPulseVal = null;
+
+    // Trigger Pop-up if user hasn't checked in recently (Simulated check)
+    const hasCheckedInThisWeek = sessionStorage.getItem('kandili_wellness_checked_in');
+
+    if (!hasCheckedInThisWeek && wellnessModal) {
+        // Short delay for smooth loading effect
+        setTimeout(() => {
+            wellnessModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }, 800);
+    }
+
+    function closeWellnessModal() {
+        if (wellnessModal) {
+            wellnessModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (wellnessCloseBtn) {
+        wellnessCloseBtn.addEventListener('click', closeWellnessModal);
+    }
+
+    // Option Button Selection Logic
+    pulseBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            pulseBtns.forEach(b => {
+                b.style.borderColor = '#e2e8f0';
+                b.style.background = '#ffffff';
+            });
+            btn.style.borderColor = '#0038A8';
+            btn.style.background = '#eff6ff';
+            selectedPulseVal = btn.getAttribute('data-val');
+        });
+    });
+
+    // Submit Check-in
+    if (submitWellnessBtn) {
+        submitWellnessBtn.addEventListener('click', () => {
+            if (!selectedPulseVal) {
+                alert('Please select your feeling level before submitting.');
+                return;
+            }
+
+            sessionStorage.setItem('kandili_wellness_checked_in', 'true');
+            alert('Thank you! Your weekly pulse check-in has been logged.');
+            closeWellnessModal();
+        });
+    }
+});
