@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimal Faculty Roster &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase Client & Auth Guards -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="principal,admin"></script>
+    <script src="../static/logout.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/optimal_teachers.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Navigation Header -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="nav-back-circle-btn" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Optimal Workload Roster</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
+            <button class="theme-nav__refresh" onclick="location.reload()" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container optimal-container">
+        
+        <!-- Summary Banner Card -->
+        <div class="content-card optimal-banner">
+            <div class="banner-info-group">
+                <div class="banner-icon-badge">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <h2 class="banner-title">18 Balanced Faculty Members</h2>
+                    <p class="banner-subtext">Teachers maintaining an ideal teaching and administrative load (38–40 hrs/wk baseline), operating at maximum wellness and output efficiency.</p>
+                </div>
+            </div>
+            <a href="principaldashboard.html#recommendations" class="banner-action-btn">
+                <i class="fas fa-sliders-h"></i> Open Capacity Simulator
+            </a>
+        </div>
+
+        <!-- Faculty Directory Table Card -->
+        <div class="content-card directory-card">
+            <div class="directory-card-header">
+                <h3 class="directory-card-title"><i class="fas fa-user-shield" style="color: #16a34a;"></i> Healthy Workload Profile</h3>
+                <span class="status-pill-green">Status: Fully Sustainable</span>
+            </div>
+
+            <div class="table-wrapper directory-table-wrapper">
+                <table class="directory-table">
+                    <thead>
+                        <tr>
+                            <th>Teacher Code</th>
+                            <th>Faculty Name</th>
+                            <th>Department</th>
+                            <th>Current Hours</th>
+                            <th>Workload Balance Index</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="tch-code">TCH-001</td>
+                            <td class="tch-name">Ana Reyes</td>
+                            <td class="tch-dept">Mathematics</td>
+                            <td class="tch-hrs">40 hrs/wk</td>
+                            <td class="tch-avail">100% Optimal</td>
+                            <td><span class="badge-optimal-tag">OPTIMAL</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-001', 'Ana Reyes', '40 hrs/wk', '100% Optimal', 'Maintain current schedule. Faculty member is currently providing peer mentorship in Math Department.')">
+                                    <i class="fas fa-lightbulb"></i> View Recommendation &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tch-code">TCH-008</td>
+                            <td class="tch-name">Carlos Dizon</td>
+                            <td class="tch-dept">Science</td>
+                            <td class="tch-hrs">39 hrs/wk</td>
+                            <td class="tch-avail">98% Optimal</td>
+                            <td><span class="badge-optimal-tag">OPTIMAL</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-008', 'Carlos Dizon', '39 hrs/wk', '98% Optimal', 'Schedule is highly balanced. Buffer hour reserved for STEM Club advisorship duties.')">
+                                    <i class="fas fa-lightbulb"></i> View Recommendation &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tch-code">TCH-019</td>
+                            <td class="tch-name">Elena Gomez</td>
+                            <td class="tch-dept">Filipino</td>
+                            <td class="tch-hrs">38 hrs/wk</td>
+                            <td class="tch-avail">95% Optimal</td>
+                            <td><span class="badge-optimal-tag">OPTIMAL</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-019', 'Elena Gomez', '38 hrs/wk', '95% Optimal', 'Capacity is steady. Optional 2-hour capacity available if urgent departmental support is needed.')">
+                                    <i class="fas fa-lightbulb"></i> View Recommendation &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- RECOMMENDATION POP-UP MODAL -->
+    <div class="modal-overlay" id="recoModalOverlay">
+        <div class="modal-card">
+            <div class="modal-header-green">
+                <h3><i class="fas fa-circle-check" style="color: #16a34a;"></i> Wellness & Capacity Status</h3>
+                <button class="modal-close-btn" onclick="closeRecoModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="reco-detail-box">
+                    <div class="reco-detail-row">
+                        <span style="color: #64748b;">Teacher Target:</span>
+                        <strong id="modalTeacherName" style="color: #0f172a;">Ana Reyes (TCH-001)</strong>
+                    </div>
+                    <div class="reco-detail-row">
+                        <span style="color: #64748b;">Current Load:</span>
+                        <span id="modalCurrentLoad" style="font-weight: 600; color: #1e293b;">40 hrs/wk</span>
+                    </div>
+                    <div class="reco-detail-row">
+                        <span style="color: #64748b;">Workload Balance Index:</span>
+                        <strong id="modalAvailableCap" style="color: #16a34a;">100% Optimal</strong>
+                    </div>
+                </div>
+
+                <div class="reco-card-item-green">
+                    <strong style="color: #15803d; display: block; margin-bottom: 0.25rem;"><i class="fas fa-heart"></i> Sustainable Allocation Guidance:</strong>
+                    <span id="modalRecoText">Maintain current schedule. Faculty member is currently providing peer mentorship in Math Department.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeRecoModal()">Close</button>
+                <button class="btn-primary-action" onclick="window.location.href='principaldashboard.html#recommendations'">Open in Simulator &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic for Pop-up Modal -->
+    <script>
+        function openRecoModal(code, name, currentLoad, availCap, recoText) {
+            document.getElementById('modalTeacherName').textContent = `${name} (${code})`;
+            document.getElementById('modalCurrentLoad').textContent = currentLoad;
+            document.getElementById('modalAvailableCap').textContent = availCap;
+            document.getElementById('modalRecoText').textContent = recoText;
+
+            document.getElementById('recoModalOverlay').classList.add('active');
+        }
+
+        function closeRecoModal() {
+            document.getElementById('recoModalOverlay').classList.remove('active');
+        }
+
+        // Close on background overlay click
+        document.getElementById('recoModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecoModal();
+            }
+        });
+    </script>
+
+</body>
+</html>

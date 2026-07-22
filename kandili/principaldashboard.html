@@ -59,49 +59,68 @@
     <!-- ============================================================ -->
     <main class="dashboard">
 
-        <!-- SECTION 1: WORKLOAD CARDS (TOP ALERTS) -->
+<!-- SECTION 1: FACULTY WORKLOAD OVERVIEW CARDS -->
         <section class="risk-cards">
-            <div class="risk-card risk-card--critical">
+            <!-- 1. UNDERLOAD -->
+            <div class="risk-card risk-card--info">
                 <div class="risk-card-header">
-                    <div class="risk-card-icon">🚨</div>
-                    <span class="risk-card-badge">OVERLOADED</span>
+                    <div class="risk-card-icon">📉</div>
+                    <span class="risk-card-badge badge-underload">UNDERLOAD</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">2</span>
-                    <span class="risk-card-label">Overloaded Teachers</span>
-                    <span class="risk-card-action">Requires Reallocation</span>
+                    <span class="risk-card-number">3</span>
+                    <span class="risk-card-label">Underloaded Teachers</span>
+                    <span class="risk-card-action text-info">Available Capacity</span>
                 </div>
-                <button class="risk-card-btn" data-filter="overloaded">
+                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='underload_teachers.html'">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
 
-            <div class="risk-card risk-card--moderate">
-                <div class="risk-card-header">
-                    <div class="risk-card-icon">⚠️</div>
-                    <span class="risk-card-badge">MAXIMIZED</span>
-                </div>
-                <div class="risk-card-body">
-                    <span class="risk-card-number">8</span>
-                    <span class="risk-card-label">At Capacity Teachers</span>
-                    <span class="risk-card-action">Monitor Assignment</span>
-                </div>
-                <button class="risk-card-btn" data-filter="maximized">
-                    View List <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-
+            <!-- 2. OPTIMAL -->
             <div class="risk-card risk-card--low">
                 <div class="risk-card-header">
                     <div class="risk-card-icon">✅</div>
-                    <span class="risk-card-badge">OPTIMAL</span>
+                    <span class="risk-card-badge badge-optimal">OPTIMAL</span>
                 </div>
                 <div class="risk-card-body">
                     <span class="risk-card-number">32</span>
                     <span class="risk-card-label">Optimal Load Teachers</span>
-                    <span class="risk-card-action">Well Balanced</span>
+                    <span class="risk-card-action text-success">Well Balanced</span>
                 </div>
-                <button class="risk-card-btn" data-filter="optimal">
+                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='optimal_teachers.html'">
+                    View List <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- 3. HIGH -->
+            <div class="risk-card risk-card--moderate">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">⚠️</div>
+                    <span class="risk-card-badge badge-high-load">HIGH</span>
+                </div>
+                <div class="risk-card-body">
+                    <span class="risk-card-number">8</span>
+                    <span class="risk-card-label">High Load Teachers</span>
+                    <span class="risk-card-action text-warning">Monitor Assignment</span>
+                </div>
+                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='high-load_teachers.html'">
+                    View List <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- 4. OVERLOAD -->
+            <div class="risk-card risk-card--critical">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">🚨</div>
+                    <span class="risk-card-badge badge-overload">OVERLOAD</span>
+                </div>
+                <div class="risk-card-body">
+                    <span class="risk-card-number">2</span>
+                    <span class="risk-card-label">Overloaded Teachers</span>
+                    <span class="risk-card-action text-danger">Requires Reallocation</span>
+                </div>
+                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='overload_teachers.html'">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>

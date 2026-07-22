@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underloaded Faculty List &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase Client & Auth Guards -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="principal,admin"></script>
+    <script src="../static/logout.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/underload_teachers.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Navigation Header -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="nav-back-circle-btn" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Underloaded Faculty Roster</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
+            <button class="theme-nav__refresh" onclick="location.reload()" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container underload-container">
+        
+        <!-- Summary Banner Card -->
+        <div class="content-card underload-banner">
+            <div class="banner-info-group">
+                <div class="banner-icon-badge">
+                    <i class="fas fa-arrow-trend-down"></i>
+                </div>
+                <div>
+                    <h2 class="banner-title">3 Underloaded Faculty Members</h2>
+                    <p class="banner-subtext">Teachers with available teaching capacity below the standard 40-hour weekly threshold (R.A. 4670 / eSF7 baseline).</p>
+                </div>
+            </div>
+            <a href="principaldashboard.html#recommendations" class="banner-action-btn">
+                <i class="fas fa-sliders-h"></i> Open Reallocation Simulator
+            </a>
+        </div>
+
+        <!-- Faculty Directory Table Card -->
+        <div class="content-card directory-card">
+            <div class="directory-card-header">
+                <h3 class="directory-card-title"><i class="fas fa-user-check" style="color: #0284c7;"></i> Available Capacity Breakdown</h3>
+                <span class="status-pill">Status: Optimal for Reallocation</span>
+            </div>
+
+            <div class="table-wrapper directory-table-wrapper">
+                <table class="directory-table">
+                    <thead>
+                        <tr>
+                            <th>Teacher Code</th>
+                            <th>Faculty Name</th>
+                            <th>Department</th>
+                            <th>Current Hours</th>
+                            <th>Available Hours</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="tch-code">TCH-003</td>
+                            <td class="tch-name">Lander Storm</td>
+                            <td class="tch-dept">Araling Panlipunan</td>
+                            <td class="tch-hrs">28 hrs/wk</td>
+                            <td class="tch-avail">+12 hrs</td>
+                            <td><span class="badge-underload-tag">UNDERLOAD</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-003', 'Lander Storm', '28 hrs/wk', '+12 hrs', 'Assign SDRRM Coordinator duties (5 hrs/wk) from overloaded faculty TCH-012, balancing departmental load safely.')">
+                                    <i class="fas fa-lightbulb"></i> View Recommendation &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tch-code">TCH-014</td>
+                            <td class="tch-name">Maria Santos</td>
+                            <td class="tch-dept">English</td>
+                            <td class="tch-hrs">32 hrs/wk</td>
+                            <td class="tch-avail">+8 hrs</td>
+                            <td><span class="badge-underload-tag">UNDERLOAD</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-014', 'Maria Santos', '32 hrs/wk', '+8 hrs', 'Transfer Grade 9 Advisory load (-8 hrs) from overloaded faculty J. Dela Cruz to equalize core teaching hours.')">
+                                    <i class="fas fa-lightbulb"></i> View Recommendation &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tch-code">TCH-027</td>
+                            <td class="tch-name">Lester Bautista</td>
+                            <td class="tch-dept">MAPEH</td>
+                            <td class="tch-hrs">34 hrs/wk</td>
+                            <td class="tch-avail">+6 hrs</td>
+                            <td><span class="badge-underload-tag">UNDERLOAD</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-027', 'Lester Bautista', '34 hrs/wk', '+6 hrs', 'Assign Grade 7 Homeroom co-advisorship (+6 hrs) from maximized faculty A. Reyes.')">
+                                    <i class="fas fa-lightbulb"></i> View Recommendation &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- RECOMMENDATION POP-UP MODAL -->
+    <div class="modal-overlay" id="recoModalOverlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> Capacity Optimization Plan</h3>
+                <button class="modal-close-btn" onclick="closeRecoModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="reco-detail-box">
+                    <div class="reco-detail-row">
+                        <span style="color: #64748b;">Teacher Target:</span>
+                        <strong id="modalTeacherName" style="color: #0f172a;">Lander Storm (TCH-003)</strong>
+                    </div>
+                    <div class="reco-detail-row">
+                        <span style="color: #64748b;">Current Load:</span>
+                        <span id="modalCurrentLoad" style="font-weight: 600; color: #1e293b;">28 hrs/wk</span>
+                    </div>
+                    <div class="reco-detail-row">
+                        <span style="color: #64748b;">Available Capacity:</span>
+                        <strong id="modalAvailableCap" style="color: #0284c7;">+12 hrs</strong>
+                    </div>
+                </div>
+
+                <div class="reco-card-item">
+                    <strong style="color: #0369a1; display: block; margin-bottom: 0.25rem;"><i class="fas fa-check-circle"></i> Suggested Reallocation Task:</strong>
+                    <span id="modalRecoText">Assign SDRRM Coordinator duties (5 hrs/wk) from overloaded faculty TCH-012, balancing departmental load safely.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeRecoModal()">Close</button>
+                <button class="btn-primary-action" onclick="window.location.href='principaldashboard.html#recommendations'">Open in Simulator &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic for Pop-up Modal -->
+    <script>
+        function openRecoModal(code, name, currentLoad, availCap, recoText) {
+            document.getElementById('modalTeacherName').textContent = `${name} (${code})`;
+            document.getElementById('modalCurrentLoad').textContent = currentLoad;
+            document.getElementById('modalAvailableCap').textContent = availCap;
+            document.getElementById('modalRecoText').textContent = recoText;
+
+            document.getElementById('recoModalOverlay').classList.add('active');
+        }
+
+        function closeRecoModal() {
+            document.getElementById('recoModalOverlay').classList.remove('active');
+        }
+
+        // Close on background overlay click
+        document.getElementById('recoModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecoModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
