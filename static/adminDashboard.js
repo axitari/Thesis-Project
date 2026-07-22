@@ -177,6 +177,7 @@ async function loadFacultyDirectory() {
                 last_name,
                 role,
                 department,
+                grade_level,
                 teacher_code,
                 teaching_loads ( minutes_per_week ),
                 ancillary_duties ( hours_per_week )
@@ -239,7 +240,19 @@ async function loadFacultyDirectory() {
                             <i class="fas fa-ellipsis-v"></i>
                         </button>
                         <div class="action-dropdown-menu">
-                            <button class="dropdown-item" type="button" onclick="window.location.href='admin_facultydirectory.html?id=${profile.id}'">
+                            <button
+                                class="dropdown-item btn-edit-profile"
+                                type="button"
+                                onclick="window.openTeacherEditModal(this)"
+                                data-profile-id="${profile.id || ''}"
+                                data-code="${tCode}"
+                                data-firstname="${profile.first_name || ''}"
+                                data-lastname="${profile.last_name || ''}"
+                                data-email=""
+                                data-dept="${department}"
+                                data-grade="${profile.grade_level || ''}"
+                                data-ancillary=""
+                            >
                                 <i class="fas fa-user-edit"></i> Edit Profile
                             </button>
                             <div class="dropdown-divider"></div>
