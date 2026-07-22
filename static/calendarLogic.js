@@ -299,3 +299,271 @@
         return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     }
 })();
+
+/* ============================================================ */
+/* KANDILI MASTER CALENDAR - ROLE-BASED ACCESS CONTROL LOGIC      */
+/* ============================================================ */
+
+// Retrieve active user role from localStorage (defaults to 'principal' if null)
+const currentUserRole = localStorage.getItem('user_role') || 'principal'; 
+
+let events = [
+    { id: 101, date: '2026-07-03', title: 'Q1 Faculty Meeting', type: 'school', time: '09:00 AM' },
+    { id: 102, date: '2026-07-18', title: 'Grade Submission Deadline', type: 'school', time: '05:00 PM' },
+    { id: 103, date: '2026-07-18', title: 'Parent-Teacher Conference', type: 'personal', time: '03:00 PM' },
+    { id: 104, date: '2026-07-22', title: 'Department Planning', type: 'school', time: '08:30 AM' },
+    { id: 105, date: '2026-07-29', title: 'Lesson Plan Preparation', type: 'personal', time: '10:00 AM' }
+];
+
+// DOM Element Selectors
+const calendarGrid = document.getElementById('calendarGrid');
+const monthLabel = document.getElementById('monthLabel');
+const selectedDateLabel = document.getElementById('selectedDateLabel');
+const selectedEvents = document.getElementById('selectedEvents');
+const monthEventCount = document.getElementById('monthEventCount');
+const schoolCount = document.getElementById('schoolCount');
+const personalCount = document.getElementById('personalCount');
+const eventForm = document.getElementById('eventForm');
+const eventIdInput = document.getElementById('eventId');
+const eventTitle = document.getElementById('eventTitle');
+const eventType = document.getElementById('eventType');
+const eventTime = document.getElementById('eventTime');
+const addEventBtn = document.getElementById('addEventBtn');
+const cancelEventBtn = document.getElementById('cancelEventBtn');
+const deleteEventBtn = document.getElementById('deleteEventBtn');
+
+let currentDate = new Date(2026, 6, 1);
+let selectedDate = new Date(2026, 6, 18);
+
+// Configure form options based on logged-in role
+function configureRoleOptions() {
+    if (!eventType) return;
+    eventType.innerHTML = '';
+    if (currentUserRole === 'principal' || currentUserRole === 'admin') {
+        eventType.innerHTML = `
+            <option value="school">Schoolwide / Master Schedule (All Faculty)</option>
+            <option value="personal">Personal Event (Principal Private)</option>
+        `;
+    } else {
+        // Regular Teacher Access
+        eventType.innerHTML = `
+            <option value="personal">Personal Event (Visible only to you)</option>
+        `;
+    }
+}
+
+function formatDateKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function formatDisplayDate(date) {
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function getEventsForDate(dateKey) {
+    return events.filter((event) => event.date === dateKey);
+}
+
+function renderCalendar() {
+    if (!calendarGrid) return;
+    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const firstWeekday = firstDay.getDay();
+    const totalCells = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
+
+    monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    calendarGrid.innerHTML = '';
+
+    const todayKey = formatDateKey(new Date());
+    const selectedKey = formatDateKey(selectedDate);
+    const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const monthEvents = events.filter((event) => event.date.startsWith(monthKey));
+    
+    monthEventCount.textContent = monthEvents.length;
+    schoolCount.textContent = monthEvents.filter((e) => e.type === 'school').length;
+    personalCount.textContent = monthEvents.filter((e) => e.type === 'personal').length;
+
+    for (let i = 0; i < totalCells; i += 1) {
+        const dayNumber = i - firstWeekday + 1;
+        const cellDate = new Date(year, month, dayNumber);
+        const isCurrentMonth = cellDate.getMonth() === month;
+        const cellKey = formatDateKey(cellDate);
+        const isToday = cellKey === todayKey;
+        const isSelected = cellKey === selectedKey;
+
+        const dayEl = document.createElement('div');
+        dayEl.className = `calendar-day${isCurrentMonth ? '' : ' disabled'}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}`;
+        dayEl.innerHTML = `
+            <div class="date-row">
+                <span class="date-number">${isCurrentMonth ? cellDate.getDate() : ''}</span>
+                ${isToday ? '<span class="today-pill">Today</span>' : ''}
+            </div>
+        `;
+
+        if (isCurrentMonth) {
+            const eventList = getEventsForDate(cellKey);
+            eventList.slice(0, 2).forEach((event) => {
+                const pill = document.createElement('div');
+                pill.className = `event-pill event-${event.type}`;
+                pill.textContent = event.title;
+                pill.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectedDate = cellDate;
+                    renderCalendar();
+                    updateSelectedEvents();
+                });
+                dayEl.appendChild(pill);
+            });
+            if (eventList.length > 2) {
+                const more = document.createElement('div');
+                more.className = 'event-pill event-more';
+                more.textContent = `+${eventList.length - 2} more`;
+                dayEl.appendChild(more);
+            }
+        }
+
+        dayEl.addEventListener('click', () => {
+            if (!isCurrentMonth) return;
+            selectedDate = cellDate;
+            renderCalendar();
+            updateSelectedEvents();
+        });
+
+        calendarGrid.appendChild(dayEl);
+    }
+
+    updateSelectedEvents();
+}
+
+function updateSelectedEvents() {
+    if (!selectedEvents) return;
+    const key = formatDateKey(selectedDate);
+    const list = getEventsForDate(key);
+    selectedDateLabel.textContent = formatDisplayDate(selectedDate);
+    
+    if (list.length === 0) {
+        selectedEvents.innerHTML = '<div class="empty-state">No events scheduled for this day.</div>';
+        return;
+    }
+
+    selectedEvents.innerHTML = list.map((event) => {
+        // Check if current user has permission to edit this specific event
+        const isEditable = currentUserRole === 'principal' || currentUserRole === 'admin' || event.type === 'personal';
+        
+        return `
+            <div class="detail-card" style="position: relative; padding: 0.85rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;">
+                <div class="detail-card-title" style="font-weight: 700; color: #0f172a;">${event.title}</div>
+                <div class="detail-card-meta" style="font-size: 0.8rem; color: #64748b; margin-top: 0.2rem;">
+                    ${event.time || 'All day'} &bull; <span class="badge-${event.type}">${event.type === 'school' ? 'Schoolwide' : 'Personal'}</span>
+                </div>
+                ${isEditable ? `
+                    <button onclick="editEvent(${event.id})" style="position: absolute; right: 0.75rem; top: 0.75rem; background: none; border: none; color: #0038A8; cursor: pointer;">
+                        <i class="fas fa-pen-to-square"></i>
+                    </button>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+function editEvent(id) {
+    const ev = events.find(e => e.id === id);
+    if (!ev) return;
+
+    eventIdInput.value = ev.id;
+    eventTitle.value = ev.title;
+    eventTime.value = ev.time;
+    eventType.value = ev.type;
+    
+    document.getElementById('formHeader').textContent = 'Edit Event Details';
+    deleteEventBtn.classList.remove('hidden');
+    eventForm.classList.remove('hidden');
+}
+
+// Event Listeners Initializer
+document.addEventListener('DOMContentLoaded', () => {
+    configureRoleOptions();
+    renderCalendar();
+
+    if (document.getElementById('prevMonthBtn')) {
+        document.getElementById('prevMonthBtn').addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+            renderCalendar();
+        });
+    }
+
+    if (document.getElementById('nextMonthBtn')) {
+        document.getElementById('nextMonthBtn').addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+            renderCalendar();
+        });
+    }
+
+    if (document.getElementById('todayBtn')) {
+        document.getElementById('todayBtn').addEventListener('click', () => {
+            currentDate = new Date();
+            selectedDate = new Date();
+            renderCalendar();
+        });
+    }
+
+    if (addEventBtn) {
+        addEventBtn.addEventListener('click', () => {
+            eventIdInput.value = '';
+            eventTitle.value = '';
+            eventTime.value = '';
+            configureRoleOptions();
+            document.getElementById('formHeader').textContent = 'Create New Event';
+            deleteEventBtn.classList.add('hidden');
+            eventForm.classList.remove('hidden');
+            eventTitle.focus();
+        });
+    }
+
+    if (cancelEventBtn) {
+        cancelEventBtn.addEventListener('click', () => {
+            eventForm.classList.add('hidden');
+        });
+    }
+
+    if (deleteEventBtn) {
+        deleteEventBtn.addEventListener('click', () => {
+            const id = parseInt(eventIdInput.value);
+            events = events.filter(e => e.id !== id);
+            eventForm.classList.add('hidden');
+            renderCalendar();
+        });
+    }
+
+    if (eventForm) {
+        eventForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!eventTitle.value.trim()) return;
+
+            const existingId = eventIdInput.value;
+            if (existingId) {
+                const ev = events.find(item => item.id === parseInt(existingId));
+                if (ev) {
+                    ev.title = eventTitle.value.trim();
+                    ev.type = eventType.value;
+                    ev.time = eventTime.value.trim() || 'All day';
+                }
+            } else {
+                events.push({
+                    id: Date.now(),
+                    date: formatDateKey(selectedDate),
+                    title: eventTitle.value.trim(),
+                    type: eventType.value,
+                    time: eventTime.value.trim() || 'All day'
+                });
+            }
+
+            eventForm.classList.add('hidden');
+            renderCalendar();
+        });
+    }
+});
