@@ -189,20 +189,43 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     padding: 0;
 }
 
-/* Assessment form spacing fixes */
+/* Assessment form card and spacing */
 .assessment-container #mbiForm {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(2,6,23,0.06);
     padding: 1.5rem 1.75rem;
     box-sizing: border-box;
-    background: #ffffff00; /* keep transparent but provide spacing */
+    margin: 1rem auto;
+    max-width: 1100px;
 }
 
 .assessment-container .section {
-    padding: 0.75rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid #eef2f7;
+}
+
+.assessment-container .section:first-of-type {
+    border-top: none;
+}
+
+.assessment-container .question {
+    padding: 0.75rem 1rem;
+}
+
+.assessment-container .question-text {
+    margin-bottom: 0.5rem;
+    padding-left: 0.25rem;
+}
+
+.assessment-container .options {
+    padding-left: 0.5rem;
 }
 
 @media (max-width: 800px) {
     .assessment-container #mbiForm {
         padding: 1rem;
+        margin: 0.6rem;
     }
 }
 .theme-nav__menu {
