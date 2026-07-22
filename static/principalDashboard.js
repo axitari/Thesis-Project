@@ -1,9 +1,24 @@
 // static/principalDashboard.js
 
+let workloadChartInstance = null;
+let distributionChartInstance = null;
+
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Authorization
+    if (typeof checkAuthAndRole === 'function') {
+        checkAuthAndRole('principal');
+    }
+
+    // 2. Fetch & Render Data
     await loadPrincipalDashboardData();
 
-    // Setup Refresh Button
+    // 3. UI Event Listeners
+    setupNavigationEvents();
+    setupDirectorySearch();
+});
+
+function setupNavigationEvents() {
+    // Refresh Button
     const refreshBtn = document.querySelector('.theme-nav__refresh');
     if (refreshBtn) {
         refreshBtn.addEventListener('click', async () => {
@@ -12,11 +27,49 @@ document.addEventListener('DOMContentLoaded', async () => {
             refreshBtn.innerHTML = `<i class="fas fa-sync-alt"></i> Refresh`;
         });
     }
-});
+
+    // Burger Menu
+    const burgerMenuBtn = document.getElementById('burgerMenuBtn');
+    const themeNavMenu = document.getElementById('themeNavMenu');
+
+    if (burgerMenuBtn && themeNavMenu) {
+        burgerMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = themeNavMenu.classList.toggle('active');
+            burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
+                themeNavMenu.classList.remove('active');
+                burgerMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (typeof kandiliLogout === 'function') kandiliLogout();
+        });
+    }
+
+    // Risk Filter Buttons
+    const riskButtons = document.querySelectorAll('.risk-card-btn');
+    riskButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const filter = btn.getAttribute('data-filter');
+            if (typeof showTeacherList === 'function') {
+                showTeacherList(filter);
+            }
+        });
+    });
+}
 
 async function loadPrincipalDashboardData() {
     try {
-        // Fetch all teachers along with their relational teaching loads and ancillary duties
         const { data: teachers, error } = await window.supabaseClient
             .from('profiles')
             .select(`
@@ -41,7 +94,6 @@ async function loadPrincipalDashboardData() {
         let maximizedCount = 0;
         let optimalCount = 0;
 
-        // Process workload metrics for each teacher
         const processedTeachers = teachers.map((teacher, index) => {
             const teachingMins = teacher.teaching_loads?.reduce((sum, item) => sum + (item.minutes_per_week || 0), 0) || 0;
             const teachingHrs = teachingMins / 60;
@@ -52,10 +104,10 @@ async function loadPrincipalDashboardData() {
             totalSchoolTeachingMins += teachingMins;
             totalSchoolAncillaryHrs += ancillaryHrs;
 
-            // Classify workload compliance (DepEd / R.A. 4670 Magna Carta Standards)
+            // Normalized to OVERLOADED for consistency
             let status = 'OPTIMAL';
             if (totalLoadHrs > 40) {
-                status = 'OVERLOAD';
+                status = 'OVERLOADED';
                 overloadedCount++;
             } else if (totalLoadHrs > 36) {
                 status = 'MAXIMIZED';
@@ -73,7 +125,6 @@ async function loadPrincipalDashboardData() {
             };
         });
 
-        // 1. Populate Overview Summary Metric Cards
         updatePrincipalSummaryCards({
             totalTeachers: teachers.length,
             totalTeachingHrs: (totalSchoolTeachingMins / 60).toFixed(1),
@@ -83,10 +134,8 @@ async function loadPrincipalDashboardData() {
             optimalCount
         });
 
-        // 2. Render Faculty Directory Table
         renderPrincipalFacultyTable(processedTeachers);
 
-        // 3. Render Dynamic Chart.js Analytics
         renderPrincipalCharts(processedTeachers, {
             overloadedCount,
             maximizedCount,
@@ -98,16 +147,12 @@ async function loadPrincipalDashboardData() {
     }
 }
 
-let workloadChartInstance = null;
-let distributionChartInstance = null;
-
 function renderPrincipalCharts(teachers, metrics) {
     if (typeof Chart === 'undefined') return;
 
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#64748b';
 
-    // 1. Faculty Burnout Risk Distribution Bar Chart
     const distCanvas = document.getElementById('distributionChart');
     if (distCanvas) {
         if (distributionChartInstance) distributionChartInstance.destroy();
@@ -135,7 +180,6 @@ function renderPrincipalCharts(teachers, metrics) {
         });
     }
 
-    // 2. Workload vs. Exhaustion Scatter Plot
     const scatterCanvas = document.getElementById('workloadChart');
     if (scatterCanvas) {
         if (workloadChartInstance) workloadChartInstance.destroy();
@@ -159,11 +203,7 @@ function renderPrincipalCharts(teachers, metrics) {
             data: {
                 datasets: [{
                     label: 'Teachers',
-                    data: scatterPoints.length > 0 ? scatterPoints : [
-                        { x: 28, y: 30, state: 'Optimal', name: 'Sample Teacher 1' },
-                        { x: 38, y: 65, state: 'Maximized', name: 'Sample Teacher 2' },
-                        { x: 45, y: 90, state: 'Overloaded', name: 'Sample Teacher 3' }
-                    ],
+                    data: scatterPoints.length > 0 ? scatterPoints : [],
                     backgroundColor: function(context) {
                         const state = context.raw?.state;
                         if (state === 'Overloaded') return '#C8102E';
@@ -216,7 +256,8 @@ function updatePrincipalSummaryCards(metrics) {
 }
 
 function renderPrincipalFacultyTable(teachers) {
-    const tableBody = document.querySelector('.reallocation-table tbody, .faculty-table tbody, #facultyTableBody');
+    // Isolated target to prevent overwriting the reallocation table
+    const tableBody = document.querySelector('#facultyTableBody');
     if (tableBody) {
         tableBody.innerHTML = '';
 
@@ -225,8 +266,8 @@ function renderPrincipalFacultyTable(teachers) {
         } else {
             teachers.forEach(teacher => {
                 let statusBadge = `<span class="status-pending">OPTIMAL</span>`;
-                if (teacher.status === 'OVERLOAD') {
-                    statusBadge = `<span class="status-overload">OVERLOAD</span>`;
+                if (teacher.status === 'OVERLOADED') {
+                    statusBadge = `<span class="status-overload">OVERLOADED</span>`;
                 } else if (teacher.status === 'MAXIMIZED') {
                     statusBadge = `<span class="status-active">MAXIMIZED</span>`;
                 }
@@ -274,8 +315,6 @@ function renderPrincipalFacultyTable(teachers) {
             `;
             directoryGrid.appendChild(card);
         });
-
-        setupDirectorySearch();
     }
 }
 
@@ -302,4 +341,10 @@ function setupDirectorySearch() {
 
 function viewTeacherDetail(teacherId) {
     alert("Opening eSF7 Workload Breakdown for Teacher ID: " + teacherId);
+}
+
+if (typeof window.showTeacherList !== 'function') {
+    window.showTeacherList = function (status) {
+        console.log(`[Teacher List Handler] Filter applied: ${status}`);
+    };
 }
