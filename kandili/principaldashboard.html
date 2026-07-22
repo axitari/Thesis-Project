@@ -553,41 +553,67 @@
 </section>
 
         <!-- SECTION 5: SYSTEM MODULES -->
-        <section class="modules-row">
-            <div class="module-card">
-                <div class="module-icon">📁</div>
-                <h4 class="module-title">Master Class Programs</h4>
-                <p class="module-desc">Access and review official class schedules of all 28 faculty members.</p>
-                <button class="module-btn module-btn--outline" onclick="window.location.href='facultydirectory.html'">Open Directory &rarr;</button>
-            </div>
-
-            <div class="module-card">
-                <div class="module-icon">📊</div>
-                <h4 class="module-title">Risk Assessments</h4>
-                <p class="module-desc">Review predictive risk levels. Fully anonymized with Teacher Codes.</p>
-                <span class="module-status text-green"><i class="fas fa-shield-alt"></i> R.A. 10173 Compliant</span>
-                <button class="module-btn module-btn--outline" onclick="window.location.href='high_burnout_teachers.html'">Open Analytics &rarr;</button>
-            </div>
-
-            <div class="module-card">
-                <div class="module-icon">📤</div>
-                <h4 class="module-title">Data Ingestion</h4>
-                <p class="module-desc">Upload Master eSF7 spreadsheet to extract objective workload data.</p>
-                <div class="module-bottom-wrapper">
-                    <span class="module-status text-blue">Last Upload: 07/23/2026</span>
-                    <button class="module-btn module-btn--outline"><i class="fas fa-cloud-upload-alt"></i> Upload New Data</button>
+        <!-- 4-CARD SYSTEM NAVIGATION GRID -->
+        <section class="dashboard-grid-4">
+            
+            <!-- CARD 1: MASTER CLASS PROGRAMS / WORKLOAD DIRECTORY -->
+            <div class="dash-card">
+                <div class="dash-card__icon"><i class="fas fa-folder-open icon-amber"></i></div>
+                <h3 class="dash-card__title">Master Class Programs</h3>
+                <p class="dash-card__desc">Access and review official eSF7 class schedules and workload audits of all faculty members.</p>
+                <div class="dash-card__footer">
+                    <a href="facultydirectory.html" class="dash-card__btn">
+                        Open Directory <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
 
-            <div class="module-card">
-                <div class="module-icon">⚙️</div>
-                <h4 class="module-title">System Controls</h4>
-                <p class="module-desc">Export full reports and monitor system health.</p>
-                <span class="module-status text-green"><i class="fas fa-check-circle"></i> System OK <span style="font-weight: 400; color: #94a3b8; font-size: 0.75rem;">(Ping: 0.8s)</span></span>
-                <button class="module-btn module-btn--outline"><i class="fas fa-download"></i> Export PDF</button>
+            <!-- CARD 2: RISK ASSESSMENTS / BURNOUT DIRECTORY -->
+            <div class="dash-card">
+                <div class="dash-card__icon"><i class="fas fa-chart-column icon-purple"></i></div>
+                <h3 class="dash-card__title">Risk Assessments</h3>
+                <p class="dash-card__desc">Review MBI-ES predictive burnout risk levels. Fully anonymized with Teacher Codes.</p>
+                <div class="dash-card__status text-success">
+                    <i class="fas fa-shield-alt"></i> R.A. 10173 Compliant
+                </div>
+                <div class="dash-card__footer">
+                    <a href="burnout_reports_directory.html" class="dash-card__btn">
+                        Open Analytics <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
+
+            <!-- CARD 3: DATA INGESTION -->
+            <div class="dash-card">
+                <div class="dash-card__icon"><i class="fas fa-cloud-arrow-up icon-blue"></i></div>
+                <h3 class="dash-card__title">Data Ingestion</h3>
+                <p class="dash-card__desc">Upload Master eSF7 spreadsheet to extract objective workload data for automated parsing.</p>
+                <div class="dash-card__subtext">
+                    Last Upload: 07/23/2026
+                </div>
+                <div class="dash-card__footer">
+                    <a href="principaldashboard.html#upload" class="dash-card__btn">
+                        <i class="fas fa-upload"></i> Upload New Data
+                    </a>
+                </div>
+            </div>
+
+            <!-- CARD 4: SYSTEM CONTROLS / DASHBOARD RETURN -->
+            <div class="dash-card">
+                <div class="dash-card__icon"><i class="fas fa-gear icon-slate"></i></div>
+                <h3 class="dash-card__title">System Controls</h3>
+                <p class="dash-card__desc">Export consolidated administrative reports and monitor system health metrics.</p>
+                <div class="dash-card__status text-success">
+                    <i class="fas fa-circle-check"></i> System OK <span class="ping-sub">(Ping: 0.8s)</span>
+                </div>
+                <div class="dash-card__footer">
+                    <a href="principaldashboard.html" class="dash-card__btn">
+                        <i class="fas fa-house"></i> Return to Dashboard
+                    </a>
+                </div>
+            </div>
+
         </section>
-    </main>
 
     <!-- GLOBAL FOOTER -->
     <footer class="dashboard-footer">

@@ -4,185 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty Directory - Kandili Workspace</title>
+    
+    <!-- External CSS Files -->
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/facultyDirectory.css">
+    
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../static/logout.js"></script>
     <script src="../static/principalDashboard.js"></script>
-
-    <style>
-        /* Header & Navigation */
-        .directory-header {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .directory-header-top {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .directory-header h2 {
-            color: #0038A8;
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .back-button {
-            padding: 0.6rem 1rem;
-            background-color: #f8fafc;
-            color: #0038A8;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-
-        .back-button:hover {
-            background-color: #0038A8;
-            color: #ffffff;
-            border-color: #0038A8;
-            box-shadow: 0 4px 12px rgba(0, 56, 168, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .back-button:active {
-            transform: translateY(0);
-        }
-
-        /* Search Bar */
-        .search-bar {
-            width: 100%;
-            max-width: 500px;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background-color: #ffffff;
-            color: #0f172a;
-            transition: all 0.2s ease;
-        }
-
-        .search-bar::placeholder {
-            color: #94a3b8;
-        }
-
-        .search-bar:focus {
-            outline: none;
-            border-color: #0038A8;
-            box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.1);
-            background-color: #f8fbff;
-        }
-
-        /* Grid Layout */
-        .directory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* Faculty Card */
-        .faculty-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .faculty-card:hover {
-            border-color: #0038A8;
-            box-shadow: 0 8px 16px rgba(0, 56, 168, 0.12);
-            transform: translateY(-2px);
-        }
-
-        .faculty-info {
-            flex: 1;
-            margin-bottom: 1.5rem;
-        }
-
-        .faculty-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0038A8;
-            margin-bottom: 0.5rem;
-        }
-
-        .faculty-role {
-            font-size: 0.9rem;
-            color: #64748b;
-            line-height: 1.5;
-        }
-
-        /* Action Button */
-        .faculty-action {
-            width: 100%;
-            padding: 0.65rem 1rem;
-            background-color: #0038A8;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        .faculty-action:hover {
-            background-color: #002266;
-            box-shadow: 0 4px 12px rgba(0, 56, 168, 0.25);
-            transform: translateY(-1px);
-        }
-
-        .faculty-action:active {
-            transform: translateY(0);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .directory-header-top {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .directory-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .search-bar {
-                max-width: 100%;
-            }
-
-            .directory-header h2 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
 </head>
 <body class="dashboard-body">
 
-    <!-- Navbar -->
+    <!-- TOP NAVBAR -->
     <header class="theme-nav">
         <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
+            <button class="theme-nav__back" onclick="window.location.href='principaldashboard.html'" type="button" title="Back to Dashboard">
+                <i class="fas fa-arrow-left"></i>
+            </button>
             <div class="theme-nav__logo">
                 <span class="theme-nav__logo-icon">🏫</span>
                 <span>Kandili</span>
@@ -191,61 +37,101 @@
             <div class="theme-nav__title">Faculty Directory</div>
         </div>
         <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
+            <button class="theme-nav__refresh" type="button" onclick="window.location.reload()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
         </div>
     </header>
 
+    <!-- MAIN CONTAINER -->
     <div class="dashboard-container">
+        
+        <!-- HEADER & SEARCH BAR -->
         <div class="directory-header">
             <div class="directory-header-top">
-
-                <h2>Faculty Class Programs Directory</h2>
+                <h2><i class="fas fa-folder-open icon-amber"></i> Master Class Programs Directory</h2>
             </div>
-            <input type="text" class="search-bar" placeholder="🔍 Search by teacher name, grade level, or subject...">
+            
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="facultySearch" class="search-bar" placeholder="Search teacher name, grade level, or section..." onkeyup="filterDirectory()">
+            </div>
         </div>
         
-        <div class="directory-grid">
+        <!-- FACULTY GRID CARD LIST -->
+        <div class="directory-grid" id="facultyGrid">
+            
             <!-- Faculty Item 1 -->
             <div class="faculty-card">
+                <div class="faculty-avatar">BM</div>
                 <div class="faculty-info">
                     <div class="faculty-name">Beverly Ann C. Matulac</div>
-                    <div class="faculty-role">Adviser: Grade 2 - SSES</div>
+                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - SSES</div>
                 </div>
-                <button class="faculty-action" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html?faculty=matulac'">
+                    <i class="fas fa-table"></i> View Class Program
+                </button>
             </div>
 
             <!-- Faculty Item 2 -->
             <div class="faculty-card">
+                <div class="faculty-avatar">ME</div>
                 <div class="faculty-info">
                     <div class="faculty-name">Maria T. Espineda</div>
-                    <div class="faculty-role">Adviser: Grade 2 - Melon</div>
+                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Melon</div>
                 </div>
-                <button class="faculty-action" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html?faculty=espineda'">
+                    <i class="fas fa-table"></i> View Class Program
+                </button>
             </div>
 
             <!-- Faculty Item 3 -->
             <div class="faculty-card">
+                <div class="faculty-avatar">JS</div>
                 <div class="faculty-info">
                     <div class="faculty-name">Juan Carlos Silva</div>
-                    <div class="faculty-role">Adviser: Grade 2 - Paho</div>
+                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Paho</div>
                 </div>
-                <button class="faculty-action" onclick="window.location.href='classprogram.html'">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html?faculty=silva'">
+                    <i class="fas fa-table"></i> View Class Program
+                </button>
             </div>
 
             <!-- Faculty Item 4 -->
             <div class="faculty-card">
+                <div class="faculty-avatar">AG</div>
                 <div class="faculty-info">
                     <div class="faculty-name">Anna L. Gaylan</div>
-                    <div class="faculty-role">Adviser: Grade 2 - Pinya</div>
+                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Pinya</div>
                 </div>
-                <button class="faculty-action" onclick="window.open('classprogram.html', '_blank')">📄 View Class Program</button>
+                <button class="faculty-action" onclick="window.location.href='classprogram.html?faculty=gaylan'">
+                    <i class="fas fa-table"></i> View Class Program
+                </button>
             </div>
+
         </div>
 
     </div>
 
+    <!-- DYNAMIC SEARCH SCRIPT -->
     <script>
+        function filterDirectory() {
+            const query = document.getElementById('facultySearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.faculty-card');
+
+            cards.forEach(card => {
+                const name = card.querySelector('.faculty-name').textContent.toLowerCase();
+                const role = card.querySelector('.faculty-role').textContent.toLowerCase();
+
+                if (name.includes(query) || role.includes(query)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
         if (typeof checkAuthAndRole === "function") {
             checkAuthAndRole('principal'); 
         }
