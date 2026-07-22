@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Assessment Report &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase Client & Auth Guards -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../static/logout.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/teacher_report.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Navigation (Hidden when printing) -->
+    <header class="theme-nav no-print">
+        <div class="theme-nav__brand">
+            <button class="nav-back-circle-btn" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Institutional Report &bull; Cycle Q2 2026</div>
+        </div>
+        <div class="theme-nav__actions">
+            <button class="btn-print-report" id="printReportBtn" type="button"><i class="fas fa-print"></i> Print / Save PDF</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container report-container">
+        
+        <!-- Report Document Paper Frame -->
+        <article class="report-paper">
+            
+            <!-- Report Official Header -->
+            <header class="report-header">
+                <div class="institutional-badge">
+                    <span class="inst-logo">🏫</span>
+                    <div>
+                        <h2>DEPARTMENT OF EDUCATION</h2>
+                        <h3>Kandili Faculty Workload & Well-being Intelligence</h3>
+                    </div>
+                </div>
+                <div class="report-meta">
+                    <div><strong>Teacher Code:</strong> <span class="teacher-code-badge">TCH-012</span></div>
+                    <div><strong>Report ID:</strong> RPT-2026-0723</div>
+                    <div><strong>Generated:</strong> July 23, 2026</div>
+                    <div><strong>Status:</strong> <span class="status-badge status-pending" style="background: #e0f2fe; color: #0369a1;">Support Recommended</span></div>
+                </div>
+            </header>
+
+            <hr class="report-divider">
+
+            <!-- Subject Details Grid -->
+            <section class="report-section">
+                <h3 class="section-heading"><i class="fas fa-user-circle"></i> Faculty Profile & Workload Overview</h3>
+                <div class="details-grid">
+                    <div><strong>Teacher Code:</strong> <span style="color: #0038A8; font-weight: 700;">TCH-012</span></div>
+                    <div><strong>Faculty Name:</strong> Sarah J. Cruz</div>
+                    <div><strong>Position / Title:</strong> Teacher II / Class Adviser</div>
+                    <div><strong>Assigned Section:</strong> Grade 2 - Section A (ROVCMS)</div>
+                    <div><strong>Assessment Cycle:</strong> Mid-Year 2026 Well-being Review</div>
+                    <div><strong>Evaluating System:</strong> Project Meraki Engine v2.1</div>
+                </div>
+            </section>
+
+            <!-- Diagnostic Executive Summary (Positive Framing) -->
+            <section class="report-section">
+                <h3 class="section-heading"><i class="fas fa-heartbeat"></i> Faculty Well-being & Capacity Profile</h3>
+                <div class="summary-highlight-box positive-frame">
+                    <div class="summary-score-column">
+                        <div class="score-large">72<span class="score-denom">/100</span></div>
+                        <div class="score-label">Workload Balance Index</div>
+                    </div>
+                    <div class="summary-text-column">
+                        <h4>Proactive Support & Capacity Optimization Identified</h4>
+                        <p>Faculty member <strong>TCH-012</strong> demonstrates high dedication and positive professional efficacy (<strong>PA = 31/48</strong>). To maintain long-term teaching sustainability and prevent exhaustion, the intelligence engine identifies a key opportunity to optimize capacity by balancing <strong>5 hours/week of ancillary duties</strong> with additional departmental resources.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MBI Diagnostic Breakdown Table -->
+            <section class="report-section">
+                <h3 class="section-heading"><i class="fas fa-list-ol"></i> MBI-ES Well-being Dimension Breakdown</h3>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Well-being Subscale Dimension</th>
+                            <th>Score Achieved</th>
+                            <th>Status & Support Level</th>
+                            <th>Optimal Baseline Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Emotional Energy & Strain (EE)</strong></td>
+                            <td>38 / 54</td>
+                            <td><span class="badge-support">Rest Buffer Recommended</span></td>
+                            <td>0 - 26 (Balanced Energy)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Professional Connection (DP)</strong></td>
+                            <td>14 / 30</td>
+                            <td><span class="badge-mod">Moderate Efficacy</span></td>
+                            <td>0 - 9 (High Engagement)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Personal Accomplishment (PA)</strong></td>
+                            <td>31 / 48</td>
+                            <td><span class="badge-good">Satisfactory Achievement</span></td>
+                            <td>32 - 48 (High Sense of Efficacy)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Formula Breakdown Section -->
+            <section class="report-section">
+                <h3 class="section-heading"><i class="fas fa-calculator"></i> Workload & Well-being Index Calculation</h3>
+                <div class="formula-box">
+                    <p class="formula-title">Calculated Sustainability Equation:</p>
+                    <div class="formula-code">
+                        Workload Index = (0.50 &times; EE_normalized) + (0.30 &times; Ancillary_Load_Factor) + (0.20 &times; DP_normalized)
+                    </div>
+                    <ul class="formula-notes">
+                        <li><strong>Emotional Energy Component:</strong> (38 / 54) &times; 100 = 70.37 &rarr; Contributes <strong>35.18 pts</strong></li>
+                        <li><strong>Ancillary Load Contribution:</strong> (5 hrs over threshold) &rarr; Contributes <strong>24.00 pts</strong></li>
+                        <li><strong>Professional Connection Factor:</strong> (14 / 30) &times; 100 = 46.66 &rarr; Contributes <strong>13.33 pts</strong></li>
+                        <li><strong>Composite Sustainability Index:</strong> <strong>72.51 &approx; 72</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Official System Recommendations -->
+            <section class="report-section">
+                <h3 class="section-heading"><i class="fas fa-hand-holding-heart"></i> Institutional Support Recommendations</h3>
+                <div class="recommendations-container">
+                    <div class="reco-card-item">
+                        <div class="reco-tag high" style="background: #e0f2fe; color: #0369a1;">Action 1</div>
+                        <div>
+                            <strong>Ancillary Rebalance:</strong> Reassign <em>SDRRM Coordinator</em> duties (5 hrs/wk) from <strong>TCH-012</strong> to designated co-faculty member TCH-015 to restore optimal class prep time.
+                        </div>
+                    </div>
+                    <div class="reco-card-item">
+                        <div class="reco-tag mod" style="background: #fef3c7; color: #92400e;">Action 2</div>
+                        <div>
+                            <strong>Focus Time Buffer:</strong> Provide at least 1.5 consecutive hours of uninterrupted daily planning time to enhance instructional delivery and reduce stress.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Signatures / Approval Block -->
+            <footer class="report-signature-block">
+                <div class="sig-line">
+                    <div class="sig-title">Evaluated By:</div>
+                    <div class="sig-name">Kandili System Intelligence</div>
+                    <div class="sig-sub">Automated Assessment Engine</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-title">Acknowledged By:</div>
+                    <div class="sig-space"></div>
+                    <div class="sig-name">Sarah J. Cruz (TCH-012)</div>
+                    <div class="sig-sub">Faculty / Class Adviser</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-title">Approved By:</div>
+                    <div class="sig-space"></div>
+                    <div class="sig-name">School Principal / Admin</div>
+                    <div class="sig-sub">Institutional Authority</div>
+                </div>
+            </footer>
+
+        </article>
+
+    </main>
+
+    <!-- External Script -->
+    <script src="../static/teacherReport.js"></script>
+</body>
+</html>

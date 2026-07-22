@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burnout Analytics &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Supabase Client & Auth Guards -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../static/logout.js"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/teacher_analytics.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Navigation -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="nav-back-circle-btn" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Faculty Portal &bull; Detailed Analytics</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 1:39 AM</span>
+            <button class="theme-nav__refresh" type="button" onclick="location.reload();"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container analytics-container">
+        
+        <!-- Page Header -->
+        <div class="welcome-header">
+            <h1><i class="fas fa-chart-line" style="color: #0038A8;"></i> Comprehensive Burnout Analytics</h1>
+            <p>In-depth diagnostic breakdown of Maslach Burnout Inventory (MBI-ES) indicators and longitudinal risk trends.</p>
+        </div>
+
+        <!-- Metric Summary Cards Grid -->
+        <div class="analytics-metrics-grid">
+            
+            <!-- Overall Risk Card -->
+            <div class="content-card metric-card">
+                <div class="metric-card-header">
+                    <span>Overall Risk Index</span>
+                    <i class="fas fa-fire-alt metric-icon" style="color: #e11d48;"></i>
+                </div>
+                <div class="metric-value-wrapper">
+                    <span class="metric-number">72</span>
+                    <span class="metric-max">/100</span>
+                    <span class="status-badge status-pending" style="margin-left: auto;">High Risk</span>
+                </div>
+                <div class="metric-footer">
+                    <i class="fas fa-arrow-up" style="color: #e11d48;"></i> +4 points since last cycle
+                </div>
+            </div>
+
+            <!-- EE Subscale Card -->
+            <div class="content-card metric-card">
+                <div class="metric-card-header">
+                    <span>Emotional Exhaustion (EE)</span>
+                    <i class="fas fa-heartbeat metric-icon" style="color: #3b82f6;"></i>
+                </div>
+                <div class="metric-value-wrapper">
+                    <span class="metric-number">38</span>
+                    <span class="metric-max">/54</span>
+                </div>
+                <div class="subscale-bar-bg">
+                    <div class="subscale-bar-fill" style="width: 70%; background-color: #e11d48;"></div>
+                </div>
+                <div class="metric-sublabel">Severity Level: High</div>
+            </div>
+
+            <!-- DP Subscale Card -->
+            <div class="content-card metric-card">
+                <div class="metric-card-header">
+                    <span>Depersonalization (DP)</span>
+                    <i class="fas fa-user-slash metric-icon" style="color: #f59e0b;"></i>
+                </div>
+                <div class="metric-value-wrapper">
+                    <span class="metric-number">14</span>
+                    <span class="metric-max">/30</span>
+                </div>
+                <div class="subscale-bar-bg">
+                    <div class="subscale-bar-fill" style="width: 46%; background-color: #f59e0b;"></div>
+                </div>
+                <div class="metric-sublabel">Severity Level: Moderate</div>
+            </div>
+
+            <!-- PA Subscale Card -->
+            <div class="content-card metric-card">
+                <div class="metric-card-header">
+                    <span>Personal Accomplishment (PA)</span>
+                    <i class="fas fa-award metric-icon" style="color: #10b981;"></i>
+                </div>
+                <div class="metric-value-wrapper">
+                    <span class="metric-number">31</span>
+                    <span class="metric-max">/48</span>
+                </div>
+                <div class="subscale-bar-bg">
+                    <div class="subscale-bar-fill" style="width: 64%; background-color: #10b981;"></div>
+                </div>
+                <div class="metric-sublabel">Sense of Efficacy: Satisfactory</div>
+            </div>
+
+        </div>
+
+        <!-- Longitudinal Trend Chart Section -->
+        <section class="content-card">
+            <div class="card-title"><i class="fas fa-chart-area"></i> 6-Month Burnout & Subscale Trajectory</div>
+            <div class="chart-box">
+                <canvas id="burnoutTrendChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Detailed Assessment History Table -->
+        <section class="content-card">
+            <div class="card-title">
+                <i class="fas fa-history"></i> Assessment History Logs
+                <span style="margin-left: auto; font-size: 0.85rem; color: #64748b; font-weight: normal;">3 Surveys Completed</span>
+            </div>
+            
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date Taken</th>
+                            <th>EE Score</th>
+                            <th>DP Score</th>
+                            <th>PA Score</th>
+                            <th>Calculated Risk Index</th>
+                            <th>Status Rating</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>June 15, 2026</strong></td>
+                            <td>38 / 54</td>
+                            <td>14 / 30</td>
+                            <td>31 / 48</td>
+                            <td><span style="color: #e11d48; font-weight: 700;">72 / 100</span></td>
+                            <td><span class="status-badge status-pending">Moderate-High</span></td>
+                            <td><button class="btn-outline btn-sm"><i class="fas fa-download"></i> PDF</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>March 10, 2026</strong></td>
+                            <td>32 / 54</td>
+                            <td>11 / 30</td>
+                            <td>35 / 48</td>
+                            <td><span style="color: #f59e0b; font-weight: 700;">64 / 100</span></td>
+                            <td><span class="status-badge status-pending">Moderate</span></td>
+                            <td><button class="btn-outline btn-sm"><i class="fas fa-download"></i> PDF</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dec 05, 2025</strong></td>
+                            <td>24 / 54</td>
+                            <td>08 / 30</td>
+                            <td>39 / 48</td>
+                            <td><span style="color: #10b981; font-weight: 700;">48 / 100</span></td>
+                            <td><span class="status-badge status-confirmed">Low Risk</span></td>
+                            <td><button class="btn-outline btn-sm"><i class="fas fa-download"></i> PDF</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Page JavaScript -->
+    <script src="../static/teacherAnalytics.js"></script>
+</body>
+</html>
