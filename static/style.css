@@ -5298,6 +5298,99 @@ hr.modal-divider {
     width: 100%;
 }
 
+/* ==========================================================================
+   ADMIN DASHBOARD: ANALYTICS ROW & CHART CARDS ENHANCEMENT
+   ========================================================================== */
+
+/* 1. Force a 2-Column Grid Layout */
+.admin-details-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.75rem !important;
+    margin-top: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 2. Unified Card Container for BOTH Charts */
+.admin-details-row .card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 1.75rem !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    min-height: 420px; /* Forces equal card heights */
+}
+
+/* 3. Subtle Color Top Borders */
+.admin-details-row .card-accent-red {
+    border-top: 4px solid #b91c1c !important;
+}
+
+.admin-details-row .card-accent-blue {
+    border-top: 4px solid #0038A8 !important;
+}
+
+/* 4. Standardized Card Headers */
+.admin-details-row .card-header {
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding-bottom: 1rem !important;
+    margin-bottom: 1.25rem !important;
+}
+
+.admin-details-row .card-header h3 {
+    margin: 0 0 0.35rem 0 !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-details-row .card-accent-red .card-header h3 {
+    color: #b91c1c !important;
+}
+
+.admin-details-row .card-accent-blue .card-header h3 {
+    color: #0038A8 !important;
+}
+
+.admin-details-row .card-header p {
+    margin: 0 !important;
+    font-size: 0.825rem !important;
+    color: #64748b !important;
+    line-height: 1.4 !important;
+}
+
+/* 5. Chart Canvas Body Wrapper */
+.admin-details-row .card-body {
+    position: relative !important;
+    flex: 1 !important;
+    width: 100% !important;
+    height: 280px !important; /* Locks chart height ratio */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+/* Ensure Canvas elements remain responsive */
+.admin-details-row canvas {
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+/* Responsive adjustment for tablets/mobile */
+@media (max-width: 900px) {
+    .admin-details-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 /* =========================================
    SETTINGS PAGE STYLES
    ========================================= */
