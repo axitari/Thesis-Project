@@ -65,9 +65,22 @@ async function loadOfficialClassProgramView() {
             teacherNameEl.textContent = name || 'DOCTOR BROWN';
         }
 
-        const savedPrincipal = localStorage.getItem('kandili_principal_name');
+        // Dynamic Principal Name Resolution from public.profiles
+        const { data: principalProfile } = await window.supabaseClient
+            .from('profiles')
+            .select('first_name, last_name, role')
+            .eq('role', 'principal')
+            .limit(1)
+            .maybeSingle();
+
         if (principalNameEl) {
-            principalNameEl.textContent = (savedPrincipal || 'JIM HAWKINS').toUpperCase();
+            if (principalProfile && (principalProfile.first_name || principalProfile.last_name)) {
+                const fullPrincipalName = `${principalProfile.first_name || ''} ${principalProfile.last_name || ''}`.trim().toUpperCase();
+                principalNameEl.textContent = fullPrincipalName;
+            } else {
+                const savedPrincipal = localStorage.getItem('kandili_principal_name');
+                principalNameEl.textContent = savedPrincipal ? savedPrincipal.toUpperCase() : '(Principal Name)';
+            }
         }
     }
 
