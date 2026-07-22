@@ -327,6 +327,7 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
     }
 }
 
+<<<<<<< Updated upstream
 // ============================================================
 // AUTOMATIC WELLNESS CHECK-IN POP-UP
 // ============================================================
@@ -535,3 +536,140 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+=======
+document.addEventListener('DOMContentLoaded', async () => {
+    await initTeacherDashboard();
+    setupESF7UploadListener();
+});
+
+// 1. Initialize Dashboard & Populate Live Workload Tables
+async function initTeacherDashboard() {
+    try {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session) return;
+
+        const userId = session.user.id;
+
+        // Fetch User Profile
+        const { data: profile } = await window.supabaseClient
+            .from('profiles')
+            .select('first_name, last_name, department')
+            .eq('id', userId)
+            .single();
+
+        if (profile) {
+            const welcomeText = document.querySelector('.welcome-header h1');
+            if (welcomeText) {
+                const fullName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Teacher';
+                welcomeText.innerHTML = `👋 Welcome back, ${fullName}`;
+            }
+        }
+
+        // Fetch Teaching Loads
+        const { data: teachingLoads } = await window.supabaseClient
+            .from('teaching_loads')
+            .select('*')
+            .eq('teacher_id', userId);
+
+        // Fetch Ancillary Duties
+        const { data: ancillaryDuties } = await window.supabaseClient
+            .from('ancillary_duties')
+            .select('*')
+            .eq('teacher_id', userId);
+
+        // Update Official Workload Table
+        renderOfficialWorkloadTable(teachingLoads || [], ancillaryDuties || []);
+
+    } catch (err) {
+        console.error("Failed to load teacher dashboard live data:", err);
+    }
+}
+
+// 2. Render Live Data into Team's Official Workload (From eSF7) Table
+function renderOfficialWorkloadTable(teachingLoads, ancillaryDuties) {
+    const tableBody = document.querySelector('.data-table tbody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
+
+    if (teachingLoads.length === 0 && ancillaryDuties.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 1.5rem; color: #64748b;">
+                    No eSF7 workload records found. Choose an eSF7 spreadsheet (.xlsx) above and click <strong>Upload Program</strong> to populate your schedule.
+                </td>
+            </tr>`;
+        return;
+    }
+
+    // Render Teaching Loads Rows
+    teachingLoads.forEach(load => {
+        const hours = (load.minutes_per_week / 60).toFixed(1);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${load.subject_category}</strong></td>
+            <td>${load.grade_level || 'Grade Level'}</td>
+            <td>MON-FRI</td>
+            <td>${load.minutes_per_week} mins/wk</td>
+            <td><span class="badge" style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:4px; font-size:0.8rem;">Teaching</span></td>
+            <td>${hours} hrs</td>
+            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Active</span></td>
+        `;
+        tableBody.appendChild(tr);
+    });
+
+    // Render Ancillary Duties Rows
+    ancillaryDuties.forEach(duty => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${duty.duty_title}</strong></td>
+            <td>School Wide</td>
+            <td>-</td>
+            <td>-</td>
+            <td><span class="badge" style="background:#fef3c7; color:#b45309; padding:2px 8px; border-radius:4px; font-size:0.8rem;">Ancillary</span></td>
+            <td style="color: #C8102E; font-weight: 600;">${duty.hours_per_week} hrs</td>
+            <td><span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending Review</span></td>
+        `;
+        tableBody.appendChild(tr);
+    });
+}
+
+// 3. Attach Ingestion Engine to Team's Upload Button (#uploadProgramBtn)
+function setupESF7UploadListener() {
+    const fileInput = document.getElementById('classProgramFile');
+    const uploadBtn = document.getElementById('uploadProgramBtn');
+
+    if (!uploadBtn || !fileInput) return;
+
+    uploadBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const file = fileInput.files[0];
+        if (!file) {
+            alert("Please select an eSF7 spreadsheet file (.xlsx) first.");
+            return;
+        }
+
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (!session) {
+            alert("Session expired. Please log in again.");
+            return;
+        }
+
+        uploadBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
+        uploadBtn.disabled = true;
+
+        try {
+            // Call esf7Parser.js function
+            const result = await parseAndUploadESF7(file, session.user.id);
+            alert(`Success! Ingested ${result.teachingCount} teaching loads and ${result.ancillaryCount} ancillary duties.`);
+            window.location.reload();
+        } catch (err) {
+            alert("Upload Failed: " + (err.message || err));
+        } finally {
+            uploadBtn.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Upload Program`;
+            uploadBtn.disabled = false;
+        }
+    });
+}
+>>>>>>> Stashed changes

@@ -2,9 +2,6 @@
 
 /**
  * Parses an eSF7 Spreadsheet (XLSX/CSV) and uploads structured workloads to Supabase
- * @param {File} file - The file object from <input type="file">
- * @param {string} teacherId - The UUID of the teacher from public.profiles
- * @param {string} schoolYear - Current academic year (defaults to '2025-2026')
  */
 async function parseAndUploadESF7(file, teacherId, schoolYear = '2025-2026') {
     if (!file || !teacherId) {
@@ -26,14 +23,13 @@ async function parseAndUploadESF7(file, teacherId, schoolYear = '2025-2026') {
                 const teachingLoads = [];
                 const ancillaryDuties = [];
 
-                // Parse rows into respective DepEd categories
                 jsonRows.forEach((row) => {
                     if (!row || row.length < 2) return;
 
                     const titleOrCategory = row[0]?.toString().trim();
                     const gradeLevel = row[1]?.toString().trim() || 'Grade 7';
                     const value = parseFloat(row[2]) || 0;
-                    const rowType = row[3]?.toString().trim().toLowerCase(); // 'teaching' or 'ancillary'
+                    const rowType = row[3]?.toString().trim().toLowerCase(); 
 
                     if (!titleOrCategory || value <= 0) return;
 
@@ -49,13 +45,13 @@ async function parseAndUploadESF7(file, teacherId, schoolYear = '2025-2026') {
                             teacher_id: teacherId,
                             subject_category: titleOrCategory,
                             grade_level: gradeLevel,
-                            minutes_per_week: Math.round(value), // In minutes
+                            minutes_per_week: Math.round(value),
                             school_year: schoolYear
                         });
                     }
                 });
 
-                // 1. Clear existing workloads for current school year (Fresh Import)
+                // 1. Clear existing workloads for current school year
                 await window.supabaseClient.from('teaching_loads').delete().eq('teacher_id', teacherId).eq('school_year', schoolYear);
                 await window.supabaseClient.from('ancillary_duties').delete().eq('teacher_id', teacherId).eq('school_year', schoolYear);
 
@@ -68,7 +64,7 @@ async function parseAndUploadESF7(file, teacherId, schoolYear = '2025-2026') {
                 // 3. Insert into ancillary_duties
                 if (ancillaryDuties.length > 0) {
                     const { error: aErr } = await window.supabaseClient.from('ancillary_duties').insert(ancillaryDuties);
-                    if aErr throw aErr;
+                    if (aErr) throw aErr;
                 }
 
                 // 4. Upload raw spreadsheet to Storage Bucket for audit
