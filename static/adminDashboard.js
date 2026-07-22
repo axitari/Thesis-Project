@@ -69,54 +69,47 @@ function setupDrawerToggle() {
    TEACHER CODE AUTO-GENERATION
    ============================================================ */
 function setupTeacherCodeGeneration() {
-    // Generate code on drawer open (handled in setupDrawerToggle)
+    const generateCodeBtn = document.getElementById('generateTeacherCodeBtn');
+    if (generateCodeBtn) {
+        generateCodeBtn.addEventListener('click', generateTeacherCode);
+    }
 }
 
 async function generateTeacherCode() {
     const teacherCodeInput = document.getElementById('teacherCode');
     if (!teacherCodeInput) return;
 
+    const currentYear = new Date().getFullYear();
+    const prefix = `TCH${currentYear}-`;
+
     try {
-        // Fetch existing teachers to determine max code number
-        const { data: profiles, error } = await window.supabaseClient
+        const { data: existingCodes, error } = await window.supabaseClient
             .from('profiles')
-            .select('id')
-            .eq('role', 'teacher');
+            .select('teacher_code')
+            .eq('role', 'teacher')
+            .not('teacher_code', 'is', null);
 
-        const currentYear = new Date().getFullYear(); // e.g. 2026
-        let maxNumber = 0;
-
-        if (!error && profiles && profiles.length > 0) {
-            // Try to find the highest existing teacher code from metadata if available
-            const { data: existingCodes, error: codeError } = await window.supabaseClient
-                .from('profiles')
-                .select('teacher_code')
-                .eq('role', 'teacher')
-                .not('teacher_code', 'is', null);
-
-            if (!codeError && existingCodes) {
-                existingCodes.forEach(item => {
-                    if (item.teacher_code) {
-                        const parts = item.teacher_code.split('-');
-                        if (parts.length === 2) {
-                            const num = parseInt(parts[1], 10);
-                            if (!isNaN(num) && num > maxNumber) {
-                                maxNumber = num;
-                            }
-                        }
-                    }
-                });
-            }
+        const usedCodes = new Set();
+        if (!error && existingCodes) {
+            existingCodes.forEach(item => {
+                if (item.teacher_code) {
+                    usedCodes.add(item.teacher_code.trim());
+                }
+            });
         }
 
-        const nextNumber = maxNumber + 1;
-        const code = `TCH${currentYear}-${String(nextNumber).padStart(3, '0')}`;
+        let code;
+        let attempts = 0;
+        do {
+            const suffix = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+            code = `${prefix}${suffix}`;
+            attempts += 1;
+        } while (usedCodes.has(code) && attempts < 20);
+
         teacherCodeInput.value = code;
     } catch (err) {
         console.error("Failed to generate teacher code:", err);
-        // Fallback: Use timestamp-based code
-        const fallbackCode = `TCH${new Date().getFullYear()}-${String(Date.now()).slice(-3)}`;
-        teacherCodeInput.value = fallbackCode;
+        teacherCodeInput.value = `TCH${currentYear}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
     }
 }
 
@@ -127,13 +120,53 @@ function setupPasswordGenerator() {
     const generateBtn = document.getElementById('generatePasswordBtn');
     if (!generateBtn) return;
 
-    generateBtn.addEventListener('click', () => {
+    generateBtn.addEventListener('click', async () => {
         const password = generateSecurePassword();
         const passwordInput = document.getElementById('teacherPassword');
         if (passwordInput) {
             passwordInput.value = password;
         }
+
+        await generateTeacherCode();
     });
+}
+
+async function generateTeacherCode() {
+    const teacherCodeInput = document.getElementById('teacherCode');
+    if (!teacherCodeInput) return;
+
+    const currentYear = new Date().getFullYear();
+    const prefix = `TCH${currentYear}-`;
+
+    try {
+        const { data: existingCodes, error } = await window.supabaseClient
+            .from('profiles')
+            .select('teacher_code')
+            .eq('role', 'teacher')
+            .not('teacher_code', 'is', null);
+
+        const usedCodes = new Set();
+        if (!error && existingCodes) {
+            existingCodes.forEach(item => {
+                if (item.teacher_code) {
+                    usedCodes.add(item.teacher_code.trim());
+                }
+            });
+        }
+
+        let code;
+        let attempts = 0;
+        do {
+            const suffix = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+            code = `${prefix}${suffix}`;
+            attempts += 1;
+        } while (usedCodes.has(code) && attempts < 20);
+
+        teacherCodeInput.value = code;
+    } catch (err) {
+        console.error("Failed to generate teacher code:", err);
+        teacherCodeInput.value = `TCH${currentYear}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+    }
 }
 
 function generateSecurePassword() {

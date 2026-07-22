@@ -227,7 +227,10 @@
             
             <div class="form-group">
                 <label>Teacher Code</label>
-                <input type="text" id="teacherCode" readonly>
+                <div class="password-row">
+                    <input type="text" id="teacherCode" placeholder="TCH2026-XXX" readonly>
+                    <button type="button" class="btn-generate" id="generateTeacherCodeBtn">🔄 Generate</button>
+                </div>
                 <span class="field-hint">Auto-generated</span>
             </div>
             
@@ -250,28 +253,6 @@
         </div>
     </div>
 </div>
-
-<!-- ============================================================ -->
-<!-- TEACHER DIRECTORY QUICK ACCESS & EDIT PROFILE CARD           -->
-<!-- ============================================================ -->
-<section class="content-card directory-navigation-card">
-    <div class="directory-nav-content">
-        <div class="directory-nav-left">
-            <div class="directory-icon-box">
-                <i class="fas fa-id-card-clip"></i>
-            </div>
-            <div class="directory-text-info">
-                <h3>Teacher Directory & Profile Management</h3>
-                <p>View, update, and edit detailed profile records, subject assignments, and account status for all registered faculty members.</p>
-            </div>
-        </div>
-        <div class="directory-nav-actions">
-            <button class="btn-primary" type="button" onclick="window.location.href='teacher_directory.html'">
-                <i class="fas fa-users-gear"></i> Open Teacher Directory
-            </button>
-        </div>
-    </div>
-</section>
 
 <!-- NEW: Interactive Analytics Row -->
         <div class="admin-details-row">
@@ -316,7 +297,7 @@
             Version 2.1.0
         </div>
     </footer>
-
+<script src="../static/adminDashboard.js"></script>
 <script>
     // 1. Burger Menu Toggle (Unchanged)
     const burgerMenuBtn = document.getElementById('burgerMenuBtn');
