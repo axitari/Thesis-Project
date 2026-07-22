@@ -4,8 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - Master Calendar</title>
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Supabase JS Library-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Supabase & Auth Scripts 
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js"></script>
+    <script src="../static/logout.js"></script>-->
 </head>
 <body class="dashboard-body">
     <header class="theme-nav">
@@ -19,8 +29,8 @@
             <div class="theme-nav__title">Master Calendar</div>
         </div>
         <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <span class="theme-nav__date" id="navDateDisplay"><i class="far fa-calendar-alt"></i> Loading...</span>
+            <button class="theme-nav__refresh" id="refreshBtn" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
     </header>
 
@@ -29,7 +39,7 @@
             <div class="calendar-header">
                 <div class="month-nav">
                     <button id="prevMonthBtn" class="btn-outline btn-small" type="button">&lt;</button>
-                    <h2 id="monthLabel">July 2026</h2>
+                    <h2 id="monthLabel">Loading...</h2>
                     <button id="nextMonthBtn" class="btn-outline btn-small" type="button">&gt;</button>
                 </div>
                 <div class="calendar-actions">
@@ -62,11 +72,11 @@
                     <div class="sidebar-card">
                         <div class="sidebar-card-title">This Month</div>
                         <div class="stat-row">
-                            <span>Events</span>
+                            <span>Total Events</span>
                             <strong id="monthEventCount">0</strong>
                         </div>
                         <div class="stat-row">
-                            <span>School</span>
+                            <span>Schoolwide</span>
                             <strong id="schoolCount">0</strong>
                         </div>
                         <div class="stat-row">
@@ -77,25 +87,25 @@
                 </aside>
             </div>
 
-            <form id="eventForm" class="event-form hidden" novalidate>
+            <form id="eventForm" class="event-form hidden" novalidate style="margin-top: 1rem; padding: 1.25rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                <h4 style="margin: 0 0 1rem 0; color: #0038A8;" id="formHeader">Create New Event</h4>
                 <div class="field-group">
-                    <label for="eventTitle">Event title</label>
-                    <input id="eventTitle" name="eventTitle" type="text" placeholder="e.g. Parent Conference" required>
+                    <label for="eventTitle">Event Title</label>
+                    <input id="eventTitle" name="eventTitle" type="text" placeholder="e.g. Parent Conference or Dept Meeting" required style="width: 100%; padding: 0.6rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 4px;">
                 </div>
                 <div class="field-group">
-                    <label for="eventType">Category</label>
-                    <select id="eventType" name="eventType">
-                        <option value="school">School</option>
-                        <option value="deadline">Deadline</option>
-                        <option value="personal">Personal</option>
+                    <label for="eventType">Category / Scope</label>
+                    <select id="eventType" name="eventType" style="width: 100%; padding: 0.6rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                        <!-- Options dynamically populated based on User Role -->
+                        <option value="personal">Personal Event (Visible only to you)</option>
                     </select>
                 </div>
                 <div class="field-group">
                     <label for="eventTime">Time</label>
-                    <input id="eventTime" name="eventTime" type="text" placeholder="e.g. 09:00 AM">
+                    <input id="eventTime" name="eventTime" type="text" placeholder="e.g. 09:00 AM or All Day" style="width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid #cbd5e1; border-radius: 4px;">
                 </div>
-                <div class="field-actions">
-                    <button type="submit" class="btn-primary btn-small">Save Event</button>
+                <div class="field-actions" style="display: flex; gap: 0.5rem;">
+                    <button type="submit" id="saveEventBtn" class="btn-primary btn-small">Save Event</button>
                     <button id="cancelEventBtn" type="button" class="btn-outline btn-small">Cancel</button>
                 </div>
             </form>
@@ -278,12 +288,12 @@
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js"></script>
     <script src="../static/logout.js"></script>
+    <script src="../static/calendarLogic.js"></script>
     <script>
         if (typeof checkAuthAndRole === "function") {
-            // Allows logged-in users with valid session
-            checkAuthAndRole('teacher'); 
+            // Allow any logged-in user (Teacher, Principal, Admin)
+            checkAuthAndRole('any'); 
         }
     </script>
-
 </body>
 </html>
