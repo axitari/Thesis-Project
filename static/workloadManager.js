@@ -1,43 +1,132 @@
 // static/workloadManager.js
 
-document.addEventListener('DOMContentLoaded', () => {
-    const teachingLoadForm = document.getElementById('teachingLoadForm');
+/**
+ * Kandili Workload Analytics Engine
+ * Calculates teaching loads, ancillary duties, total weekly hours, and risk classification.
+ */
 
-    if (teachingLoadForm) {
-        teachingLoadForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+// 1. Calculate workload summary for a single teacher
+async function getTeacherWorkloadSummary(teacherId, schoolYear = '2025-2026') {
+    if (!teacherId || !window.supabaseClient) return null;
 
-            // 1. Get user session
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (!session) return;
+    try {
+        // Fetch teaching loads (in minutes)
+        const { data: teachingData, error: tErr } = await window.supabaseClient
+            .from('teaching_loads')
+            .select('minutes_per_week')
+            .eq('teacher_id', teacherId)
+            .eq('school_year', schoolYear);
 
-            // 2. Gather values
-            const subject = document.getElementById('subjectCategory').value;
-            const minutes = parseInt(document.getElementById('minutesPerWeek').value);
+        if (tErr) throw tErr;
 
-            // 3. Insert into Supabase 'teaching_loads' table
-            const { error } = await window.supabaseClient
-                .from('teaching_loads')
-                .insert([
-                    { 
-                        teacher_id: session.user.id, 
-                        subject_category: subject,
-                        grade_level: subject, 
-                        minutes_per_week: minutes 
-                    }
-                ]);
+        // Fetch ancillary duties (in hours)
+        const { data: ancillaryData, error: aErr } = await window.supabaseClient
+            .from('ancillary_duties')
+            .select('hours_per_week')
+            .eq('teacher_id', teacherId)
+            .eq('school_year', schoolYear);
 
-            if (error) {
-                alert("Error adding class: " + error.message);
+        if (aErr) throw aErr;
+
+        // Sum total teaching minutes -> convert to hours
+        const totalTeachingMinutes = (teachingData || []).reduce((sum, item) => sum + (item.minutes_per_week || 0), 0);
+        const teachingHours = totalTeachingMinutes / 60;
+
+        // Sum total ancillary hours
+        const ancillaryHours = (ancillaryData || []).reduce((sum, item) => sum + (parseFloat(item.hours_per_week) || 0), 0);
+
+        // Compute Total Workload Hours
+        const totalHours = Math.round((teachingHours + ancillaryHours) * 10) / 10; // Round to 1 decimal
+
+        // Classify Status based on R.A. 4670 40-hour limit
+        let status = 'optimal'; // Default
+        let riskScore = Math.min(Math.round((totalHours / 40) * 100), 100);
+
+        if (totalHours > 40) {
+            status = 'overloaded';
+            riskScore = Math.min(85 + Math.round((totalHours - 40) * 3), 100); // 85-100 scale for overloaded
+        } else if (totalHours > 36) {
+            status = 'maximized';
+            riskScore = 60 + Math.round((totalHours - 36) * 5); // 60-80 scale for maximized
+        } else {
+            status = 'optimal';
+            riskScore = Math.round((totalHours / 36) * 50); // 0-50 scale for optimal
+        }
+
+        return {
+            teacherId,
+            teachingMinutes: totalTeachingMinutes,
+            teachingHours: Math.round(teachingHours * 10) / 10,
+            ancillaryHours: Math.round(ancillaryHours * 10) / 10,
+            totalHours,
+            status,
+            riskScore
+        };
+
+    } catch (err) {
+        console.error(`Failed to calculate workload for teacher ${teacherId}:`, err);
+        return null;
+    }
+}
+
+// 2. Aggregate workloads for ALL teachers (Used by Principal/Admin Dashboards)
+async function getFacultyWorkloadOverview(schoolYear = '2025-2026') {
+    if (!window.supabaseClient) return null;
+
+    try {
+        // Fetch all teachers
+        const { data: teachers, error: profileErr } = await window.supabaseClient
+            .from('profiles')
+            .select('id, first_name, last_name, department, role')
+            .eq('role', 'teacher');
+
+        if (profileErr) throw profileErr;
+
+        const overview = {
+            optimal: [],
+            maximized: [],
+            overloaded: [],
+            all: []
+        };
+
+        // Process each teacher concurrently
+        const workloadPromises = teachers.map(async (teacher) => {
+            const summary = await getTeacherWorkloadSummary(teacher.id, schoolYear);
+            const fullName = `${teacher.first_name || ''} ${teacher.last_name || ''}`.trim() || `Teacher (${teacher.id.substring(0, 5)})`;
+
+            const fullRecord = {
+                ...teacher,
+                fullName,
+                workload: summary || {
+                    teachingMinutes: 0,
+                    teachingHours: 0,
+                    ancillaryHours: 0,
+                    totalHours: 0,
+                    status: 'optimal',
+                    riskScore: 0
+                }
+            };
+
+            overview.all.push(fullRecord);
+            if (fullRecord.workload.status === 'overloaded') {
+                overview.overloaded.push(fullRecord);
+            } else if (fullRecord.workload.status === 'maximized') {
+                overview.maximized.push(fullRecord);
             } else {
-                alert("Class added successfully!");
-                location.reload(); // Refresh to update the UI
+                overview.optimal.push(fullRecord);
             }
         });
-    }
 
-    loadOfficialClassProgramView();
-});
+        await Promise.all(workloadPromises);
+        return overview;
+
+    } catch (err) {
+        console.error("Failed to generate faculty workload overview:", err);
+        return null;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadOfficialClassProgramView);
 
 // Render Official DepEd Class Program Template on classprogram.html
 async function loadOfficialClassProgramView() {
