@@ -12,6 +12,9 @@
     <!-- Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
+    <!-- SheetJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
@@ -110,11 +113,11 @@
                 <!-- 1: Section Info -->
                 <div class="info-box">
                     <h4><i class="fas fa-info-circle"></i> Section Information</h4>
-                    <div class="info-row"><span>Section:</span> <span>Grade 2 - A</span></div>
-                    <div class="info-row"><span>Room:</span> <span>Room 204</span></div>
-                    <div class="info-row"><span>Adviser:</span> <span>Sarah J. Cruz</span></div>
-                    <div class="info-row"><span>SY:</span> <span>2025-2026</span></div>
-                    <div class="info-row"><span>Semester:</span> <span>1st</span></div>
+                    <div class="info-row"><span>Section:</span> <span id="dashSectionVal">Grade 2 - A</span></div>
+                    <div class="info-row"><span>Room:</span> <span id="dashRoomVal">Room 204</span></div>
+                    <div class="info-row"><span>Adviser:</span> <span id="dashAdviserVal">Doctor Brown</span></div>
+                    <div class="info-row"><span>SY:</span> <span id="dashSYVal">2026-2027</span></div>
+                    <div class="info-row"><span>Semester:</span> <span id="dashSemVal">1st</span></div>
                 </div>
 
 
@@ -124,15 +127,15 @@
                    
                     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5rem;">
                         <div style="text-align: left;">
-                            <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary, #0038A8); line-height: 1;">42</div>
+                            <div id="dashTotalDemographics" style="font-size: 2.2rem; font-weight: 700; color: var(--primary, #0038A8); line-height: 1;">42</div>
                             <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Total</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5rem; font-weight: 600; color: #3b82f6; line-height: 1;">22</div>
+                            <div id="dashBoysCount" style="font-size: 1.5rem; font-weight: 600; color: #3b82f6; line-height: 1;">22</div>
                             <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Boys</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5rem; font-weight: 600; color: #ec4899; line-height: 1;">20</div>
+                            <div id="dashGirlsCount" style="font-size: 1.5rem; font-weight: 600; color: #ec4899; line-height: 1;">20</div>
                             <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Girls</div>
                         </div>
                     </div>
@@ -140,12 +143,12 @@
 
                     <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
                         <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.4rem; font-weight: 500;">
-                            <span>52%</span>
-                            <span>48%</span>
+                            <span id="dashBoysPercent">52%</span>
+                            <span id="dashGirlsPercent">48%</span>
                         </div>
                         <div style="height: 8px; width: 100%; background: #e2e8f0; border-radius: 4px; display: flex; overflow: hidden;">
-                            <div style="width: 52%; background: #3b82f6;"></div>
-                            <div style="width: 48%; background: #ec4899;"></div>
+                            <div id="dashBoysBar" style="width: 52%; background: #3b82f6;"></div>
+                            <div id="dashGirlsBar" style="width: 48%; background: #ec4899;"></div>
                         </div>
                     </div>
                 </div>
@@ -157,7 +160,7 @@
                     <div class="info-row"><span><i class="fas fa-medal" style="color: #f59e0b;"></i> Honor Students:</span> <span>5</span></div>
                     <div class="info-row"><span><i class="fas fa-star" style="color: #10b981;"></i> Sp. Needs:</span> <span>2</span></div>
                     <div class="info-row"><span><i class="fas fa-calendar-check" style="color: #3b82f6;"></i> Attendance:</span> <span>89%</span></div>
-                    <div class="info-row"><span><i class="fas fa-book" style="color: #8b5cf6;"></i> Subjects:</span> <span>8</span></div>
+                    <div class="info-row"><span><i class="fas fa-book" style="color: #8b5cf6;"></i> Subjects:</span> <span id="dashSubjectsCount">8</span></div>
                 </div>
 
 
@@ -168,11 +171,11 @@
                     <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem;">
                         <div>
                             <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
-                                <span style="font-weight: 600; color: #334155;"><i class="fas fa-chalkboard" style="color: #3b82f6; margin-right: 5px;"></i> Core Teaching (8 Subjects)</span>
-                                <span style="color: #64748b; font-weight: 700;">22 hrs</span>
+                                <span id="dashCoreSubjectsTitle" style="font-weight: 600; color: #334155;"><i class="fas fa-chalkboard" style="color: #3b82f6; margin-right: 5px;"></i> Core Teaching (8 Subjects)</span>
+                                <span id="dashCoreHoursVal" style="color: #64748b; font-weight: 700;">22 hrs</span>
                             </div>
                             <div style="height: 8px; width: 100%; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
-                                <div style="width: 81%; background: #3b82f6; height: 100%; border-radius: 4px;"></div>
+                                <div id="dashCoreBar" style="width: 81%; background: #3b82f6; height: 100%; border-radius: 4px;"></div>
                             </div>
                         </div>
 
@@ -180,17 +183,17 @@
                         <div>
                             <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
                                 <span style="font-weight: 600; color: #334155;"><i class="fas fa-folder-open" style="color: #f59e0b; margin-right: 5px;"></i> Ancillary & Advising</span>
-                                <span style="color: #64748b; font-weight: 700;">5 hrs</span>
+                                <span id="dashAncillaryHoursVal" style="color: #64748b; font-weight: 700;">5 hrs</span>
                             </div>
                             <div style="height: 8px; width: 100%; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
-                                <div style="width: 19%; background: #f59e0b; height: 100%; border-radius: 4px;"></div>
+                                <div id="dashAncillaryBar" style="width: 19%; background: #f59e0b; height: 100%; border-radius: 4px;"></div>
                             </div>
                         </div>
 
 
                         <div style="border-top: 1px dashed #cbd5e1; padding-top: 0.8rem; margin-top: -0.2rem; display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-weight: 700; color: #1e293b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Logged</span>
-                            <span style="font-size: 1.1rem; font-weight: 800; color: var(--primary, #0038A8);">27 hrs</span>
+                            <span id="dashTotalLoggedHoursVal" style="font-size: 1.1rem; font-weight: 800; color: var(--primary, #0038A8);">27 hrs</span>
                         </div>
                     </div>
                 </div>

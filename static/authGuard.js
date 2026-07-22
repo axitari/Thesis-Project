@@ -48,3 +48,27 @@ async function checkAuthAndRole(requiredRole) {
     document.body.classList.remove('protected-page');
     document.body.style.display = 'block';
 }
+
+// Live Real-Time Header Clock & Calendar
+function initRealtimeHeaderClock() {
+    function updateClock() {
+        const dateElement = document.querySelector('.theme-nav__date');
+        if (!dateElement) return;
+
+        const now = new Date();
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        const dateString = now.toLocaleDateString('en-US', options);
+        const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        dateElement.innerHTML = `<i class="far fa-calendar-alt"></i> ${dateString} | ${timeString}`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRealtimeHeaderClock);
+} else {
+    initRealtimeHeaderClock();
+}
