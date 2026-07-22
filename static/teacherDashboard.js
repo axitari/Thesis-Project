@@ -326,3 +326,150 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
         });
     }
 }
+
+// ============================================================
+// AUTOMATIC WELLNESS CHECK-IN POP-UP
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const wellnessModal = document.getElementById('wellnessCheckinModal');
+    const wellnessCloseBtn = document.getElementById('wellnessCloseBtn');
+    const submitWellnessBtn = document.getElementById('submitWellnessBtn');
+    const pulseBtns = document.querySelectorAll('.pulse-opt-btn');
+
+    let selectedPulseVal = null;
+
+    // Trigger Pop-up if user hasn't checked in recently (Simulated check)
+    const hasCheckedInThisWeek = sessionStorage.getItem('kandili_wellness_checked_in');
+
+    if (!hasCheckedInThisWeek && wellnessModal) {
+        // Short delay for smooth loading effect
+        setTimeout(() => {
+            wellnessModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }, 800);
+    }
+
+    function closeWellnessModal() {
+        if (wellnessModal) {
+            wellnessModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (wellnessCloseBtn) {
+        wellnessCloseBtn.addEventListener('click', closeWellnessModal);
+    }
+
+    // Option Button Selection Logic
+    pulseBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            pulseBtns.forEach(b => {
+                b.style.borderColor = '#e2e8f0';
+                b.style.background = '#ffffff';
+            });
+            btn.style.borderColor = '#0038A8';
+            btn.style.background = '#eff6ff';
+            selectedPulseVal = btn.getAttribute('data-val');
+        });
+    });
+
+    // Submit Check-in
+    if (submitWellnessBtn) {
+        submitWellnessBtn.addEventListener('click', () => {
+            if (!selectedPulseVal) {
+                alert('Please select your feeling level before submitting.');
+                return;
+            }
+
+            sessionStorage.setItem('kandili_wellness_checked_in', 'true');
+            alert('Thank you! Your weekly pulse check-in has been logged.');
+            closeWellnessModal();
+        });
+    }
+});
+
+// ============================================================
+// REQUEST LEAVE MODAL HANDLER
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const leaveModal = document.getElementById('requestLeaveModal');
+    // Finds the "+ Request Leave" link in the card title
+    const requestLeaveBtn = document.querySelector('a[href="#"][style*="Request Leave"]') || document.querySelector('.card-title a');
+    const closeBtn = document.getElementById('leaveModalCloseBtn');
+    const cancelBtn = document.getElementById('cancelLeaveBtn');
+    const submitBtn = document.getElementById('submitLeaveBtn');
+
+    // Open Modal
+    if (requestLeaveBtn && leaveModal) {
+        requestLeaveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            leaveModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Default dates to today
+            const today = new Date().toISOString().split('T')[0];
+            const startDate = document.getElementById('leaveStartDate');
+            const endDate = document.getElementById('leaveEndDate');
+            if (startDate) startDate.value = today;
+            if (endDate) endDate.value = today;
+        });
+    }
+
+    // Close Modal helper
+    function closeLeaveModal() {
+        if (leaveModal) {
+            leaveModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeLeaveModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeLeaveModal);
+
+    if (leaveModal) {
+        leaveModal.addEventListener('click', (e) => {
+            if (e.target === leaveModal) closeLeaveModal();
+        });
+    }
+
+    // Submit Request Handler
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            const leaveType = document.getElementById('leaveTypeSelect')?.value;
+            const startDate = document.getElementById('leaveStartDate')?.value;
+            const endDate = document.getElementById('leaveEndDate')?.value;
+            const substitute = document.getElementById('substituteSelect')?.value || '-';
+            const reason = document.getElementById('leaveReasonTextarea')?.value.trim();
+
+            if (!startDate || !endDate) {
+                alert('Please select valid start and end dates.');
+                return;
+            }
+            if (!reason) {
+                alert('Please provide a brief reason for your absence request.');
+                return;
+            }
+
+            // Append new row to Absence Requests table
+            const tableBody = document.querySelector('.content-card:has(.fa-calendar-times) tbody');
+            if (tableBody) {
+                const formattedDate = new Date(startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${leaveType}</td>
+                    <td><span class="status-badge status-pending">Pending</span></td>
+                    <td>${substitute}</td>
+                    <td style="color: #64748b;">${reason}</td>
+                `;
+                tableBody.insertBefore(newRow, tableBody.firstChild);
+            }
+
+            alert('Absence request submitted successfully and is pending admin review!');
+            
+            // Reset form and close
+            document.getElementById('leaveReasonTextarea').value = '';
+            closeLeaveModal();
+        });
+    }
+});
