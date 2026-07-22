@@ -99,34 +99,7 @@
     </div>
 
     <!-- Dynamic Rendering Script -->
-    <script>
-        // This is a placeholder for your future Supabase logic
-        document.addEventListener('DOMContentLoaded', async () => {
-            // 1. In the future, you will fetch data from Supabase here.
-            // const { data, error } = await supabase.from('schedules').select('*').eq('user_id', currentUser.id);
-            
-            // 2. Clear the loading message
-            // const tableBody = document.getElementById('matrix-body');
-            // tableBody.innerHTML = ''; 
-
-            // 3. Loop through the data and build rows dynamically
-            /*
-            data.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${row.start_time} - ${row.end_time}</td>
-                    <td>${row.minutes}</td>
-                    <td>${row.monday_subj}</td>
-                    <td>${row.tuesday_subj}</td>
-                    <td>${row.wednesday_subj}</td>
-                    <td>${row.thursday_subj}</td>
-                    <td>${row.friday_subj}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
-            */
-        });
-    </script>
+    <script src="../static/workloadManager.js"></script>
 
     <!-- Supabase & Auth Security Stack -->
     <script src="../static/supabaseClient.js"></script>

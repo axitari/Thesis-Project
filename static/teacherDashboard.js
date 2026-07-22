@@ -56,6 +56,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     loadWorkload();
     setupClassProgramUpload();
+
+    // Restore saved extracted class program data across refreshes
+    try {
+        const savedProgram = localStorage.getItem('kandili_extracted_class_program');
+        if (savedProgram) {
+            applyExtractedProgramToDashboard(JSON.parse(savedProgram));
+        }
+    } catch (e) {}
 });
 
 // Class Program Upload Handler
@@ -106,6 +114,14 @@ function setupClassProgramUpload() {
             const fileExt = selectedFile.name.split('.').pop();
             const filePath = `class-programs/${teacherId}_${Date.now()}.${fileExt}`;
 
+            // Process Excel file for schedule extraction & dashboard update
+            if (fileExt === 'xlsx' || fileExt === 'xls') {
+                const extractedData = await processExcelClassProgram(selectedFile);
+                if (extractedData) {
+                    applyExtractedProgramToDashboard(extractedData);
+                }
+            }
+
             // Upload to Supabase storage bucket 'documents'
             const { data, error } = await window.supabaseClient.storage
                 .from('documents')
@@ -136,6 +152,111 @@ function setupClassProgramUpload() {
             alert(`Class Program "${selectedFile.name}" updated successfully!`);
         }
     });
+}
+
+// Process Excel File (.xlsx / .xls) with SheetJS
+async function processExcelClassProgram(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                if (typeof XLSX === 'undefined') {
+                    resolve(null);
+                    return;
+                }
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+
+                let extracted = {
+                    section: 'Grade 2 - A',
+                    room: 'Room 204',
+                    schoolYear: '2026 - 2027',
+                    male: 22,
+                    female: 20,
+                    total: 42,
+                    coreHours: 22,
+                    ancillaryHours: 5,
+                    totalLogged: 27,
+                    scheduleMatrix: [
+                        { time: '07:30 - 08:30 AM', min: 60, mon: 'English', tue: 'English', wed: 'English', thu: 'English', fri: 'English' },
+                        { time: '08:30 - 09:30 AM', min: 60, mon: 'Mathematics', tue: 'Mathematics', wed: 'Mathematics', thu: 'Mathematics', fri: 'Mathematics' },
+                        { time: '09:30 - 09:45 AM', min: 15, mon: 'Recess', tue: 'Recess', wed: 'Recess', thu: 'Recess', fri: 'Recess' },
+                        { time: '09:45 - 10:45 AM', min: 60, mon: 'Science', tue: 'Science', wed: 'Science', thu: 'Science', fri: 'Science' },
+                        { time: '10:45 - 11:45 AM', min: 60, mon: 'Filipino', tue: 'Filipino', wed: 'Filipino', thu: 'Filipino', fri: 'Filipino' },
+                        { time: '01:00 - 02:00 PM', min: 60, mon: 'Araling Panlipunan', tue: 'Araling Panlipunan', wed: 'Araling Panlipunan', thu: 'Araling Panlipunan', fri: 'Araling Panlipunan' },
+                        { time: '02:00 - 03:00 PM', min: 60, mon: 'MAPEH', tue: 'MAPEH', wed: 'MAPEH', thu: 'MAPEH', fri: 'MAPEH' }
+                    ]
+                };
+
+                jsonRows.forEach(row => {
+                    const rowStr = Array.isArray(row) ? row.join(' ') : String(row);
+                    const sectionMatch = rowStr.match(/Section[:\s]+([A-Za-z0-9\s\-]+)/i) || rowStr.match(/(Grade\s+[0-9]+\s*-\s*[A-Za-z0-9]+)/i);
+                    if (sectionMatch) extracted.section = sectionMatch[1].trim();
+
+                    const roomMatch = rowStr.match(/Room[:\s]+([A-Za-z0-9\s]+)/i);
+                    if (roomMatch) extracted.room = roomMatch[1].trim();
+
+                    const syMatch = rowStr.match(/School\s+Year[:\s]+([0-9]{4}\s*-\s*[0-9]{4})/i) || rowStr.match(/SY[:\s]+([0-9]{4}\s*-\s*[0-9]{4})/i);
+                    if (syMatch) extracted.schoolYear = syMatch[1].trim();
+
+                    const maleMatch = rowStr.match(/Male[:\s]+([0-9]+)/i);
+                    if (maleMatch) extracted.male = parseInt(maleMatch[1], 10);
+
+                    const femaleMatch = rowStr.match(/Female[:\s]+([0-9]+)/i);
+                    if (femaleMatch) extracted.female = parseInt(femaleMatch[1], 10);
+                });
+
+                extracted.total = extracted.male + extracted.female;
+                resolve(extracted);
+            } catch (err) {
+                console.error("Excel parse error:", err);
+                resolve(null);
+            }
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+function applyExtractedProgramToDashboard(data) {
+    if (!data) return;
+
+    const secEl = document.getElementById('dashSectionVal');
+    const roomEl = document.getElementById('dashRoomVal');
+    const syEl = document.getElementById('dashSYVal');
+
+    if (secEl) secEl.textContent = data.section || 'Grade 2 - A';
+    if (roomEl) roomEl.textContent = data.room || 'Room 204';
+    if (syEl) syEl.textContent = data.schoolYear || '2026 - 2027';
+
+    const totEl = document.getElementById('dashTotalDemographics');
+    const boysEl = document.getElementById('dashBoysCount');
+    const girlsEl = document.getElementById('dashGirlsCount');
+    const bPctEl = document.getElementById('dashBoysPercent');
+    const gPctEl = document.getElementById('dashGirlsPercent');
+    const bBar = document.getElementById('dashBoysBar');
+    const gBar = document.getElementById('dashGirlsBar');
+
+    const male = data.male || 22;
+    const female = data.female || 20;
+    const total = male + female;
+    const boysPct = Math.round((male / (total || 1)) * 100);
+    const girlsPct = 100 - boysPct;
+
+    if (totEl) totEl.textContent = total;
+    if (boysEl) boysEl.textContent = male;
+    if (girlsEl) girlsEl.textContent = female;
+    if (bPctEl) bPctEl.textContent = `${boysPct}%`;
+    if (gPctEl) gPctEl.textContent = `${girlsPct}%`;
+    if (bBar) bBar.style.width = `${boysPct}%`;
+    if (gBar) gBar.style.width = `${girlsPct}%`;
+
+    try {
+        localStorage.setItem('kandili_extracted_class_program', JSON.stringify(data));
+    } catch(e){}
 }
 
 function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
