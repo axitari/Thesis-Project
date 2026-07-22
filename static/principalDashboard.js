@@ -47,17 +47,17 @@ async function loadPrincipalDashboardData() {
             const teachingHrs = teachingMins / 60;
             const ancillaryHrs = teacher.ancillary_duties?.reduce((sum, item) => sum + parseFloat(item.hours_per_week || 0), 0) || 0;
             
-            const totalLoadHrs = (teachingHrs + ancillaryHrs).toFixed(1);
+            const totalLoadHrs = parseFloat((teachingHrs + ancillaryHrs).toFixed(1));
 
             totalSchoolTeachingMins += teachingMins;
             totalSchoolAncillaryHrs += ancillaryHrs;
 
-            // Classify workload compliance
+            // Classify workload compliance (DepEd / R.A. 4670 Magna Carta Standards)
             let status = 'OPTIMAL';
-            if (totalLoadHrs > 30) {
+            if (totalLoadHrs > 40) {
                 status = 'OVERLOAD';
                 overloadedCount++;
-            } else if (totalLoadHrs >= 25) {
+            } else if (totalLoadHrs > 36) {
                 status = 'MAXIMIZED';
                 maximizedCount++;
             } else {
@@ -115,7 +115,7 @@ function renderPrincipalCharts(teachers, metrics) {
         distributionChartInstance = new Chart(distCanvas.getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ['Optimal Load (<25h)', 'Maximized Load (25-30h)', 'Overloaded (>30h)'],
+                labels: ['Optimal Load (≤36h)', 'Maximized Load (36-40h)', 'Overloaded (>40h)'],
                 datasets: [{
                     label: 'Teachers Count',
                     data: [metrics.optimalCount, metrics.maximizedCount, metrics.overloadedCount],
@@ -143,12 +143,12 @@ function renderPrincipalCharts(teachers, metrics) {
         const scatterPoints = teachers.map(t => {
             const load = parseFloat(t.totalLoadHrs);
             let state = 'Optimal';
-            if (load > 30) state = 'Overloaded';
-            else if (load >= 25) state = 'Maximized';
+            if (load > 40) state = 'Overloaded';
+            else if (load > 36) state = 'Maximized';
 
             return {
                 x: load,
-                y: Math.min(100, Math.round((load / 35) * 70)),
+                y: Math.min(100, Math.round((load / 40) * 80)),
                 state: state,
                 name: t.fullName
             };
@@ -160,9 +160,9 @@ function renderPrincipalCharts(teachers, metrics) {
                 datasets: [{
                     label: 'Teachers',
                     data: scatterPoints.length > 0 ? scatterPoints : [
-                        { x: 22, y: 15, state: 'Optimal', name: 'TCH-001' },
-                        { x: 38, y: 45, state: 'Maximized', name: 'TCH-002' },
-                        { x: 47, y: 92, state: 'Overloaded', name: 'TCH-003' }
+                        { x: 28, y: 30, state: 'Optimal', name: 'Sample Teacher 1' },
+                        { x: 38, y: 65, state: 'Maximized', name: 'Sample Teacher 2' },
+                        { x: 45, y: 90, state: 'Overloaded', name: 'Sample Teacher 3' }
                     ],
                     backgroundColor: function(context) {
                         const state = context.raw?.state;
@@ -198,7 +198,6 @@ function renderPrincipalCharts(teachers, metrics) {
 }
 
 function updatePrincipalSummaryCards(metrics) {
-    // Target overview numbers in principaldashboard.html
     const teacherCountEl = document.querySelector('.metric-card--teachers .metric-value');
     const teachingHrsEl = document.querySelector('.metric-card--teaching .metric-value');
     const ancillaryHrsEl = document.querySelector('.metric-card--ancillary .metric-value');
@@ -207,7 +206,6 @@ function updatePrincipalSummaryCards(metrics) {
     if (teachingHrsEl) teachingHrsEl.innerText = `${metrics.totalTeachingHrs} hrs`;
     if (ancillaryHrsEl) ancillaryHrsEl.innerText = `${metrics.totalAncillaryHrs} hrs`;
 
-    // Update risk alert numbers if present
     const overloadedEl = document.querySelector('.risk-card--critical .risk-card-number');
     const maximizedEl = document.querySelector('.risk-card--moderate .risk-card-number');
     const optimalEl = document.querySelector('.risk-card--low .risk-card-number');
@@ -218,7 +216,6 @@ function updatePrincipalSummaryCards(metrics) {
 }
 
 function renderPrincipalFacultyTable(teachers) {
-    // 1. Target Table View (for principaldashboard.html)
     const tableBody = document.querySelector('.reallocation-table tbody, .faculty-table tbody, #facultyTableBody');
     if (tableBody) {
         tableBody.innerHTML = '';
@@ -248,10 +245,9 @@ function renderPrincipalFacultyTable(teachers) {
         }
     }
 
-    // 2. Target Card Grid View (for facultydirectory.html)
     const directoryGrid = document.querySelector('.directory-grid');
     if (directoryGrid) {
-        directoryGrid.innerHTML = ''; // Clear hardcoded static cards
+        directoryGrid.innerHTML = '';
 
         if (teachers.length === 0) {
             directoryGrid.innerHTML = `<div class="info-box" style="grid-column: 1 / -1; text-align: center; padding: 2rem;">No registered teachers found in database.</div>`;
@@ -279,7 +275,6 @@ function renderPrincipalFacultyTable(teachers) {
             directoryGrid.appendChild(card);
         });
 
-        // Setup Search Filter Functionality
         setupDirectorySearch();
     }
 }
@@ -306,6 +301,5 @@ function setupDirectorySearch() {
 }
 
 function viewTeacherDetail(teacherId) {
-    // Opens review modal or navigates to individual eSF7 breakdown
     alert("Opening eSF7 Workload Breakdown for Teacher ID: " + teacherId);
 }

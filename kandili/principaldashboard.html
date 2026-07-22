@@ -15,9 +15,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- External Stylesheet -->
-    <link rel="stylesheet" href="style.css" />
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
@@ -457,8 +454,7 @@
         </div>
 </footer>
 
-    <!-- External JavaScript -->
-    <script src="script.js"></script>
+    <!-- 1. Navigation Menu Script -->
     <script>
         const burgerMenuBtn = document.getElementById('burgerMenuBtn');
         const themeNavMenu = document.getElementById('themeNavMenu');
@@ -478,114 +474,13 @@
         }
     </script>
 
-    <!-- Include Chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Chart Initializations -->
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        
-        Chart.defaults.font.family = "'Inter', sans-serif";
-        Chart.defaults.color = '#64748b';
-
-        // 1. RISK DISTRIBUTION BAR CHART (Low, Moderate, High Burnout Risk)
-        const distCtx = document.getElementById('distributionChart').getContext('2d');
-        new Chart(distCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Low Risk', 'Moderate Risk', 'High Risk'],
-                datasets: [{
-                    label: 'Number of Teachers',
-                    data: [30, 10, 5],
-                    backgroundColor: [
-                        '#0038A8', '#f59e0b', '#C8102E' 
-                    ],
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
-
-        // 2. WORKLOAD VS. EXHAUSTION SCATTER PLOT (Optimal, Maximized, Overloaded)
-        const scatterCtx = document.getElementById('workloadChart').getContext('2d');
-        new Chart(scatterCtx, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Teacher Data Points',
-                    data: [
-                        {x: 22, y: 15, state: 'Optimal'},
-                        {x: 32, y: 28, state: 'Optimal'},
-                        {x: 38, y: 45, state: 'Maximized'},
-                        {x: 40, y: 52, state: 'Maximized'},
-                        {x: 42, y: 75, state: 'Overloaded'},
-                        {x: 47, y: 92, state: 'Overloaded'}
-                    ],
-                    backgroundColor: function(context) {
-                        const state = context.raw?.state;
-                        if (state === 'Overloaded') return '#C8102E'; // Crimson
-                        if (state === 'Maximized') return '#f59e0b';  // Amber
-                        return '#0038A8';                              // Deep Blue (Optimal)
-                    },
-                    pointRadius: 6,
-                    pointHoverRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                return `Status: ${ctx.raw.state} | Workload: ${ctx.raw.x} hrs | Exhaustion: ${ctx.raw.y}%`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: { 
-                        title: { display: true, text: 'Exhaustion Score (%)' },
-                        beginAtZero: true, 
-                        max: 100 
-                    },
-                    x: { 
-                        title: { display: true, text: 'Objective Workload (Hours)' },
-                        beginAtZero: true,
-                        max: 50,
-                        grid: {
-                            color: function(context) {
-                                if (context.tick.value === 40) return 'rgba(200, 16, 46, 0.3)';
-                                return 'rgba(0,0,0,0.05)';
-                            },
-                            lineWidth: function(context) {
-                                return context.tick.value === 40 ? 2 : 1;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    });
-    </script>
-
-<!-- Supabase & Auth Security Stack -->
+    <!-- 2. Supabase, Chart.js & Core Application Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js"></script>
     <script src="../static/logout.js"></script>
+    <script src="../static/workloadManager.js"></script>
     <script src="../static/principalDashboard.js"></script>
     <script>
         if (typeof checkAuthAndRole === "function") {
