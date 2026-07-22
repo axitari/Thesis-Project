@@ -188,6 +188,23 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     height: 2.6rem;
     padding: 0;
 }
+
+/* Assessment form spacing fixes */
+.assessment-container #mbiForm {
+    padding: 1.5rem 1.75rem;
+    box-sizing: border-box;
+    background: #ffffff00; /* keep transparent but provide spacing */
+}
+
+.assessment-container .section {
+    padding: 0.75rem 0;
+}
+
+@media (max-width: 800px) {
+    .assessment-container #mbiForm {
+        padding: 1rem;
+    }
+}
 .theme-nav__menu {
     position: absolute;
     top: calc(100% + 0.5rem);
