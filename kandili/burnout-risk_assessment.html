@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Assessment &bull; Kandili Workspace</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/teacher_assessment.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Core Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../static/logout.js"></script>
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Navigation -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="theme-nav__back" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Faculty Portal &bull; Burnout Assessment</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 12:35 AM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container assessment-container">
+        
+        <!-- Header Banner -->
+        <div class="header">
+            <h1>Maslach Burnout Inventory - Educators Survey (MBI-ES)</h1>
+            <p>Professional burnout assessment questionnaire for educators to quantify workload stress and well-being risk factors.</p>
+        </div>
+
+        <!-- Instructions Section -->
+        <div class="instructions">
+            <h2>Instructions &amp; Response Scale</h2>
+            <p>For each statement below, select the response rating that best describes how frequently you experience that feeling in your day-to-day work.</p>
+            <div class="scale-list">
+                <div class="scale-item"><strong>0</strong> = Never</div>
+                <div class="scale-item"><strong>1</strong> = A few times a year or less</div>
+                <div class="scale-item"><strong>2</strong> = Once a month or less</div>
+                <div class="scale-item"><strong>3</strong> = A few times a month</div>
+                <div class="scale-item"><strong>4</strong> = Once a week</div>
+                <div class="scale-item"><strong>5</strong> = A few times a week</div>
+                <div class="scale-item"><strong>6</strong> = Every day</div>
+            </div>
+        </div>
+
+        <!-- MBI Questionnaire Form -->
+        <form id="mbiForm">
+            
+            <!-- SECTION 1: EMOTIONAL EXHAUSTION -->
+            <div class="section">
+                <h3>Emotional Exhaustion (EE)</h3>
+
+                <div class="question">
+                    <div class="question-text">1. I feel emotionally drained from my work.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q1" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q1" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q1" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q1" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q1" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q1" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q1" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">2. I feel used up at the end of the workday.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q2" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q2" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q2" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q2" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q2" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q2" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q2" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">3. I feel fatigued when I get up in the morning and have to face another day on the job.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q3" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q3" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q3" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q3" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q3" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q3" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q3" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">4. Working with people all day is really a strain for me.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q4" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q4" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q4" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q4" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q4" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q4" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q4" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">5. I feel burned out from my work.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q5" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q5" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q5" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q5" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q5" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q5" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q5" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">6. I feel frustrated by my job.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q6" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q6" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q6" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q6" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q6" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q6" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q6" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">7. I feel I'm working too hard on my job.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q7" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q7" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q7" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q7" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q7" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q7" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q7" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">8. Working with people directly puts too much stress on me.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q8" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q8" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q8" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q8" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q8" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q8" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q8" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">9. I feel like I'm at the end of my rope.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q9" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q9" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q9" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q9" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q9" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q9" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q9" value="6" /> 6</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: DEPERSONALIZATION -->
+            <div class="section">
+                <h3>Depersonalization (DP)</h3>
+
+                <div class="question">
+                    <div class="question-text">10. I feel I treat some students as if they were impersonal objects.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q10" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q10" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q10" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q10" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q10" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q10" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q10" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">11. I've become more callous toward people since I took this job.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q11" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q11" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q11" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q11" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q11" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q11" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q11" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">12. I worry that this job is hardening me emotionally.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q12" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q12" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q12" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q12" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q12" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q12" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q12" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">13. I do not really care what happens to some students.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q13" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q13" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q13" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q13" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q13" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q13" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q13" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">14. I feel students blame me for some of their problems.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q14" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q14" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q14" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q14" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q14" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q14" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q14" value="6" /> 6</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: PERSONAL ACCOMPLISHMENT -->
+            <div class="section">
+                <h3>Personal Accomplishment (PA)</h3>
+
+                <div class="question">
+                    <div class="question-text">15. I can easily understand how my students feel about things.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q15" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q15" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q15" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q15" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q15" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q15" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q15" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">16. I deal very effectively with the problems of my students.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q16" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q16" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q16" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q16" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q16" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q16" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q16" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">17. I feel I'm positively influencing other people's lives through my work.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q17" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q17" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q17" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q17" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q17" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q17" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q17" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">18. I feel very energetic.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q18" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q18" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q18" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q18" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q18" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q18" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q18" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">19. I can easily create a relaxed atmosphere with my students.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q19" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q19" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q19" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q19" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q19" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q19" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q19" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">20. I feel exhilarated after working closely with my students.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q20" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q20" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q20" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q20" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q20" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q20" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q20" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">21. I have accomplished many worthwhile things in this job.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q21" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q21" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q21" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q21" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q21" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q21" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q21" value="6" /> 6</label>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">22. In my work, I deal with emotional problems very calmly.</div>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="q22" value="0" required /> 0</label>
+                        <label class="option"><input type="radio" name="q22" value="1" /> 1</label>
+                        <label class="option"><input type="radio" name="q22" value="2" /> 2</label>
+                        <label class="option"><input type="radio" name="q22" value="3" /> 3</label>
+                        <label class="option"><input type="radio" name="q22" value="4" /> 4</label>
+                        <label class="option"><input type="radio" name="q22" value="5" /> 5</label>
+                        <label class="option"><input type="radio" name="q22" value="6" /> 6</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submission Actions -->
+            <div class="actions">
+                <button class="btn-submit" type="submit"><i class="fas fa-paper-plane"></i> Submit Survey</button>
+                <button class="btn-reset" type="reset"><i class="fas fa-undo"></i> Reset Answers</button>
+            </div>
+
+            <div id="result" class="result"></div>
+        </form>
+    </main>
+
+    <!-- External Logic Script -->
+    <script src="../static/teacherAssessment.js"></script>
+</body>
+</html>
