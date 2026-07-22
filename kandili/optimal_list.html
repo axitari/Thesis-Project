@@ -11,6 +11,12 @@
     
     <!-- External Stylesheet -->
     <link rel="stylesheet" href="../static/style.css">
+
+    <!-- Supabase Auth Stack -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="admin,principal"></script>
+    <script src="../static/logout.js"></script>
 </head>
 <body>
 
@@ -250,5 +256,6 @@
             });
         });
     </script>
+    <script src="../static/workloadCategoryList.js"></script>
 </body>
 </html>
