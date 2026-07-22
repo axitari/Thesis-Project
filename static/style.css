@@ -4575,6 +4575,96 @@ body.dashboard-body .btn-manage:hover {
 }
 
 /* ==========================================================================
+   TEACHER DIRECTORY NAVIGATION CARD
+   ========================================================================== */
+
+.directory-navigation-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.directory-navigation-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 25px -5px rgba(0, 56, 168, 0.08);
+}
+
+.directory-nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.directory-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 280px;
+}
+
+.directory-icon-box {
+    width: 52px;
+    height: 52px;
+    background: #eff6ff;
+    color: #0038A8;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.directory-text-info h3 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.directory-text-info p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.directory-nav-actions button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 8px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .directory-nav-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .directory-nav-actions {
+        width: 100%;
+    }
+    
+    .directory-nav-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
    SEARCHABLE DROPDOWN (Enhanced & Polished)
    ========================================================================== */
 
