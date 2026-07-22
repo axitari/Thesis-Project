@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kandili Workspace - Anonymized Burnout Diagnostic Report</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/burnoutReport.css">
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
+    <script src="../static/logout.js"></script>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Diagnostic Reports</div>
+        </div>
+        <div class="theme-nav__actions">
+            <button class="theme-nav__refresh" type="button" onclick="window.location.href='burnout_reports_directory.html'">
+                <i class="fas fa-arrow-left"></i> Back to Directory
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="dashboard report-container">
+
+        <!-- REPORT ACTION BAR -->
+        <div class="report-actions">
+            <div>
+                <span class="badge-anonymized-doc">
+                    <i class="fas fa-user-shield"></i> ANONYMIZED MBI-ES DIAGNOSTIC DOCUMENT
+                </span>
+                <h2 class="report-title">Burnout Risk Diagnostic Profile</h2>
+            </div>
+            <div class="report-action-buttons">
+                <button onclick="window.print()" class="btn-print">
+                    <i class="fas fa-print"></i> Print / Save Diagnostic PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN REPORT CARD -->
+        <div class="report-card">
+            
+            <!-- OFFICIAL HEADER -->
+            <div class="report-header">
+                <h3 class="report-dept-title">Kandili Faculty Wellness Analytics Engine</h3>
+                <h4 class="report-sub-title">Maslach Burnout Inventory for Educators (MBI-ES) Standardized Audit</h4>
+                <p class="report-meta">R.A. 10173 Protected &bull; Audit Timestamp: July 23, 2026</p>
+            </div>
+
+            <!-- TEACHER CODE METRICS GRID -->
+            <div class="profile-metrics-grid">
+                <div>
+                    <table class="profile-info-table">
+                        <tr>
+                            <td class="info-label">Subject Code:</td>
+                            <td class="info-val"><code class="code-highlight" id="diagnosticTeacherCode">TCH-012</code></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Anonymization:</td>
+                            <td class="info-val text-success"><i class="fas fa-check-circle"></i> Strict Teacher Code Identification</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Department:</td>
+                            <td class="info-val">Araling Panlipunan</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Assigned Workload:</td>
+                            <td class="info-val text-danger">48.0 hrs/week (Overloaded)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="overall-tier-box">
+                    <span class="tier-label">DIAGNOSTIC RISK TIER</span>
+                    <span class="tier-val text-danger">HIGH BURNOUT RISK</span>
+                    <span class="tier-sub">Critical Fatigue Intervention Recommended</span>
+                </div>
+            </div>
+
+            <!-- MBI-ES SUBSCALES BREAKDOWN -->
+            <h4 class="section-title"><i class="fas fa-chart-line icon-purple"></i> 1. Standardized MBI-ES Subscale Profile</h4>
+            
+            <div class="subscales-grid">
+                <!-- Subscale 1: EE -->
+                <div class="subscale-card subscale-danger">
+                    <div class="subscale-header">
+                        <span class="subscale-title">Emotional Exhaustion (EE)</span>
+                        <span class="subscale-badge badge-high">High Risk</span>
+                    </div>
+                    <div class="subscale-body">
+                        <span class="subscale-score">31 <span class="subscale-max">/ 54</span></span>
+                        <p class="subscale-desc">High emotional depletion and fatigue due to excessive workload burden (Benchmark: ≥27 High).</p>
+                    </div>
+                </div>
+
+                <!-- Subscale 2: DP -->
+                <div class="subscale-card subscale-danger">
+                    <div class="subscale-header">
+                        <span class="subscale-title">Depersonalization (DP)</span>
+                        <span class="subscale-badge badge-high">High Risk</span>
+                    </div>
+                    <div class="subscale-body">
+                        <span class="subscale-score">15 <span class="subscale-max">/ 30</span></span>
+                        <p class="subscale-desc">Elevated detached or cynical response toward work environment (Benchmark: ≥13 High).</p>
+                    </div>
+                </div>
+
+                <!-- Subscale 3: PA -->
+                <div class="subscale-card subscale-warning">
+                    <div class="subscale-header">
+                        <span class="subscale-title">Personal Accomplishment (PA)</span>
+                        <span class="subscale-badge badge-low-pa">Reduced Efficacy</span>
+                    </div>
+                    <div class="subscale-body">
+                        <span class="subscale-score">26 <span class="subscale-max">/ 48</span></span>
+                        <p class="subscale-desc">Declining feelings of competence and successful achievement in teaching (Benchmark: ≤30 Low).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECOMMENDED ORGANIZATIONAL RELIEF STRATEGIES -->
+            <h4 class="section-title" style="margin-top: 2rem;"><i class="fas fa-shield-heart icon-purple"></i> 2. Recommended Organizational Relief Strategies</h4>
+            
+            <div class="relief-box">
+                <ul class="relief-list">
+                    <li>
+                        <i class="fas fa-check-circle text-purple"></i>
+                        <strong>Immediate Ancillary Offloading:</strong> Transfer Grade 9 Advisory Duty or SDRRM Coordinator responsibility (-8 hrs/wk target) via the Principal Simulator.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle text-purple"></i>
+                        <strong>Institutional Check-In Pulse:</strong> Schedule a supportive administrative conversation focusing on resource provision rather than performance metrics.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle text-purple"></i>
+                        <strong>Peer Co-Teaching Support:</strong> Pair with an optimal-capacity teacher (<35 hrs/wk) for departmental committee tasks.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- SIGNATURE & AUDIT BLOCK -->
+            <div class="signature-block">
+                <div class="signature-column">
+                    <p class="sig-label">Generated by:</p>
+                    <p class="sig-name">KANDILI ANALYTICS ENGINE</p>
+                    <p class="sig-title">Automated MBI-ES Diagnostic System</p>
+                </div>
+                <div class="signature-column">
+                    <p class="sig-label">Reviewed by:</p>
+                    <p class="sig-name">SCHOOL HEAD / PRINCIPAL</p>
+                    <p class="sig-title">School Administrator</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="dashboard-footer">
+        &copy; 2026 Kandili Workspace &bull; Anonymized MBI-ES Diagnostic Protocol &bull; R.A. 10173 Compliant
+    </footer>
+
+    <script src="../static/burnoutReport.js"></script>
+</body>
+</html>

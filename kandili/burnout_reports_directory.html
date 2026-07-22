@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kandili Workspace - Anonymized Burnout Reports Directory</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/burnoutDirectory.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
+    <script src="../static/logout.js"></script>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Burnout Diagnostic Directory</div>
+        </div>
+        <div class="theme-nav__actions">
+            <button class="theme-nav__refresh" type="button" onclick="window.location.href='principaldashboard.html'">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="dashboard directory-container">
+
+        <!-- HEADER & FILTER BAR -->
+        <div class="directory-header">
+            <div>
+                <span class="badge-anonymized-tag">
+                    <i class="fas fa-shield-alt"></i> R.A. 10173 STRICT ANONYMIZATION ACTIVE
+                </span>
+                <h2 class="directory-title"><i class="fas fa-heart-pulse icon-purple"></i> Anonymized Burnout Diagnostics (MBI-ES)</h2>
+                <p class="directory-sub">Standardized Emotional Exhaustion (EE), Depersonalization (DP), and Personal Accomplishment (PA) assessments.</p>
+            </div>
+            <div class="directory-controls">
+                <input type="text" id="burnoutSearch" class="search-input" placeholder="Search Teacher Code (e.g., TCH-012)..." />
+                <select id="burnoutTierFilter" class="filter-select">
+                    <option value="all">All Risk Tiers</option>
+                    <option value="high">High Risk (Critical Fatigue)</option>
+                    <option value="moderate">Moderate Risk (Early Strain)</option>
+                    <option value="low">Low Risk (Healthy Balance)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- REPORTS DIRECTORY TABLE CARD -->
+        <div class="directory-card">
+            <table class="directory-table">
+                <thead>
+                    <tr>
+                        <th>Teacher Code</th>
+                        <th>Emotional Exhaustion (EE)</th>
+                        <th>Depersonalization (DP)</th>
+                        <th>Personal Accomplishment (PA)</th>
+                        <th>Burnout Tier</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="burnoutTableBody">
+                    <tr>
+                        <td><code class="code-tag-bold">TCH-012</code></td>
+                        <td><span class="score-val text-danger">31 / 54 (High)</span></td>
+                        <td><span class="score-val text-danger">15 / 30 (High)</span></td>
+                        <td><span class="score-val text-danger">26 / 48 (Low)</span></td>
+                        <td><span class="badge-risk badge-high-risk">High Risk</span></td>
+                        <td class="text-right">
+                            <a href="burnout_report.html?code=TCH-012" class="btn-view-diagnostic">
+                                <i class="fas fa-microscope"></i> View Diagnostic
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-tag-bold">TCH-018</code></td>
+                        <td><span class="score-val text-danger">28 / 54 (High)</span></td>
+                        <td><span class="score-val text-danger">14 / 30 (High)</span></td>
+                        <td><span class="score-val text-danger">28 / 48 (Low)</span></td>
+                        <td><span class="badge-risk badge-high-risk">High Risk</span></td>
+                        <td class="text-right">
+                            <a href="burnout_report.html?code=TCH-018" class="btn-view-diagnostic">
+                                <i class="fas fa-microscope"></i> View Diagnostic
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-tag-bold">TCH-003</code></td>
+                        <td><span class="score-val text-warning">22 / 54 (Moderate)</span></td>
+                        <td><span class="score-val text-warning">9 / 30 (Moderate)</span></td>
+                        <td><span class="score-val text-warning">33 / 48 (Mod)</span></td>
+                        <td><span class="badge-risk badge-moderate-risk">Moderate Risk</span></td>
+                        <td class="text-right">
+                            <a href="burnout_report.html?code=TCH-003" class="btn-view-diagnostic">
+                                <i class="fas fa-microscope"></i> View Diagnostic
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-tag-bold">TCH-008</code></td>
+                        <td><span class="score-val text-success">12 / 54 (Low)</span></td>
+                        <td><span class="score-val text-success">4 / 30 (Low)</span></td>
+                        <td><span class="score-val text-success">41 / 48 (High)</span></td>
+                        <td><span class="badge-risk badge-low-risk">Low Risk</span></td>
+                        <td class="text-right">
+                            <a href="burnout_report.html?code=TCH-008" class="btn-view-diagnostic">
+                                <i class="fas fa-microscope"></i> View Diagnostic
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="code-tag-bold">TCH-004</code></td>
+                        <td><span class="score-val text-success">10 / 54 (Low)</span></td>
+                        <td><span class="score-val text-success">3 / 30 (Low)</span></td>
+                        <td><span class="score-val text-success">44 / 48 (High)</span></td>
+                        <td><span class="badge-risk badge-low-risk">Low Risk</span></td>
+                        <td class="text-right">
+                            <a href="burnout_report.html?code=TCH-004" class="btn-view-diagnostic">
+                                <i class="fas fa-microscope"></i> View Diagnostic
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="dashboard-footer">
+        &copy; 2026 Kandili Workspace &bull; Anonymized MBI-ES & R.A. 10173 Compliant
+    </footer>
+
+</body>
+</html>

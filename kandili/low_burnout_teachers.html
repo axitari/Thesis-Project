@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Burnout Risk Faculty &bull; Kandili Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="principal,admin"></script>
+    <script src="../static/logout.js"></script>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/low_burnout_teachers.css">
+</head>
+<body class="dashboard-body">
+
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <button class="nav-back-circle-btn" onclick="window.history.back()" type="button" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Low Burnout Risk Roster</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
+            <button class="theme-nav__refresh" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+    </header>
+
+    <main class="dashboard-container low-burnout-container">
+        <div class="content-card low-burnout-banner">
+            <div class="banner-info-group">
+                <div class="banner-icon-badge"><i class="fas fa-shield-heart"></i></div>
+                <div>
+                    <h2 class="banner-title">21 Faculty Entries at Low Risk</h2>
+                    <p class="banner-subtext">Low Emotional Exhaustion (&le;16), low Depersonalization (&le;6), and high Personal Accomplishment (&ge;37).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card directory-card">
+            <div class="directory-card-header">
+                <h3 class="directory-card-title"><i class="fas fa-circle-check" style="color: #16a34a;"></i> Stable & Well-Balanced Roster</h3>
+                <span class="status-pill-green">Status: Healthy Equilibrium</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="directory-table">
+                    <thead>
+                        <tr>
+                            <th>Teacher Code</th>
+                            <th>Weekly Load</th>
+                            <th>MBI-ES Subscales (EE / DP / PA)</th>
+                            <th>Risk Tier</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight:700; color:#16a34a;">TCH-004</td>
+                            <td>39 hrs/wk</td>
+                            <td>
+                                <div class="mbi-scores-group">
+                                    <span class="mbi-tag">EE: 11</span>
+                                    <span class="mbi-tag">DP: 3</span>
+                                    <span class="mbi-tag" style="background:#dcfce7; color:#14532d;">PA: 42</span>
+                                </div>
+                            </td>
+                            <td><span class="badge-low-risk">LOW RISK</span></td>
+                            <td style="text-align: right;">
+                                <button class="view-reco-btn" onclick="openRecoModal('TCH-004', '11 (Low)', '3 (Low)', '42 (High)', 'Maintain current schedule allocation. Baseline indicators reflect sustainable capacity.')">
+                                    <i class="fas fa-lightbulb"></i> View Strategy &rarr;
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- RECOMMENDATION MODAL -->
+    <div class="modal-overlay" id="recoModalOverlay">
+        <div class="modal-card">
+            <div class="modal-header-green">
+                <h3><i class="fas fa-shield-heart" style="color: #16a34a;"></i> Wellness Preservation Strategy</h3>
+                <button class="modal-close-btn" onclick="closeRecoModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                <p>Teacher Code <strong id="modalTeacherCode">TCH-004</strong> shows a stable baseline.</p>
+                <div style="background:#f8fafc; padding:1rem; border-radius:8px; margin-bottom:1rem;">
+                    <div><strong>EE Score:</strong> <span id="modalEE">11</span></div>
+                    <div><strong>DP Score:</strong> <span id="modalDP">3</span></div>
+                    <div><strong>PA Score:</strong> <span id="modalPA">42</span></div>
+                </div>
+                <div style="background:#f0fdf4; border-left:4px solid #16a34a; padding:1rem; border-radius:6px;">
+                    <strong style="color:#14532d;">Recommended Focus:</strong>
+                    <p id="modalRecoText" style="margin:0.25rem 0 0; color:#166534;">Maintain current load.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRecoModal(code, ee, dp, pa, recoText) {
+            document.getElementById('modalTeacherCode').textContent = code;
+            document.getElementById('modalEE').textContent = ee;
+            document.getElementById('modalDP').textContent = dp;
+            document.getElementById('modalPA').textContent = pa;
+            document.getElementById('modalRecoText').textContent = recoText;
+            document.getElementById('recoModalOverlay').classList.add('active');
+        }
+        function closeRecoModal() {
+            document.getElementById('recoModalOverlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

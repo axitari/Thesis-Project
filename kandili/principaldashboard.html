@@ -35,8 +35,8 @@
             <div class="theme-nav__title">Principal Dashboard</div>
         </div>
         <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh" type="button" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
             <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
                 <i class="fas fa-bars"></i>
             </button>
@@ -59,7 +59,49 @@
     <!-- ============================================================ -->
     <main class="dashboard">
 
-<!-- SECTION 1: FACULTY WORKLOAD OVERVIEW CARDS -->
+        <!-- Welcome Header Banner (DepEd Primary Blue Theme) -->
+        <div class="welcome-banner welcome-banner--blue">
+            <div class="welcome-main-info">
+                <div class="welcome-icon-box welcome-icon-box--blue">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="welcome-text-content">
+                    <div class="welcome-tag-group">
+                        <span class="welcome-role-tag welcome-role-tag--blue">School Administrator</span>
+                        <span class="welcome-status-tag welcome-status-tag--blue"><i class="fas fa-circle"></i> System Active</span>
+                    </div>
+                    <h1 class="welcome-heading welcome-heading--blue">Welcome back, Principal! 👋</h1>
+                    <p class="welcome-subtext welcome-subtext--blue">
+                        Here is your daily overview of faculty capacity, wellness balance, and schedule optimization for <strong>SY 2026–2027</strong>.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="welcome-stats-box welcome-stats-box--blue">
+                <div class="stat-group">
+                    <span class="stat-label stat-label--blue"><i class="fas fa-users"></i> Total Faculty</span>
+                    <span class="stat-val stat-val--blue">28 Members</span>
+                </div>
+                <div class="stat-divider stat-divider--blue"></div>
+                <div class="stat-group">
+                    <span class="stat-label stat-label--blue"><i class="fas fa-heart-pulse"></i> Overall Wellness</span>
+                    <span class="stat-val stat-val--green-light">89.2% Balanced</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <h2 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a;">
+                    Faculty Workload Summary
+                </h2>
+            </div>
+            <p style="margin: 0; font-size: 0.9rem; color: #64748b;">
+                Real-time distribution of faculty teaching and administrative capacity across four workload balance tiers.
+            </p>
+        </div>
+
+        <!-- SECTION 1: FACULTY WORKLOAD OVERVIEW CARDS -->
         <section class="risk-cards">
             <!-- 1. UNDERLOAD -->
             <div class="risk-card risk-card--info">
@@ -84,11 +126,11 @@
                     <span class="risk-card-badge badge-optimal">OPTIMAL</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">32</span>
+                    <span class="risk-card-number">18</span>
                     <span class="risk-card-label">Optimal Load Teachers</span>
                     <span class="risk-card-action text-success">Well Balanced</span>
                 </div>
-                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='optimal_teachers.html'">
+                <button class="risk-card-btn" data-filter="optimal" onclick="window.location.href='optimal_teachers.html'">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -100,11 +142,11 @@
                     <span class="risk-card-badge badge-high-load">HIGH</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">8</span>
+                    <span class="risk-card-number">5</span>
                     <span class="risk-card-label">High Load Teachers</span>
                     <span class="risk-card-action text-warning">Monitor Assignment</span>
                 </div>
-                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='high-load_teachers.html'">
+                <button class="risk-card-btn" data-filter="high" onclick="window.location.href='high-load_teachers.html'">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -120,11 +162,88 @@
                     <span class="risk-card-label">Overloaded Teachers</span>
                     <span class="risk-card-action text-danger">Requires Reallocation</span>
                 </div>
-                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='overload_teachers.html'">
+                <button class="risk-card-btn" data-filter="overload" onclick="window.location.href='overload_teachers.html'">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </section>
+
+        <!-- ============================================================ -->
+        <!-- BURNOUT RISK ASSESSMENT SECTION (MBI-ES ALIGNED)             -->
+        <!-- ============================================================ -->
+
+        <div class="section-header" style="margin-top: 2.5rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.25rem;">
+                <h2 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a;">
+                    Burnout Risk Assessment
+                </h2>
+                <span style="background: #e0e7ff; color: #3730a3; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 20px; border: 1px solid #c7d2fe;">
+                    MBI-ES Standardized
+                </span>
+            </div>
+            <p style="margin: 0; font-size: 0.9rem; color: #64748b;">
+                Proactive risk profiling based on Maslach Burnout Inventory for Educators (EE, DP, and PA subscales) paired with eSF7 workload metrics.
+            </p>
+        </div>
+
+        <!-- Burnout Risk Cards Grid (3 MBI-ES Tiers) -->
+        <div class="burnout-cards-grid">
+
+            <!-- 1. LOW RISK CARD (Green) -->
+            <div class="burnout-card burnout-card--low">
+                <div class="burnout-card-header">
+                    <div class="burnout-card-icon"><i class="fas fa-shield-heart"></i></div>
+                    <span class="burnout-card-badge">Low Burnout Risk</span>
+                </div>
+                <div class="burnout-card-body">
+                    <span class="burnout-card-count">21</span>
+                    <h3 class="burnout-card-title">Low Stress / High Efficacy</h3>
+                    <p class="burnout-card-desc">Faculty showing low Emotional Exhaustion (&le;16), low Depersonalization (&le;6), and high Personal Accomplishment (&ge;37). Workload is well-managed.</p>
+                </div>
+                <div class="burnout-card-footer">
+                    <button class="burnout-card-btn" onclick="window.location.href='low_burnout_teachers.html'">
+                        View Roster <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. MODERATE RISK CARD (Yellow/Amber) -->
+            <div class="burnout-card burnout-card--moderate">
+                <div class="burnout-card-header">
+                    <div class="burnout-card-icon"><i class="fas fa-battery-quarter"></i></div>
+                    <span class="burnout-card-badge">Moderate Burnout Risk</span>
+                </div>
+                <div class="burnout-card-body">
+                    <span class="burnout-card-count">5</span>
+                    <h3 class="burnout-card-title">Moderate Strain</h3>
+                    <p class="burnout-card-desc">Faculty with moderate Emotional Exhaustion (17–26) or Depersonalization (7–12). Early workload adjustment prevents chronic fatigue.</p>
+                </div>
+                <div class="burnout-card-footer">
+                    <button class="burnout-card-btn" onclick="window.location.href='moderate_burnout_teachers.html'">
+                        Monitor Trends <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. HIGH RISK CARD (Red) -->
+            <div class="burnout-card burnout-card--high">
+                <div class="burnout-card-header">
+                    <div class="burnout-card-icon"><i class="fas fa-heart-crack"></i></div>
+                    <span class="burnout-card-badge">High Burnout Risk</span>
+                </div>
+                <div class="burnout-card-body">
+                    <span class="burnout-card-count">2</span>
+                    <h3 class="burnout-card-title">Critical Fatigue</h3>
+                    <p class="burnout-card-desc">Faculty scoring high Emotional Exhaustion (&ge;27), high Depersonalization (&ge;13), and low Personal Accomplishment (&le;30). Priority intervention needed.</p>
+                </div>
+                <div class="burnout-card-footer">
+                    <button class="burnout-card-btn" onclick="window.location.href='high_burnout_teachers.html'">
+                        Review Interventions <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
 
         <!-- SECTION 2: RISK DISTRIBUTION CHART + SCATTER PLOT -->
         <section class="charts-row">
@@ -156,278 +275,290 @@
                     <canvas id="distributionChart"></canvas>
                 </div>
                 <div class="chart-footer">
-                    <span>Kandili Analytics Engine &bull; Updated: July 20, 2026</span>
+                    <span>Kandili Analytics Engine &bull; Updated: July 23, 2026</span>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: DATA-DRIVEN RECOMMENDATIONS -->
+        <!-- ============================================================ -->
+        <!-- SECTION 3: DATA-DRIVEN RECOMMENDATIONS (WITH SIMULATOR)      -->
+        <!-- ============================================================ -->
         <section class="recommendations">
             <div class="recommendations-header">
-                <h2 style="color: #0f172a; margin-bottom: 0.25rem;"><i class="fas fa-lightbulb" style="color: #f59e0b;"></i> Data-Driven Recommendations</h2>
-                <span class="recommendations-subtitle" style="color: #475569; font-size: 0.9rem;">Based on objective eSF7 workload balancing analysis.</span>
+                <h2 style="color: #0f172a; margin-bottom: 0.25rem;">
+                    <i class="fas fa-lightbulb" style="color: #f59e0b;"></i> Data-Driven Recommendations
+                </h2>
+                <span class="recommendations-subtitle" style="color: #475569; font-size: 0.9rem;">
+                    Proactive task reallocation based on objective eSF7 workload and MBI-ES balance metrics.
+                </span>
             </div>
 
             <div class="hotlist-row" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+                
                 <!-- LEFT (2fr): REALLOCATION TABLE -->
                 <div class="reallocation-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05);">
-                    <h4 style="color: #0038A8; margin-bottom: 0.25rem; font-size: 1.1rem;"><i class="fas fa-exchange-alt"></i> Recommended Reallocation</h4>
-                    <p class="reallocation-intro" style="font-size: 0.85rem; color: #475569; margin-bottom: 1.5rem; display: block;"><strong>J. Dela Cruz</strong> is overloaded (52 hrs/week). Consider redistributing:</p>
+                    <h4 style="color: #0038A8; margin-bottom: 0.25rem; font-size: 1.1rem;">
+                        <i class="fas fa-exchange-alt"></i> Recommended Workload Reallocation
+                    </h4>
+                    <p class="reallocation-intro" style="font-size: 0.85rem; color: #475569; margin-bottom: 1.5rem; display: block;">
+                        <strong>Juan Dela Cruz</strong> is operating in overload (<span id="jdc-current-hours">48 hrs/wk</span>). Suggested offloading schedule:
+                    </p>
 
                     <div class="table-wrapper" style="margin-top: 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-                        <table class="reallocation-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: #ffffff;">
+                        <table class="reallocation-table" id="reallocationTable" style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: #ffffff;">
                             <thead>
                                 <tr>
-                                    <th style="background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Task / Duty</th>
-                                    <th style="background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Current Holder</th>
-                                    <th style="background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Suggested Transfer</th>
-                                    <th style="background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Load Impact</th>
-                                    <th style="background: #f8fafc; padding: 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Action</th>
+                                    <th style="background: #f8fafc; padding: 0.85rem 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Task / Ancillary Duty</th>
+                                    <th style="background: #f8fafc; padding: 0.85rem 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Current Holder</th>
+                                    <th style="background: #f8fafc; padding: 0.85rem 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Suggested Transfer</th>
+                                    <th style="background: #f8fafc; padding: 0.85rem 1rem; text-align: left; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Load Impact</th>
+                                    <th style="background: #f8fafc; padding: 0.85rem 1rem; text-align: right; border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: 600;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="border-bottom: 1px solid #f1f5f9;">
-                                    <td style="padding: 1rem; font-weight: 500;">Grade 9 Advisory</td>
-                                    <td style="padding: 1rem;"><span style="color: #C8102E; font-weight: 600;">J. Dela Cruz (Overloaded)</span></td>
-                                    <td style="padding: 1rem;"><span style="color: #059669; font-weight: 600;">M. Santos (Optimal)</span></td>
-                                    <td style="padding: 1rem;"><span style="color: #059669; font-weight: 700;">-8 hrs</span></td>
-                                    <td style="padding: 1rem;"><button class="action-btn action-btn--simulate">Simulate</button></td>
+                                <!-- Row 1 -->
+                                <tr style="border-bottom: 1px solid #f1f5f9;" id="row-sim-1">
+                                    <td style="padding: 0.85rem 1rem; font-weight: 500;">Grade 9 Advisory Assignment</td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #dc2626; font-weight: 600;">J. Dela Cruz (Overload)</span></td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 600;">M. Santos (Optimal)</span></td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 700;">-8 hrs/wk</span></td>
+                                    <td style="padding: 0.85rem 1rem; text-align: right;">
+                                        <button class="action-btn action-btn--simulate" onclick="toggleRowSimulation('row-sim-1', 8)">Simulate</button>
+                                    </td>
                                 </tr>
-                                <tr style="border-bottom: 1px solid #f1f5f9;">
-                                    <td style="padding: 1rem; font-weight: 500;">Sports Fest Committee</td>
-                                    <td style="padding: 1rem;"><span style="color: #C8102E; font-weight: 600;">J. Dela Cruz (Overloaded)</span></td>
-                                    <td style="padding: 1rem;"><span style="color: #059669; font-weight: 600;">R. Garcia (Optimal)</span></td>
-                                    <td style="padding: 1rem;"><span style="color: #059669; font-weight: 700;">-5 hrs</span></td>
-                                    <td style="padding: 1rem;"><button class="action-btn action-btn--simulate">Simulate</button></td>
+                                <!-- Row 2 -->
+                                <tr style="border-bottom: 1px solid #f1f5f9;" id="row-sim-2">
+                                    <td style="padding: 0.85rem 1rem; font-weight: 500;">SDRRM Coordinator Duty</td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #dc2626; font-weight: 600;">J. Dela Cruz (Overload)</span></td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 600;">R. Garcia (Optimal)</span></td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 700;">-5 hrs/wk</span></td>
+                                    <td style="padding: 0.85rem 1rem; text-align: right;">
+                                        <button class="action-btn action-btn--simulate" onclick="toggleRowSimulation('row-sim-2', 5)">Simulate</button>
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td style="padding: 1rem; font-weight: 500;">Grade 7 Homeroom</td>
-                                    <td style="padding: 1rem;"><span style="color: #f59e0b; font-weight: 600;">A. Reyes (Maximized)</span></td>
-                                    <td style="padding: 1rem;"><span style="color: #059669; font-weight: 600;">L. Bautista (Optimal)</span></td>
-                                    <td style="padding: 1rem;"><span style="color: #059669; font-weight: 700;">-6 hrs</span></td>
-                                    <td style="padding: 1rem;"><button class="action-btn action-btn--simulate">Simulate</button></td>
+                                <!-- Row 3 -->
+                                <tr id="row-sim-3">
+                                    <td style="padding: 0.85rem 1rem; font-weight: 500;">Grade 7 Homeroom Duty</td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #d97706; font-weight: 600;">A. Reyes (Maximized)</span></td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 600;">L. Bautista (Optimal)</span></td>
+                                    <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 700;">-6 hrs/wk</span></td>
+                                    <td style="padding: 0.85rem 1rem; text-align: right;">
+                                        <button class="action-btn action-btn--simulate" onclick="toggleRowSimulation('row-sim-3', 6)">Simulate</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="reallocation-actions" style="margin-top: 1.5rem; display: flex; gap: 1rem;">
-                        <button class="reallocation-btn reallocation-btn--apply">
-                            <i class="fas fa-check"></i> Apply in Simulator
+                    <div class="reallocation-actions" style="margin-top: 1.25rem; display: flex; gap: 1rem;">
+                        <button class="reallocation-btn reallocation-btn--apply" onclick="applyAllSimulations()">
+                            <i class="fas fa-check-circle"></i> Apply All in Simulator
                         </button>
-                        <button class="reallocation-btn reallocation-btn--report">
-                            <i class="fas fa-file-alt"></i> Generate Report
+                        <button class="reallocation-btn reallocation-btn--report" onclick="exportSimulationReport()">
+                            <i class="fas fa-file-pdf"></i> Export Reallocation Plan
                         </button>
                     </div>
                 </div>
 
                 <!-- RIGHT (1fr): DEPARTMENT WORKLOAD TRACKER -->
-                <div class="side-card">
-                    <h4 class="dept-tracker-title"><i class="fas fa-chart-bar"></i> Dept. Workload Impact</h4>
+                <div class="side-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05);">
+                    <h4 class="dept-tracker-title" style="color: #0f172a; margin-top: 0; margin-bottom: 1rem; font-size: 1.05rem;">
+                        <i class="fas fa-chart-bar" style="color: #0038A8;"></i> Dept. Workload Distribution
+                    </h4>
                     
-                    <div class="dept-row">
-                        <div class="dept-header">
-                            <span class="dept-name">Science</span>
-                            <span class="dept-score status-overloaded">Avg: 48 hrs (Overloaded)</span>
+                    <div class="dept-row" style="margin-bottom: 0.85rem;">
+                        <div class="dept-header" style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                            <span class="dept-name" style="font-weight: 600; color: #334155;">Araling Panlipunan</span>
+                            <span class="dept-score status-overloaded" id="ap-dept-score" style="color: #dc2626; font-weight: 700;">Avg: 48 hrs (Overloaded)</span>
                         </div>
-                        <div class="dept-bar-track">
-                            <div class="dept-bar-fill dept-bar--high" style="width: 85%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="dept-row">
-                        <div class="dept-header">
-                            <span class="dept-name">MAPEH</span>
-                            <span class="dept-score status-overloaded">Avg: 47 hrs (Overloaded)</span>
-                        </div>
-                        <div class="dept-bar-track">
-                            <div class="dept-bar-fill dept-bar--high" style="width: 82%;"></div>
+                        <div class="dept-bar-track" style="background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div class="dept-bar-fill" id="ap-dept-bar" style="width: 85%; background: #dc2626; height: 100%; transition: all 0.4s ease;"></div>
                         </div>
                     </div>
 
-                    <div class="dept-row">
-                        <div class="dept-header">
-                            <span class="dept-name">Mathematics</span>
-                            <span class="dept-score status-maximized">Avg: 41 hrs (Maximized)</span>
+                    <div class="dept-row" style="margin-bottom: 0.85rem;">
+                        <div class="dept-header" style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                            <span class="dept-name" style="font-weight: 600; color: #334155;">Science</span>
+                            <span class="dept-score status-overloaded" style="color: #dc2626; font-weight: 700;">Avg: 47 hrs (Overloaded)</span>
                         </div>
-                        <div class="dept-bar-track">
-                            <div class="dept-bar-fill dept-bar--moderate" style="width: 70%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="dept-row">
-                        <div class="dept-header">
-                            <span class="dept-name">Filipino</span>
-                            <span class="dept-score status-maximized">Avg: 40 hrs (Maximized)</span>
-                        </div>
-                        <div class="dept-bar-track">
-                            <div class="dept-bar-fill dept-bar--moderate" style="width: 65%;"></div>
+                        <div class="dept-bar-track" style="background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div class="dept-bar-fill" style="width: 82%; background: #dc2626; height: 100%;"></div>
                         </div>
                     </div>
 
-                    <div class="dept-row">
-                        <div class="dept-header">
-                            <span class="dept-name">Araling Panlipunan</span>
-                            <span class="dept-score status-optimal">Avg: 36 hrs (Optimal)</span>
+                    <div class="dept-row" style="margin-bottom: 0.85rem;">
+                        <div class="dept-header" style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                            <span class="dept-name" style="font-weight: 600; color: #334155;">Mathematics</span>
+                            <span class="dept-score status-maximized" style="color: #d97706; font-weight: 700;">Avg: 41 hrs (Maximized)</span>
                         </div>
-                        <div class="dept-bar-track">
-                            <div class="dept-bar-fill dept-bar--low" style="width: 45%;"></div>
+                        <div class="dept-bar-track" style="background: #f1f5f9; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div class="dept-bar-fill" style="width: 70%; background: #d97706; height: 100%;"></div>
                         </div>
                     </div>
 
-                    <div class="dept-row">
-                        <div class="dept-header">
-                            <span class="dept-name">English</span>
-                            <span class="dept-score status-optimal">Avg: 34 hrs (Optimal)</span>
-                        </div>
-                        <div class="dept-bar-track">
-                            <div class="dept-bar-fill dept-bar--low" style="width: 40%;"></div>
-                        </div>
-                    </div>
-                    
-                    <p class="dept-tracker-footer">
-                        Simulating changes will update these department averages live.
+                    <p class="dept-tracker-footer" style="font-size: 0.78rem; color: #64748b; margin-top: 1rem; margin-bottom: 0; line-height: 1.4;">
+                        <i class="fas fa-circle-info"></i> Simulating changes updates department averages in real time.
                     </p>
                 </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: HOTLIST & SIDE CARDS -->
-        <section class="hotlist-row">
-            <div class="hotlist-panel" style="background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05);">
-                <div class="hotlist-header">
-                    <h3 style="color: #C8102E; margin: 0; font-size: 1.2rem;"><i class="fas fa-exclamation-triangle"></i> High Risk Teacher Hotlist</h3>
-                    <span style="background: #C8102E; color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600;">2 Alerts</span>
-                </div>
-
-                <div class="hotlist-item hotlist-item--critical">
-                    <div class="hotlist-item-left">
-                        <span class="hotlist-code">TCH-042</span>
-                        <span class="hotlist-details">Risk Score: 92</span>
-                    </div>
-                    <div class="hotlist-item-right">
-                        <button class="hotlist-btn hotlist-btn--profile"><i class="fas fa-user"></i> Profile</button>
-                        <button class="hotlist-btn hotlist-btn--checkin"><i class="fas fa-paper-plane"></i> Check-in</button>
-                    </div>
-                </div>
-
-                <div class="hotlist-item hotlist-item--critical">
-                    <div class="hotlist-item-left">
-                        <span class="hotlist-code">TCH-018</span>
-                        <span class="hotlist-details">Risk Score: 85</span>
-                    </div>
-                    <div class="hotlist-item-right">
-                        <button class="hotlist-btn hotlist-btn--profile"><i class="fas fa-user"></i> Profile</button>
-                        <button class="hotlist-btn hotlist-btn--checkin"><i class="fas fa-paper-plane"></i> Check-in</button>
-                    </div>
-                </div>
-
-                <div class="hotlist-hidden-flag">
-                    <div class="hidden-flag-content">
-                        <i class="fas fa-flag" style="margin-right: 0.5rem;"></i> 
-                        <strong>Hidden Risk Flag:</strong> 3 Teachers show High Subjective Exhaustion despite Lawful Workload (&lt;40 hrs).
-                    </div>
-                    <button class="hidden-flag-link">View These Teachers &rarr;</button>
-                </div>
-            </div>
-
-            <div class="side-cards">
-                <div class="pulse-panel" style="background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h3 style="color: #059669; margin: 0; font-size: 1.1rem;"><i class="fas fa-heartbeat"></i> Pulse Compliance</h3>
-                    
-                    <div class="pulse-stats">
-                        <div class="pulse-stat">
-                            <span class="pulse-number" style="color: #059669;">37</span>
-                            <span class="pulse-label">Completed</span>
-                            <span class="pulse-detail">/ 42 (88%)</span>
-                        </div>
-                        <div class="pulse-stat">
-                            <span class="pulse-number" style="color: #C8102E;">5</span>
-                            <span class="pulse-label">Missing</span>
-                            <span class="pulse-detail">(12%)</span>
-                        </div>
-                    </div>
-
-                    <button style="width: 100%; padding: 0.75rem; background: #0038A8; color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer;">
-                        <i class="fas fa-bell"></i> Send Reminders (5 Missing)
-                    </button>
-
-                    <div class="pulse-exhaustion">
-                        <span style="color: #475569;">Avg. Exhaustion:</span> 
-                        <span style="text-align: right;">
-                            <strong style="color: #C8102E;">75% (Critical)</strong><br>
-                            <span style="color: #C8102E; font-size: 0.75rem;">&uarr; +12% from last week</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================================ -->
-        <!-- PRINCIPAL DASHBOARD: FACULTY REPORTS MANAGEMENT             -->
-        <!-- ============================================================ -->
-        <section class="content-card principal-reports-card">
-    
-            <!-- Top Header -->
-            <div class="reports-header">
-                <div>
-                    <h3><i class="fas fa-folder-open"></i> Faculty Workload & Diagnostic Reports</h3>
-                    <p>Access administrative workload assignments and privacy-protected burnout diagnostics.</p>
-                </div>
-                
-                <div class="teacher-select-group">
-                    <span class="select-label">SELECT FACULTY:</span>
-                    <select id="facultySelect" class="form-control-sm">
-                        <option value="TCH-015">Lysander Callahan</option>
-                        <option value="TCH-016">Cali Sudalga</option>
-                        <option value="TCH-015">Lander Storm</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- THIS GRID WRAPPER FORCES SIDE-BY-SIDE -->
-            <div class="report-type-grid">
-                
-                <!-- CARD 1 (LEFT) -->
-                <div class="report-type-card">
-                    <div>
-                        <div class="report-card-icon workload-icon">
-                            <i class="fas fa-list-check"></i>
-                        </div>
-                        <span class="report-type-badge badge-identified">IDENTIFIED ADMIN REPORT</span>
-                        <h4>Workload Quantification Report</h4>
-                        <p>Official record of teaching hours, ancillary task distribution, and load score computation for administrative action.</p>
-                    </div>
-                    <button class="btn-primary" id="openWorkloadReportBtn" type="button">
-                        <i class="fas fa-file-invoice"></i> View Workload Report
-                    </button>
-                </div>
-
-                <!-- CARD 2 (RIGHT) -->
-                <div class="report-type-card">
-                    <div>
-                        <div class="report-card-icon burnout-icon">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
-                        <span class="report-type-badge badge-anonymized">ANONYMIZED DIAGNOSTIC</span>
-                        <h4>Burnout Diagnostic Report</h4>
-                        <p>Anonymized Maslach Burnout Inventory (MBI) scores and risk categories to evaluate organizational stress trends safely.</p>
-                    </div>
-                    <button class="btn-outline" id="openBurnoutReportBtn" type="button">
-                        <i class="fas fa-shield-alt"></i> View Anonymized Report
-                    </button>
-                </div>
 
             </div>
         </section>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: HOTLIST & SIDE CARDS                             -->
+<!-- ============================================================ -->
+<section class="hotlist-row">
+    <!-- LEFT: HIGH RISK HOTLIST -->
+    <div class="hotlist-panel" style="background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05);">
+        <div class="hotlist-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="color: #dc2626; margin: 0; font-size: 1.2rem; font-weight: 700;">
+                <i class="fas fa-exclamation-triangle"></i> High Risk Teacher Hotlist
+            </h3>
+            <span style="background: #ffe4e6; color: #881337; border: 1px solid #fecdd3; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700;">2 Alerts</span>
+        </div>
+
+        <!-- Hotlist Entry 1 -->
+        <div class="hotlist-item hotlist-item--critical" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: 8px; background: #fff1f2; border: 1px solid #fecdd3; margin-bottom: 0.85rem;">
+            <div class="hotlist-item-left">
+                <span class="hotlist-code" style="font-weight: 800; color: #dc2626; font-size: 1rem; display: block;">TCH-012</span>
+                <span class="hotlist-details" style="font-size: 0.82rem; color: #9f1239;">EE: 31 | DP: 15 | PA: 26 (High Risk)</span>
+            </div>
+            <div class="hotlist-item-right" style="display: flex; gap: 0.5rem;">
+                <button class="hotlist-btn hotlist-btn--profile" onclick="window.location.href='high_burnout_teachers.html'" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fecdd3; background: #ffffff; color: #be123c; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                    <i class="fas fa-file-invoice"></i> Diagnostic
+                </button>
+                <button class="hotlist-btn hotlist-btn--checkin" onclick="sendIndividualCheckIn('TCH-012')" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: none; background: #dc2626; color: #ffffff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                    <i class="fas fa-paper-plane"></i> Check-in
+                </button>
+            </div>
+        </div>
+
+        <!-- Hotlist Entry 2 -->
+        <div class="hotlist-item hotlist-item--critical" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: 8px; background: #fff1f2; border: 1px solid #fecdd3; margin-bottom: 1rem;">
+            <div class="hotlist-item-left">
+                <span class="hotlist-code" style="font-weight: 800; color: #dc2626; font-size: 1rem; display: block;">TCH-018</span>
+                <span class="hotlist-details" style="font-size: 0.82rem; color: #9f1239;">EE: 28 | DP: 14 | PA: 28 (High Risk)</span>
+            </div>
+            <div class="hotlist-item-right" style="display: flex; gap: 0.5rem;">
+                <button class="hotlist-btn hotlist-btn--profile" onclick="window.location.href='high_burnout_teachers.html'" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fecdd3; background: #ffffff; color: #be123c; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                    <i class="fas fa-file-invoice"></i> Diagnostic
+                </button>
+                <button class="hotlist-btn hotlist-btn--checkin" onclick="sendIndividualCheckIn('TCH-018')" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: none; background: #dc2626; color: #ffffff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                    <i class="fas fa-paper-plane"></i> Check-in
+                </button>
+            </div>
+        </div>
+
+        <div class="hotlist-hidden-flag" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div class="hidden-flag-content" style="font-size: 0.83rem; color: #334155;">
+                <i class="fas fa-flag" style="color: #d97706; margin-right: 0.4rem;"></i> 
+                <strong>Hidden Strain Flag:</strong> 3 Faculty entries report high emotional fatigue despite lawful workloads (&lt;40 hrs).
+            </div>
+            <button class="hidden-flag-link" onclick="window.location.href='moderate_burnout_teachers.html'" style="background: transparent; border: none; color: #0038A8; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                Inspect Roster &rarr;
+            </button>
+        </div>
+    </div>
+
+    <!-- RIGHT: PULSE COMPLIANCE PANEL -->
+    <div class="side-cards">
+        <div class="pulse-panel" style="background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+            <h3 style="color: #059669; margin: 0; font-size: 1.1rem; font-weight: 700;">
+                <i class="fas fa-heartbeat"></i> MBI Pulse Response Rate
+            </h3>
+            
+            <div class="pulse-stats" style="display: flex; gap: 1.5rem; margin: 1rem 0;">
+                <div class="pulse-stat">
+                    <span class="pulse-number" style="color: #059669; font-size: 1.8rem; font-weight: 800; display: block;">25</span>
+                    <span class="pulse-label" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Submitted</span>
+                    <span class="pulse-detail" style="font-size: 0.75rem; color: #059669; font-weight: 700;">/ 28 (89%)</span>
+                </div>
+                <div class="pulse-stat">
+                    <span class="pulse-number" style="color: #dc2626; font-size: 1.8rem; font-weight: 800; display: block;">3</span>
+                    <span class="pulse-label" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Pending</span>
+                    <span class="pulse-detail" style="font-size: 0.75rem; color: #dc2626; font-weight: 700;">(11%)</span>
+                </div>
+            </div>
+
+            <button onclick="sendBulkPulseReminders()" style="width: 100%; padding: 0.75rem; background: #0038A8; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: background 0.2s ease;">
+                <i class="fas fa-bell"></i> Send Automated Reminder (3 Pending)
+            </button>
+
+            <div class="pulse-exhaustion" style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 0.83rem;">
+                <span style="color: #475569;">Average Exhaustion Index:</span> 
+                <span style="text-align: right;">
+                    <strong style="color: #dc2626;">75% (Elevated)</strong>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PRINCIPAL DASHBOARD: FACULTY REPORTS MANAGEMENT             -->
+<!-- ============================================================ -->
+<section class="content-card principal-reports-card">
+
+    <!-- Top Header -->
+    <div class="reports-header">
+        <div>
+            <h3><i class="fas fa-folder-open"></i> Faculty Workload & Diagnostic Reports</h3>
+            <p>Access administrative workload assignments and privacy-protected burnout diagnostics.</p>
+        </div>
+        
+        <div class="teacher-select-group">
+            <span class="select-label">SELECT FACULTY ENTRY:</span>
+            <select id="facultySelect" class="form-control-sm">
+                <option value="TCH-012">Juan Dela Cruz (TCH-012)</option>
+                <option value="TCH-018">Maria Santos (TCH-018)</option>
+                <option value="TCH-004">Ramon Garcia (TCH-004)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- REPORT SELECTION GRID -->
+    <div class="report-type-grid">
+        
+        <!-- CARD 1: IDENTIFIED WORKLOAD DIRECTORY -->
+        <div class="report-type-card">
+            <div>
+                <div class="report-card-icon workload-icon">
+                    <i class="fas fa-list-check"></i>
+                </div>
+                <span class="report-type-badge badge-identified">IDENTIFIED ADMIN REPORT</span>
+                <h4>Workload Quantification Reports</h4>
+                <p>Access official administrative records of teaching hours, ancillary task distributions, and load calculations across all faculty.</p>
+            </div>
+            <button class="btn-primary" id="openWorkloadReportBtn" type="button">
+                <i class="fas fa-folder-open"></i> View All Faculty Reports
+            </button>
+        </div>
+
+        <!-- CARD 2: ANONYMIZED BURNOUT DIRECTORY -->
+        <div class="report-type-card">
+            <div>
+                <div class="report-card-icon burnout-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <span class="report-type-badge badge-anonymized">ANONYMIZED DIAGNOSTIC</span>
+                <h4>Burnout Diagnostic Reports</h4>
+                <p>Access privacy-protected Maslach Burnout Inventory (MBI-ES) subscale scores and risk diagnostics across all faculty.</p>
+            </div>
+            <button class="btn-outline" id="openBurnoutReportBtn" type="button">
+                <i class="fas fa-shield-alt"></i> View All Diagnostic Reports
+            </button>
+        </div>
+
+    </div>
+</section>
 
         <!-- SECTION 5: SYSTEM MODULES -->
         <section class="modules-row">
             <div class="module-card">
                 <div class="module-icon">📁</div>
                 <h4 class="module-title">Master Class Programs</h4>
-                <p class="module-desc">Access and review official class schedules of all 42 faculty members.</p>
-                <button class="module-btn module-btn--outline">Open Directory &rarr;</button>
+                <p class="module-desc">Access and review official class schedules of all 28 faculty members.</p>
+                <button class="module-btn module-btn--outline" onclick="window.location.href='facultydirectory.html'">Open Directory &rarr;</button>
             </div>
 
             <div class="module-card">
@@ -435,7 +566,7 @@
                 <h4 class="module-title">Risk Assessments</h4>
                 <p class="module-desc">Review predictive risk levels. Fully anonymized with Teacher Codes.</p>
                 <span class="module-status text-green"><i class="fas fa-shield-alt"></i> R.A. 10173 Compliant</span>
-                <button class="module-btn module-btn--outline">Open Analytics &rarr;</button>
+                <button class="module-btn module-btn--outline" onclick="window.location.href='high_burnout_teachers.html'">Open Analytics &rarr;</button>
             </div>
 
             <div class="module-card">
@@ -443,7 +574,7 @@
                 <h4 class="module-title">Data Ingestion</h4>
                 <p class="module-desc">Upload Master eSF7 spreadsheet to extract objective workload data.</p>
                 <div class="module-bottom-wrapper">
-                    <span class="module-status text-blue">Last Upload: 07/20/2026</span>
+                    <span class="module-status text-blue">Last Upload: 07/23/2026</span>
                     <button class="module-btn module-btn--outline"><i class="fas fa-cloud-upload-alt"></i> Upload New Data</button>
                 </div>
             </div>
@@ -474,7 +605,5 @@
     <!-- Core Scripts -->
     <script src="../static/workloadManager.js"></script>
     <script src="../static/principalDashboard.js"></script>
-    <!-- Newly Extracted JS -->
-    <!--<script src="../static/principalDashboardUi.js"></script>-->
 </body>
 </html>

@@ -348,3 +348,190 @@ if (typeof window.showTeacherList !== 'function') {
         console.log(`[Teacher List Handler] Filter applied: ${status}`);
     };
 }
+
+// State tracker for simulated hours
+let totalDeduction = 0;
+const baseHours = 48;
+
+function toggleRowSimulation(rowId, hours) {
+    const row = document.getElementById(rowId);
+    const btn = row.querySelector('.action-btn--simulate');
+    
+    if (row.classList.contains('simulated-active')) {
+        // Revert row
+        row.classList.remove('simulated-active');
+        row.style.background = 'transparent';
+        btn.textContent = 'Simulate';
+        btn.style.background = '#e2e8f0';
+        btn.style.color = '#334155';
+        totalDeduction -= hours;
+    } else {
+        // Activate simulation mode on row
+        row.classList.add('simulated-active');
+        row.style.background = '#f0fdf4';
+        btn.textContent = 'Simulated ✓';
+        btn.style.background = '#16a34a';
+        btn.style.color = '#ffffff';
+        totalDeduction += hours;
+    }
+
+    updateSimulatorDisplay();
+}
+
+function applyAllSimulations() {
+    ['row-sim-1', 'row-sim-2', 'row-sim-3'].forEach(id => {
+        const row = document.getElementById(id);
+        if (!row.classList.contains('simulated-active')) {
+            row.click();
+        }
+    });
+}
+
+function updateSimulatorDisplay() {
+    const newHours = Math.max(35, baseHours - totalDeduction);
+    const currentHoursElem = document.getElementById('jdc-current-hours');
+    
+    if (totalDeduction > 0) {
+        currentHoursElem.innerHTML = `<s style="color:#dc2626;">48 hrs</s> → <strong style="color:#16a34a;">${newHours} hrs/wk</strong>`;
+    } else {
+        currentHoursElem.textContent = '48 hrs/wk';
+    }
+
+    // Dynamic Dept Bar Adjustment
+    const apBar = document.getElementById('ap-dept-bar');
+    const apScore = document.getElementById('ap-dept-score');
+    
+    if (totalDeduction >= 13) { // When major offloading is simulated
+        apBar.style.width = '55%';
+        apBar.style.background = '#16a34a';
+        apScore.textContent = 'Avg: 37 hrs (Optimal)';
+        apScore.style.color = '#16a34a';
+    } else {
+        apBar.style.width = '85%';
+        apBar.style.background = '#dc2626';
+        apScore.textContent = 'Avg: 48 hrs (Overloaded)';
+        apScore.style.color = '#dc2626';
+    }
+}
+
+function exportSimulationReport() {
+    alert("Reallocation Summary Report generated successfully!\n\nProposed Reassignments:\n• Grade 9 Advisory -> M. Santos (-8 hrs)\n• SDRRM Coordinator -> R. Garcia (-5 hrs)\n• Grade 7 Homeroom -> L. Bautista (-6 hrs)\n\nNew Target Workload: 35 hrs/wk (Optimal)");
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const workloadBtn = document.getElementById('openWorkloadReportBtn');
+
+    if (workloadBtn) {
+        workloadBtn.addEventListener('click', () => {
+            // Redirects to the master list of all faculty workload reports
+            window.location.href = 'workload_reports_directory.html';
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const burnoutBtn = document.getElementById('openBurnoutReportBtn');
+
+    if (burnoutBtn) {
+        burnoutBtn.addEventListener('click', () => {
+            window.location.href = 'burnout_reports_directory.html';
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const teacherCode = urlParams.get('code');
+    if (teacherCode) {
+        document.getElementById('diagnosticTeacherCode').textContent = teacherCode;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Mock Data Dictionary for Anonymized Teachers
+    const burnoutDatabase = {
+        'TCH-012': {
+            eeScore: 31, eeTier: 'High',
+            dpScore: 15, dpTier: 'High',
+            paScore: 26, paTier: 'Low (Reduced Efficacy)',
+            overallRisk: 'HIGH BURNOUT RISK',
+            workload: '48.0 hrs/week (Overloaded)',
+            department: 'Araling Panlipunan',
+            riskClass: 'text-danger'
+        },
+        'TCH-018': {
+            eeScore: 28, eeTier: 'High',
+            dpScore: 14, dpTier: 'High',
+            paScore: 28, paTier: 'Low (Reduced Efficacy)',
+            overallRisk: 'HIGH BURNOUT RISK',
+            workload: '46.5 hrs/week (Overloaded)',
+            department: 'English',
+            riskClass: 'text-danger'
+        },
+        'TCH-003': {
+            eeScore: 22, eeTier: 'Moderate',
+            dpScore: 9,  dpTier: 'Moderate',
+            paScore: 33, paTier: 'Moderate Efficacy',
+            overallRisk: 'MODERATE BURNOUT RISK',
+            workload: '40.0 hrs/week (High Load)',
+            department: 'Science',
+            riskClass: 'text-warning'
+        },
+        'TCH-008': {
+            eeScore: 12, eeTier: 'Low',
+            dpScore: 4,  dpTier: 'Low',
+            paScore: 41, paTier: 'High Efficacy',
+            overallRisk: 'LOW BURNOUT RISK',
+            workload: '36.0 hrs/week (Optimal)',
+            department: 'Mathematics',
+            riskClass: 'text-success'
+        },
+        'TCH-004': {
+            eeScore: 10, eeTier: 'Low',
+            dpScore: 3,  dpTier: 'Low',
+            paScore: 44, paTier: 'High Efficacy',
+            overallRisk: 'LOW BURNOUT RISK',
+            workload: '28.0 hrs/week (Underload)',
+            department: 'MAPEH',
+            riskClass: 'text-success'
+        }
+    };
+
+    // 2. Extract Teacher Code from Query String (e.g. ?code=TCH-012)
+    const urlParams = new URLSearchParams(window.location.search);
+    const teacherCode = urlParams.get('code') || 'TCH-012'; // Fallback to TCH-012
+
+    // 3. Populate Page Fields Dynamic to Tapped Entry
+    const teacherData = burnoutDatabase[teacherCode] || burnoutDatabase['TCH-012'];
+
+    // Header & Code
+    const codeElem = document.getElementById('diagnosticTeacherCode');
+    if (codeElem) codeElem.textContent = teacherCode;
+
+    // Overall Tier Display
+    const tierElem = document.querySelector('.overall-tier-box .tier-val');
+    if (tierElem) {
+        tierElem.textContent = teacherData.overallRisk;
+        tierElem.className = `tier-val ${teacherData.riskClass}`;
+    }
+
+    // Workload & Dept Details
+    const infoRows = document.querySelectorAll('.profile-info-table tr');
+    if (infoRows.length >= 4) {
+        infoRows[2].querySelectorAll('td')[1].textContent = teacherData.department;
+        
+        const workloadTd = infoRows[3].querySelectorAll('td')[1];
+        workloadTd.textContent = teacherData.workload;
+        workloadTd.className = `info-val ${teacherData.riskClass}`;
+    }
+
+    // Subscale Scores
+    const eeScoreElem = document.querySelector('.subscales-grid .subscale-card:nth-child(1) .subscale-score');
+    if (eeScoreElem) eeScoreElem.innerHTML = `${teacherData.eeScore} <span class="subscale-max">/ 54</span>`;
+
+    const dpScoreElem = document.querySelector('.subscales-grid .subscale-card:nth-child(2) .subscale-score');
+    if (dpScoreElem) dpScoreElem.innerHTML = `${teacherData.dpScore} <span class="subscale-max">/ 30</span>`;
+
+    const paScoreElem = document.querySelector('.subscales-grid .subscale-card:nth-child(3) .subscale-score');
+    if (paScoreElem) paScoreElem.innerHTML = `${teacherData.paScore} <span class="subscale-max">/ 48</span>`;
+});

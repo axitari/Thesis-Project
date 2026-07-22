@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kandili Workspace - Workload Quantification Report</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/workloadReport.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="principal"></script>
+    <script src="../static/logout.js"></script>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Administrative Audit Reports</div>
+        </div>
+        <div class="theme-nav__actions">
+            <button class="theme-nav__refresh" type="button" onclick="window.location.href='workload_reports_directory.html'">
+                <i class="fas fa-arrow-left"></i> Back to Directory
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="dashboard report-container">
+
+        <!-- REPORT ACTION BAR -->
+        <div class="report-actions">
+            <div>
+                <span class="badge-identified-doc">
+                    <i class="fas fa-file-contract"></i> OFFICIAL DepEd eSF7 AUDIT DOCUMENT
+                </span>
+                <h2 class="report-title">Faculty Workload Quantification Report</h2>
+            </div>
+            <div class="report-action-buttons">
+                <button onclick="window.print()" class="btn-print">
+                    <i class="fas fa-print"></i> Print / Save Report PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- MAIN REPORT CARD -->
+        <div class="report-card">
+            
+            <!-- OFFICIAL HEADER -->
+            <div class="report-header">
+                <h3 class="report-dept-title">Department of Education &bull; Region VI</h3>
+                <h4 class="report-sub-title">eSF7 Teaching Load & Ancillary Workload Quantification Audit</h4>
+                <p class="report-meta">R.A. 4670 Magna Carta Compliant &bull; Audit Date: July 23, 2026</p>
+            </div>
+
+            <!-- FACULTY PROFILE METRICS GRID -->
+            <div class="profile-metrics-grid">
+                <div>
+                    <table class="profile-info-table">
+                        <tr>
+                            <td class="info-label">Faculty Name:</td>
+                            <td class="info-val" id="reportFacultyName">Juan Dela Cruz</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">System Code:</td>
+                            <td class="info-val"><code class="code-highlight" id="reportTeacherCode">TCH-012</code></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Department:</td>
+                            <td class="info-val" id="reportDepartment">Araling Panlipunan</td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Position Title:</td>
+                            <td class="info-val">Teacher III</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="overall-tier-box">
+                    <span class="tier-label">WORKLOAD AUDIT STATUS</span>
+                    <span class="tier-val text-danger" id="reportStatusTier">CRITICAL OVERLOAD</span>
+                    <span class="tier-sub" id="reportTotalHours">48.0 Hours / Week</span>
+                </div>
+            </div>
+
+            <!-- SECTION 1: TEACHING LOAD BREAKDOWN -->
+            <h4 class="section-title"><i class="fas fa-chalkboard-user icon-blue"></i> 1. Direct Teaching Assignment Load</h4>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Subject / Section</th>
+                        <th>Grade Level</th>
+                        <th>Minutes / Day</th>
+                        <th>Days / Week</th>
+                        <th class="text-right">Weekly Hours</th>
+                    </tr>
+                </thead>
+                <tbody id="teachingLoadBody">
+                    <tr>
+                        <td>Araling Panlipunan (Section A)</td>
+                        <td>Grade 9</td>
+                        <td>60 mins</td>
+                        <td>5 days</td>
+                        <td class="text-right font-bold">5.0 hrs</td>
+                    </tr>
+                    <tr>
+                        <td>Araling Panlipunan (Section B)</td>
+                        <td>Grade 9</td>
+                        <td>60 mins</td>
+                        <td>5 days</td>
+                        <td class="text-right font-bold">5.0 hrs</td>
+                    </tr>
+                    <tr>
+                        <td>Araling Panlipunan (Section C)</td>
+                        <td>Grade 10</td>
+                        <td>60 mins</td>
+                        <td>5 days</td>
+                        <td class="text-right font-bold">5.0 hrs</td>
+                    </tr>
+                    <tr>
+                        <td>Araling Panlipunan (Section D)</td>
+                        <td>Grade 10</td>
+                        <td>60 mins</td>
+                        <td>5 days</td>
+                        <td class="text-right font-bold">5.0 hrs</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="font-bold">Subtotal Teaching Load:</td>
+                        <td class="text-right font-bold text-blue">20.0 hrs/wk</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- SECTION 2: ANCILLARY & ADMINISTRATIVE DUTIES -->
+            <h4 class="section-title"><i class="fas fa-list-check icon-blue"></i> 2. Ancillary & Administrative Assignments</h4>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Assigned Ancillary / Administrative Task</th>
+                        <th>Category</th>
+                        <th>Mandated Focus Area</th>
+                        <th class="text-right">Quantified Hours</th>
+                    </tr>
+                </thead>
+                <tbody id="ancillaryLoadBody">
+                    <tr>
+                        <td>Class Advisory (Grade 9 - Rizal)</td>
+                        <td>Advisory Duty</td>
+                        <td>Student Records, Guidance & Form 137</td>
+                        <td class="text-right font-bold">8.0 hrs</td>
+                    </tr>
+                    <tr>
+                        <td>School Disaster Risk Reduction Coordinator (SDRRM)</td>
+                        <td>Special Assignment</td>
+                        <td>Safety Protocols, Drills & Compliance</td>
+                        <td class="text-right font-bold">12.0 hrs</td>
+                    </tr>
+                    <tr>
+                        <td>Department Learning Action Cell (LAC) Leader</td>
+                        <td>Departmental</td>
+                        <td>Curriculum Planning & Mentorship</td>
+                        <td class="text-right font-bold">8.0 hrs</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="font-bold">Subtotal Ancillary Load:</td>
+                        <td class="text-right font-bold text-blue">28.0 hrs/wk</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- SECTION 3: COMPLIANCE AUDIT SUMMARY -->
+            <h4 class="section-title"><i class="fas fa-scale-balanced icon-blue"></i> 3. Statutory Compliance Summary (R.A. 4670)</h4>
+            <div class="profile-metrics-grid" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <p class="font-bold" style="margin-top: 0;">Magna Carta Upper Limit Threshold:</p>
+                    <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #475569;">
+                        <li>Max Teaching Limit: <strong>30.0 hrs/wk (6 hrs/day)</strong></li>
+                        <li>Max Combined Threshold: <strong>40.0 hrs/wk</strong></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-bold" style="margin-top: 0;">Current Audit Evaluation:</p>
+                    <p class="text-danger font-bold" style="font-size: 0.95rem;">
+                        <i class="fas fa-triangle-exclamation"></i> Exceeds maximum threshold by 8.0 hrs/wk. Immediate task offloading required.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SIGNATURE & AUDIT BLOCK -->
+            <div class="signature-block">
+                <div class="signature-column">
+                    <p class="sig-label">Prepared & Evaluated by:</p>
+                    <p class="sig-name">DEPARTMENT HEAD / COORDINATOR</p>
+                    <p class="sig-title">Academic Auditor</p>
+                </div>
+                <div class="signature-column">
+                    <p class="sig-label">Approved & Certified by:</p>
+                    <p class="sig-name">SCHOOL HEAD / PRINCIPAL</p>
+                    <p class="sig-title">School Administrator</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- GLOBAL FOOTER -->
+    <footer class="dashboard-footer">
+        &copy; 2026 Kandili Workspace &bull; DepEd eSF7 Workload Quantification &bull; R.A. 4670 Compliant
+    </footer>
+
+    <!-- DYNAMIC DATA LOADING SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const workloadDatabase = {
+                'TCH-012': { name: 'Juan Dela Cruz', dept: 'Araling Panlipunan', hours: '48.0 hrs/wk', status: 'CRITICAL OVERLOAD', class: 'text-danger' },
+                'TCH-003': { name: 'Maria Santos', dept: 'Science', hours: '40.0 hrs/wk', status: 'HIGH LOAD', class: 'text-warning' },
+                'TCH-008': { name: 'Ramon Garcia', dept: 'Mathematics', hours: '36.0 hrs/wk', status: 'OPTIMAL LOAD', class: 'text-success' },
+                'TCH-018': { name: 'Ana Reyes', dept: 'English', hours: '46.5 hrs/wk', status: 'CRITICAL OVERLOAD', class: 'text-danger' },
+                'TCH-004': { name: 'Leo Bautista', dept: 'MAPEH', hours: '28.0 hrs/wk', status: 'UNDERLOAD', class: 'text-info' }
+            };
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const teacherCode = urlParams.get('code') || 'TCH-012';
+            const data = workloadDatabase[teacherCode] || workloadDatabase['TCH-012'];
+
+            document.getElementById('reportTeacherCode').textContent = teacherCode;
+            document.getElementById('reportFacultyName').textContent = data.name;
+            document.getElementById('reportDepartment').textContent = data.dept;
+            document.getElementById('reportTotalHours').textContent = data.hours;
+            
+            const statusElem = document.getElementById('reportStatusTier');
+            statusElem.textContent = data.status;
+            statusElem.className = `tier-val ${data.class}`;
+        });
+    </script>
+</body>
+</html>
