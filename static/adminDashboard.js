@@ -1,29 +1,33 @@
 // static/adminDashboard.js
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Initial Load
+    // 1. Initial Load: Faculty Directory
     await loadFacultyDirectory();
     
-    // 2. Setup Refresh Button
+    // 2. Initial Load: Phase 4 Admin Dynamic Charts
+    await loadAdminCharts();
+    
+    // 3. Setup Refresh Button
     const refreshBtn = document.querySelector('.theme-nav__refresh');
     if (refreshBtn) {
         refreshBtn.addEventListener('click', async () => {
             refreshBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Refreshing...`;
             await loadFacultyDirectory();
+            await loadAdminCharts();
             refreshBtn.innerHTML = `<i class="fas fa-sync-alt"></i> Refresh`;
         });
     }
 
-    // 3. Setup Drawer Open/Close via body listener
+    // 4. Setup Drawer Open/Close via body listener
     setupDrawerToggle();
 
-    // 4. Auto-generate teacher code when drawer opens
+    // 5. Auto-generate teacher code when drawer opens
     setupTeacherCodeGeneration();
 
-    // 5. Setup Password Generate button
+    // 6. Setup Password Generate button
     setupPasswordGenerator();
 
-    // 6. Setup Add Teacher Drawer Form Submission
+    // 7. Setup Add Teacher Drawer Form Submission
     setupAddTeacherForm();
 });
 
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
    ============================================================ */
 function setupDrawerToggle() {
     const teacherDrawer = document.getElementById('teacherDrawer');
-    const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer');
+    const openTeacherButtons = document.querySelectorAll('.open-teacher-drawer, .btn-add-teacher');
     const closeTeacherDrawer = document.getElementById('closeTeacherDrawer');
     const cancelTeacherDrawerBtn = document.getElementById('cancelTeacherDrawerBtn');
 
@@ -131,51 +135,12 @@ function setupPasswordGenerator() {
     });
 }
 
-async function generateTeacherCode() {
-    const teacherCodeInput = document.getElementById('teacherCode');
-    if (!teacherCodeInput) return;
-
-    const currentYear = new Date().getFullYear();
-    const prefix = `TCH${currentYear}-`;
-
-    try {
-        const { data: existingCodes, error } = await window.supabaseClient
-            .from('profiles')
-            .select('teacher_code')
-            .eq('role', 'teacher')
-            .not('teacher_code', 'is', null);
-
-        const usedCodes = new Set();
-        if (!error && existingCodes) {
-            existingCodes.forEach(item => {
-                if (item.teacher_code) {
-                    usedCodes.add(item.teacher_code.trim());
-                }
-            });
-        }
-
-        let code;
-        let attempts = 0;
-        do {
-            const suffix = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
-            code = `${prefix}${suffix}`;
-            attempts += 1;
-        } while (usedCodes.has(code) && attempts < 20);
-
-        teacherCodeInput.value = code;
-    } catch (err) {
-        console.error("Failed to generate teacher code:", err);
-        teacherCodeInput.value = `TCH${currentYear}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
-    }
-}
-
 function generateSecurePassword() {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const lowercase = 'abcdefghijklmnopqrstuvwxyz';
     const numbers = '0123456789';
     const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
-    // Ensure at least one of each required type
     const requiredChars = [
         uppercase[Math.floor(Math.random() * uppercase.length)],
         lowercase[Math.floor(Math.random() * lowercase.length)],
@@ -183,15 +148,13 @@ function generateSecurePassword() {
         special[Math.floor(Math.random() * special.length)]
     ];
 
-    // Fill remaining to meet 12-16 length
     const allChars = uppercase + lowercase + numbers + special;
-    const remainingLength = Math.floor(Math.random() * 5) + 8; // 8-12 additional chars
+    const remainingLength = Math.floor(Math.random() * 5) + 8;
     const randomChars = [];
     for (let i = 0; i < remainingLength; i++) {
         randomChars.push(allChars[Math.floor(Math.random() * allChars.length)]);
     }
 
-    // Combine and shuffle
     const combined = [...requiredChars, ...randomChars];
     for (let i = combined.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -201,11 +164,11 @@ function generateSecurePassword() {
     return combined.join('');
 }
 
-// static/adminDashboard.js
-
+/* ============================================================
+   FACULTY DIRECTORY & WORKLOAD LOADING
+   ============================================================ */
 async function loadFacultyDirectory() {
     try {
-        // 1. Fetch profiles + relational workload data
         const { data: profiles, error: profileError } = await window.supabaseClient
             .from('profiles')
             .select(`
@@ -225,11 +188,9 @@ async function loadFacultyDirectory() {
             return;
         }
 
-        // 2. Target the table body in the DOM
         const tableBody = document.querySelector('.dashboard-table tbody');
         if (!tableBody) return;
 
-        // Clear placeholder rows
         tableBody.innerHTML = '';
 
         let overloadedCount = 0;
@@ -238,14 +199,12 @@ async function loadFacultyDirectory() {
         let underloadedCount = 0;
 
         profiles.forEach((profile, index) => {
-            // Compute Total Hours (R.A. 4670 Logic)
             const teachingMins = profile.teaching_loads?.reduce((sum, item) => sum + (item.minutes_per_week || 0), 0) || 0;
             const teachingHrs = teachingMins / 60;
             const ancillaryHrs = profile.ancillary_duties?.reduce((sum, item) => sum + parseFloat(item.hours_per_week || 0), 0) || 0;
             
             const totalWorkloadHrs = (teachingHrs + ancillaryHrs).toFixed(1);
 
-            // Determine Workload Status & UI Badge
             let statusBadge = '';
             if (totalWorkloadHrs > 30) {
                 statusBadge = `<span class="table-badge badge-red">Overload</span>`;
@@ -261,13 +220,11 @@ async function loadFacultyDirectory() {
                 underloadedCount++;
             }
 
-            // Fallback formatted code if database field is null
             const tCode = profile.teacher_code || `TCH2026-${String(index + 1).padStart(3, '0')}`;
             const fullName = `${profile.last_name || ''}, ${profile.first_name || 'Faculty'}`;
             const department = profile.department || 'Not Assigned';
             const roleText = profile.role ? profile.role.toUpperCase() : 'TEACHER';
 
-            // Generate Table Row
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="text-muted">${tCode}</td>
@@ -305,16 +262,164 @@ async function loadFacultyDirectory() {
     }
 }
 
-function updateRiskCards(overloaded, maximized, optimal) {
-    const criticalCard = document.querySelector('.risk-card--critical .risk-card-number');
-    const moderateCard = document.querySelector('.risk-card--moderate .risk-card-number');
-    const lowCard = document.querySelector('.risk-card--low .risk-card-number');
+function updateRiskCards(underload, optimal, maximized, overload) {
+    const underloadEl = document.querySelector('.workload-card--underload .workload-card-number');
+    const optimalEl = document.querySelector('.workload-card--optimal .workload-card-number');
+    const highEl = document.querySelector('.workload-card--high .workload-card-number');
+    const overloadEl = document.querySelector('.workload-card--overload .workload-card-number');
 
-    if (criticalCard) criticalCard.innerText = overloaded;
-    if (moderateCard) moderateCard.innerText = maximized;
-    if (lowCard) lowCard.innerText = optimal;
+    if (underloadEl) underloadEl.innerText = underload;
+    if (optimalEl) optimalEl.innerText = optimal;
+    if (highEl) highEl.innerText = maximized;
+    if (overloadEl) overloadEl.innerText = overload;
 }
 
+/* ============================================================
+   PHASE 4: LIVE CHART.JS DATA BINDING
+   ============================================================ */
+let adminTrendChartInstance = null;
+let adminDistChartInstance = null;
+
+async function loadAdminCharts() {
+    await Promise.all([
+        renderAdminBurnoutTrendChart(),
+        renderAdminLoadDistributionChart()
+    ]);
+}
+
+// Line Chart: School-wide Burnout Risk Trend from burnout_assessments
+async function renderAdminBurnoutTrendChart() {
+    const trendCtx = document.getElementById('burnoutTrendChart');
+    if (!trendCtx) return;
+
+    try {
+        const { data: assessments, error } = await window.supabaseClient
+            .from('burnout_assessments')
+            .select('risk_index, created_at')
+            .order('created_at', { ascending: true });
+
+        if (error) {
+            console.error("Error fetching burnout assessments for chart:", error.message);
+            return;
+        }
+
+        if (!assessments || assessments.length === 0) return;
+
+        const monthlyGroups = {};
+        assessments.forEach(item => {
+            const date = new Date(item.created_at);
+            const monthLabel = date.toLocaleString('en-US', { month: 'short' });
+            
+            if (!monthlyGroups[monthLabel]) {
+                monthlyGroups[monthLabel] = { sum: 0, count: 0 };
+            }
+            monthlyGroups[monthLabel].sum += parseFloat(item.risk_index || 0);
+            monthlyGroups[monthLabel].count += 1;
+        });
+
+        const labels = Object.keys(monthlyGroups);
+        const dataValues = labels.map(m => Math.round(monthlyGroups[m].sum / monthlyGroups[m].count));
+
+        // 💡 SAFELY DESTROY ANY EXISTING CHART INSTANCE ON THIS CANVAS
+        const existingChart = Chart.getChart(trendCtx);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+
+        adminTrendChartInstance = new Chart(trendCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Average Faculty Burnout Risk Score',
+                    data: dataValues,
+                    borderColor: '#b91c1c',
+                    backgroundColor: 'rgba(185, 28, 28, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#b91c1c',
+                    pointBorderColor: '#ffffff',
+                    pointRadius: 5,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error("Failed to render burnout trend chart:", err);
+    }
+}
+
+// 2. Doughnut Chart: Live Workload Ratios
+async function renderAdminLoadDistributionChart() {
+    const distCtx = document.getElementById('loadDistributionChart');
+    if (!distCtx) return;
+
+    try {
+        const [teachingRes, ancillaryRes] = await Promise.all([
+            window.supabaseClient.from('teaching_loads').select('minutes_per_week'),
+            window.supabaseClient.from('ancillary_duties').select('hours_per_week')
+        ]);
+
+        const totalTeachingMins = teachingRes.data?.reduce((sum, i) => sum + (i.minutes_per_week || 0), 0) || 0;
+        const totalTeachingHrs = totalTeachingMins / 60;
+        const totalAncillaryHrs = ancillaryRes.data?.reduce((sum, i) => sum + parseFloat(i.hours_per_week || 0), 0) || 0;
+
+        const calculatedTotal = totalTeachingHrs + totalAncillaryHrs || 1;
+        const teachingPercent = Math.round((totalTeachingHrs / calculatedTotal) * 100) || 65;
+        const ancillaryPercent = Math.round((totalAncillaryHrs / calculatedTotal) * 100) || 25;
+        const advisingPercent = Math.max(0, 100 - teachingPercent - ancillaryPercent);
+
+        // 💡 SAFELY DESTROY ANY EXISTING CHART INSTANCE ON THIS CANVAS
+        const existingChart = Chart.getChart(distCtx);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+
+        adminDistChartInstance = new Chart(distCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Teaching Hours', 'Ancillary Duties', 'Advisory / Prep Load'],
+                datasets: [{
+                    data: [teachingPercent, ancillaryPercent, advisingPercent],
+                    backgroundColor: ['#0038A8', '#facc15', '#94a3b8'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 12, family: "'Inter', sans-serif" },
+                            color: '#475569'
+                        }
+                    }
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error("Failed to render load distribution chart:", err);
+    }
+}
+/* ============================================================
+   ADD TEACHER FORM SUBMISSION
+   ============================================================ */
 function setupAddTeacherForm() {
     const createAccountBtn = document.getElementById('createTeacherAccountBtn');
     if (!createAccountBtn) return;
@@ -322,7 +427,6 @@ function setupAddTeacherForm() {
     createAccountBtn.addEventListener('click', async (e) => {
         e.preventDefault();
 
-        // Gather all form fields
         const firstName = document.getElementById('teacherFirstName')?.value.trim();
         const lastName = document.getElementById('teacherLastName')?.value.trim();
         const email = document.getElementById('teacherEmail')?.value.trim();
@@ -331,19 +435,16 @@ function setupAddTeacherForm() {
         const password = document.getElementById('teacherPassword')?.value.trim();
         const teacherCode = document.getElementById('teacherCode')?.value.trim();
 
-        // Validate required fields
         if (!firstName || !lastName || !email || !school || !gradeLevel || !password) {
             alert("Please fill in all required fields marked with *.");
             return;
         }
 
-        // Validate email format
         if (!email.includes('@') || !email.includes('.')) {
             alert("Please enter a valid email address.");
             return;
         }
 
-        // Validate password requirements
         const passwordErrors = [];
         if (password.length < 8) passwordErrors.push("At least 8 characters");
         if (!/[A-Z]/.test(password)) passwordErrors.push("Contains uppercase letter");
@@ -360,10 +461,8 @@ function setupAddTeacherForm() {
         createAccountBtn.disabled = true;
 
         try {
-            // 1. SAVE THE ADMIN'S SESSION SO WE DON'T LOSE IT
             const { data: { session: currentAdminSession } } = await window.supabaseClient.auth.getSession();
 
-            // 2. Create the user via Supabase Auth
             const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
                 email: email,
                 password: password,
@@ -382,12 +481,11 @@ function setupAddTeacherForm() {
 
             if (authError) {
                 alert("Failed to create teacher account: " + authError.message);
-                createAccountBtn.innerText = "✅ Create Account";
+                createAccountBtn.innerText = "Create Account";
                 createAccountBtn.disabled = false;
                 return;
             }
 
-            // 3. RESTORE THE ADMIN'S SESSION IMMEDIATELY
             if (currentAdminSession) {
                 await window.supabaseClient.auth.setSession({
                     access_token: currentAdminSession.access_token,
@@ -395,7 +493,6 @@ function setupAddTeacherForm() {
                 });
             }
 
-            // 4. Store teacher_code in profiles table if it doesn't have it
             if (authData?.user?.id) {
                 const { error: updateError } = await window.supabaseClient
                     .from('profiles')
@@ -414,28 +511,26 @@ function setupAddTeacherForm() {
                 }
             }
 
-            alert(`✅ Teacher account created successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nSchool: ${school}\nGrade Level: ${gradeLevel}\nTeacher Code: ${teacherCode}\nPassword: ${password}`);
+            alert(`Teacher account created successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nSchool: ${school}\nGrade Level: ${gradeLevel}\nTeacher Code: ${teacherCode}\nPassword: ${password}`);
 
-            // Clear form fields
             document.getElementById('teacherFirstName').value = '';
             document.getElementById('teacherLastName').value = '';
             document.getElementById('teacherEmail').value = '';
             document.getElementById('teacherSchool').value = '';
             document.getElementById('teacherGradeLevel').value = '';
             document.getElementById('teacherPassword').value = '';
-            // Keep teacher code generated for the next user
 
-            createAccountBtn.innerText = "✅ Create Account";
+            createAccountBtn.innerText = "Create Account";
             createAccountBtn.disabled = false;
             document.getElementById('teacherDrawer').classList.remove('active');
 
-            // 5. Reload full directory under Admin session
             await loadFacultyDirectory();
+            await loadAdminCharts();
 
         } catch (err) {
             console.error("Failed to create teacher account:", err);
             alert("An unexpected error occurred. Please try again.");
-            createAccountBtn.innerText = "✅ Create Account";
+            createAccountBtn.innerText = "Create Account";
             createAccountBtn.disabled = false;
         }
     });
@@ -445,89 +540,29 @@ function manageUser(userId) {
     alert("User Management for ID: " + userId + "\nThis action opens detail configurations.");
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Auth Guard Check
-    if (typeof checkAuthAndRole === 'function') {
-        checkAuthAndRole('admin');
-    }
-
-    // Modal DOM Elements
-    const editModal = document.getElementById('editProfileModal');
-    const closeBtn = document.getElementById('closeEditProfileModal');
-    const cancelBtn = document.getElementById('cancelEditProfileBtn');
-    const saveBtn = document.getElementById('saveProfileBtn');
-    const addTeacherBtn = document.getElementById('openAddTeacherBtn');
-
-    // Function to Populate and Open Edit Modal
-    const openEditModal = (btn) => {
-        document.getElementById('editTeacherCode').value = btn.getAttribute('data-code');
-        document.getElementById('editFirstName').value = btn.getAttribute('data-firstname');
-        document.getElementById('editLastName').value = btn.getAttribute('data-lastname');
-        document.getElementById('editEmail').value = btn.getAttribute('data-email');
-        document.getElementById('editDepartment').value = btn.getAttribute('data-dept');
-        document.getElementById('editGradeLevel').value = btn.getAttribute('data-grade');
-        document.getElementById('editAncillary').value = btn.getAttribute('data-ancillary') || '';
-
-        editModal.classList.add('active');
-    };
-
-    // Function to Close Modal
-    const closeModal = () => editModal.classList.remove('active');
-
-    // Attach Event Listeners to all Edit Profile Buttons
-    document.querySelectorAll('.btn-edit-profile').forEach(btn => {
-        btn.addEventListener('click', () => openEditModal(btn));
-    });
-
-    // Close Modal Events
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+// Three-Dots Menu Toggle & Removal Logic
+document.addEventListener('click', (e) => {
+    const dotsBtn = e.target.closest('.btn-action-dots');
     
-    window.addEventListener('click', (e) => {
-        if (e.target === editModal) closeModal();
+    document.querySelectorAll('.action-dropdown-wrapper.active').forEach(wrapper => {
+        if (!dotsBtn || wrapper !== dotsBtn.closest('.action-dropdown-wrapper')) {
+            wrapper.classList.remove('active');
+        }
     });
 
-    // Handle Save Profile Action
-    if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
-            alert('Teacher profile information updated successfully! This will reflect in their system profile.');
-            closeModal();
-        });
-    }
-
-    // Redirect to Add Teacher Modal/Drawer on Admin Dashboard
-    if (addTeacherBtn) {
-        addTeacherBtn.addEventListener('click', () => {
-            window.location.href = 'admindashboard.html#teacherDrawer';
-        });
+    if (dotsBtn) {
+        const currentWrapper = dotsBtn.closest('.action-dropdown-wrapper');
+        currentWrapper.classList.toggle('active');
     }
 });
 
-// Three-Dots Menu Toggle & Removal Logic
-    document.addEventListener('click', (e) => {
-        const dotsBtn = e.target.closest('.btn-action-dots');
-        
-        // Close any open dropdown if clicking outside
-        document.querySelectorAll('.action-dropdown-wrapper.active').forEach(wrapper => {
-            if (!dotsBtn || wrapper !== dotsBtn.closest('.action-dropdown-wrapper')) {
-                wrapper.classList.remove('active');
-            }
-        });
-
-        // Toggle clicked three-dots menu
-        if (dotsBtn) {
-            const currentWrapper = dotsBtn.closest('.action-dropdown-wrapper');
-            currentWrapper.classList.toggle('active');
+// Remove Teacher Handler
+function confirmRemoveTeacher(btn, teacherCode, teacherName, profileId) {
+    if (confirm(`Are you sure you want to remove ${teacherName} (${teacherCode}) from the directory?`)) {
+        const row = btn.closest('tr');
+        if (row) {
+            row.remove();
         }
-    });
-
-    // Remove Teacher Handler
-    function confirmRemoveTeacher(btn, teacherCode, teacherName) {
-        if (confirm(`Are you sure you want to remove ${teacherName} (${teacherCode}) from the directory?`)) {
-            const row = btn.closest('tr');
-            if (row) {
-                row.remove();
-            }
-            alert(`${teacherName} has been removed successfully.`);
-        }
+        alert(`${teacherName} has been removed successfully.`);
     }
+}
