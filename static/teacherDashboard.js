@@ -473,3 +473,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ============================================================
+// WELLNESS CHECK-IN MODAL HANDLER
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const wellnessModal   = document.getElementById('wellnessCheckinModal');
+    const closeBtn        = document.getElementById('wellnessCloseBtn');
+    const remindLaterBtn  = document.getElementById('remindLaterBtn');
+    const completeBtn     = document.getElementById('completeCheckinBtn');
+
+    // Auto-open modal if user hasn't checked in / dismissed during this session
+    const isDismissed = sessionStorage.getItem('kandili_wellness_dismissed');
+
+    if (!isDismissed && wellnessModal) {
+        setTimeout(() => {
+            wellnessModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }, 600);
+    }
+
+    function closeWellnessModal() {
+        if (wellnessModal) {
+            wellnessModal.classList.remove('active');
+            document.body.style.overflow = '';
+            sessionStorage.setItem('kandili_wellness_dismissed', 'true');
+        }
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeWellnessModal);
+    if (remindLaterBtn) remindLaterBtn.addEventListener('click', closeWellnessModal);
+
+    // Direct to Periodic Burnout Assessment
+    if (completeBtn) {
+        completeBtn.addEventListener('click', () => {
+            closeWellnessModal();
+
+            // Locate burnout section
+            const targetSection = document.getElementById('burnoutAssessmentSection');
+            
+            if (targetSection) {
+                // Smooth scroll to section
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Highlight effect on the assessment card
+                const burnoutCard = targetSection.nextElementSibling;
+                if (burnoutCard) {
+                    burnoutCard.classList.add('highlight-pulse');
+                    setTimeout(() => {
+                        burnoutCard.classList.remove('highlight-pulse');
+                    }, 2000);
+                }
+            }
+        });
+    }
+
+    // Close modal on overlay background click
+    if (wellnessModal) {
+        wellnessModal.addEventListener('click', (e) => {
+            if (e.target === wellnessModal) closeWellnessModal();
+        });
+    }
+});
