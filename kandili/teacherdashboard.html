@@ -272,7 +272,7 @@
 
 
                 <div class="action-row">
-                    <button class="btn-blue">Request Adjustment</button>
+                    <button class="btn-blue" id="requestAdjustmentBtn">Request Adjustment</button>
                 </div>
             </div>
            
@@ -503,6 +503,93 @@
         </section>
 
 
+        <!-- ============================================================ -->
+        <!-- MODAL: REQUEST ADJUSTMENT                                   -->
+        <!-- ============================================================ -->
+        <div class="modal-overlay" id="requestAdjustmentModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2><i class="fas fa-exchange-alt"></i> Request Adjustment</h2>
+                    <button class="modal-close-icon" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Action Type (Read-only) -->
+                    <div class="form-group">
+                        <label>Action Type <span class="required-star">*</span></label>
+                        <div class="modal-target-info">
+                            <span><i class="fas fa-tag"></i> <strong>Role Reassignment</strong></span>
+                            <span class="status-badge status-pending"><i class="fas fa-sync-alt"></i> Recommended</span>
+                        </div>
+                    </div>
+
+                    <!-- Target Duty (Dropdown) -->
+                    <div class="form-group">
+                        <label for="targetDutySelect">Target Duty <span class="required-star">*</span></label>
+                        <select id="targetDutySelect">
+                            <option value="SDRRM Coordinator" selected>SDRRM Coordinator</option>
+                            <option value="Guidance Counselor">Guidance Counselor</option>
+                            <option value="Class Adviser">Class Adviser</option>
+                            <option value="Property Custodian">Property Custodian</option>
+                            <option value="Clinic Teacher">Clinic Teacher</option>
+                            <option value="Library Coordinator">Library Coordinator</option>
+                            <option value="Computer Lab In-Charge">Computer Lab In-Charge</option>
+                            <option value="YES-O Coordinator">YES-O Coordinator</option>
+                            <option value="Girl Scout / Boy Scout Coordinator">Girl Scout / Boy Scout Coordinator</option>
+                            <option value="Other Duty">Other Duty</option>
+                        </select>
+                        <span class="field-hint">Pre-filled with the system's recommendation. Change if needed.</span>
+                    </div>
+
+                    <!-- Proposed Assignee (Searchable Dropdown) -->
+                    <div class="form-group">
+                        <label for="proposedAssigneeInput">Proposed Assignee <span class="required-star">*</span></label>
+                        <div class="searchable-select-wrapper">
+                            <input
+                                type="text"
+                                id="proposedAssigneeInput"
+                                class="searchable-select-input"
+                                placeholder="Search staff by name or ID..."
+                                value="Select your Recommended Substitute"
+                                autocomplete="off"
+                            />
+                            <i class="fas fa-chevron-down searchable-select-arrow"></i>
+                            <div class="searchable-dropdown" id="assigneeDropdown">
+                                <div class="dropdown-item" data-value="TCH-008"> Maria L. Reyes</div>
+                                <div class="dropdown-item" data-value="TCH-012">Antonio G. Cruz </div>
+                                <div class="dropdown-item" data-value="TCH-022">Sofia P. Bautista </div>
+                                <div class="dropdown-item" data-value="TCH-031">Miguel A. Dela Cruz </div>
+                                <div class="dropdown-item" data-value="TCH-005">Ana R. Villanueva</div>
+                                <div class="dropdown-item" data-value="TCH-018">Jose D. Ramos</div>
+                                <div class="dropdown-item" data-value="TCH-025">Carmen F. Gonzales</div>
+                                <div class="dropdown-item" data-value="TCH-010">Pedro S. Lopez</div>
+                            </div>
+                        </div>
+                        <span class="field-hint">Pre-filled with the intelligence algorithm's recommendation (TCH-015).</span>
+                    </div>
+
+                    <!-- Effective Date (Date Picker) -->
+                    <div class="form-group">
+                        <label for="effectiveDateInput">Effective Date <span class="required-star">*</span></label>
+                        <input type="date" id="effectiveDateInput" />
+                        <span class="field-hint">Select when this workload shift becomes official.</span>
+                    </div>
+
+                    <!-- Justification / Remarks (Text Area) -->
+                    <div class="form-group">
+                        <label for="justificationTextarea">Justification / Remarks <span class="required-star">*</span></label>
+                        <textarea id="justificationTextarea" rows="4" placeholder="Rebalancing ancillary load due to high burnout risk score. This adjustment is intended to reduce workload from 27 hrs/wk to a more sustainable level."></textarea>
+                        <span class="field-hint">Provide a required note explaining the reason for this adjustment.</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="submitRequestBtn"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                        <button class="btn-outline" id="cancelRequestBtn"><i class="fas fa-times"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
 
@@ -566,6 +653,218 @@
                     // Update accessibility attribute
                     const isExpanded = burgerBtn.getAttribute('aria-expanded') === 'true';
                     burgerBtn.setAttribute('aria-expanded', !isExpanded);
+                });
+            }
+        });
+
+        // ============================================================
+        // REQUEST ADJUSTMENT MODAL
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal        = document.getElementById('requestAdjustmentModal');
+            const openBtn      = document.getElementById('requestAdjustmentBtn');
+            const closeBtn     = document.getElementById('modalCloseBtn');
+            const cancelBtn    = document.getElementById('cancelRequestBtn');
+            const submitBtn    = document.getElementById('submitRequestBtn');
+
+            // Searchable dropdown elements
+            const searchInput  = document.getElementById('proposedAssigneeInput');
+            const dropdown     = document.getElementById('assigneeDropdown');
+            const wrapper      = document.querySelector('.searchable-select-wrapper');
+
+            // --- Open Modal ---
+            if (openBtn && modal) {
+                openBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    // Set default date to today
+                    const dateInput = document.getElementById('effectiveDateInput');
+                    if (dateInput) {
+                        const today = new Date().toISOString().split('T')[0];
+                        dateInput.value = today;
+                    }
+                });
+            }
+
+            // --- Close Modal helpers ---
+            function closeModal() {
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+            if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+            // Close on overlay click
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal();
+                });
+            }
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // --- Searchable Dropdown Logic ---
+            if (searchInput && dropdown && wrapper) {
+                // Open/close dropdown on input focus/click
+                searchInput.addEventListener('focus', () => {
+                    dropdown.classList.add('open');
+                    wrapper.classList.add('open');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdown.classList.remove('open');
+                        wrapper.classList.remove('open');
+                    }
+                });
+
+                // Filter dropdown items
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.toLowerCase().trim();
+                    const items = dropdown.querySelectorAll('.dropdown-item');
+                    let hasVisible = false;
+
+                    items.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(query)) {
+                            item.style.display = '';
+                            hasVisible = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Show/hide no-results message
+                    let noResults = dropdown.querySelector('.no-results');
+                    if (!hasVisible) {
+                        if (!noResults) {
+                            noResults = document.createElement('div');
+                            noResults.className = 'dropdown-item no-results';
+                            noResults.textContent = 'No matching staff found';
+                            dropdown.appendChild(noResults);
+                        }
+                        noResults.style.display = '';
+                    } else {
+                        if (noResults) noResults.style.display = 'none';
+                    }
+
+                    // Keep dropdown open while typing
+                    dropdown.classList.add('open');
+                    wrapper.classList.add('open');
+                });
+
+                // Select item on click
+                dropdown.addEventListener('click', (e) => {
+                    const item = e.target.closest('.dropdown-item');
+                    if (!item || item.classList.contains('no-results')) return;
+
+                    // Update input value
+                    searchInput.value = item.textContent.trim();
+
+                    // Update selected state
+                    dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+
+                    // Close dropdown
+                    dropdown.classList.remove('open');
+                    wrapper.classList.remove('open');
+                });
+
+                // Keyboard navigation (Arrow keys + Enter)
+                searchInput.addEventListener('keydown', (e) => {
+                    const items = [...dropdown.querySelectorAll('.dropdown-item')];
+                    const visibleItems = items.filter(i => i.style.display !== 'none' && !i.classList.contains('no-results'));
+                    if (visibleItems.length === 0) return;
+
+                    const currentIdx = visibleItems.findIndex(i => i.classList.contains('highlighted'));
+
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const nextIdx = Math.min(currentIdx + 1, visibleItems.length - 1);
+                        visibleItems.forEach(i => i.classList.remove('highlighted'));
+                        visibleItems[nextIdx].classList.add('highlighted');
+                        visibleItems[nextIdx].scrollIntoView({ block: 'nearest' });
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const prevIdx = Math.max(currentIdx - 1, 0);
+                        visibleItems.forEach(i => i.classList.remove('highlighted'));
+                        visibleItems[prevIdx].classList.add('highlighted');
+                        visibleItems[prevIdx].scrollIntoView({ block: 'nearest' });
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const highlighted = visibleItems.find(i => i.classList.contains('highlighted'));
+                        if (highlighted) {
+                            highlighted.click();
+                        }
+                    }
+                });
+            }
+
+            // --- Form Submit Handler ---
+            if (submitBtn && modal) {
+                submitBtn.addEventListener('click', () => {
+                    const duty = document.getElementById('targetDutySelect');
+                    const assigneeInput = document.getElementById('proposedAssigneeInput');
+                    const date = document.getElementById('effectiveDateInput');
+                    const justification = document.getElementById('justificationTextarea');
+
+                    // Simple validation
+                    if (!date.value) {
+                        alert('Please select an effective date.');
+                        return;
+                    }
+                    if (!justification.value.trim()) {
+                        alert('Please provide a justification/remarks.');
+                        return;
+                    }
+
+                    // Simulate submission
+                    const selectedItem = dropdown ? dropdown.querySelector('.dropdown-item.selected') : null;
+                    const assigneeValue = selectedItem ? selectedItem.getAttribute('data-value') : assigneeInput.value;
+
+                    // Show success feedback
+                    const summary = [
+                        `--- Adjustment Request Submitted ---`,
+                        `Action: Role Reassignment`,
+                        `Target Duty: ${duty.value}`,
+                        `Proposed Assignee: ${assigneeValue}`,
+                        `Effective Date: ${date.value}`,
+                        `Justification: ${justification.value.trim()}`,
+                        `Status: PENDING (awaiting principal approval)`
+                    ].join('\n');
+
+                    alert(summary);
+
+                    // Show in console for debugging
+                    console.log('[Adjustment Request Submitted]', {
+                        duty: duty.value,
+                        assignee: assigneeValue,
+                        date: date.value,
+                        justification: justification.value.trim()
+                    });
+
+                    // Reset form and close
+                    if (date) date.value = new Date().toISOString().split('T')[0];
+                    if (justification) justification.value = '';
+                    if (searchInput) searchInput.value = 'TCH-015 – Juan M. Santos';
+                    if (dropdown) {
+                        dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                        const defaultItem = dropdown.querySelector('[data-value="TCH-015"]');
+                        if (defaultItem) defaultItem.classList.add('selected');
+                    }
+
+                    closeModal();
                 });
             }
         });
