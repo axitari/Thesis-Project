@@ -1,0 +1,32 @@
+/* static/teacher_analytics.css */
+.analytics-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.analytics-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.subscale-bar-bg {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    margin: 0.75rem 0;
+    overflow: hidden;
+}
+
+.subscale-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.chart-box {
+    height: 320px;
+    position: relative;
+}
