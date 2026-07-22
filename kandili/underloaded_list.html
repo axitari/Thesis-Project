@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Underloaded Teachers</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/supabaseClient.js"></script>
+    <script src="../static/authGuard.js" data-allowed-roles="admin,principal"></script>
+    <script src="../static/logout.js"></script>
+</head>
+<body class="dashboard-body underloaded-page">
+
+    <!-- Top Navigation (Back Arrow placed to the LEFT of Kandili Logo) -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <a href="javascript:history.back()" class="nav-back-circle-btn" title="Go Back" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Faculty Workload Management</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 22, 2026 | 11:15 PM</span>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="admindashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="facultydirectory.html"><i class="fas fa-users"></i> User Management</a>
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+
+        <!-- Fixed Header Banner (Clean Flex Layout with Correct FontAwesome Icon) -->
+        <section class="beautified-header beautified-header--blue">
+            <div class="header-main">
+                <div class="header-icon-box icon-box--sky">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="header-text-wrapper">
+                    <h1>📉 Underloaded Teachers List</h1>
+                    <p>Faculty members below target capacity (&lt; 24.0 hrs/week). <strong>Available for ancillary duty allocation or subject reassignments.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table Toolbar -->
+        <div class="table-toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="teacherSearchInput" placeholder="Search teacher by name or code...">
+            </div>
+            <div class="filter-group">
+                <select class="filter-dropdown" id="departmentFilter">
+                    <option value="">All Departments</option>
+                    <option value="English">English</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="Filipino">Filipino</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table Card Container -->
+        <div class="content-card no-padding">
+            <div class="table-container">
+                <table class="dashboard-table admin-table">
+                    <thead>
+                        <tr>
+                            <th>Teacher Code</th>
+                            <th>Name & Department</th>
+                            <th>Current Load</th>
+                            <th>Capacity Gap</th>
+                            <th>Recommended Allocation</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample Row 1 -->
+                        <tr>
+                            <td class="cell-id">TCH2026-004</td>
+                            <td class="cell-name">
+                                <strong>Vance, Julian</strong>
+                                <span class="sub-text">Filipino Department</span>
+                            </td>
+                            <td class="text-blue-dark">14.0 hrs</td>
+                            <td class="text-sky-dark">-10.0 hrs</td>
+                            <td>
+                                <span class="reco-pill reco-pill--blue">
+                                    💡 Assign 2x Remedial Filipino Classes (+6 hrs)
+                                </span>
+                            </td>
+                            <td><span class="table-badge badge-sky">Underload</span></td>
+                            <td>
+                                <button class="btn-action btn-sky" type="button" onclick="openAssignModal('Julian Vance', '14.0 hrs', '-10.0 hrs', 'Remedial Reading Coordinator / Grade 7 Filipino Extra Load')">
+                                    <i class="fas fa-plus-circle"></i> Assign Workload
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Sample Row 2 -->
+                        <tr>
+                            <td class="cell-id">TCH2026-009</td>
+                            <td class="cell-name">
+                                <strong>Garrison, Elena</strong>
+                                <span class="sub-text">Science Department</span>
+                            </td>
+                            <td class="text-blue-dark">18.5 hrs</td>
+                            <td class="text-sky-dark">-5.5 hrs</td>
+                            <td>
+                                <span class="reco-pill reco-pill--blue">
+                                    💡 Reallocate Science Lab Ancillary Duty (+5 hrs)
+                                </span>
+                            </td>
+                            <td><span class="table-badge badge-sky">Underload</span></td>
+                            <td>
+                                <button class="btn-action btn-sky" type="button" onclick="openAssignModal('Elena Garrison', '18.5 hrs', '-5.5 hrs', 'Science Laboratory Manager / School Clinic Advisory')">
+                                    <i class="fas fa-plus-circle"></i> Assign Workload
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Sample Row 3 -->
+                        <tr>
+                            <td class="cell-id">TCH2026-012</td>
+                            <td class="cell-name">
+                                <strong>Rios, Mateo</strong>
+                                <span class="sub-text">Mathematics Department</span>
+                            </td>
+                            <td class="text-blue-dark">16.0 hrs</td>
+                            <td class="text-sky-dark">-8.0 hrs</td>
+                            <td>
+                                <span class="reco-pill reco-pill--blue">
+                                    💡 Assign Math Intervention & Grade 8 Adviser (+8 hrs)
+                                </span>
+                            </td>
+                            <td><span class="table-badge badge-sky">Underload</span></td>
+                            <td>
+                                <button class="btn-action btn-sky" type="button" onclick="openAssignModal('Mateo Rios', '16.0 hrs', '-8.0 hrs', 'Math Remediation Lead / Homeroom Adviser')">
+                                    <i class="fas fa-plus-circle"></i> Assign Workload
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Row -->
+            <div class="pagination-row">
+                <div class="pagination-info">Showing 1 to 3 of 3 underloaded faculty members</div>
+                <div class="pagination-controls">
+                    <button class="page-btn disabled" disabled><i class="fas fa-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn disabled" disabled><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ASSIGN WORKLOAD MODAL -->
+    <div class="modal-overlay" id="assignModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fas fa-tasks"></i> Assign Additional Workload</h2>
+                <button class="modal-close-icon" id="closeAssignModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-target-info">
+                    <div>
+                        <strong id="modalTeacherName" style="font-size: 1.1rem; color: #0f172a; display: block;">Teacher Name</strong>
+                        <span style="font-size: 0.85rem; color: #64748b;">Current Load: <strong id="modalCurrentLoad" class="text-blue-dark">0 hrs</strong> | Deficit: <strong id="modalDeficit" class="text-sky-dark">0 hrs</strong></span>
+                    </div>
+                    <span class="table-badge badge-sky">Underload</span>
+                </div>
+
+                <div class="reco-box box-blue" style="margin-bottom: 1.25rem;">
+                    <div class="reco-box-header">
+                        <i class="fas fa-lightbulb"></i> System Recommended Reallocation
+                    </div>
+                    <div class="reco-box-content">
+                        <p id="modalRecommendationText">Loading recommendation...</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Ancillary Task / Additional Load <span class="required-star">*</span></label>
+                    <select id="taskAssignmentSelect">
+                        <option value="" disabled selected>Choose assignment...</option>
+                        <option value="remedial">Remedial / Intervention Coordinator (+6.0 hrs)</option>
+                        <option value="advisorship">Homeroom Section Advisorship (+4.0 hrs)</option>
+                        <option value="subject_section">Additional Subject Teaching Section (+5.0 hrs)</option>
+                        <option value="clinic">School Clinic & Health Coordinator (+3.0 hrs)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Administrative Notes / Justification</label>
+                    <textarea placeholder="e.g. Assigned additional section to balance department teaching hours for Q3."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" type="button" id="confirmAssignBtn">✅ Confirm Assignment</button>
+                    <button class="btn-outline" type="button" id="cancelAssignBtn">✗ Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="dashboard-footer">
+        <div class="footer-left">&copy; 2026 Kandili Workspace. All rights reserved.</div>
+        <div class="footer-center"><strong>Data Privacy:</strong> <span class="text-green"><i class="fas fa-check-square"></i> R.A. 10173 Compliant</span></div>
+        <div class="footer-right">Version 2.1.0</div>
+    </footer>
+
+<script>
+    const assignModal = document.getElementById('assignModal');
+    const closeBtn = document.getElementById('closeAssignModal');
+    const cancelBtn = document.getElementById('cancelAssignBtn');
+
+    function openAssignModal(name, load, deficit, reco) {
+        document.getElementById('modalTeacherName').textContent = name;
+        document.getElementById('modalCurrentLoad').textContent = load;
+        document.getElementById('modalDeficit').textContent = deficit;
+        document.getElementById('modalRecommendationText').textContent = "Suggested Action: " + reco;
+        assignModal.classList.add('active');
+    }
+
+    const closeModal = () => assignModal.classList.remove('active');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === assignModal) closeModal();
+    });
+</script>
+
+</body>
+</html>

@@ -5391,6 +5391,436 @@ hr.modal-divider {
     }
 }
 
+/* ==========================================================================
+   FACULTY WORKLOAD OVERVIEW CARDS (RENAMED & UPDATED TO 4 COLUMNS)
+   ========================================================================== */
+
+/* Main Grid Container */
+.workload-cards--4col {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.25rem !important;
+    margin: 1.5rem 0 2rem !important;
+}
+
+/* Base Card Styling */
+.workload-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-top: 4px solid transparent;
+    border-radius: 18px;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 210px;
+    box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.workload-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+}
+
+.workload-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+}
+
+.workload-card-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: rgba(15, 23, 42, 0.05);
+}
+
+.workload-card-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.workload-card-body {
+    margin: 1.4rem 0 1.2rem;
+}
+
+.workload-card-number {
+    display: block;
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.workload-card-label {
+    display: block;
+    margin-top: 0.55rem;
+    font-size: 0.95rem;
+    color: #475569;
+    font-weight: 600;
+}
+
+.workload-card-action {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.workload-card-btn {
+    align-self: flex-start;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+    padding: 0.75rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.workload-card-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08);
+}
+
+/* --- CATEGORY COLOR ACCENTS --- */
+
+/* 1. Underload (Blue) */
+.workload-card--underload { border-top-color: #0284c7 !important; }
+.workload-card--underload .workload-card-badge { background: rgba(2, 132, 199, 0.12); color: #0369a1; }
+.workload-card--underload .workload-card-action { color: #0369a1; }
+.workload-card--underload .workload-card-btn { border-color: #0284c7; color: #0284c7; }
+.workload-card--underload .workload-card-btn:hover { background: #f0f9ff; }
+
+/* 2. Optimal (Green) */
+.workload-card--optimal { border-top-color: #059669 !important; }
+.workload-card--optimal .workload-card-badge { background: rgba(5, 150, 105, 0.12); color: #047857; }
+.workload-card--optimal .workload-card-action { color: #047857; }
+.workload-card--optimal .workload-card-btn { border-color: #059669; color: #059669; }
+.workload-card--optimal .workload-card-btn:hover { background: #f0fdf4; }
+
+/* 3. High (Amber/Orange) */
+.workload-card--high { border-top-color: #f59e0b !important; }
+.workload-card--high .workload-card-badge { background: rgba(245, 158, 11, 0.12); color: #c2410b; }
+.workload-card--high .workload-card-action { color: #c2410b; }
+.workload-card--high .workload-card-btn { border-color: #f59e0b; color: #f59e0b; }
+.workload-card--high .workload-card-btn:hover { background: #fffbeb; }
+
+/* 4. Overload (Red) */
+.workload-card--overload { border-top-color: #C8102E !important; }
+.workload-card--overload .workload-card-badge { background: rgba(200, 16, 46, 0.12); color: #C8102E; }
+.workload-card--overload .workload-card-action { color: #C8102E; }
+.workload-card--overload .workload-card-btn { border-color: #C8102E; color: #C8102E; }
+.workload-card--overload .workload-card-btn:hover { background: #fff1f2; }
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+    .workload-cards--4col {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .workload-cards--4col {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ==========================================================================
+   UNDERLOADED LIST VIEW SPECIFIC STYLES
+   ========================================================================== */
+
+/* Sky Blue Header Border & Accent */
+.beautified-header--blue {
+    border-left: 5px solid #0284c7 !important;
+}
+
+.icon-box--sky {
+    background: #e0f2fe !important;
+    color: #0284c7 !important;
+}
+
+.text-sky-dark {
+    color: #0369a1 !important;
+    font-weight: 700;
+}
+
+/* Sky Blue Pill Badge */
+.table-badge.badge-sky {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+/* Action Button */
+.btn-sky {
+    background-color: #ffffff;
+    border: 1px solid #7dd3fc;
+    color: #0284c7;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-sky:hover {
+    background-color: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+}
+
+.underloaded-page .page-btn.active {
+    background: #0284c7;
+    border-color: #0284c7;
+    color: #ffffff;
+}
+
+/* Recommendation Pill inside Table */
+.reco-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.reco-pill--blue {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+/* ==========================================================================
+   NAV BACK BUTTON & HEADER BANNER REFINEMENT
+   ========================================================================== */
+
+/* Circular Back Button on Far Left of Top Nav */
+.nav-back-circle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-right: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.nav-back-circle-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    transform: translateX(-2px);
+}
+
+/* Header Layout Alignment */
+.beautified-header .header-main {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+}
+
+.beautified-header .header-icon-box {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.5rem !important;
+    flex-shrink: 0;
+}
+
+.beautified-header .header-text-wrapper h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.3rem 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   HEADER BANNER SPACING & ALIGNMENT FIX
+   ========================================================================== */
+
+/* Tighten flex container layout */
+.beautified-header .header-main {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* Forces items to stay together on the left */
+    gap: 1.25rem !important; /* Controls exact distance between icon box & text */
+    width: 100% !important;
+}
+
+/* Ensure title-wrapper doesn't stretch or push elements apart */
+.beautified-header .title-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1.25rem !important;
+    width: auto !important;
+}
+
+/* Fixed size for the icon box so it stays crisp */
+.beautified-header .header-icon-box {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.5rem !important;
+    flex-shrink: 0 !important; /* Prevents stretching */
+    margin: 0 !important;
+}
+
+/* Clean text margins */
+.beautified-header .header-text-wrapper h1 {
+    margin: 0 0 0.25rem 0 !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+}
+
+.beautified-header .header-text-wrapper p {
+    margin: 0 !important;
+}
+
+/* ==========================================================================
+   TEACHER DIRECTORY NAVIGATION CARD
+   ========================================================================== */
+
+.directory-navigation-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.directory-navigation-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 25px -5px rgba(0, 56, 168, 0.08);
+}
+
+.directory-nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.directory-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 280px;
+}
+
+.directory-icon-box {
+    width: 52px;
+    height: 52px;
+    background: #eff6ff;
+    color: #0038A8;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.directory-text-info h3 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.directory-text-info p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.directory-nav-actions button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 8px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .directory-nav-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .directory-nav-actions {
+        width: 100%;
+    }
+    
+    .directory-nav-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Green Recommendation Pill for Optimal Page */
+.reco-pill--green {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.btn-green-outline {
+    background: #ffffff;
+    border: 1px solid #34d399;
+    color: #059669;
+    font-weight: 600;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-green-outline:hover {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+}
+
 /* =========================================
    SETTINGS PAGE STYLES
    ========================================= */

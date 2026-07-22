@@ -17,8 +17,8 @@
 <!-- TOP NAVIGATION BAR -->
     <header class="theme-nav">
         <div class="theme-nav__brand">
-            <!-- Back Arrow to Dashboard -->
-            <a href="admindashboard.html" class="nav-back-arrow" title="Back to Dashboard">
+            <!-- Circular Back Arrow to Dashboard -->
+            <a href="javascript:history.back()" class="nav-back-circle-btn" title="Go Back">
                 <i class="fas fa-arrow-left"></i>
             </a>
             
@@ -39,21 +39,18 @@
     <main class="dashboard optimal-page">
 
         <!-- PAGE HEADER -->
-        <div class="page-header beautified-header">
+        <div class="page-header beautified-header beautified-header--green">
             <div class="header-main">
-                <div class="title-wrapper">
-                    <div class="header-icon-box" style="color: #059669; background: #d1fae5;">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="header-text-wrapper">
-                        <h1>Optimal Faculty List</h1>
-                        <p>Elementary faculty with well-balanced workloads. These teachers have <strong>available capacity</strong> for additional assignments if needed.</p>
-                    </div>
+                <div class="header-icon-box" style="color: #059669; background: #d1fae5;">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-outline"><i class="fas fa-download"></i> Export Roster</button>
-                    <button class="btn-green" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fas fa-plus-circle"></i> Assign New Load</button>
+                <div class="header-text-wrapper">
+                    <h1>✅ Optimal Faculty List</h1>
+                    <p>Elementary faculty with well-balanced workloads. These teachers have <strong>available capacity</strong> for additional assignments if needed.</p>
                 </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline"><i class="fas fa-download"></i> Export Roster</button>
             </div>
         </div>
 
@@ -85,7 +82,8 @@
                             <th>Teacher Code</th>
                             <th>Faculty Name</th>
                             <th>Department / Role</th>
-                            <th>Total Load (Hrs)</th>
+                            <th>Total Load</th>
+                            <th>Recommended Allocation</th>
                             <th>Status Flag</th>
                             <th>Action</th>
                         </tr>
@@ -98,11 +96,22 @@
                                 <strong>Mcfly, Marty</strong>
                                 <span class="sub-text">Subject Teacher</span>
                             </td>
-                            <td>Not Assigned</td>
-                            <td><span class="load-value" style="color: #059669; font-weight: 700;">0.0 hrs</span></td>
+                            <td>English Department</td>
+                            <td><span class="load-value" style="color: #059669; font-weight: 700;">20.0 hrs</span></td>
+                            <td>
+                                <span class="reco-pill reco-pill--green">
+                                    💡 Ideal for 1 extra section or Reading Club Lead (+4.0 hrs)
+                                </span>
+                            </td>
                             <td><span class="badge-optimal">OPTIMAL</span></td>
                             <td>
-                                <button class="action-btn open-reco-modal" data-id="TCH2026-003" data-name="Mcfly, Marty" data-load="0.0"><i class="fas fa-eye"></i> View Capacity</button>
+                                <button class="action-btn open-reco-modal btn-green-outline" 
+                                        data-id="TCH2026-003" 
+                                        data-name="Mcfly, Marty" 
+                                        data-load="20.0 hrs"
+                                        data-reco="Assign Reading Club Lead or 1 additional Grade 5 English teaching block (+4.0 hrs)">
+                                    <i class="fas fa-plus-circle"></i> Assign Workload
+                                </button>
                             </td>
                         </tr>
 
@@ -113,11 +122,22 @@
                                 <strong>Brown, Doctor</strong>
                                 <span class="sub-text">Subject Teacher</span>
                             </td>
-                            <td>Not Assigned</td>
-                            <td><span class="load-value" style="color: #059669; font-weight: 700;">0.0 hrs</span></td>
+                            <td>Science Department</td>
+                            <td><span class="load-value" style="color: #059669; font-weight: 700;">22.0 hrs</span></td>
+                            <td>
+                                <span class="reco-pill reco-pill--green">
+                                    💡 Can absorb Science Fair Co-Coordinator (+3.0 hrs)
+                                </span>
+                            </td>
                             <td><span class="badge-optimal">OPTIMAL</span></td>
                             <td>
-                                <button class="action-btn open-reco-modal" data-id="TCH2026-004" data-name="Brown, Doctor" data-load="0.0"><i class="fas fa-eye"></i> View Capacity</button>
+                                <button class="action-btn open-reco-modal btn-green-outline" 
+                                        data-id="TCH2026-004" 
+                                        data-name="Brown, Doctor" 
+                                        data-load="22.0 hrs"
+                                        data-reco="Assign Science Fair Co-Coordinator or Lab Prep Ancillary Load (+3.0 hrs)">
+                                    <i class="fas fa-plus-circle"></i> Assign Workload
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -126,7 +146,7 @@
             
             <!-- PAGINATION -->
             <div class="pagination-row">
-                <span class="pagination-info">Showing 1 to 10 of 10 optimal faculty</span>
+                <span class="pagination-info">Showing 1 to 2 of 2 optimal faculty</span>
                 <div class="pagination-controls">
                     <button class="page-btn disabled"><i class="fas fa-chevron-left"></i></button>
                     <button class="page-btn active">1</button>
@@ -136,12 +156,12 @@
         </section>
 
         <!-- ============================================================ -->
-        <!-- CAPACITY REVIEW MODAL POP-UP                                 -->
+        <!-- WORKLOAD ASSIGNMENT & CAPACITY REVIEW MODAL                 -->
         <!-- ============================================================ -->
         <div id="capacityModal" class="modal-overlay">
             <div class="modal-container">
                 <div class="modal-header">
-                    <h2><i class="fas fa-chart-pie"></i> Available Capacity Review</h2>
+                    <h2><i class="fas fa-tasks"></i> Assign Additional Workload</h2>
                     <button class="modal-close-icon">&times;</button>
                 </div>
                 
@@ -154,38 +174,41 @@
                         </div>
                         <div style="text-align: right;">
                             <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase;">Current Load</span>
-                            <div style="font-weight: 800; color: #059669; font-size: 1.1rem;"><span id="modalCurrentLoad">0.0</span>/30.0 hrs</div>
+                            <div style="font-weight: 800; color: #059669; font-size: 1.1rem;"><span id="modalCurrentLoad">20.0 hrs</span> / 24.0 max</div>
                         </div>
                     </div>
 
-                    <!-- Split Actions -->
-                    <div class="reco-split-grid">
-                        <!-- 1. Available Hours -->
-                        <div class="reco-box" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
-                            <div class="reco-box-header" style="color: #166534;">
-                                <i class="fas fa-unlock-alt"></i> Ready for Delegation
-                            </div>
-                            <div class="reco-box-content">
-                                <p><strong>Status:</strong> Teacher is well below the maximum workload threshold.</p>
-                                <p><strong>System Action:</strong> This faculty member is an ideal candidate to absorb ancillary duties or relief classes from overloaded peers.</p>
-                            </div>
+                    <!-- System Recommendation Highlight -->
+                    <div class="reco-box box-green" style="margin-bottom: 1.25rem; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1rem; border-radius: 10px;">
+                        <div class="reco-box-header" style="color: #166534; font-weight: 700; margin-bottom: 0.4rem;">
+                            <i class="fas fa-lightbulb"></i> System Recommended Allocation
                         </div>
+                        <div class="reco-box-content" style="font-size: 0.9rem; color: #15803d;">
+                            <p id="modalRecommendationText">Loading recommendation...</p>
+                        </div>
+                    </div>
 
-                        <!-- 2. Reallocation Shortcut -->
-                        <div class="reco-box" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                            <div class="reco-box-header" style="color: #334155;">
-                                <i class="fas fa-exchange-alt"></i> Reallocation Routing
-                            </div>
-                            <div class="reco-box-content">
-                                <p>Would you like to open the workload assignment interface for this teacher now?</p>
-                            </div>
-                        </div>
+                    <!-- Workload Selection Form -->
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label style="display:block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;">Select Assignment / Task <span style="color: #ef4444;">*</span></label>
+                        <select id="taskAssignmentSelect" style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                            <option value="" disabled selected>Choose ancillary task or subject load...</option>
+                            <option value="co-lead">Club Lead / Co-Coordinator (+3.0 hrs)</option>
+                            <option value="section">Additional Teaching Section (+4.0 hrs)</option>
+                            <option value="remediation">Learning Remediation Assistant (+2.5 hrs)</option>
+                            <option value="event">School Event Committee Lead (+2.0 hrs)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display:block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;">Administrative Notes</label>
+                        <textarea placeholder="e.g. Assigned auxiliary lead role to utilize remaining optimal hours for Q3." style="width: 100%; padding: 0.65rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; min-height: 70px;"></textarea>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button class="btn-outline modal-cancel-btn">Close</button>
-                    <button class="btn-green" style="background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fas fa-tasks"></i> Assign Workload</button>
+                <div class="modal-footer" style="padding: 1rem 1.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                    <button class="btn-outline modal-cancel-btn">Cancel</button>
+                    <button class="btn-green" style="background: #10b981; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 600;"><i class="fas fa-check"></i> Confirm Workload</button>
                 </div>
             </div>
         </div>
@@ -193,7 +216,6 @@
     </main>
 
     <script>
-        // JavaScript to handle Modal opening and closing for Optimal List
         document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('capacityModal');
             const openBtns = document.querySelectorAll('.open-reco-modal');
@@ -201,24 +223,28 @@
             const cancelBtn = document.querySelector('.modal-cancel-btn');
             const mName = document.getElementById('modalTeacherName');
             const mLoad = document.getElementById('modalCurrentLoad');
+            const mReco = document.getElementById('modalRecommendationText');
 
-            // Open modal and populate data
+            // Open modal and populate dynamic recommendation data
             openBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', () => {
                     const name = btn.getAttribute('data-name');
                     const load = btn.getAttribute('data-load');
+                    const reco = btn.getAttribute('data-reco');
+
                     mName.textContent = name;
                     mLoad.textContent = load;
+                    mReco.textContent = "Suggested Action: " + reco;
+
                     modal.classList.add('active');
                 });
             });
 
             // Close modal functions
             const closeModal = () => modal.classList.remove('active');
-            closeBtnIcon.addEventListener('click', closeModal);
-            cancelBtn.addEventListener('click', closeModal);
+            if(closeBtnIcon) closeBtnIcon.addEventListener('click', closeModal);
+            if(cancelBtn) cancelBtn.addEventListener('click', closeModal);
             
-            // Close if clicking outside the container
             modal.addEventListener('click', (e) => {
                 if(e.target === modal) closeModal();
             });

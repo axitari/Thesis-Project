@@ -53,54 +53,73 @@
         <div class="workload-section">
     <h3 class="workload-title">Faculty Workload Overview</h3>
 
-    <div class="summary-cards-grid">
+<section class="workload-cards workload-cards--4col">
+    
+    <!-- 1. UNDERLOAD CARD -->
+    <div class="workload-card workload-card--underload">
+        <div class="workload-card-header">
+            <div class="workload-card-icon">📉</div>
+            <span class="workload-card-badge">UNDERLOAD</span>
+        </div>
+        <div class="workload-card-body">
+            <span class="workload-card-number">3</span>
+            <span class="workload-card-label">Underloaded Teachers</span>
+            <span class="workload-card-action">Available Capacity</span>
+        </div>
+        <button class="workload-card-btn" onclick="window.location.href='underloaded_list.html'">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
 
-        <section class="risk-cards">
-            <div class="risk-card risk-card--critical">
-                <div class="risk-card-header">
-                    <div class="risk-card-icon">🚨</div>
-                    <span class="risk-card-badge">OVERLOADED</span>
-                </div>
-                <div class="risk-card-body">
-                    <span class="risk-card-number">2</span>
-                    <span class="risk-card-label">Overloaded Teachers</span>
-                    <span class="risk-card-action">Requires Reallocation</span>
-                </div>
-                <button class="risk-card-btn" onclick="window.location.href='overloaded_list.html'">
-                    View List <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
+    <!-- 2. OPTIMAL CARD -->
+    <div class="workload-card workload-card--optimal">
+        <div class="workload-card-header">
+            <div class="workload-card-icon">✅</div>
+            <span class="workload-card-badge">OPTIMAL</span>
+        </div>
+        <div class="workload-card-body">
+            <span class="workload-card-number">32</span>
+            <span class="workload-card-label">Optimal Load Teachers</span>
+            <span class="workload-card-action">Well Balanced</span>
+        </div>
+        <button class="workload-card-btn" onclick="window.location.href='optimal_list.html'">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
 
-            <div class="risk-card risk-card--moderate">
-                <div class="risk-card-header">
-                    <div class="risk-card-icon">⚠️</div>
-                    <span class="risk-card-badge">MAXIMIZED</span>
-                </div>
-                <div class="risk-card-body">
-                    <span class="risk-card-number">8</span>
-                    <span class="risk-card-label">At Capacity Teachers</span>
-                    <span class="risk-card-action">Monitor Assignment</span>
-                </div>
-                <button class="risk-card-btn" onclick="window.location.href='maximized_list.html'">
-                    View List <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
+    <!-- 3. HIGH CARD -->
+    <div class="workload-card workload-card--high">
+        <div class="workload-card-header">
+            <div class="workload-card-icon">⚠️</div>
+            <span class="workload-card-badge">HIGH</span>
+        </div>
+        <div class="workload-card-body">
+            <span class="workload-card-number">8</span>
+            <span class="workload-card-label">High Load Teachers</span>
+            <span class="workload-card-action">Monitor Assignment</span>
+        </div>
+        <button class="workload-card-btn" onclick="window.location.href='high-load_list.html'">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
 
-            <div class="risk-card risk-card--low">
-                <div class="risk-card-header">
-                    <div class="risk-card-icon">✅</div>
-                    <span class="risk-card-badge">OPTIMAL</span>
-                </div>
-                <div class="risk-card-body">
-                    <span class="risk-card-number">32</span>
-                    <span class="risk-card-label">Optimal Load Teachers</span>
-                    <span class="risk-card-action">Well Balanced</span>
-                </div>
-                <button class="risk-card-btn" onclick="window.location.href='optimal_list.html'">
-                    View List <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </section>
+    <!-- 4. OVERLOAD CARD -->
+    <div class="workload-card workload-card--overload">
+        <div class="workload-card-header">
+            <div class="workload-card-icon">🚨</div>
+            <span class="workload-card-badge">OVERLOAD</span>
+        </div>
+        <div class="workload-card-body">
+            <span class="workload-card-number">2</span>
+            <span class="workload-card-label">Overloaded Teachers</span>
+            <span class="workload-card-action">Requires Reallocation</span>
+        </div>
+        <button class="workload-card-btn" onclick="window.location.href='overloaded_list.html'">
+            View List <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+</section>
 
 <!-- FACULTY DIRECTORY & USER MANAGEMENT SECTION -->
 <div class="directory-section">
@@ -253,6 +272,29 @@
         </div>
     </div>
 </div>
+
+<!-- ============================================================ -->
+<!-- TEACHER DIRECTORY QUICK ACCESS & EDIT PROFILE CARD           -->
+<!-- ============================================================ -->
+<section class="content-card directory-navigation-card">
+    <div class="directory-nav-content">
+        <div class="directory-nav-left">
+            <div class="directory-icon-box">
+                <i class="fas fa-id-card-clip"></i>
+            </div>
+            <div class="directory-text-info">
+                <h3>Teacher Directory & Profile Management</h3>
+                <p>View, update, and edit detailed profile records, subject assignments, and account status for all registered faculty members.</p>
+            </div>
+        </div>
+        <div class="directory-nav-actions">
+            <button class="btn-primary" type="button" onclick="window.location.href='teacher_directory.html'">
+                <i class="fas fa-users-gear"></i> Open Teacher Directory
+            </button>
+        </div>
+    </div>
+</section>
+
 
 <!-- NEW: Interactive Analytics Row -->
         <div class="admin-details-row">
