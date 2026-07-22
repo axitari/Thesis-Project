@@ -6199,3 +6199,38 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* Full-Width Alert Banner Adjustment */
+.alert-banner-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-bottom: 1.5rem;
+}
+
+.alert-banner--info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+}
+
+.upload-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Responsive adjustment for small laptop/tablet screens */
+@media (max-width: 768px) {
+    .alert-banner--info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .upload-controls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
