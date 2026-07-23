@@ -124,13 +124,13 @@
 <!-- FACULTY DIRECTORY & USER MANAGEMENT SECTION -->
 <!-- FACULTY DIRECTORY & USER MANAGEMENT SECTION -->
 <div class="directory-section">
-    <!-- Header with Title & Add Teacher Button -->
+    <!-- Header with Title & Add User Button -->
     <div class="directory-header">
         <div class="directory-title-block">
             <h3><i class="fas fa-address-book"></i> Faculty Directory & User Management</h3>
-            <p>Manage existing teachers, assignments, and workload distribution.</p>
+            <p>Manage existing teachers, principals, assignments, and workload distribution.</p>
         </div>
-        <button class="btn-add-teacher"><i class="fas fa-plus"></i> Add New Teacher</button>
+        <button class="btn-add-teacher"><i class="fas fa-user-plus"></i> Add Teacher / Principal</button>
     </div>
 
     <!-- Faculty Table -->
@@ -138,7 +138,7 @@
         <table class="dashboard-table">
             <thead>
                 <tr>
-                    <th>Teacher Code</th>
+                    <th>User Code</th>
                     <th>Name</th>
                     <th>Role</th>
                     <th>Assignment</th>
@@ -204,15 +204,15 @@
     </div>
 </div>
 
-<!-- ADD NEW TEACHER MODAL (CENTERED & SCROLLABLE) -->
+<!-- ADD NEW USER MODAL (CENTERED & SCROLLABLE) -->
 <div class="modal-overlay" id="teacherDrawer">
     <div class="modal-container">
         
         <!-- Header -->
         <div class="modal-header">
             <div>
-                <span class="modal-subtitle">Admin Enters Teacher Info</span>
-                <h2>Create New Teacher Account</h2>
+                <span class="modal-subtitle">Admin Enters Account Information</span>
+                <h2>Create New User Account</h2>
             </div>
             <button class="modal-close-icon" id="closeTeacherDrawer" aria-label="Close panel">&times;</button>
         </div>
@@ -220,8 +220,16 @@
         <!-- Body -->
         <div class="modal-body">
         
-            <!-- Teacher Basic Information -->
-            <div class="section-title">📋 Teacher Basic Information</div>
+            <!-- Basic Information -->
+            <div class="section-title">📋 User Basic Information</div>
+
+            <div class="form-group">
+                <label>Account Role <span class="required-star">*</span></label>
+                <select id="userRoleSelect">
+                    <option value="teacher" selected>Teacher</option>
+                    <option value="principal">Principal</option>
+                </select>
+            </div>
             
             <div class="form-row">
                 <div class="form-group">
@@ -259,6 +267,7 @@
                         <option value="Grade 4">Grade 4</option>
                         <option value="Grade 5">Grade 5</option>
                         <option value="Grade 6">Grade 6</option>
+                        <option value="N/A - Principal">N/A - Principal</option>
                     </select>
                 </div>
             </div>

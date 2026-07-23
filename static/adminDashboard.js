@@ -77,20 +77,37 @@ function setupTeacherCodeGeneration() {
     if (generateCodeBtn) {
         generateCodeBtn.addEventListener('click', generateTeacherCode);
     }
+
+    const roleSelect = document.getElementById('userRoleSelect');
+    if (roleSelect) {
+        roleSelect.addEventListener('change', () => {
+            const gradeSelect = document.getElementById('teacherGradeLevel');
+            if (roleSelect.value === 'principal') {
+                if (gradeSelect) gradeSelect.value = 'N/A - Principal';
+            } else {
+                if (gradeSelect && gradeSelect.value === 'N/A - Principal') {
+                    gradeSelect.value = '';
+                }
+            }
+            generateTeacherCode();
+        });
+    }
 }
 
 async function generateTeacherCode() {
     const teacherCodeInput = document.getElementById('teacherCode');
     if (!teacherCodeInput) return;
 
+    const roleSelect = document.getElementById('userRoleSelect');
+    const selectedRole = roleSelect ? roleSelect.value : 'teacher';
+
     const currentYear = new Date().getFullYear();
-    const prefix = `TCH${currentYear}-`;
+    const prefix = selectedRole === 'principal' ? `PRN${currentYear}-` : `TCH${currentYear}-`;
 
     try {
         const { data: existingCodes, error } = await window.supabaseClient
             .from('profiles')
             .select('teacher_code')
-            .eq('role', 'teacher')
             .not('teacher_code', 'is', null);
 
         const usedCodes = new Set();
@@ -112,8 +129,8 @@ async function generateTeacherCode() {
 
         teacherCodeInput.value = code;
     } catch (err) {
-        console.error("Failed to generate teacher code:", err);
-        teacherCodeInput.value = `TCH${currentYear}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
+        console.error("Failed to generate code:", err);
+        teacherCodeInput.value = `${prefix}${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`;
     }
 }
 
@@ -182,7 +199,7 @@ async function loadFacultyDirectory() {
                 teaching_loads ( minutes_per_week ),
                 ancillary_duties ( hours_per_week )
             `)
-            .eq('role', 'teacher');
+            .or('role.eq.teacher,role.eq.principal');
 
         if (profileError) {
             console.error("Error fetching faculty profiles:", profileError.message);
@@ -440,15 +457,17 @@ function setupAddTeacherForm() {
     createAccountBtn.addEventListener('click', async (e) => {
         e.preventDefault();
 
+        const selectedRole = document.getElementById('userRoleSelect')?.value || 'teacher';
         const firstName = document.getElementById('teacherFirstName')?.value.trim();
         const lastName = document.getElementById('teacherLastName')?.value.trim();
         const email = document.getElementById('teacherEmail')?.value.trim();
         const school = document.getElementById('teacherSchool')?.value;
-        const gradeLevel = document.getElementById('teacherGradeLevel')?.value;
+        const rawGradeLevel = document.getElementById('teacherGradeLevel')?.value;
+        const gradeLevel = selectedRole === 'principal' ? (rawGradeLevel || 'N/A - Principal') : rawGradeLevel;
         const password = document.getElementById('teacherPassword')?.value.trim();
         const teacherCode = document.getElementById('teacherCode')?.value.trim();
 
-        if (!firstName || !lastName || !email || !school || !gradeLevel || !password) {
+        if (!firstName || !lastName || !email || !school || (!gradeLevel && selectedRole !== 'principal') || !password) {
             alert("Please fill in all required fields marked with *.");
             return;
         }
@@ -470,11 +489,14 @@ function setupAddTeacherForm() {
             return;
         }
 
+        const roleLabel = selectedRole === 'principal' ? 'Principal' : 'Teacher';
         createAccountBtn.innerText = "⏳ Creating Account...";
         createAccountBtn.disabled = true;
 
         try {
             const { data: { session: currentAdminSession } } = await window.supabaseClient.auth.getSession();
+
+            const departmentStr = selectedRole === 'principal' ? `${school} - Principal's Office` : `${school} - ${gradeLevel}`;
 
             const { data: authData, error: authError } = await window.supabaseClient.auth.signUp({
                 email: email,
@@ -483,17 +505,17 @@ function setupAddTeacherForm() {
                     data: {
                         first_name: firstName,
                         last_name: lastName,
-                        role: 'teacher',
+                        role: selectedRole,
                         school: school,
                         grade_level: gradeLevel,
                         teacher_code: teacherCode,
-                        department: `${school} - ${gradeLevel}`
+                        department: departmentStr
                     }
                 }
             });
 
             if (authError) {
-                alert("Failed to create teacher account: " + authError.message);
+                alert(`Failed to create ${roleLabel.toLowerCase()} account: ` + authError.message);
                 createAccountBtn.innerText = "Create Account";
                 createAccountBtn.disabled = false;
                 return;
@@ -510,12 +532,13 @@ function setupAddTeacherForm() {
                 const { error: updateError } = await window.supabaseClient
                     .from('profiles')
                     .update({ 
+                        role: selectedRole,
                         teacher_code: teacherCode,
                         school: school,
                         grade_level: gradeLevel,
                         first_name: firstName,
                         last_name: lastName,
-                        department: `${school} - ${gradeLevel}`
+                        department: departmentStr
                     })
                     .eq('id', authData.user.id);
 
@@ -524,7 +547,7 @@ function setupAddTeacherForm() {
                 }
             }
 
-            alert(`Teacher account created successfully!\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nSchool: ${school}\nGrade Level: ${gradeLevel}\nTeacher Code: ${teacherCode}\nPassword: ${password}`);
+            alert(`${roleLabel} account created successfully!\n\nRole: ${roleLabel}\nName: ${firstName} ${lastName}\nEmail: ${email}\nSchool: ${school}\nAssignment: ${departmentStr}\nUser Code: ${teacherCode}\nPassword: ${password}`);
 
             document.getElementById('teacherFirstName').value = '';
             document.getElementById('teacherLastName').value = '';
