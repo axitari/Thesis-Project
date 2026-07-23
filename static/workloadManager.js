@@ -4,6 +4,54 @@
  * Kandili Workload Analytics Engine
  * Calculates teaching loads, ancillary duties, total weekly hours, and risk classification.
  */
+/**
+ * Core WLU / JDS Calculation Engine (Global)
+ * Based on DO 5, s. 2024 & DM 291, s. 2008
+ */
+window.calculateWLUDetails = function(teacherProfile) {
+    const totalTeachingMins = teacherProfile.teaching_loads?.reduce((sum, item) => sum + (item.minutes_per_week || 0), 0) || 0;
+    const teachingHours = totalTeachingMins / 60;
+    const teachingWLU = teachingHours * 1.0;
+
+    let ancillaryHours = 0;
+    let assignmentHours = 0;
+    let ancillaryWLU = 0;
+    let assignmentWLU = 0;
+
+    teacherProfile.ancillary_duties?.forEach(duty => {
+        const hrs = parseFloat(duty.hours_per_week || duty.hours || 0);
+        // Safe check for duty title across various schema column names
+        const name = (duty.duty_name || duty.duty_title || duty.name || duty.title || '').toLowerCase();
+
+        if (
+            name.includes('coordinator') || 
+            name.includes('chair') || 
+            name.includes('paper') || 
+            name.includes('master teacher') || 
+            name.includes('sdrrm')
+        ) {
+            assignmentHours += hrs;
+            assignmentWLU += hrs * 2.0;
+        } else {
+            ancillaryHours += hrs;
+            ancillaryWLU += hrs * 1.5;
+        }
+    });
+
+    const totalHours = parseFloat((teachingHours + ancillaryHours + assignmentHours).toFixed(1));
+    const totalJDS = parseFloat((teachingWLU + ancillaryWLU + assignmentWLU).toFixed(2));
+
+    let status = 'OPTIMAL';
+    let statusClass = 'text-success';
+
+    if (totalJDS > 75) { status = 'OVERLOAD'; statusClass = 'text-danger'; }
+    else if (totalJDS >= 66) { status = 'MAXIMIZED'; statusClass = 'text-warning'; }
+    else if (totalJDS >= 54) { status = 'HIGH'; statusClass = 'text-warning'; }
+    else if (totalJDS >= 36) { status = 'OPTIMAL'; statusClass = 'text-success'; }
+    else { status = 'UNDERLOAD'; statusClass = 'text-info'; }
+
+    return { teachingHours, ancillaryHours, assignmentHours, totalHours, teachingWLU, ancillaryWLU, assignmentWLU, totalJDS, status, statusClass };
+};
 
 // 1. Calculate workload summary for a single teacher
 async function getTeacherWorkloadSummary(teacherId, schoolYear = '2025-2026') {
@@ -232,3 +280,83 @@ async function loadOfficialClassProgramView() {
         matrixBodyEl.appendChild(tr);
     });
 }
+
+/**
+ * Calculates Job Demand Score (JDS) in Workload Units (WLU)
+ * Based on DO 5, s. 2024 & DM 291, s. 2008
+ 
+function calculateWLUDetails(teacherProfile) {
+    // 1. Tier 1: Teaching Load (Baseline Weight: 1.0)
+    const totalTeachingMins = teacherProfile.teaching_loads?.reduce((sum, item) => {
+        return sum + (item.minutes_per_week || 0);
+    }, 0) || 0;
+    
+    const teachingHours = totalTeachingMins / 60;
+    const teachingWLU = teachingHours * 1.0;
+
+    // 2. Tier 2 & Tier 3: Ancillary & High-Weight Assignments
+    let ancillaryHours = 0;
+    let assignmentHours = 0;
+    let ancillaryWLU = 0;
+    let assignmentWLU = 0;
+
+    teacherProfile.ancillary_duties?.forEach(duty => {
+        const hrs = parseFloat(duty.hours_per_week || 0);
+        const name = (duty.duty_name || '').toLowerCase();
+
+        // Tier 3: Teaching-Related Assignments (Weight: 2.0)
+        if (
+            name.includes('coordinator') || 
+            name.includes('chair') || 
+            name.includes('paper') || 
+            name.includes('master teacher') ||
+            name.includes('sdrrm')
+        ) {
+            assignmentHours += hrs;
+            assignmentWLU += hrs * 2.0;
+        } 
+        // Tier 2: Standard Ancillary Duties (Weight: 1.5)
+        else {
+            ancillaryHours += hrs;
+            ancillaryWLU += hrs * 1.5;
+        }
+    });
+
+    // 3. Compute Composite JDS Total
+    const totalHours = parseFloat((teachingHours + ancillaryHours + assignmentHours).toFixed(1));
+    const totalJDS = parseFloat((teachingWLU + ancillaryWLU + assignmentWLU).toFixed(2));
+
+    // 4. WLU Classification Thresholds
+    let status = 'OPTIMAL';
+    let statusClass = 'text-success';
+
+    if (totalJDS > 75) {
+        status = 'OVERLOAD';
+        statusClass = 'text-danger';
+    } else if (totalJDS >= 66) {
+        status = 'MAXIMIZED';
+        statusClass = 'text-warning';
+    } else if (totalJDS >= 54) {
+        status = 'HIGH';
+        statusClass = 'text-warning';
+    } else if (totalJDS >= 36) {
+        status = 'OPTIMAL';
+        statusClass = 'text-success';
+    } else {
+        status = 'UNDERLOAD';
+        statusClass = 'text-info';
+    }
+
+    return {
+        teachingHours,
+        ancillaryHours,
+        assignmentHours,
+        totalHours,
+        teachingWLU,
+        ancillaryWLU,
+        assignmentWLU,
+        totalJDS,
+        status,
+        statusClass
+    };
+}*/

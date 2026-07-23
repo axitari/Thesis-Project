@@ -110,11 +110,11 @@
                     <span class="risk-card-badge badge-underload">UNDERLOAD</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">3</span>
+                    <span class="risk-card-number" id="count-underload">0</span>
                     <span class="risk-card-label">Underloaded Teachers</span>
-                    <span class="risk-card-action text-info">Available Capacity</span>
+                    <span class="risk-card-action text-info">&lt; 36 WLU</span>
                 </div>
-                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='underload_teachers.html'">
+                <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='underload_teachers.html'; return false;">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -126,11 +126,11 @@
                     <span class="risk-card-badge badge-optimal">OPTIMAL</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">18</span>
+                    <span class="risk-card-number" id="count-optimal">0</span>
                     <span class="risk-card-label">Optimal Load Teachers</span>
-                    <span class="risk-card-action text-success">Well Balanced</span>
+                    <span class="risk-card-action text-success">36–54 WLU</span>
                 </div>
-                <button class="risk-card-btn" data-filter="optimal" onclick="window.location.href='optimal_teachers.html'">
+                <button class="risk-card-btn" data-filter="optimal" onclick="window.location.href='optimal_teachers.html'; return false;">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -139,14 +139,14 @@
             <div class="risk-card risk-card--moderate">
                 <div class="risk-card-header">
                     <div class="risk-card-icon">⚠️</div>
-                    <span class="risk-card-badge badge-high-load">HIGH</span>
+                    <span class="risk-card-badge badge-high-load">HIGH / MAXIMIZED</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">5</span>
+                    <span class="risk-card-number" id="count-maximized">0</span>
                     <span class="risk-card-label">High Load Teachers</span>
-                    <span class="risk-card-action text-warning">Monitor Assignment</span>
+                    <span class="risk-card-action text-warning">54–75 WLU</span>
                 </div>
-                <button class="risk-card-btn" data-filter="high" onclick="window.location.href='high-load_teachers.html'">
+                <button class="risk-card-btn" data-filter="high" onclick="window.location.href='high-load_teachers.html'; return false;">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -158,11 +158,11 @@
                     <span class="risk-card-badge badge-overload">OVERLOAD</span>
                 </div>
                 <div class="risk-card-body">
-                    <span class="risk-card-number">2</span>
+                    <span class="risk-card-number" id="count-overload">0</span>
                     <span class="risk-card-label">Overloaded Teachers</span>
-                    <span class="risk-card-action text-danger">Requires Reallocation</span>
+                    <span class="risk-card-action text-danger">&gt; 75 WLU</span>
                 </div>
-                <button class="risk-card-btn" data-filter="overload" onclick="window.location.href='overload_teachers.html'">
+                <button class="risk-card-btn" data-filter="overload" onclick="window.location.href='overload_teachers.html'; return false;">
                     View List <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
@@ -196,7 +196,7 @@
                     <span class="burnout-card-badge">Low Burnout Risk</span>
                 </div>
                 <div class="burnout-card-body">
-                    <span class="burnout-card-count">21</span>
+                    <span class="burnout-card-count" id="burnout-count-low">0</span>
                     <h3 class="burnout-card-title">Low Stress / High Efficacy</h3>
                     <p class="burnout-card-desc">Faculty showing low Emotional Exhaustion (&le;16), low Depersonalization (&le;6), and high Personal Accomplishment (&ge;37). Workload is well-managed.</p>
                 </div>
@@ -214,7 +214,7 @@
                     <span class="burnout-card-badge">Moderate Burnout Risk</span>
                 </div>
                 <div class="burnout-card-body">
-                    <span class="burnout-card-count">5</span>
+                    <span class="burnout-card-count" id="burnout-count-moderate">0</span>
                     <h3 class="burnout-card-title">Moderate Strain</h3>
                     <p class="burnout-card-desc">Faculty with moderate Emotional Exhaustion (17–26) or Depersonalization (7–12). Early workload adjustment prevents chronic fatigue.</p>
                 </div>
@@ -232,7 +232,7 @@
                     <span class="burnout-card-badge">High Burnout Risk</span>
                 </div>
                 <div class="burnout-card-body">
-                    <span class="burnout-card-count">2</span>
+                    <span class="burnout-card-count" id="burnout-count-high">0</span>
                     <h3 class="burnout-card-title">Critical Fatigue</h3>
                     <p class="burnout-card-desc">Faculty scoring high Emotional Exhaustion (&ge;27), high Depersonalization (&ge;13), and low Personal Accomplishment (&le;30). Priority intervention needed.</p>
                 </div>
