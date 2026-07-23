@@ -43,9 +43,6 @@
         <div class="directory-header">
             <div class="directory-header-top">
                 <h2>👥 Faculty Profile Directory</h2>
-                <button class="btn-primary" id="openAddTeacherBtn">
-                    <i class="fas fa-user-plus"></i> Add New Teacher
-                </button>
             </div>
             
             <!-- Toolbar & Search Filters -->
@@ -147,71 +144,106 @@
                 <button class="modal-close-icon" id="closeEditProfileModal">&times;</button>
             </div>
             
-            <div class="modal-body">
-                <div class="modal-notice">
-                    💡 Updates made here will immediately reflect on the teacher's profile across Kandili.
-                </div>
+           <div class="modal-body">
+    <div class="modal-notice">
+        💡 Updates made here will immediately reflect on the teacher's profile across Kandili.
+    </div>
 
-                <!-- Basic Profile Fields -->
-                <div class="section-title">👤 Profile Details</div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name <span class="required-star">*</span></label>
-                        <input type="text" id="editFirstName">
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name <span class="required-star">*</span></label>
-                        <input type="text" id="editLastName">
-                    </div>
-                </div>
+    <!-- Basic Profile Fields -->
+    <div class="section-title">👤 Profile Details</div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>First Name <span class="required-star">*</span></label>
+            <input type="text" id="editFirstName">
+        </div>
+        <div class="form-group">
+            <label>Last Name <span class="required-star">*</span></label>
+            <input type="text" id="editLastName">
+        </div>
+    </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Email Address <span class="required-star">*</span></label>
-                        <input type="email" id="editEmail">
-                    </div>
-                    <div class="form-group">
-                        <label>Teacher Code</label>
-                        <input type="text" id="editTeacherCode" readonly class="readonly-field">
-                    </div>
-                </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Email Address <span class="required-star">*</span></label>
+            <input type="email" id="editEmail">
+        </div>
+        <div class="form-group">
+            <label>Teacher Code</label>
+            <input type="text" id="editTeacherCode" readonly class="readonly-field">
+        </div>
+    </div>
+    <!-- Employment Stats / Details -->
+    <div class="section-title">💼 Employment Details</div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>DepEd Employee ID</label>
+            <input type="text" id="editEmployeeId" placeholder="e.g. 4930281">
+        </div>
+        <div class="form-group">
+            <label>Plantilla Item No.</label>
+            <input type="text" id="editPlantillaItem" placeholder="e.g. OSEC-DECSB-TCH1-2021">
+        </div>
+    </div>
 
-                <!-- Academic Assignments -->
-                <hr class="modal-divider">
-                <div class="section-title">🏫 Department & Assignment Details</div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Department <span class="required-star">*</span></label>
-                        <select id="editDepartment">
-                            <option value="English">English</option>
-                            <option value="Mathematics">Mathematics</option>
-                            <option value="Science">Science</option>
-                            <option value="Filipino">Filipino</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Grade Level <span class="required-star">*</span></label>
-                        <select id="editGradeLevel">
-                            <option value="Grade 1">Grade 1</option>
-                            <option value="Grade 2">Grade 2</option>
-                            <option value="Grade 3">Grade 3</option>
-                            <option value="Grade 4">Grade 4</option>
-                            <option value="Grade 5">Grade 5</option>
-                            <option value="Grade 6">Grade 6</option>
-                        </select>
-                    </div>
-                </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>PRC License No.</label>
+            <input type="text" id="editPrcLicense" placeholder="e.g. 1234567">
+        </div>
+        <div class="form-group">
+            <label>Employment Status</label>
+            <select id="editEmploymentStatus">
+                <option value="">Select Status</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Provisional">Provisional</option>
+                <option value="Substitute">Substitute</option>
+                <option value="Contractual">Contractual</option>
+            </select>
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label>Ancillary Duty / Special Role</label>
-                    <input type="text" id="editAncillary" placeholder="e.g. Reading Program Coordinator">
-                </div>
+    <div class="form-group">
+        <label>Years in Service</label>
+        <input type="number" id="editYearsInService" min="0" placeholder="e.g. 5">
+    </div>
 
-                <div class="modal-actions">
-                    <button class="btn-primary" type="button" id="saveProfileBtn"><i class="fas fa-save"></i> Save Changes</button>
-                    <button class="btn-outline" type="button" id="cancelEditProfileBtn">Cancel</button>
-                </div>
-            </div>
+    <!-- Instructional & Teaching Details -->
+    <div class="section-title">🏫 Teaching & Academic Details</div>
+    <div class="form-group">
+        <label>Assigned Institution</label>
+        <input type="text" id="editAssignedInstitution" placeholder="e.g. Central Elementary School">
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>Grade Level / Department</label>
+            <input type="text" id="editGradeDepartment" placeholder="e.g. Grade 4 / Primary">
+        </div>
+        <div class="form-group">
+            <label>Advisory Class</label>
+            <input type="text" id="editAdvisoryClass" placeholder="e.g. Grade 4 - Sampaguita">
+        </div>
+    </div>
+
+    <!-- Professional Qualifications -->
+    <div class="section-title">🎓 Qualifications</div>
+    <div class="form-group">
+        <label>Highest Educational Attainment</label>
+        <select id="editHighestEducation">
+            <option value="">Select Attainment</option>
+            <option value="Bachelor's Degree">Bachelor's Degree</option>
+            <option value="Master's Units">Master's Units</option>
+            <option value="Master's Degree">Master's Degree</option>
+            <option value="Doctorate Units">Doctorate Units</option>
+            <option value="Doctorate Degree">Doctorate Degree</option>
+        </select>
+    </div>
+
+    <div class="modal-actions">
+        <button class="btn-primary" type="button" id="saveProfileBtn"><i class="fas fa-save"></i> Save Changes</button>
+        <button class="btn-outline" type="button" id="cancelEditProfileBtn">Cancel</button>
+    </div>
+</div>
         </div>
     </div>
 
