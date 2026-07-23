@@ -247,10 +247,15 @@ async function loadOfficialClassProgramView() {
     };
 
     const finalData = data || defaultData;
+    const matrix = finalData.scheduleMatrix || defaultData.scheduleMatrix;
+
+    // Filter out Recess from teaching minutes calculation
+    const academicRows = matrix.filter(row => !(row.mon || '').toLowerCase().includes('recess'));
+    const academicMinutesPerDay = academicRows.reduce((sum, row) => sum + (row.min || 0), 0);
 
     if (sectionNameEl) sectionNameEl.textContent = `Section: ${finalData.section || 'Grade 2 - A'}`;
     if (schoolYearEl) schoolYearEl.textContent = `School Year ${finalData.schoolYear || '2026 - 2027'}`;
-    if (totalMinutesEl) totalMinutesEl.textContent = `Total minutes per day: ${finalData.totalMinutes || 375} min`;
+    if (totalMinutesEl) totalMinutesEl.textContent = `Total teaching minutes per day: ${academicMinutesPerDay || 360} min (excl. Recess)`;
     if (demographicsEl) demographicsEl.innerHTML = `Male: <strong>${finalData.male || 22}</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Female: <strong>${finalData.female || 20}</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Total: <strong>${finalData.total || 42}</strong>`;
 
     // Render Matrix Rows

@@ -259,6 +259,21 @@ function applyExtractedProgramToDashboard(data) {
     if (bBar) bBar.style.width = `${boysPct}%`;
     if (gBar) gBar.style.width = `${girlsPct}%`;
 
+    // Filter out Recess from core teaching subjects count & calculations
+    const scheduleMatrix = data.scheduleMatrix || [];
+    const academicSubjects = scheduleMatrix.filter(row => !(row.mon || '').toLowerCase().includes('recess'));
+    const subjectCount = academicSubjects.length || 6;
+
+    const coreTitleEl = document.getElementById('dashCoreSubjectsTitle');
+    const subjQuickStatEl = document.getElementById('dashSubjectsCount');
+
+    if (coreTitleEl) {
+        coreTitleEl.innerHTML = `<i class="fas fa-chalkboard" style="color: #3b82f6; margin-right: 5px;"></i> Core Teaching (${subjectCount} Subjects)`;
+    }
+    if (subjQuickStatEl) {
+        subjQuickStatEl.textContent = subjectCount;
+    }
+
     try {
         localStorage.setItem('kandili_extracted_class_program', JSON.stringify(data));
     } catch(e){}
