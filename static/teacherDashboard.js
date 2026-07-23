@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (welcomeHeading) {
                     welcomeHeading.innerText = `👋 Welcome back, ${profile.first_name || ''} ${profile.last_name || 'Teacher'}`;
                 }
+                const adviserEl = document.getElementById('dashAdviserVal');
+                if (adviserEl) {
+                    const teacherFullName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
+                    adviserEl.textContent = teacherFullName || 'Teacher';
+                }
             }
 
             // Fetch Teaching Loads
