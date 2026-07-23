@@ -97,13 +97,14 @@
         </section>
     </div>
 
-    <!-- Dynamic Rendering Script -->
-    <script src="../static/workloadManager.js"></script>
-
     <!-- Supabase & Auth Security Stack -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../static/supabaseClient.js"></script>
     <script src="../static/authGuard.js"></script>
     <script src="../static/logout.js"></script>
+
+    <!-- Dynamic Rendering Script -->
+    <script src="../static/workloadManager.js"></script>
     <script>
         if (typeof checkAuthAndRole === "function") {
             // Allows logged-in users with valid session

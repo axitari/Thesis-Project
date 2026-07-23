@@ -188,56 +188,73 @@ async function loadOfficialClassProgramView() {
 
     if (!matrixBodyEl) return;
 
-    // 1. Fetch Session & User Details
-    const { data: { session } } = await window.supabaseClient.auth.getSession();
-    if (session) {
-        const { data: profile } = await window.supabaseClient
-            .from('profiles')
-            .select('first_name, last_name, role')
-            .eq('id', session.user.id)
-            .single();
-
-        if (profile && teacherNameEl) {
-            const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim().toUpperCase();
-            teacherNameEl.textContent = name || 'DOCTOR BROWN';
+    // 1. Fetch Session & User Details (Safely)
+    let session = null;
+    try {
+        if (window.supabaseClient && window.supabaseClient.auth) {
+            const { data } = await window.supabaseClient.auth.getSession();
+            session = data ? data.session : null;
         }
+    } catch(e) {
+        console.warn("Session check notice:", e);
+    }
 
-        // Dynamic Principal Name Resolution from public.profiles
-        const { data: principalProfile } = await window.supabaseClient
-            .from('profiles')
-            .select('first_name, last_name, role')
-            .eq('role', 'principal')
-            .limit(1)
-            .maybeSingle();
+    if (session && window.supabaseClient) {
+        try {
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('first_name, last_name, role')
+                .eq('id', session.user.id)
+                .maybeSingle();
 
-        if (principalNameEl) {
-            if (principalProfile && (principalProfile.first_name || principalProfile.last_name)) {
-                const fullPrincipalName = `${principalProfile.first_name || ''} ${principalProfile.last_name || ''}`.trim().toUpperCase();
-                principalNameEl.textContent = fullPrincipalName;
-            } else {
-                const savedPrincipal = localStorage.getItem('kandili_principal_name');
-                principalNameEl.textContent = savedPrincipal ? savedPrincipal.toUpperCase() : '(Principal Name)';
+            if (profile && teacherNameEl) {
+                const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim().toUpperCase();
+                teacherNameEl.textContent = name || 'CLASS ADVISER';
             }
+
+            // Dynamic Principal Name Resolution from public.profiles
+            const { data: principalProfile } = await window.supabaseClient
+                .from('profiles')
+                .select('first_name, last_name, role')
+                .eq('role', 'principal')
+                .limit(1)
+                .maybeSingle();
+
+            if (principalNameEl) {
+                if (principalProfile && (principalProfile.first_name || principalProfile.last_name)) {
+                    const fullPrincipalName = `${principalProfile.first_name || ''} ${principalProfile.last_name || ''}`.trim().toUpperCase();
+                    principalNameEl.textContent = fullPrincipalName;
+                } else {
+                    const savedPrincipal = localStorage.getItem('kandili_principal_name');
+                    principalNameEl.textContent = savedPrincipal ? savedPrincipal.toUpperCase() : '(Principal Name)';
+                }
+            }
+        } catch(err) {
+            console.warn("Profile lookup notice:", err);
         }
     }
 
-    // 2. Read Extracted Class Program Data (from Supabase profile or user storage)
+    // 2. Read Extracted Class Program Data
     let data = null;
     try {
         if (session) {
+            const storedUser = localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`);
+            if (storedUser) data = JSON.parse(storedUser);
+        }
+        if (!data) {
+            const storedGlobal = localStorage.getItem('kandili_extracted_class_program');
+            if (storedGlobal) data = JSON.parse(storedGlobal);
+        }
+        if (!data && session && window.supabaseClient) {
             const { data: profile } = await window.supabaseClient
                 .from('profiles')
                 .select('advisory_class')
                 .eq('id', session.user.id)
-                .single();
+                .maybeSingle();
 
-            if (profile && profile.advisory_class && profile.advisory_class.startsWith('{')) {
+            if (profile && profile.advisory_class && profile.advisory_class.trim().startsWith('{')) {
                 data = JSON.parse(profile.advisory_class);
             }
-        }
-        if (!data) {
-            const stored = (session ? localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`) : null) || localStorage.getItem('kandili_extracted_class_program');
-            if (stored) data = JSON.parse(stored);
         }
     } catch(e){}
 
@@ -273,7 +290,6 @@ async function loadOfficialClassProgramView() {
 
     // Render Matrix Rows
     matrixBodyEl.innerHTML = '';
-    const matrix = finalData.scheduleMatrix || defaultData.scheduleMatrix;
 
     matrix.forEach(row => {
         const tr = document.createElement('tr');
