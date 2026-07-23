@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - Log In</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
 <body class="auth-body">
 
     <div class="auth-card">
@@ -16,20 +18,29 @@
        <section class="login-card">
           <h3>Sign in</h3>
           <form id="loginForm">
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="name@school.edu" />
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="name@school.edu" required />
+            </div>
 
-            <label for="password">Password</label>
-            <input id="password" type="password" placeholder="Enter password" />
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="Enter password" required />
+            </div>
 
-            <label for="role">Role</label>
-            <select id="role" name="role">
-              <option value="teacherdashboard.html">Teacher</option>
-              <option value="principaldashboard.html">Principal</option>
-              <option value="admindashboard.html">Admin</option>
-            </select>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role">
+                  <option value="teacherdashboard.html">Teacher</option>
+                  <option value="principaldashboard.html">Principal</option>
+                  <option value="admindashboard.html">Admin</option>
+                </select>
+            </div>
 
-            <button type="submit" class="btn-primary">Login</button>
+            <button type="submit" class="btn-primary btn-login">
+                <span>Login</span>
+                <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+            </button>
           </form>
         </section>
 
