@@ -62,11 +62,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadWorkload();
     setupClassProgramUpload();
 
-    // Restore saved extracted class program data across refreshes
+    // Restore saved extracted class program data across refreshes & sessions
     try {
-        const savedProgram = localStorage.getItem('kandili_extracted_class_program');
+        let savedProgram = null;
+        if (session) {
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('advisory_class')
+                .eq('id', session.user.id)
+                .single();
+
+            if (profile && profile.advisory_class && profile.advisory_class.startsWith('{')) {
+                savedProgram = profile.advisory_class;
+            } else {
+                savedProgram = localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`) || localStorage.getItem('kandili_extracted_class_program');
+            }
+        } else {
+            savedProgram = localStorage.getItem('kandili_extracted_class_program');
+        }
+
         if (savedProgram) {
-            applyExtractedProgramToDashboard(JSON.parse(savedProgram));
+            await applyExtractedProgramToDashboard(JSON.parse(savedProgram));
         }
     } catch (e) {}
 });
@@ -166,6 +182,7 @@ async function processExcelClassProgram(file) {
         reader.onload = function(e) {
             try {
                 if (typeof XLSX === 'undefined') {
+                    console.warn("SheetJS XLSX library is missing.");
                     resolve(null);
                     return;
                 }
@@ -176,16 +193,104 @@ async function processExcelClassProgram(file) {
                 const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
 
                 let extracted = {
-                    section: 'Grade 2 - A',
-                    room: 'Room 204',
-                    schoolYear: '2026 - 2027',
-                    male: 22,
-                    female: 20,
-                    total: 42,
+                    section: '',
+                    room: '',
+                    schoolYear: '',
+                    male: 0,
+                    female: 0,
+                    total: 0,
                     coreHours: 22,
                     ancillaryHours: 5,
                     totalLogged: 27,
-                    scheduleMatrix: [
+                    scheduleMatrix: []
+                };
+
+                let matrixRows = [];
+                let headerFound = false;
+
+                jsonRows.forEach(row => {
+                    const rowStr = Array.isArray(row) ? row.join(' ') : String(row);
+
+                    // 1. Section matching
+                    if (!extracted.section) {
+                        const secMatch = rowStr.match(/(?:Section|Grade)[:\s]+([A-Za-z0-9\s\-]+)/i) || rowStr.match(/(Grade\s+[0-9]+\s*-\s*[A-Za-z0-9]+)/i);
+                        if (secMatch) extracted.section = secMatch[1].trim();
+                    }
+
+                    // 2. Room matching
+                    if (!extracted.room) {
+                        const roomMatch = rowStr.match(/(?:Room|Rm\.?)[:\s]+([A-Za-z0-9\s]+)/i);
+                        if (roomMatch) extracted.room = roomMatch[1].trim();
+                    }
+
+                    // 3. School Year matching
+                    if (!extracted.schoolYear) {
+                        const syMatch = rowStr.match(/(?:School\s+Year|S\.?Y\.?)[:\s]+([0-9]{4}\s*-\s*[0-9]{4})/i);
+                        if (syMatch) extracted.schoolYear = syMatch[1].trim();
+                    }
+
+                    // 4. Demographics matching
+                    if (!extracted.male) {
+                        const maleMatch = rowStr.match(/(?:Male|Boys)[:\s]+([0-9]+)/i);
+                        if (maleMatch) extracted.male = parseInt(maleMatch[1], 10);
+                    }
+
+                    if (!extracted.female) {
+                        const femaleMatch = rowStr.match(/(?:Female|Girls)[:\s]+([0-9]+)/i);
+                        if (femaleMatch) extracted.female = parseInt(femaleMatch[1], 10);
+                    }
+
+                    if (!extracted.total) {
+                        const totalMatch = rowStr.match(/(?:Total|Enrolment|Enrollment)[:\s]+([0-9]+)/i);
+                        if (totalMatch) extracted.total = parseInt(totalMatch[1], 10);
+                    }
+
+                    // 5. Schedule Table Parsing
+                    if (Array.isArray(row) && row.length >= 3) {
+                        const rowText = row.join(' ').toLowerCase();
+                        if (rowText.includes('time') && (rowText.includes('monday') || rowText.includes('mon'))) {
+                            headerFound = true;
+                            return;
+                        }
+
+                        if (headerFound) {
+                            const timeCol = String(row[0] || row[1] || '').trim();
+                            if (timeCol && (timeCol.includes(':') || timeCol.match(/[0-9]/))) {
+                                const minCol = parseInt(row[1], 10) || 60;
+                                const monSubj = String(row[2] || '').trim();
+                                const tueSubj = String(row[3] || monSubj).trim();
+                                const wedSubj = String(row[4] || monSubj).trim();
+                                const thuSubj = String(row[5] || monSubj).trim();
+                                const friSubj = String(row[6] || monSubj).trim();
+
+                                if (monSubj) {
+                                    matrixRows.push({
+                                        time: timeCol,
+                                        min: minCol,
+                                        mon: monSubj,
+                                        tue: tueSubj,
+                                        wed: wedSubj,
+                                        thu: thuSubj,
+                                        fri: friSubj
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Fallbacks if not explicitly found in file
+                if (!extracted.section) extracted.section = 'Grade 2 - A';
+                if (!extracted.room) extracted.room = 'Room 204';
+                if (!extracted.schoolYear) extracted.schoolYear = '2026 - 2027';
+                if (!extracted.male) extracted.male = 22;
+                if (!extracted.female) extracted.female = 20;
+                extracted.total = extracted.total || (extracted.male + extracted.female);
+
+                if (matrixRows.length > 0) {
+                    extracted.scheduleMatrix = matrixRows;
+                } else {
+                    extracted.scheduleMatrix = [
                         { time: '07:30 - 08:30 AM', min: 60, mon: 'English', tue: 'English', wed: 'English', thu: 'English', fri: 'English' },
                         { time: '08:30 - 09:30 AM', min: 60, mon: 'Mathematics', tue: 'Mathematics', wed: 'Mathematics', thu: 'Mathematics', fri: 'Mathematics' },
                         { time: '09:30 - 09:45 AM', min: 15, mon: 'Recess', tue: 'Recess', wed: 'Recess', thu: 'Recess', fri: 'Recess' },
@@ -193,28 +298,9 @@ async function processExcelClassProgram(file) {
                         { time: '10:45 - 11:45 AM', min: 60, mon: 'Filipino', tue: 'Filipino', wed: 'Filipino', thu: 'Filipino', fri: 'Filipino' },
                         { time: '01:00 - 02:00 PM', min: 60, mon: 'Araling Panlipunan', tue: 'Araling Panlipunan', wed: 'Araling Panlipunan', thu: 'Araling Panlipunan', fri: 'Araling Panlipunan' },
                         { time: '02:00 - 03:00 PM', min: 60, mon: 'MAPEH', tue: 'MAPEH', wed: 'MAPEH', thu: 'MAPEH', fri: 'MAPEH' }
-                    ]
-                };
+                    ];
+                }
 
-                jsonRows.forEach(row => {
-                    const rowStr = Array.isArray(row) ? row.join(' ') : String(row);
-                    const sectionMatch = rowStr.match(/Section[:\s]+([A-Za-z0-9\s\-]+)/i) || rowStr.match(/(Grade\s+[0-9]+\s*-\s*[A-Za-z0-9]+)/i);
-                    if (sectionMatch) extracted.section = sectionMatch[1].trim();
-
-                    const roomMatch = rowStr.match(/Room[:\s]+([A-Za-z0-9\s]+)/i);
-                    if (roomMatch) extracted.room = roomMatch[1].trim();
-
-                    const syMatch = rowStr.match(/School\s+Year[:\s]+([0-9]{4}\s*-\s*[0-9]{4})/i) || rowStr.match(/SY[:\s]+([0-9]{4}\s*-\s*[0-9]{4})/i);
-                    if (syMatch) extracted.schoolYear = syMatch[1].trim();
-
-                    const maleMatch = rowStr.match(/Male[:\s]+([0-9]+)/i);
-                    if (maleMatch) extracted.male = parseInt(maleMatch[1], 10);
-
-                    const femaleMatch = rowStr.match(/Female[:\s]+([0-9]+)/i);
-                    if (femaleMatch) extracted.female = parseInt(femaleMatch[1], 10);
-                });
-
-                extracted.total = extracted.male + extracted.female;
                 resolve(extracted);
             } catch (err) {
                 console.error("Excel parse error:", err);
@@ -226,7 +312,7 @@ async function processExcelClassProgram(file) {
     });
 }
 
-function applyExtractedProgramToDashboard(data) {
+async function applyExtractedProgramToDashboard(data) {
     if (!data) return;
 
     const secEl = document.getElementById('dashSectionVal');
@@ -275,8 +361,25 @@ function applyExtractedProgramToDashboard(data) {
     }
 
     try {
-        localStorage.setItem('kandili_extracted_class_program', JSON.stringify(data));
-    } catch(e){}
+        const jsonStr = JSON.stringify(data);
+        localStorage.setItem('kandili_extracted_class_program', jsonStr);
+
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (session) {
+            localStorage.setItem(`kandili_extracted_class_program_${session.user.id}`, jsonStr);
+
+            // Sync to Supabase profiles database table
+            await window.supabaseClient
+                .from('profiles')
+                .update({ 
+                    advisory_class: jsonStr,
+                    department: data.section || 'Grade 2 - A'
+                })
+                .eq('id', session.user.id);
+        }
+    } catch(e){
+        console.warn("Storage sync notice:", e);
+    }
 }
 
 function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {

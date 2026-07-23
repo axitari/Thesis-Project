@@ -221,11 +221,24 @@ async function loadOfficialClassProgramView() {
         }
     }
 
-    // 2. Read Extracted Class Program Data
+    // 2. Read Extracted Class Program Data (from Supabase profile or user storage)
     let data = null;
     try {
-        const stored = localStorage.getItem('kandili_extracted_class_program');
-        if (stored) data = JSON.parse(stored);
+        if (session) {
+            const { data: profile } = await window.supabaseClient
+                .from('profiles')
+                .select('advisory_class')
+                .eq('id', session.user.id)
+                .single();
+
+            if (profile && profile.advisory_class && profile.advisory_class.startsWith('{')) {
+                data = JSON.parse(profile.advisory_class);
+            }
+        }
+        if (!data) {
+            const stored = (session ? localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`) : null) || localStorage.getItem('kandili_extracted_class_program');
+            if (stored) data = JSON.parse(stored);
+        }
     } catch(e){}
 
     const defaultData = {
