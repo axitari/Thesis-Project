@@ -22,7 +22,7 @@
       <div class="theme-nav__title">School Management Platform</div>
     </div>
     <div class="theme-nav__actions">
-      <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+      <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> Loading date...</span>
       <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
       <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
         <i class="fas fa-bars"></i>
@@ -179,6 +179,21 @@
           }
         });
       }
+
+      function updateIndexClock() {
+        const dateElement = document.querySelector('.theme-nav__date');
+        if (!dateElement) return;
+
+        function tick() {
+          const now = new Date();
+          const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+          const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          dateElement.innerHTML = `<i class="far fa-calendar-alt"></i> ${dateStr} | ${timeStr}`;
+        }
+        tick();
+        setInterval(tick, 1000);
+      }
+      updateIndexClock();
     });
   </script>
 </body>

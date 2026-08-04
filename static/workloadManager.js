@@ -213,12 +213,15 @@ async function loadOfficialClassProgramView() {
             }
 
             // Dynamic Principal Name Resolution from public.profiles
-            const { data: principalProfile } = await window.supabaseClient
+            const { data: principalProfiles, error: pErr } = await window.supabaseClient
                 .from('profiles')
                 .select('first_name, last_name, role')
-                .eq('role', 'principal')
-                .limit(1)
-                .maybeSingle();
+                .or('role.eq.principal,role.eq.Principal')
+                .limit(1);
+
+            if (pErr) console.warn("Principal query note:", pErr.message);
+
+            const principalProfile = (principalProfiles && principalProfiles.length > 0) ? principalProfiles[0] : null;
 
             if (principalNameEl) {
                 if (principalProfile && (principalProfile.first_name || principalProfile.last_name)) {
@@ -287,6 +290,18 @@ async function loadOfficialClassProgramView() {
     if (schoolYearEl) schoolYearEl.textContent = `School Year ${finalData.schoolYear || '2026 - 2027'}`;
     if (totalMinutesEl) totalMinutesEl.textContent = `Total teaching minutes per day: ${academicMinutesPerDay || 360} min (excl. Recess)`;
     if (demographicsEl) demographicsEl.innerHTML = `Male: <strong>${finalData.male || 22}</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Female: <strong>${finalData.female || 20}</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Total: <strong>${finalData.total || 42}</strong>`;
+
+    if (principalNameEl) {
+        if (finalData && finalData.principalName) {
+            principalNameEl.textContent = finalData.principalName.toUpperCase();
+        } else if (typeof principalProfile !== 'undefined' && principalProfile && (principalProfile.first_name || principalProfile.last_name)) {
+            const fullPrincipalName = `${principalProfile.first_name || ''} ${principalProfile.last_name || ''}`.trim().toUpperCase();
+            principalNameEl.textContent = fullPrincipalName;
+        } else {
+            const savedPrincipal = localStorage.getItem('kandili_principal_name');
+            principalNameEl.textContent = savedPrincipal ? savedPrincipal.toUpperCase() : '(Principal Name)';
+        }
+    }
 
     // Render Matrix Rows
     matrixBodyEl.innerHTML = '';

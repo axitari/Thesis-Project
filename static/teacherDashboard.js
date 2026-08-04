@@ -245,6 +245,17 @@ async function processExcelClassProgram(file) {
                         if (totalMatch) extracted.total = parseInt(totalMatch[1], 10);
                     }
 
+                    // 5. Principal Name extraction
+                    if (!extracted.principalName) {
+                        const prMatch = rowStr.match(/(?:Approved\s+by|Approved|Principal)[:\s]+([A-Za-z\.\s\-]+)/i);
+                        if (prMatch) {
+                            const nameStr = prMatch[1].trim();
+                            if (nameStr && !nameStr.toLowerCase().includes('school principal') && !nameStr.toLowerCase().includes('principal i')) {
+                                extracted.principalName = nameStr;
+                            }
+                        }
+                    }
+
                     // 5. Schedule Table Parsing
                     if (Array.isArray(row) && row.length >= 3) {
                         const rowText = row.join(' ').toLowerCase();

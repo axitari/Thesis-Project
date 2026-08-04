@@ -7,38 +7,60 @@
     let userRole = 'teacher';
     let userId = null;
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        await initCalendar();
-        setupEventListeners();
-    });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initCalendar();
+            setupEventListeners();
+        });
+    } else {
+        initCalendar().then(() => setupEventListeners());
+    }
 
     async function initCalendar() {
+        // 1. Render calendar grid & live header clock immediately with current date
+        updateHeaderClock();
+        updateCategoryDropdown();
+        renderCalendar();
+
+        // 2. Safely check auth & fetch events in background
         try {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (!session) return;
+            if (window.supabaseClient && window.supabaseClient.auth) {
+                const { data } = await window.supabaseClient.auth.getSession();
+                const session = data ? data.session : null;
+                if (session) {
+                    userId = session.user.id;
+                    const { data: profile } = await window.supabaseClient
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', userId)
+                        .maybeSingle();
 
-            userId = session.user.id;
-
-            // Fetch user profile role from Supabase
-            const { data: profile } = await window.supabaseClient
-                .from('profiles')
-                .select('role')
-                .eq('id', userId)
-                .single();
-
-            if (profile && profile.role) {
-                userRole = profile.role.toLowerCase();
+                    if (profile && profile.role) {
+                        userRole = profile.role.toLowerCase();
+                        updateCategoryDropdown();
+                    }
+                }
             }
-
-            // Populate Category Select Dropdown based on verified role
-            updateCategoryDropdown();
-
-            await fetchCalendarEvents();
-            renderCalendar();
-
         } catch (err) {
-            console.error("Failed to initialize calendar:", err);
+            console.warn("Calendar auth notice:", err);
         }
+
+        await fetchCalendarEvents();
+        renderCalendar();
+    }
+
+    function updateHeaderClock() {
+        const navDate = document.getElementById('navDateDisplay') || document.querySelector('.theme-nav__date');
+        if (!navDate) return;
+
+        function tick() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            navDate.innerHTML = `<i class="far fa-calendar-alt"></i> ${dateStr} | ${timeStr}`;
+        }
+        tick();
+        setInterval(tick, 1000);
     }
 
     function updateCategoryDropdown() {
@@ -57,29 +79,117 @@
         }
     }
 
-    // Fetch Events from Supabase (RLS applies filtering)
+    function formatTime12h(time24) {
+        if (!time24) return '';
+        const parts = time24.split(':');
+        const h = parseInt(parts[0], 10);
+        const m = parseInt(parts[1] || '0', 10);
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+    }
+
+    function calculateDurationHrs(start24, end24) {
+        if (!start24 || !end24) return '';
+        const [h1, m1] = start24.split(':').map(Number);
+        const [h2, m2] = end24.split(':').map(Number);
+        let diffMins = (h2 * 60 + m2) - (h1 * 60 + m1);
+        if (diffMins <= 0) diffMins += 24 * 60;
+        const hrs = (diffMins / 60).toFixed(1).replace(/\.0$/, '');
+        return `${hrs} hr${hrs === '1' ? '' : 's'}`;
+    }
+
+    // Fetch Events from Supabase (with automatic sample & localStorage fallback)
     async function fetchCalendarEvents() {
+        const yearStr = currentDate.getFullYear();
+        const monthStr = String(currentDate.getMonth() + 1).padStart(2, '0');
+
+        const defaultSampleEvents = [
+            { id: 'sample-1', date: `${yearStr}-${monthStr}-05`, title: 'Division Academic Evaluation', type: 'schoolwide', time: '08:00 AM - 11:30 AM (3.5 hrs)', target: 'All Faculty' },
+            { id: 'sample-2', date: `${yearStr}-${monthStr}-14`, title: 'Grade Level Learning Action Cell (LAC)', type: 'schoolwide', time: '01:00 PM - 03:00 PM (2 hrs)', target: 'Grade 2 Teachers' },
+            { id: 'sample-3', date: `${yearStr}-${monthStr}-22`, title: 'Parent-Teacher Conference (PTC)', type: 'personal', time: '09:00 AM - 11:00 AM (2 hrs)', target: 'Grade 2 - Sampaguita' }
+        ];
+
+        let localCustom = [];
         try {
+            const stored = localStorage.getItem('kandili_custom_events');
+            if (stored) localCustom = JSON.parse(stored);
+        } catch(e){}
+
+        let deletedIds = [];
+        try {
+            const delStored = localStorage.getItem('kandili_deleted_events');
+            if (delStored) deletedIds = JSON.parse(delStored);
+        } catch(e){}
+
+        const activeSamples = defaultSampleEvents.filter(e => !deletedIds.includes(String(e.id)));
+        const activeCustom = localCustom.filter(e => !deletedIds.includes(String(e.id)));
+
+        try {
+            if (!window.supabaseClient) {
+                eventsList = [...activeSamples, ...activeCustom];
+                return;
+            }
+
             const { data: events, error } = await window.supabaseClient
                 .from('events')
                 .select('*')
                 .order('start_time', { ascending: true });
 
-            if (error) throw error;
+            if (error || !events || events.length === 0) {
+                eventsList = [...activeSamples, ...activeCustom];
+                return;
+            }
 
-            eventsList = (events || []).map(e => ({
-                id: e.id,
-                date: e.start_time.split('T')[0],
-                title: e.title,
-                type: e.event_type, // 'schoolwide' or 'personal'
-                time: e.description || 'All Day',
-                createdBy: e.created_by,
-                canDelete: e.created_by === userId || (e.event_type === 'schoolwide' && (userRole === 'principal' || userRole === 'admin'))
-            }));
+            const fetchedList = events.map(e => {
+                let parsedTime = e.description || 'All Day';
+                let parsedTarget = 'All Faculty';
+                try {
+                    if (e.description && e.description.trim().startsWith('{')) {
+                        const parsed = JSON.parse(e.description);
+                        parsedTime = parsed.time || parsedTime;
+                        parsedTarget = parsed.target || parsedTarget;
+                    }
+                } catch(err) {}
+
+                return {
+                    id: e.id,
+                    date: e.start_time ? e.start_time.split('T')[0] : formatDateKey(new Date()),
+                    title: e.title,
+                    type: e.event_type || 'schoolwide',
+                    time: parsedTime,
+                    target: parsedTarget,
+                    createdBy: e.created_by,
+                    canDelete: e.created_by === userId || (e.event_type === 'schoolwide' && (userRole === 'principal' || userRole === 'admin'))
+                };
+            });
+
+            // Filter out deleted IDs from fetched list as well
+            const activeFetched = fetchedList.filter(e => !deletedIds.includes(String(e.id)));
+            const fetchedIds = new Set(activeFetched.map(e => String(e.id)));
+            const uniqueCustom = activeCustom.filter(e => !fetchedIds.has(String(e.id)));
+            eventsList = [...activeFetched, ...uniqueCustom];
 
         } catch (err) {
-            console.error("Error fetching calendar events:", err.message);
+            console.warn("Calendar events fetch notice:", err.message);
+            eventsList = [...activeSamples, ...activeCustom];
         }
+    }
+
+    function isEventOnDate(event, dateObj) {
+        if (!event || !event.date) return false;
+        const dateKey = formatDateKey(dateObj);
+        const span = parseInt(event.daysSpan || 1, 10);
+        if (span <= 1) {
+            return event.date === dateKey;
+        }
+
+        const startDate = new Date(event.date + 'T00:00:00');
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + (span - 1));
+
+        const targetDate = new Date(dateKey + 'T00:00:00');
+        return targetDate >= startDate && targetDate <= endDate;
     }
 
     // Render Calendar Grid & Sidebar
@@ -104,7 +214,7 @@
         const selectedKey = formatDateKey(selectedDate);
         const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
 
-        const monthEvents = eventsList.filter(e => e.date.startsWith(monthKey));
+        const monthEvents = eventsList.filter(e => isEventOnDate(e, selectedDate) || e.date.startsWith(monthKey));
         
         const countTotal = document.getElementById('monthEventCount');
         const countSchool = document.getElementById('schoolCount');
@@ -132,12 +242,12 @@
             `;
 
             if (isCurrentMonth) {
-                const dayEvents = eventsList.filter(e => e.date === cellKey);
+                const dayEvents = eventsList.filter(e => isEventOnDate(e, cellDate));
                 dayEvents.slice(0, 2).forEach(event => {
                     const pill = document.createElement('div');
                     pill.className = `event-pill event-${event.type}`;
                     pill.style.cssText = `padding: 2px 6px; margin-top: 4px; border-radius: 4px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; ${event.type === 'schoolwide' ? 'background: #0038A8; color: #ffffff;' : 'background: #10b981; color: #ffffff;'}`;
-                    pill.textContent = event.title;
+                    pill.textContent = (event.daysSpan > 1 ? `[${event.daysSpan}D] ` : '') + event.title;
                     pill.addEventListener('click', (e) => {
                         e.stopPropagation();
                         selectedDate = cellDate;
@@ -170,8 +280,7 @@
     function updateSelectedEvents() {
         const selectedDateLabel = document.getElementById('selectedDateLabel');
         const selectedEvents = document.getElementById('selectedEvents');
-        const key = formatDateKey(selectedDate);
-        const dayEvents = eventsList.filter(e => e.date === key);
+        const dayEvents = eventsList.filter(e => isEventOnDate(e, selectedDate));
 
         if (selectedDateLabel) selectedDateLabel.textContent = formatDisplayDate(selectedDate);
         if (!selectedEvents) return;
@@ -186,8 +295,12 @@
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         <strong style="color: #0f172a; font-size: 0.95rem;">${event.title}</strong>
-                        <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">
-                            ${event.time} &bull; <span style="text-transform: capitalize; font-weight: 600; color: ${event.type === 'schoolwide' ? '#0038A8' : '#059669'};">${event.type}</span>
+                        <div style="font-size: 0.8rem; color: #475569; margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
+                            <span><i class="far fa-clock" style="width: 14px; color: #0038A8;"></i> ${event.time}</span>
+                            <span><i class="fas fa-users" style="width: 14px; color: #059669;"></i> Target: <strong>${event.target || 'All Faculty'}</strong></span>
+                            <span style="font-size: 0.75rem; text-transform: capitalize; font-weight: 600; color: ${event.type === 'schoolwide' ? '#0038A8' : '#059669'}; margin-top: 2px;">
+                                &bull; ${event.type === 'schoolwide' ? 'Schoolwide Event' : 'Personal Note'} ${event.daysSpan > 1 ? `(${event.daysSpan}-Day Span)` : ''}
+                            </span>
                         </div>
                     </div>
                     ${event.canDelete ? `<button class="delete-evt-btn" data-id="${event.id}" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 0.9rem;" title="Delete Event"><i class="fas fa-trash-alt"></i></button>` : ''}
@@ -218,9 +331,11 @@
         if (addEventBtn && eventForm) {
             addEventBtn.addEventListener('click', () => {
                 updateCategoryDropdown();
-                document.getElementById('eventTitle').value = '';
-                document.getElementById('eventTime').value = '';
+                const titleInput = document.getElementById('eventTitle');
+                if (titleInput) titleInput.value = '';
                 eventForm.classList.remove('hidden');
+                eventForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (titleInput) titleInput.focus();
             });
         }
 
@@ -233,39 +348,72 @@
                 e.preventDefault();
                 const title = document.getElementById('eventTitle').value.trim();
                 const type = document.getElementById('eventType').value;
-                const time = document.getElementById('eventTime').value.trim() || 'All Day';
+                const targetVal = document.getElementById('targetAudience')?.value || 'All Faculty';
+                const daysSpanVal = parseInt(document.getElementById('eventDaysSpan')?.value || '1', 10);
+                
+                const startTimeVal = document.getElementById('eventStartTime')?.value || '08:00';
+                const endTimeVal = document.getElementById('eventEndTime')?.value || '12:00';
 
-                if (!title) return;
+                const startStr = formatTime12h(startTimeVal);
+                const endStr = formatTime12h(endTimeVal);
+                const durationStr = calculateDurationHrs(startTimeVal, endTimeVal);
+                
+                const timeDisplay = (daysSpanVal > 1) 
+                    ? `${daysSpanVal} Days Duration (${startStr} - ${endStr})` 
+                    : ((startStr && endStr) ? `${startStr} - ${endStr} (${durationStr})` : 'All Day');
 
-                const saveBtn = document.getElementById('saveEventBtn');
-                if (saveBtn) {
-                    saveBtn.innerText = 'Saving...';
-                    saveBtn.disabled = true;
+                if (!title) {
+                    alert("Please enter an event title.");
+                    return;
                 }
 
+                const newEvent = {
+                    id: 'evt-' + Date.now(),
+                    date: formatDateKey(selectedDate),
+                    daysSpan: daysSpanVal,
+                    title: title,
+                    type: type,
+                    time: timeDisplay,
+                    target: targetVal,
+                    createdBy: userId,
+                    canDelete: true
+                };
+
+                // Add to local events list & save to localStorage immediately
+                eventsList.push(newEvent);
                 try {
-                    const { error } = await window.supabaseClient
-                        .from('events')
-                        .insert({
+                    const localCustom = JSON.parse(localStorage.getItem('kandili_custom_events') || '[]');
+                    localCustom.push(newEvent);
+                    localStorage.setItem('kandili_custom_events', JSON.stringify(localCustom));
+                } catch(err){}
+
+                renderCalendar();
+                eventForm.classList.add('hidden');
+                document.getElementById('eventTitle').value = '';
+
+                // Background Supabase Sync
+                if (window.supabaseClient) {
+                    try {
+                        const payloadDesc = JSON.stringify({ time: timeDisplay, target: targetVal, daysSpan: daysSpanVal });
+                        const dbRecord = {
                             title: title,
-                            event_type: type, // 'personal' or 'schoolwide'
-                            description: time,
-                            start_time: formatDateKey(selectedDate) + 'T00:00:00Z',
-                            created_by: userId
-                        });
+                            event_type: type === 'personal' ? 'personal' : 'schoolwide',
+                            description: payloadDesc,
+                            start_time: formatDateKey(selectedDate) + 'T00:00:00Z'
+                        };
+                        if (userId) dbRecord.created_by = userId;
 
-                    if (error) throw error;
+                        const { error: insertErr } = await window.supabaseClient
+                            .from('events')
+                            .insert([dbRecord]);
 
-                    eventForm.classList.add('hidden');
-                    await fetchCalendarEvents();
-                    renderCalendar();
-
-                } catch (err) {
-                    alert("Failed to save event: " + err.message);
-                } finally {
-                    if (saveBtn) {
-                        saveBtn.innerText = 'Save Event';
-                        saveBtn.disabled = false;
+                        if (insertErr) {
+                            console.warn("Supabase event insert notice:", insertErr.message);
+                        } else {
+                            console.log("Successfully inserted event into Supabase!");
+                        }
+                    } catch (err) {
+                        console.warn("Background event sync notice:", err.message);
                     }
                 }
             });
@@ -275,19 +423,34 @@
     async function deleteCalendarEvent(eventId) {
         if (!confirm("Are you sure you want to delete this event?")) return;
 
+        // 1. Remove locally immediately & update UI
+        eventsList = eventsList.filter(e => String(e.id) !== String(eventId));
+
+        // 2. Persist deletion in localStorage so custom & sample events don't return on refresh
         try {
-            const { error } = await window.supabaseClient
-                .from('events')
-                .delete()
-                .eq('id', eventId);
+            let customEvents = JSON.parse(localStorage.getItem('kandili_custom_events') || '[]');
+            customEvents = customEvents.filter(e => String(e.id) !== String(eventId));
+            localStorage.setItem('kandili_custom_events', JSON.stringify(customEvents));
 
-            if (error) throw error;
+            let deletedIds = JSON.parse(localStorage.getItem('kandili_deleted_events') || '[]');
+            if (!deletedIds.includes(String(eventId))) {
+                deletedIds.push(String(eventId));
+                localStorage.setItem('kandili_deleted_events', JSON.stringify(deletedIds));
+            }
+        } catch(err){}
 
-            await fetchCalendarEvents();
-            renderCalendar();
+        renderCalendar();
 
-        } catch (err) {
-            alert("Failed to delete event: " + err.message);
+        // 3. Background Supabase delete if applicable
+        if (window.supabaseClient && userId && !String(eventId).startsWith('evt-') && !String(eventId).startsWith('sample-')) {
+            try {
+                await window.supabaseClient
+                    .from('events')
+                    .delete()
+                    .eq('id', eventId);
+            } catch(err) {
+                console.warn("Background delete notice:", err.message);
+            }
         }
     }
 
@@ -299,271 +462,3 @@
         return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     }
 })();
-
-/* ============================================================ */
-/* KANDILI MASTER CALENDAR - ROLE-BASED ACCESS CONTROL LOGIC      */
-/* ============================================================ */
-
-// Retrieve active user role from localStorage (defaults to 'principal' if null)
-const currentUserRole = localStorage.getItem('user_role') || 'principal'; 
-
-let events = [
-    { id: 101, date: '2026-07-03', title: 'Q1 Faculty Meeting', type: 'school', time: '09:00 AM' },
-    { id: 102, date: '2026-07-18', title: 'Grade Submission Deadline', type: 'school', time: '05:00 PM' },
-    { id: 103, date: '2026-07-18', title: 'Parent-Teacher Conference', type: 'personal', time: '03:00 PM' },
-    { id: 104, date: '2026-07-22', title: 'Department Planning', type: 'school', time: '08:30 AM' },
-    { id: 105, date: '2026-07-29', title: 'Lesson Plan Preparation', type: 'personal', time: '10:00 AM' }
-];
-
-// DOM Element Selectors
-const calendarGrid = document.getElementById('calendarGrid');
-const monthLabel = document.getElementById('monthLabel');
-const selectedDateLabel = document.getElementById('selectedDateLabel');
-const selectedEvents = document.getElementById('selectedEvents');
-const monthEventCount = document.getElementById('monthEventCount');
-const schoolCount = document.getElementById('schoolCount');
-const personalCount = document.getElementById('personalCount');
-const eventForm = document.getElementById('eventForm');
-const eventIdInput = document.getElementById('eventId');
-const eventTitle = document.getElementById('eventTitle');
-const eventType = document.getElementById('eventType');
-const eventTime = document.getElementById('eventTime');
-const addEventBtn = document.getElementById('addEventBtn');
-const cancelEventBtn = document.getElementById('cancelEventBtn');
-const deleteEventBtn = document.getElementById('deleteEventBtn');
-
-let currentDate = new Date(2026, 6, 1);
-let selectedDate = new Date(2026, 6, 18);
-
-// Configure form options based on logged-in role
-function configureRoleOptions() {
-    if (!eventType) return;
-    eventType.innerHTML = '';
-    if (currentUserRole === 'principal' || currentUserRole === 'admin') {
-        eventType.innerHTML = `
-            <option value="school">Schoolwide / Master Schedule (All Faculty)</option>
-            <option value="personal">Personal Event (Principal Private)</option>
-        `;
-    } else {
-        // Regular Teacher Access
-        eventType.innerHTML = `
-            <option value="personal">Personal Event (Visible only to you)</option>
-        `;
-    }
-}
-
-function formatDateKey(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}
-
-function formatDisplayDate(date) {
-    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-}
-
-function getEventsForDate(dateKey) {
-    return events.filter((event) => event.date === dateKey);
-}
-
-function renderCalendar() {
-    if (!calendarGrid) return;
-    
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const firstWeekday = firstDay.getDay();
-    const totalCells = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
-
-    monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    calendarGrid.innerHTML = '';
-
-    const todayKey = formatDateKey(new Date());
-    const selectedKey = formatDateKey(selectedDate);
-    const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`;
-    const monthEvents = events.filter((event) => event.date.startsWith(monthKey));
-    
-    monthEventCount.textContent = monthEvents.length;
-    schoolCount.textContent = monthEvents.filter((e) => e.type === 'school').length;
-    personalCount.textContent = monthEvents.filter((e) => e.type === 'personal').length;
-
-    for (let i = 0; i < totalCells; i += 1) {
-        const dayNumber = i - firstWeekday + 1;
-        const cellDate = new Date(year, month, dayNumber);
-        const isCurrentMonth = cellDate.getMonth() === month;
-        const cellKey = formatDateKey(cellDate);
-        const isToday = cellKey === todayKey;
-        const isSelected = cellKey === selectedKey;
-
-        const dayEl = document.createElement('div');
-        dayEl.className = `calendar-day${isCurrentMonth ? '' : ' disabled'}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}`;
-        dayEl.innerHTML = `
-            <div class="date-row">
-                <span class="date-number">${isCurrentMonth ? cellDate.getDate() : ''}</span>
-                ${isToday ? '<span class="today-pill">Today</span>' : ''}
-            </div>
-        `;
-
-        if (isCurrentMonth) {
-            const eventList = getEventsForDate(cellKey);
-            eventList.slice(0, 2).forEach((event) => {
-                const pill = document.createElement('div');
-                pill.className = `event-pill event-${event.type}`;
-                pill.textContent = event.title;
-                pill.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    selectedDate = cellDate;
-                    renderCalendar();
-                    updateSelectedEvents();
-                });
-                dayEl.appendChild(pill);
-            });
-            if (eventList.length > 2) {
-                const more = document.createElement('div');
-                more.className = 'event-pill event-more';
-                more.textContent = `+${eventList.length - 2} more`;
-                dayEl.appendChild(more);
-            }
-        }
-
-        dayEl.addEventListener('click', () => {
-            if (!isCurrentMonth) return;
-            selectedDate = cellDate;
-            renderCalendar();
-            updateSelectedEvents();
-        });
-
-        calendarGrid.appendChild(dayEl);
-    }
-
-    updateSelectedEvents();
-}
-
-function updateSelectedEvents() {
-    if (!selectedEvents) return;
-    const key = formatDateKey(selectedDate);
-    const list = getEventsForDate(key);
-    selectedDateLabel.textContent = formatDisplayDate(selectedDate);
-    
-    if (list.length === 0) {
-        selectedEvents.innerHTML = '<div class="empty-state">No events scheduled for this day.</div>';
-        return;
-    }
-
-    selectedEvents.innerHTML = list.map((event) => {
-        // Check if current user has permission to edit this specific event
-        const isEditable = currentUserRole === 'principal' || currentUserRole === 'admin' || event.type === 'personal';
-        
-        return `
-            <div class="detail-card" style="position: relative; padding: 0.85rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;">
-                <div class="detail-card-title" style="font-weight: 700; color: #0f172a;">${event.title}</div>
-                <div class="detail-card-meta" style="font-size: 0.8rem; color: #64748b; margin-top: 0.2rem;">
-                    ${event.time || 'All day'} &bull; <span class="badge-${event.type}">${event.type === 'school' ? 'Schoolwide' : 'Personal'}</span>
-                </div>
-                ${isEditable ? `
-                    <button onclick="editEvent(${event.id})" style="position: absolute; right: 0.75rem; top: 0.75rem; background: none; border: none; color: #0038A8; cursor: pointer;">
-                        <i class="fas fa-pen-to-square"></i>
-                    </button>
-                ` : ''}
-            </div>
-        `;
-    }).join('');
-}
-
-function editEvent(id) {
-    const ev = events.find(e => e.id === id);
-    if (!ev) return;
-
-    eventIdInput.value = ev.id;
-    eventTitle.value = ev.title;
-    eventTime.value = ev.time;
-    eventType.value = ev.type;
-    
-    document.getElementById('formHeader').textContent = 'Edit Event Details';
-    deleteEventBtn.classList.remove('hidden');
-    eventForm.classList.remove('hidden');
-}
-
-// Event Listeners Initializer
-document.addEventListener('DOMContentLoaded', () => {
-    configureRoleOptions();
-    renderCalendar();
-
-    if (document.getElementById('prevMonthBtn')) {
-        document.getElementById('prevMonthBtn').addEventListener('click', () => {
-            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-            renderCalendar();
-        });
-    }
-
-    if (document.getElementById('nextMonthBtn')) {
-        document.getElementById('nextMonthBtn').addEventListener('click', () => {
-            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-            renderCalendar();
-        });
-    }
-
-    if (document.getElementById('todayBtn')) {
-        document.getElementById('todayBtn').addEventListener('click', () => {
-            currentDate = new Date();
-            selectedDate = new Date();
-            renderCalendar();
-        });
-    }
-
-    if (addEventBtn) {
-        addEventBtn.addEventListener('click', () => {
-            eventIdInput.value = '';
-            eventTitle.value = '';
-            eventTime.value = '';
-            configureRoleOptions();
-            document.getElementById('formHeader').textContent = 'Create New Event';
-            deleteEventBtn.classList.add('hidden');
-            eventForm.classList.remove('hidden');
-            eventTitle.focus();
-        });
-    }
-
-    if (cancelEventBtn) {
-        cancelEventBtn.addEventListener('click', () => {
-            eventForm.classList.add('hidden');
-        });
-    }
-
-    if (deleteEventBtn) {
-        deleteEventBtn.addEventListener('click', () => {
-            const id = parseInt(eventIdInput.value);
-            events = events.filter(e => e.id !== id);
-            eventForm.classList.add('hidden');
-            renderCalendar();
-        });
-    }
-
-    if (eventForm) {
-        eventForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!eventTitle.value.trim()) return;
-
-            const existingId = eventIdInput.value;
-            if (existingId) {
-                const ev = events.find(item => item.id === parseInt(existingId));
-                if (ev) {
-                    ev.title = eventTitle.value.trim();
-                    ev.type = eventType.value;
-                    ev.time = eventTime.value.trim() || 'All day';
-                }
-            } else {
-                events.push({
-                    id: Date.now(),
-                    date: formatDateKey(selectedDate),
-                    title: eventTitle.value.trim(),
-                    type: eventType.value,
-                    time: eventTime.value.trim() || 'All day'
-                });
-            }
-
-            eventForm.classList.add('hidden');
-            renderCalendar();
-        });
-    }
-});

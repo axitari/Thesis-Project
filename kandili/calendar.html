@@ -27,7 +27,7 @@
             <div class="theme-nav__title">Master Calendar</div>
         </div>
         <div class="theme-nav__actions">
-            <span class="theme-nav__date" id="navDateDisplay"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
+            <span class="theme-nav__date" id="navDateDisplay"><i class="far fa-calendar-alt"></i> Loading date...</span>
             <button class="theme-nav__refresh" id="refreshBtn" type="button" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
     </header>
@@ -92,8 +92,8 @@
                 <input type="hidden" id="eventId">
 
                 <div class="field-group">
-                    <label for="eventTitle" style="font-weight: 600; font-size: 0.85rem;">Event / Class Title</label>
-                    <input id="eventTitle" name="eventTitle" type="text" placeholder="e.g. Araling Panlipunan Class or Faculty Meeting" required style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    <label for="eventTitle" style="font-weight: 600; font-size: 0.85rem;">Event Title</label>
+                    <input id="eventTitle" name="eventTitle" type="text" placeholder="e.g. Division Evaluation, Midyear InSET, Faculty Meeting" required style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
                 </div>
 
                 <div class="field-group">
@@ -104,8 +104,31 @@
                 </div>
 
                 <div class="field-group">
-                    <label for="eventTime" style="font-weight: 600; font-size: 0.85rem;">Time Schedule</label>
-                    <input id="eventTime" name="eventTime" type="text" placeholder="e.g. 08:00 AM - 09:00 AM" style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 1rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    <label for="targetAudience" style="font-weight: 600; font-size: 0.85rem;">Target Audience / Assigned Teachers</label>
+                    <select id="targetAudience" name="targetAudience" style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                        <option value="All Faculty">All Faculty (Schoolwide)</option>
+                        <option value="Grade 1 Teachers">Grade 1 Teachers</option>
+                        <option value="Grade 2 Teachers">Grade 2 Teachers</option>
+                        <option value="Grade 3 Teachers">Grade 3 Teachers</option>
+                        <option value="Grade 4 Teachers">Grade 4 Teachers</option>
+                        <option value="Grade 5 Teachers">Grade 5 Teachers</option>
+                        <option value="Grade 6 Teachers">Grade 6 Teachers</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+                    <div class="field-group">
+                        <label for="eventStartTime" style="font-weight: 600; font-size: 0.85rem;">Start Time</label>
+                        <input id="eventStartTime" name="eventStartTime" type="time" value="08:00" style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 1rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                    <div class="field-group">
+                        <label for="eventEndTime" style="font-weight: 600; font-size: 0.85rem;">End Time</label>
+                        <input id="eventEndTime" name="eventEndTime" type="time" value="12:00" style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 1rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                    <div class="field-group">
+                        <label for="eventDaysSpan" style="font-weight: 600; font-size: 0.85rem;">Duration (Days)</label>
+                        <input id="eventDaysSpan" name="eventDaysSpan" type="number" min="1" max="14" value="1" placeholder="1" style="width: 100%; padding: 0.6rem; margin-top: 0.25rem; margin-bottom: 1rem; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+                    </div>
                 </div>
 
                 <div class="field-actions" style="display: flex; justify-content: space-between; align-items: center;">
