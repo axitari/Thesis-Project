@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - Educator Registration</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/register-style.css">
 </head>
 <body class="auth-body">
 
-   <div class="auth-card register-card" style="max-width: 650px;">
+   <div class="auth-card register-card">
         
         <div class="auth-header">
             <h2>Kandili Registration</h2>
@@ -31,13 +32,47 @@
 
             <!-- Account Credentials -->
             <div class="form-group">
-                <label for="email"Email</label>
+                <label for="email">Email</label>
                 <input type="email" id="email" placeholder="juan.delacruz@deped.gov.ph" required>
             </div>
             
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" required>
+            </div>
+
+            <!-- Teacher Employment Details -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="depedEmployeeId">DepEd Employee ID</label>
+                    <input type="text" id="depedEmployeeId" placeholder="e.g. 123456" required>
+                </div>
+                <div class="form-group">
+                    <label for="plantillaItemNo">Plantilla Item No.</label>
+                    <input type="text" id="plantillaItemNo" placeholder="e.g. T-2024-001" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prcLicenseNo">PRC License No.</label>
+                    <input type="text" id="prcLicenseNo" placeholder="e.g. 1234567" required>
+                </div>
+                <div class="form-group">
+                    <label for="employmentStatus">Employment Status</label>
+                    <input type="text" id="employmentStatus" placeholder="e.g. Permanent" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="yearsInService">Years in Service</label>
+                    <input type="number" id="yearsInService" min="0" placeholder="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number</label>
+                    <input type="tel" id="contactNumber" placeholder="+63 912 345 6789" required>
+                </div>
             </div>
 
             <!-- Assignment Row -->
@@ -63,6 +98,31 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="department">Department / Subject</label>
+                    <input type="text" id="department" placeholder="e.g. Math Department" required>
+                </div>
+                <div class="form-group">
+                    <label for="advisoryClass">Advisory Class</label>
+                    <input type="text" id="advisoryClass" placeholder="e.g. Grade 6 - Diamond" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="educationalAttainment">Highest Educational Attainment</label>
+                    <input type="text" id="educationalAttainment" placeholder="e.g. Bachelor of Secondary Education" required>
+                </div>
+                <div class="form-group">
+                    <label for="teachingLevel">Teaching Level</label>
+                    <select id="teachingLevel" required>
+                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
+                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- System Role -->
             <div class="form-row">
                 <div class="form-group">
@@ -74,11 +134,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="teachingLevel">Teaching Level</label>
-                    <select id="teachingLevel">
-                        <option value="Primary">Primary (Grades 1-3) - Self-Contained</option>
-                        <option value="Intermediate">Intermediate (Grades 4-6) - Departmentalized</option>
-                    </select>
+                    <label for="assignedInstitution">Assigned Institution</label>
+                    <input type="text" id="assignedInstitution" placeholder="e.g. Raul O.V. Causing Memorial School" required>
                 </div>
             </div>
 
