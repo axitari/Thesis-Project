@@ -251,6 +251,7 @@ input[type=range] { flex: 1; cursor: pointer; accent-color: var(--deped-blue); }
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 1.25rem;
+    z-index: 9999;
     display: none;
     flex-direction: column;
     gap: 0.35rem;
@@ -2212,6 +2213,7 @@ body { margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif; background: #f8f
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 1.25rem;
+    z-index: 9999;
     display: none;
     flex-direction: column;
     gap: 0.35rem;

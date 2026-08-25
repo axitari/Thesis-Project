@@ -17,14 +17,14 @@
 
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js" data-allowed-roles="teacher"></script>
-    <script src="../static/logout.js"></script>
-    <script src="../static/esf7Parser.js"></script>
-    <script src="../static/teacherDashboard.js"></script>
+    <script src="../static/js/supabaseClient.js"></script>
+    <script src="../static/js/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../static/js/logout.js"></script>
+    <script src="../static/js/esf7Parser.js"></script>
+    <script src="../static/js/teacherDashboard.js"></script>
 
     <!-- External Stylesheet (Shared) -->
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
 
@@ -43,13 +43,14 @@
         </div>
         <div class="theme-nav__actions">
             <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh open-pulse-modal-btn" id="openPulseModalBtn" type="button" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3; font-weight: 600;"><i class="fas fa-heartbeat"></i> Pulse Check-in</button>
             <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
             <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
         <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Teachers Dashboard</a>
+            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
             <a href="teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
             <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
             <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
@@ -278,13 +279,58 @@
             <button class="modal-close-icon" id="wellnessCloseBtn" aria-label="Close modal">&times;</button>
         </div>
         <div class="modal-body" style="padding-top: 1rem;">
-            <!-- Exactly your original alert banner elements inside the modal frame -->
-            <div style="font-size: 0.95rem; line-height: 1.6; color: #334155; margin-bottom: 1.5rem;">
+            <div style="font-size: 0.95rem; line-height: 1.6; color: #334155; margin-bottom: 1.25rem;">
                 <i class="fas fa-exclamation-triangle" style="margin-right: 8px; color: #f59e0b;"></i>
-                <strong>Wellness Check-in Reminder:</strong> You haven't completed your weekly pulse check-in. This helps us monitor your wellbeing.
+                <strong>Wellness Check-in Reminder:</strong> How are you feeling today? Submitting your pulse check helps monitor overall wellbeing.
             </div>
-            <div class="modal-actions" style="justify-content: flex-end;">
-                <button class="alert-btn" id="completeCheckinBtn" style="width: auto;">Complete Check-in &rarr;</button>
+
+            <!-- Quick Mood Level Selection -->
+            <div style="margin-bottom: 1.25rem;">
+                <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.5rem; color: #0f172a;">Select your current feeling level:</label>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button type="button" class="pulse-opt-btn" data-val="1" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😫</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Exhausted</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="2" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😟</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Stressed</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="3" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😐</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Okay</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="4" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">🙂</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Good</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="5" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😁</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Great</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reminder / Snooze Controls -->
+            <div style="background: #f8fafc; padding: 0.85rem 1rem; border-radius: 8px; margin-bottom: 1.25rem; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="far fa-clock" style="color: #64748b;"></i>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: #475569;">Remind me in:</span>
+                    <select id="pulseRemindSelect" style="padding: 0.35rem 0.6rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: #fff; color: #0f172a;">
+                        <option value="15">15 Minutes</option>
+                        <option value="60" selected>1 Hour</option>
+                        <option value="240">4 Hours</option>
+                        <option value="1440">24 Hours (1 Day)</option>
+                    </select>
+                </div>
+                <button type="button" id="remindLaterBtn" style="padding: 0.4rem 0.85rem; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer;">
+                    <i class="fas fa-bell-slash"></i> Snooze Reminder
+                </button>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="alert-btn" id="completeCheckinBtn" style="width: auto; background: #64748b; font-size: 0.85rem;">Full Risk Assessment &rarr;</button>
+                <button class="alert-btn" id="submitWellnessBtn" style="width: auto; background: #0038A8;">Submit Pulse &rarr;</button>
             </div>
         </div>
     </div>
@@ -739,22 +785,7 @@
             return false; 
         }
 
-        // Your existing burger menu code
-        document.addEventListener('DOMContentLoaded', () => {
-            const burgerBtn = document.getElementById('burgerMenuBtn');
-            const navMenu = document.getElementById('themeNavMenu');
 
-            if (burgerBtn && navMenu) {
-                burgerBtn.addEventListener('click', () => {
-                    // Toggle the 'active' class on the menu
-                    navMenu.classList.toggle('active');
-                    
-                    // Update accessibility attribute
-                    const isExpanded = burgerBtn.getAttribute('aria-expanded') === 'true';
-                    burgerBtn.setAttribute('aria-expanded', !isExpanded);
-                });
-            }
-        });
 
         // ============================================================
         // REQUEST ADJUSTMENT MODAL
@@ -968,6 +999,6 @@
             }
         });
     </script>
-    <script src="../static/workloadManager.js"></script>
+    <script src="../static/js/workloadManager.js"></script>
 </body>
 </html>

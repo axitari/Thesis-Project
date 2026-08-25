@@ -462,25 +462,25 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
 }
 
 // ============================================================
-// AUTOMATIC WELLNESS CHECK-IN POP-UP
+// PULSE CHECK-IN & SNOOZE REMINDER SYSTEM
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-    const wellnessModal = document.getElementById('wellnessCheckinModal');
-    const wellnessCloseBtn = document.getElementById('wellnessCloseBtn');
+    const wellnessModal     = document.getElementById('wellnessCheckinModal');
+    const wellnessCloseBtn  = document.getElementById('wellnessCloseBtn');
+    const remindLaterBtn    = document.getElementById('remindLaterBtn');
+    const pulseRemindSelect = document.getElementById('pulseRemindSelect');
     const submitWellnessBtn = document.getElementById('submitWellnessBtn');
-    const pulseBtns = document.querySelectorAll('.pulse-opt-btn');
+    const completeBtn       = document.getElementById('completeCheckinBtn');
+    const openPulseBtns     = document.querySelectorAll('.open-pulse-modal-btn, #openPulseModalBtn');
+    const pulseBtns         = document.querySelectorAll('.pulse-opt-btn');
 
     let selectedPulseVal = null;
 
-    // Trigger Pop-up if user hasn't checked in recently (Simulated check)
-    const hasCheckedInThisWeek = sessionStorage.getItem('kandili_wellness_checked_in');
-
-    if (!hasCheckedInThisWeek && wellnessModal) {
-        // Short delay for smooth loading effect
-        setTimeout(() => {
+    function openWellnessModal() {
+        if (wellnessModal) {
             wellnessModal.classList.add('active');
             document.body.style.overflow = 'hidden';
-        }, 800);
+        }
     }
 
     function closeWellnessModal() {
@@ -490,15 +490,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Bind manual open triggers (Header button / nav link)
+    openPulseBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openWellnessModal();
+        });
+    });
+
     if (wellnessCloseBtn) {
         wellnessCloseBtn.addEventListener('click', closeWellnessModal);
     }
 
-    // Option Button Selection Logic
+    // Mood Option Button Selection Logic
     pulseBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             pulseBtns.forEach(b => {
-                b.style.borderColor = '#e2e8f0';
+                b.style.borderColor = '#cbd5e1';
                 b.style.background = '#ffffff';
             });
             btn.style.borderColor = '#0038A8';
@@ -507,17 +515,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Submit Check-in
+    // Snooze / Remind Later Handler
+    if (remindLaterBtn) {
+        remindLaterBtn.addEventListener('click', () => {
+            const minutes = parseInt(pulseRemindSelect?.value || '60', 10);
+            const nextReminderMs = Date.now() + (minutes * 60 * 1000);
+            
+            localStorage.setItem('kandili_pulse_next_reminder', nextReminderMs.toString());
+            closeWellnessModal();
+
+            const timeText = minutes >= 60 ? `${minutes / 60} hour(s)` : `${minutes} minutes`;
+            alert(`Reminder set! Kandili will remind you about your pulse check-in in ${timeText}.`);
+        });
+    }
+
+    // Submit Quick Pulse Check-in
     if (submitWellnessBtn) {
         submitWellnessBtn.addEventListener('click', () => {
             if (!selectedPulseVal) {
-                alert('Please select your feeling level before submitting.');
+                alert('Please select how you are feeling today before submitting.');
                 return;
             }
 
-            sessionStorage.setItem('kandili_wellness_checked_in', 'true');
-            alert('Thank you! Your weekly pulse check-in has been logged.');
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem('kandili_pulse_completed_date', today);
+            localStorage.removeItem('kandili_pulse_next_reminder');
+
+            alert('Thank you! Your daily pulse check-in has been recorded.');
             closeWellnessModal();
+        });
+    }
+
+    // Full Risk Assessment Button
+    if (completeBtn) {
+        completeBtn.addEventListener('click', () => {
+            closeWellnessModal();
+
+            const targetSection = document.getElementById('burnoutAssessmentSection');
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const burnoutCard = targetSection.nextElementSibling;
+                if (burnoutCard) {
+                    burnoutCard.classList.add('highlight-pulse');
+                    setTimeout(() => {
+                        burnoutCard.classList.remove('highlight-pulse');
+                    }, 2000);
+                }
+            }
+        });
+    }
+
+    // Close modal on overlay background click
+    if (wellnessModal) {
+        wellnessModal.addEventListener('click', (e) => {
+            if (e.target === wellnessModal) closeWellnessModal();
         });
     }
 });
@@ -608,67 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ============================================================
-// WELLNESS CHECK-IN MODAL HANDLER
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-    const wellnessModal   = document.getElementById('wellnessCheckinModal');
-    const closeBtn        = document.getElementById('wellnessCloseBtn');
-    const remindLaterBtn  = document.getElementById('remindLaterBtn');
-    const completeBtn     = document.getElementById('completeCheckinBtn');
 
-    // Auto-open modal if user hasn't checked in / dismissed during this session
-    const isDismissed = sessionStorage.getItem('kandili_wellness_dismissed');
-
-    if (!isDismissed && wellnessModal) {
-        setTimeout(() => {
-            wellnessModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }, 600);
-    }
-
-    function closeWellnessModal() {
-        if (wellnessModal) {
-            wellnessModal.classList.remove('active');
-            document.body.style.overflow = '';
-            sessionStorage.setItem('kandili_wellness_dismissed', 'true');
-        }
-    }
-
-    if (closeBtn) closeBtn.addEventListener('click', closeWellnessModal);
-    if (remindLaterBtn) remindLaterBtn.addEventListener('click', closeWellnessModal);
-
-    // Direct to Periodic Burnout Assessment
-    if (completeBtn) {
-        completeBtn.addEventListener('click', () => {
-            closeWellnessModal();
-
-            // Locate burnout section
-            const targetSection = document.getElementById('burnoutAssessmentSection');
-            
-            if (targetSection) {
-                // Smooth scroll to section
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                // Highlight effect on the assessment card
-                const burnoutCard = targetSection.nextElementSibling;
-                if (burnoutCard) {
-                    burnoutCard.classList.add('highlight-pulse');
-                    setTimeout(() => {
-                        burnoutCard.classList.remove('highlight-pulse');
-                    }, 2000);
-                }
-            }
-        });
-    }
-
-    // Close modal on overlay background click
-    if (wellnessModal) {
-        wellnessModal.addEventListener('click', (e) => {
-            if (e.target === wellnessModal) closeWellnessModal();
-        });
-    }
-});
 document.addEventListener('DOMContentLoaded', async () => {
     await initTeacherDashboard();
     setupESF7UploadListener();

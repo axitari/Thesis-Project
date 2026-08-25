@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Settings &bull; Kandili Workspace</title>
-    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js" data-allowed-roles="any"></script>
-    <script src="../static/logout.js"></script>
+    <script src="../static/js/supabaseClient.js"></script>
+    <script src="../static/js/authGuard.js" data-allowed-roles="any"></script>
+    <script src="../static/js/logout.js"></script>
 </head>
 <body class="dashboard-body">
 
@@ -32,8 +32,21 @@
         <div class="theme-nav__actions">
             <span class="theme-nav__date" id="settingsDate"><i class="far fa-calendar-alt"></i> Loading...</span>
             <button class="theme-nav__refresh" type="button" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-       
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
+            <a href="principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
+            <a href="teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="history.html"><i class="fas fa-history"></i> History</a>
+            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
+            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+        </nav>
     </header>
 
     <!-- ============================================================ -->
@@ -266,28 +279,10 @@
     <!-- ============================================================ -->
     <!-- JAVASCRIPT                                                   -->
     <!-- ============================================================ -->
-    <script src="../static/settings.js"></script>
+    <script src="../static/js/settings.js"></script>
     <script>
-        // Burger Menu Toggle
+        // Update date
         document.addEventListener('DOMContentLoaded', () => {
-            const burgerBtn = document.getElementById('burgerMenuBtn');
-            const navMenu = document.getElementById('themeNavMenu');
-
-            if (burgerBtn && navMenu) {
-                burgerBtn.addEventListener('click', () => {
-                    const isOpen = navMenu.classList.toggle('active');
-                    burgerBtn.setAttribute('aria-expanded', String(isOpen));
-                });
-
-                document.addEventListener('click', (event) => {
-                    if (!navMenu.contains(event.target) && !burgerBtn.contains(event.target)) {
-                        navMenu.classList.remove('active');
-                        burgerBtn.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
-
-            // Update date
             const now = new Date();
             const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
             const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });

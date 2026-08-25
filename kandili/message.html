@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - Messages</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../static/js/supabaseClient.js"></script>
+    <script src="../static/js/authGuard.js" data-allowed-roles="any"></script>
+    <script src="../static/js/logout.js"></script>
 </head>
 <body class="dashboard-body">
 
@@ -23,7 +26,21 @@
         <div class="theme-nav__actions">
             <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
             <button class="theme-nav__refresh" type="button" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
+            <a href="principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
+            <a href="teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="history.html"><i class="fas fa-history"></i> History</a>
+            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
+            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+        </nav>
     </header>
 
     <main class="dashboard">
@@ -99,31 +116,14 @@
             </div>
         </div>
     </main>
-    <script>
-        const burgerMenuBtn = document.getElementById('burgerMenuBtn');
-        const themeNavMenu = document.getElementById('themeNavMenu');
 
-        if (burgerMenuBtn && themeNavMenu) {
-            burgerMenuBtn.addEventListener('click', () => {
-                const isOpen = themeNavMenu.classList.toggle('active');
-                burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
-                    themeNavMenu.classList.remove('active');
-                    burgerMenuBtn.setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-    </script>
 
    <!-- Supabase & Auth Security Stack -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js"></script>
-    <script src="../static/logout.js"></script>
-    <script src="../static/messageLogic.js"></script>
+    <script src="../static/js/supabaseClient.js"></script>
+    <script src="../static/js/authGuard.js"></script>
+    <script src="../static/js/logout.js"></script>
+    <script src="../static/js/messageLogic.js"></script>
     <script>
     if (typeof checkAuthAndRole === "function") {
         checkAuthAndRole('any'); // 👈 Allows any authenticated user!

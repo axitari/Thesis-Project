@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kandili - System Administration</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!--Scripts Section -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../static/supabaseClient.js"></script>
-    <script src="../static/authGuard.js" data-allowed-roles="admin"></script>
-    <script src="../static/logout.js"></script>
+    <script src="../static/js/supabaseClient.js"></script>
+    <script src="../static/js/authGuard.js" data-allowed-roles="admin"></script>
+    <script src="../static/js/logout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="dashboard-body">
@@ -379,26 +379,8 @@
             Version 2.1.0
         </div>
     </footer>
-<script src="../static/adminDashboard.js"></script>
+<script src="../static/js/adminDashboard.js"></script>
 <script>
-    // 1. Burger Menu Toggle (Unchanged)
-    const burgerMenuBtn = document.getElementById('burgerMenuBtn');
-    const themeNavMenu = document.getElementById('themeNavMenu');
-
-    if (burgerMenuBtn && themeNavMenu) {
-        burgerMenuBtn.addEventListener('click', () => {
-            const isOpen = themeNavMenu.classList.toggle('active');
-            burgerMenuBtn.setAttribute('aria-expanded', String(isOpen));
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!themeNavMenu.contains(event.target) && !burgerMenuBtn.contains(event.target)) {
-                themeNavMenu.classList.remove('active');
-                burgerMenuBtn.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
-
     // 2. FIXED: Center Modal Toggle Logic
     // Notice how we are using 'teacherDrawer' here to match your HTML exactly!
     const teacherModal = document.getElementById('teacherDrawer');
