@@ -17,7 +17,7 @@ async function handleLogout(event) {
     } catch (err) {
         console.error("Unexpected logout failure:", err);
     } finally {
-        window.location.href = "login.html";
+        window.location.href = typeof getKandiliPath === 'function' ? getKandiliPath('general', 'login.html') : '../general/login.html';
     }
 }
 

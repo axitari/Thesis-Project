@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kandili - Log In</title>
+    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="auth-body">
+
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Access your Kandili dashboard</p>
+        </div>
+        
+       <section class="login-card">
+          <h3>Sign in</h3>
+          <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="name@school.edu" required />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="Enter password" required />
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role">
+                  <option value="../teacher/teacherdashboard.html">Teacher</option>
+                  <option value="../principal/principaldashboard.html">Principal</option>
+                  <option value="../admin/admindashboard.html">Admin</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary btn-login">
+                <span>Login</span>
+                <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+            </button>
+          </form>
+        </section>
+
+        <div class="footer-text">
+            <p>Forgot Password? <a href="">Click here</a></p>
+            <p>Doesn't have an account? <a href="register.html">Sign in</a></p>
+        </div>
+    </div>
+    <!-- 1. Load the Supabase library from the CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- 2. Load your connection script -->
+        <script src="../../static/js/supabaseClient.js"></script>
+
+    <!-- 3. Your logic for this specific page -->
+        <script src="../../static/js/loginLogic.js"></script>
+</body>
+</html>
