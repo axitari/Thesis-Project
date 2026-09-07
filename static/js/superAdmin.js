@@ -96,3 +96,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+/* Sidebar Collapsing & Navigation Actions */
+function toggleSidebar() {
+    const sidebar = document.getElementById('workspaceSidebar');
+    if (window.innerWidth <= 900) {
+        sidebar.classList.toggle('mobile-open');
+    } else {
+        sidebar.classList.toggle('collapsed');
+    }
+}
+
+function switchSidebarView(viewName, element) {
+    // Update active nav-item class
+    document.querySelectorAll('.sidebar-menu .nav-item').forEach(item => item.classList.remove('active'));
+    if (element) element.classList.add('active');
+
+    // Toggle views
+    const analytics = document.getElementById('analyticsSection');
+    const accounts = document.getElementById('accountsSection');
+
+    if (viewName === 'analytics') {
+        if (analytics) analytics.classList.remove('hidden');
+        if (accounts) accounts.classList.add('hidden');
+    } else if (viewName === 'accounts') {
+        if (analytics) analytics.classList.add('hidden');
+        if (accounts) accounts.classList.remove('hidden');
+    }
+}
