@@ -1,5 +1,20 @@
 // static/authGuard.js
 
+// Helper to resolve relative path from current page's subfolder to target relative path in kandili
+function getKandiliPath(targetSubfolder, targetPage) {
+    const path = window.location.pathname.replace(/\\/g, '/');
+    if (path.includes('/admin/') || path.includes('/general/') || path.includes('/principal/') || path.includes('/teacher/')) {
+        const parts = path.split('/');
+        const currentSubfolder = parts[parts.length - 2];
+        if (currentSubfolder === targetSubfolder) {
+            return targetPage;
+        } else {
+            return `../${targetSubfolder}/${targetPage}`;
+        }
+    }
+    return `../${targetSubfolder}/${targetPage}`;
+}
+
 async function checkAuthAndRole(requiredRole) {
     if (!window.supabaseClient) return;
 
@@ -8,7 +23,7 @@ async function checkAuthAndRole(requiredRole) {
 
     if (sessionError || !session) {
         console.warn("No active session. Redirecting to login.");
-        window.location.href = "login.html";
+        window.location.href = getKandiliPath('general', 'login.html');
         return;
     }
 
@@ -23,7 +38,7 @@ async function checkAuthAndRole(requiredRole) {
 
     if (profileError || !profile) {
         console.error("Could not verify user profile.");
-        window.location.href = "login.html";
+        window.location.href = getKandiliPath('general', 'login.html');
         return;
     }
 
@@ -33,13 +48,13 @@ async function checkAuthAndRole(requiredRole) {
     if (requiredRole && requiredRole !== 'any' && userRole !== requiredRole) {
         console.warn(`Unauthorized Access. User is a ${userRole}, required ${requiredRole}.`);
         if (userRole === 'teacher') {
-            window.location.href = "teacherdashboard.html";
+            window.location.href = getKandiliPath('teacher', 'teacherdashboard.html');
         } else if (userRole === 'principal') {
-            window.location.href = "principaldashboard.html";
+            window.location.href = getKandiliPath('principal', 'principaldashboard.html');
         } else if (userRole === 'admin') {
-            window.location.href = "admindashboard.html";
+            window.location.href = getKandiliPath('admin', 'admindashboard.html');
         } else {
-            window.location.href = "login.html";
+            window.location.href = getKandiliPath('general', 'login.html');
         }
         return;
     }
@@ -69,11 +84,18 @@ function adaptNavMenuForRole(role) {
             } else {
                 link.style.display = 'flex';
                 if (href.includes('teacherdashboard.html')) {
+                    link.href = getKandiliPath('teacher', 'teacherdashboard.html');
                     link.innerHTML = '<i class="fas fa-chart-line"></i> Teacher Dashboard';
                 }
                 if (href.includes('teacherprofilepage.html')) {
+                    link.href = getKandiliPath('teacher', 'teacherprofilepage.html');
                     link.innerHTML = '<i class="fas fa-user"></i> My Profile';
                 }
+                if (href.includes('message.html')) link.href = getKandiliPath('general', 'message.html');
+                if (href.includes('notification.html')) link.href = getKandiliPath('general', 'notification.html');
+                if (href.includes('history.html')) link.href = getKandiliPath('general', 'history.html');
+                if (href.includes('calendar.html')) link.href = getKandiliPath('general', 'calendar.html');
+                if (href.includes('settings.html')) link.href = getKandiliPath('general', 'settings.html');
             }
         } else if (role === 'principal') {
             // Hide Teacher / Admin links for Principals
@@ -82,18 +104,30 @@ function adaptNavMenuForRole(role) {
             } else {
                 link.style.display = 'flex';
                 if (href.includes('principaldashboard.html')) {
+                    link.href = getKandiliPath('principal', 'principaldashboard.html');
                     link.innerHTML = '<i class="fas fa-chart-pie"></i> Principal Dashboard';
                 }
                 if (href.includes('principalprofilepage.html')) {
+                    link.href = getKandiliPath('principal', 'principalprofilepage.html');
                     link.innerHTML = '<i class="fas fa-user"></i> My Profile';
                 }
+                if (href.includes('message.html')) link.href = getKandiliPath('general', 'message.html');
+                if (href.includes('notification.html')) link.href = getKandiliPath('general', 'notification.html');
+                if (href.includes('history.html')) link.href = getKandiliPath('general', 'history.html');
+                if (href.includes('calendar.html')) link.href = getKandiliPath('general', 'calendar.html');
+                if (href.includes('settings.html')) link.href = getKandiliPath('general', 'settings.html');
             }
         } else if (role === 'admin') {
-            // Admin navigation view
             if (href.includes('teacherdashboard.html') || href.includes('principaldashboard.html')) {
                 link.style.display = 'none';
             } else {
                 link.style.display = 'flex';
+                if (href.includes('admindashboard.html')) link.href = getKandiliPath('admin', 'admindashboard.html');
+                if (href.includes('message.html')) link.href = getKandiliPath('general', 'message.html');
+                if (href.includes('notification.html')) link.href = getKandiliPath('general', 'notification.html');
+                if (href.includes('history.html')) link.href = getKandiliPath('general', 'history.html');
+                if (href.includes('calendar.html')) link.href = getKandiliPath('general', 'calendar.html');
+                if (href.includes('settings.html')) link.href = getKandiliPath('general', 'settings.html');
             }
         }
     });
@@ -152,7 +186,6 @@ function autoRunAuthGuard() {
         const requiredRole = scriptTag.getAttribute('data-allowed-roles');
         checkAuthAndRole(requiredRole);
     } else {
-        // Check session role asynchronously to filter burger menu on generic pages
         if (window.supabaseClient) {
             window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
                 if (session) {

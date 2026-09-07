@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard &bull; Kandili Workspace</title>
+   
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- SheetJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../static/js/supabaseClient.js"></script>
+    <script src="../../static/js/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../../static/js/logout.js"></script>
+    <script src="../../static/js/esf7Parser.js"></script>
+    <script src="../../static/js/teacherDashboard.js"></script>
+
+    <!-- External Stylesheet (Shared) -->
+    <link rel="stylesheet" href="../../static/css/style.css">
+</head>
+<body>
+
+
+    <!-- ============================================================ -->
+    <!-- TOP NAVIGATION BAR                                           -->
+    <!-- ============================================================ -->
+    <header class="theme-nav">
+        <div class="theme-nav__brand">
+            <div class="theme-nav__logo">
+                <span class="theme-nav__logo-icon">🏫</span>
+                <span>Kandili</span>
+                <span class="logo-badge">Workspace</span>
+            </div>
+            <div class="theme-nav__title">Teacher Dashboard</div>
+        </div>
+        <div class="theme-nav__actions">
+            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+            <button class="theme-nav__refresh open-pulse-modal-btn" id="openPulseModalBtn" type="button" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3; font-weight: 600;"><i class="fas fa-heartbeat"></i> Pulse Check-in</button>
+            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
+            <a href="teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
+            <a href="teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="../general/message.html"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="../general/notification.html"><i class="fas fa-bell"></i> Notifications</a>
+            <a href="../general/history.html"><i class="fas fa-history"></i> History</a>
+            <a href="../general/calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
+            <a href="../general/settings.html"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+        </nav>
+    </header>
+
+
+    <main class="dashboard">
+
+
+        <!-- WELCOME HEADER -->
+        <div class="welcome-header">
+            <h1>👋 Welcome back, Sarah J. Cruz</h1>
+            <p>Teacher | Class Adviser | ROVCMS</p>
+        </div>
+
+
+<!-- ============================================================ -->
+<!-- ALERTS & ACTIONS ROW: Class Program Upload Only              -->
+<!-- ============================================================ -->
+<div class="alert-banner-row" style="grid-template-columns: 1fr;">
+    
+    <!-- CLASS PROGRAM UPLOAD -->
+    <div class="alert-banner alert-banner--info" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+        
+        <div class="alert-text" style="flex: 1; min-width: 280px;">
+            <i class="fas fa-upload" style="margin-right: 8px;"></i>
+            <strong>Class Program Upload:</strong> Upload your updated class program document for the current semester.
+        </div>
+        
+        <div class="upload-controls" style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <label class="upload-btn" style="margin: 0; white-space: nowrap;">
+                <i class="fas fa-folder-open"></i> Choose File
+                <input type="file" id="classProgramFile" accept=".pdf,.doc,.docx,.xls,.xlsx" hidden>
+            </label>
+            <span class="file-name" id="fileDisplay" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">No file chosen</span>
+            <button class="alert-btn alert-btn--blue" id="uploadProgramBtn" style="white-space: nowrap;"><i class="fas fa-cloud-upload-alt"></i> Upload Program</button>
+        </div>
+
+    </div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: CLASS PROFILE & DEMOGRAPHICS                        -->
+        <!-- ============================================================ -->
+        <section class="content-card">
+            <div class="card-title"><i class="fas fa-users"></i> Class Profile & Demographics</div>
+           
+            <div class="profile-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+               
+                <!-- 1: Section Info -->
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Section Information</h4>
+                    <div class="info-row"><span>Section:</span> <span id="dashSectionVal">Grade 2 - A</span></div>
+                    <div class="info-row"><span>Adviser:</span> <span id="dashAdviserVal">Doctor Brown</span></div>
+                    <div class="info-row"><span>SY:</span> <span id="dashSYVal">2026-2027</span></div>
+                </div>
+
+                <!-- 2: Demographics -->
+                <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <h4><i class="fas fa-chart-pie"></i> Student Demographics</h4>
+                   
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5rem;">
+                        <div style="text-align: left;">
+                            <div id="dashTotalDemographics" style="font-size: 2.2rem; font-weight: 700; color: var(--primary, #0038A8); line-height: 1;">42</div>
+                            <div style="font-size: 0.75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Total</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div id="dashBoysCount" style="font-size: 1.5rem; font-weight: 600; color: #3b82f6; line-height: 1;">22</div>
+                            <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Boys</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div id="dashGirlsCount" style="font-size: 1.5rem; font-weight: 600; color: #ec4899; line-height: 1;">20</div>
+                            <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Girls</div>
+                        </div>
+                    </div>
+
+
+                    <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.4rem; font-weight: 500;">
+                            <span id="dashBoysPercent">52%</span>
+                            <span id="dashGirlsPercent">48%</span>
+                        </div>
+                        <div style="height: 8px; width: 100%; background: #e2e8f0; border-radius: 4px; display: flex; overflow: hidden;">
+                            <div id="dashBoysBar" style="width: 52%; background: #3b82f6;"></div>
+                            <div id="dashGirlsBar" style="width: 48%; background: #ec4899;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 3: Quick Stats -->
+                <div class="info-box">
+                    <h4><i class="fas fa-bolt"></i> Quick Stats</h4>
+                    <div class="info-row"><span><i class="fas fa-medal" style="color: #f59e0b;"></i> Honor Students:</span> <span>5</span></div>
+                    <div class="info-row"><span><i class="fas fa-star" style="color: #10b981;"></i> Sp. Needs:</span> <span>2</span></div>
+                    <div class="info-row"><span><i class="fas fa-calendar-check" style="color: #3b82f6;"></i> Attendance:</span> <span>89%</span></div>
+                    <div class="info-row"><span><i class="fas fa-book" style="color: #8b5cf6;"></i> Subjects:</span> <span id="dashSubjectsCount">8</span></div>
+                </div>
+
+
+                <!-- 4: Weekly Task Breakdown -->
+                <div class="info-box" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <h4><i class="fas fa-layer-group"></i> Weekly Task Breakdown</h4>
+                   
+                    <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
+                                <span id="dashCoreSubjectsTitle" style="font-weight: 600; color: #334155;"><i class="fas fa-chalkboard" style="color: #3b82f6; margin-right: 5px;"></i> Core Teaching (8 Subjects)</span>
+                                <span id="dashCoreHoursVal" style="color: #64748b; font-weight: 700;">22 hrs</span>
+                            </div>
+                            <div style="height: 8px; width: 100%; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div id="dashCoreBar" style="width: 81%; background: #3b82f6; height: 100%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.4rem;">
+                                <span style="font-weight: 600; color: #334155;"><i class="fas fa-folder-open" style="color: #f59e0b; margin-right: 5px;"></i> Ancillary & Advising</span>
+                                <span id="dashAncillaryHoursVal" style="color: #64748b; font-weight: 700;">5 hrs</span>
+                            </div>
+                            <div style="height: 8px; width: 100%; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                                <div id="dashAncillaryBar" style="width: 19%; background: #f59e0b; height: 100%; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+
+
+                        <div style="border-top: 1px dashed #cbd5e1; padding-top: 0.8rem; margin-top: -0.2rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; color: #1e293b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Total Logged</span>
+                            <span id="dashTotalLoggedHoursVal" style="font-size: 1.1rem; font-weight: 800; color: var(--primary, #0038A8);">27 hrs</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- FOOTER ROW -->
+                <div style="grid-column: 1 / -1; padding-top: 1rem; border-top: 1px dashed #cbd5e1; display: flex; justify-content: flex-end; align-items: center; font-size: 0.9rem;">
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <a href="classprogram.html" class="btn-blue" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-calendar-alt"></i> View Class Program
+                        </a>
+                        <span style="color: #f59e0b; font-weight: 600; border-left: 1px solid #cbd5e1; padding-left: 1.5rem;">
+                            <i class="fas fa-tasks"></i> Workload: 68 (Mod)
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================ -->
+        <!-- SECTION: WORKLOAD & RISK INTELLIGENCE                        -->
+        <!-- ============================================================ -->
+        <div class="section-header-custom">
+            <h3><i class="fas fa-brain"></i> Workload & Risk Intelligence</h3>
+            <p>Objectives 1, 2, & 4</p>
+        </div>
+
+
+        <div class="intel-grid">
+           
+            <!-- RISK STATUS & TREND -->
+            <div class="content-card intel-card">
+                <h4><i class="fas fa-crosshairs"></i> Workload Status & Trends</h4>
+               
+                <div class="risk-indicator-box">
+                    <div class="risk-indicator-header">
+                        <span class="risk-score-main">Risk Score: 68</span>
+                        <span class="risk-status-badge"><i class="fas fa-exclamation-triangle"></i> Moderate Overload</span>
+                    </div>
+                    <div class="risk-bar-bg">
+                        <div class="risk-bar-fill"></div>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h5 class="contributors-title">Risk Contributors:</h5>
+                    <div class="contributors-list">
+                        <div><i class="fas fa-check-circle" style="color: #10b981; margin-right: 8px;"></i> Teaching load is within limit</div>
+                        <div><i class="fas fa-exclamation-circle" style="color: #f59e0b; margin-right: 8px;"></i> Ancillary load exceeds recommended limits</div>
+                        <div><i class="fas fa-exclamation-circle" style="color: #f59e0b; margin-right: 8px;"></i> Prep time ratio is insufficient</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- RECOMMENDATIONS -->
+            <div class="content-card intel-card reco-card">
+                <h4><i class="fas fa-bullseye"></i> Targeted Recommendations</h4>
+               
+                <div class="reco-list">
+                    <div class="reco-item">
+                        <i class="fas fa-star reco-icon" style="color: #f59e0b;"></i>
+                        <div><strong>HIGH PRIORITY:</strong> Reduce ancillary load by 2-3 hrs/week. (Currently 5 hrs above department average).</div>
+                    </div>
+                    <div class="reco-item">
+                        <i class="fas fa-random reco-icon" style="color: #3b82f6;"></i>
+                        <div>Transfer <em>SDRRM Coordinator</em> duties to TCH-015 (currently at 32 hrs total workload).</div>
+                    </div>
+                    <div class="reco-item">
+                        <i class="fas fa-chart-line reco-icon" style="color: #10b981;"></i>
+                        <div><strong>Projected Impact:</strong> Risk score would drop to 58 (Low Risk).</div>
+                    </div>
+                </div>
+
+
+                <div class="action-row">
+                    <button class="btn-blue" id="requestAdjustmentBtn">Request Adjustment</button>
+                </div>
+            </div>
+           
+        </div>
+
+ <!-- ============================================================ -->
+<!-- MODAL: WELLNESS CHECK-IN POP-UP                             -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="wellnessCheckinModal">
+    <div class="modal-container" style="max-width: 600px; padding: 2rem;">
+        <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+            <h2><i class="fas fa-heartbeat" style="color: #e11d48;"></i> Pulse Check-in</h2>
+            <button class="modal-close-icon" id="wellnessCloseBtn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body" style="padding-top: 1rem;">
+            <div style="font-size: 0.95rem; line-height: 1.6; color: #334155; margin-bottom: 1.25rem;">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 8px; color: #f59e0b;"></i>
+                <strong>Wellness Check-in Reminder:</strong> How are you feeling today? Submitting your pulse check helps monitor overall wellbeing.
+            </div>
+
+            <!-- Quick Mood Level Selection -->
+            <div style="margin-bottom: 1.25rem;">
+                <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.5rem; color: #0f172a;">Select your current feeling level:</label>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button type="button" class="pulse-opt-btn" data-val="1" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😫</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Exhausted</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="2" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😟</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Stressed</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="3" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😐</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Okay</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="4" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">🙂</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Good</span>
+                    </button>
+                    <button type="button" class="pulse-opt-btn" data-val="5" style="flex: 1; min-width: 80px; padding: 0.6rem 0.4rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; text-align: center;">
+                        <span style="font-size: 1.4rem; display: block;">😁</span>
+                        <span style="font-size: 0.75rem; font-weight: 600; color: #64748b;">Great</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reminder / Snooze Controls -->
+            <div style="background: #f8fafc; padding: 0.85rem 1rem; border-radius: 8px; margin-bottom: 1.25rem; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="far fa-clock" style="color: #64748b;"></i>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: #475569;">Remind me in:</span>
+                    <select id="pulseRemindSelect" style="padding: 0.35rem 0.6rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: #fff; color: #0f172a;">
+                        <option value="15">15 Minutes</option>
+                        <option value="60" selected>1 Hour</option>
+                        <option value="240">4 Hours</option>
+                        <option value="1440">24 Hours (1 Day)</option>
+                    </select>
+                </div>
+                <button type="button" id="remindLaterBtn" style="padding: 0.4rem 0.85rem; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer;">
+                    <i class="fas fa-bell-slash"></i> Snooze Reminder
+                </button>
+            </div>
+
+            <div class="modal-actions" style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="alert-btn" id="completeCheckinBtn" style="width: auto; background: #64748b; font-size: 0.85rem;">Full Risk Assessment &rarr;</button>
+                <button class="alert-btn" id="submitWellnessBtn" style="width: auto; background: #0038A8;">Submit Pulse &rarr;</button>
+            </div>
+        </div>
+    </div>
+</div>       
+
+        <!-- ============================================================ -->
+        <!-- SECTION: BURNOUT ANALYTICS & ASSESSMENT                      -->
+        <!-- ============================================================ -->
+        <div class="section-header-custom" id="burnoutAssessmentSection">
+            <h3><i class="fas fa-fire-alt" style="color: #e11d48;"></i> Burnout Analytics</h3>
+            <p>Burnout Risk Quantification & Tracking</p>
+        </div>
+
+
+        <section class="content-card burnout-card">
+            <div class="burnout-container">
+               
+                <!-- Left Side: Analytics Summary -->
+                <div class="burnout-col">
+                    <h4 class="burnout-title">
+                        <i class="fas fa-chart-pie"></i> Quantified Risk Profile
+                    </h4>
+                    <p class="burnout-desc">
+                        This analytics module measures emotional exhaustion, depersonalization, and personal accomplishment levels to accurately quantify your current burnout risk index.
+                    </p>
+                   
+                    <div class="risk-index-wrapper">
+                        <div class="risk-index-box">
+                            <div class="risk-index-value">72<span class="risk-index-max">/100</span></div>
+                            <div class="risk-index-label">Risk Index</div>
+                        </div>
+                       
+                        <div class="assessment-meta">
+                            <div><i class="fas fa-history" style="color: #94a3b8; width: 20px;"></i> <strong>Last Assessment:</strong> June 15, 2026</div>
+                            <div><i class="fas fa-clock" style="color: #e11d48; width: 20px;"></i> <strong>Next Due:</strong> <span style="color: #e11d48; font-weight: 600;">July 15, 2026</span> (Overdue)</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Right Side: Action Box -->
+                <div class="burnout-col burnout-action-box">
+                    <h5 class="burnout-action-title">Periodic Burnout Assessment</h5>
+                    <p class="burnout-action-desc">
+                        Complete your standardized assessment to update your quantified risk score. The system relies on this data to adjust your workload recommendations accurately.
+                    </p>
+                    <div class="action-row no-border">
+                        <button class="btn-blue" type="button" onclick="window.location.href='burnout-risk_assessment.html'">
+                            <i class="fas fa-clipboard-check"></i> Take Assessment
+                        </button>
+                        <button class="btn-outline" type="button" onclick="window.location.href='teacher_analytics.html'">
+                            <i class="fas fa-chart-line"></i> View Full Analytics
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+        
+        <!-- ============================================================ -->
+        <!-- SECTION: WELLNESS BASELINE & WORKLOAD COMPARISON             -->
+        <!-- ============================================================ -->
+        <section class="charts-row">
+            <!-- Wellness -->
+            <div class="content-card no-margin">
+                <div class="card-title"><i class="fas fa-smile"></i> Wellness Baseline</div>
+                <div style="height: 220px; position: relative;">
+                    <canvas id="teacherWellnessChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Comparison -->
+            <div class="content-card no-margin">
+                <div class="card-title"><i class="fas fa-balance-scale-right"></i> Workload Comparison</div>
+                <div style="height: 220px; position: relative;">
+                    <canvas id="teacherWorkloadChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- STANDALONE SECTION: OFFICIAL ASSESSMENT REPORT               -->
+        <!-- ============================================================ -->
+        <section class="content-card official-report-card">
+            <div class="report-banner-content">
+                <div class="report-icon-wrapper">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <div class="report-text-group">
+                    <h4>Institutional Workload & Risk Assessment Report</h4>
+                    <p>Generate and view the official formula breakdown, MBI diagnostic breakdown, and system recommendations for your current workload cycle.</p>
+                </div>
+                <button class="btn-primary" id="openFullReportBtn" type="button" onclick="window.location.href='teacher_report.html'">
+                    <i class="fas fa-file-alt"></i> View Full Report
+                </button>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- SECTION: WEEKLY CLASS SCHEDULE                               -->
+        <!-- ============================================================ -->
+        <section class="content-card" style="margin-bottom: 2.5rem;">
+            <div class="schedule-header-row">
+                <h3 style="color: #0038A8; font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-calendar-alt"></i> Weekly Class Schedule (Preview)
+                </h3>
+                <div class="schedule-meta-badge">
+                    Grade 2 - A &nbsp;|&nbsp; Room 204 &nbsp;|&nbsp; 1st Sem
+                </div>
+            </div>
+           
+            <div class="schedule-wrapper">
+                <table class="timetable">
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>MON</th>
+                            <th>TUE</th>
+                            <th>WED</th>
+                            <th>THU</th>
+                            <th>FRI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">08:00 - 10:00</td>
+                            <td>Math<span class="class-tag">G2-A</span></td>
+                            <td>Science<span class="class-tag">G2-A</span></td>
+                            <td>Science<span class="class-tag">G2-A</span></td>
+                            <td>English<span class="class-tag">G2-A</span></td>
+                            <td>Science<span class="class-tag">G2-A</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:30 - 11:30</td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                            <td>Filipino<span class="class-tag">G2-A</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">12:30 - 14:30</td>
+                            <td>ESP/EPP<span class="class-tag">G2-A</span></td>
+                            <td>MAPEH<span class="class-tag">G2-A</span></td>
+                            <td>MTB<span class="class-tag">G2-A</span></td>
+                            <td>Araling Pan.<span class="class-tag">G2-A</span></td>
+                            <td>ESP/EPP<span class="class-tag">G2-A</span></td>
+                        </tr>
+                        <tr class="homeroom-row">
+                            <td class="time-col">14:30 - 15:00</td>
+                            <td colspan="5" class="homeroom-cell">Homeroom / Advisory Period (G2-A)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           
+            <div class="action-row" style="margin-top: 1.5rem;">
+                <button class="btn-outline"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                <button class="btn-outline btn-right"><i class="fas fa-calendar-plus"></i> Export to Master Calendar</button>
+            </div>
+        </section>
+
+
+        <!-- ============================================================ -->
+        <!-- SECTION: OFFICIAL WORKLOAD (eSF7)                            -->
+        <!-- ============================================================ -->
+        <section class="content-card">
+            <div class="card-title">
+                <i class="fas fa-file-signature"></i> Official Workload (From eSF7)
+                <span style="margin-left: auto; font-size: 0.8rem; font-weight: normal; color: #64748b;">Total: 27 hrs/week</span>
+            </div>
+           
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Subject / Task</th>
+                            <th>Grade/Section</th>
+                            <th>Days</th>
+                            <th>Time</th>
+                            <th>Type</th>
+                            <th>Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mathematics</td><td>Grade 2 - A</td><td>MON</td><td>08-12</td><td>Teaching</td><td>4 hrs</td>
+                            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Science</td><td>Grade 2 - A</td><td>TUE</td><td>08-12</td><td>Teaching</td><td>4 hrs</td>
+                            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>English</td><td>Grade 2 - A</td><td>THU</td><td>08-12</td><td>Teaching</td><td>4 hrs</td>
+                            <td><span class="status-badge status-confirmed"><i class="fas fa-check"></i> Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td>SDRRM Coordinator</td><td>Whole School</td><td>-</td><td>-</td><td>Ancillary</td><td style="color: #C8102E; font-weight: 600;">5 hrs</td>
+                            <td><span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <!-- ============================================================ -->
+        <!-- SECTION: ABSENCE REQUESTS                                    -->
+        <!-- ============================================================ -->
+        <section class="content-card">
+            <div class="card-title">
+                <i class="fas fa-calendar-times"></i> Absence Requests
+                <a href="#" style="margin-left: auto; font-size: 0.85rem; color: var(--primary, #0038A8);"><i class="fas fa-plus"></i> Request Leave</a>
+            </div>
+           
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date Requested</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Substitute</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>July 25, 2026</td>
+                            <td>Sick Leave</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td>-</td>
+                            <td style="color: #64748b;">Under review by admin</td>
+                        </tr>
+                        <tr>
+                            <td>July 15, 2026</td>
+                            <td>Personal</td>
+                            <td><span class="status-badge status-confirmed">Approved</span></td>
+                            <td>TCH-015</td>
+                            <td style="color: #64748b;">Covered by Mr. Santos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
+        <!-- ============================================================ -->
+        <!-- MODAL: REQUEST ADJUSTMENT                                   -->
+        <!-- ============================================================ -->
+        <div class="modal-overlay" id="requestAdjustmentModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2><i class="fas fa-exchange-alt"></i> Request Adjustment</h2>
+                    <button class="modal-close-icon" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Action Type (Read-only) -->
+                    <div class="form-group">
+                        <label>Action Type <span class="required-star">*</span></label>
+                        <div class="modal-target-info">
+                            <span><i class="fas fa-tag"></i> <strong>Role Reassignment</strong></span>
+                            <span class="status-badge status-pending"><i class="fas fa-sync-alt"></i> Recommended</span>
+                        </div>
+                    </div>
+
+                    <!-- Target Duty (Dropdown) -->
+                    <div class="form-group">
+                        <label for="targetDutySelect">Target Duty <span class="required-star">*</span></label>
+                        <select id="targetDutySelect">
+                            <option value="SDRRM Coordinator" selected>SDRRM Coordinator</option>
+                            <option value="Guidance Counselor">Guidance Counselor</option>
+                            <option value="Class Adviser">Class Adviser</option>
+                            <option value="Property Custodian">Property Custodian</option>
+                            <option value="Clinic Teacher">Clinic Teacher</option>
+                            <option value="Library Coordinator">Library Coordinator</option>
+                            <option value="Computer Lab In-Charge">Computer Lab In-Charge</option>
+                            <option value="YES-O Coordinator">YES-O Coordinator</option>
+                            <option value="Girl Scout / Boy Scout Coordinator">Girl Scout / Boy Scout Coordinator</option>
+                            <option value="Other Duty">Other Duty</option>
+                        </select>
+                        <span class="field-hint">Pre-filled with the system's recommendation. Change if needed.</span>
+                    </div>
+
+                    <!-- Proposed Assignee (Searchable Dropdown) -->
+                    <div class="form-group">
+                        <label for="proposedAssigneeInput">Proposed Assignee <span class="required-star">*</span></label>
+                        <div class="searchable-select-wrapper">
+                            <input
+                                type="text"
+                                id="proposedAssigneeInput"
+                                class="searchable-select-input"
+                                placeholder="Search staff by name or ID..."
+                                value="Select your Recommended Substitute"
+                                autocomplete="off"
+                            />
+                            <i class="fas fa-chevron-down searchable-select-arrow"></i>
+                            <div class="searchable-dropdown" id="assigneeDropdown">
+                                <div class="dropdown-item" data-value="TCH-008"> Maria L. Reyes</div>
+                                <div class="dropdown-item" data-value="TCH-012">Antonio G. Cruz </div>
+                                <div class="dropdown-item" data-value="TCH-022">Sofia P. Bautista </div>
+                                <div class="dropdown-item" data-value="TCH-031">Miguel A. Dela Cruz </div>
+                                <div class="dropdown-item" data-value="TCH-005">Ana R. Villanueva</div>
+                                <div class="dropdown-item" data-value="TCH-018">Jose D. Ramos</div>
+                                <div class="dropdown-item" data-value="TCH-025">Carmen F. Gonzales</div>
+                                <div class="dropdown-item" data-value="TCH-010">Pedro S. Lopez</div>
+                            </div>
+                        </div>
+                        <span class="field-hint">Pre-filled with the intelligence algorithm's recommendation (TCH-015).</span>
+                    </div>
+
+                    <!-- Effective Date (Date Picker) -->
+                    <div class="form-group">
+                        <label for="effectiveDateInput">Effective Date <span class="required-star">*</span></label>
+                        <input type="date" id="effectiveDateInput" />
+                        <span class="field-hint">Select when this workload shift becomes official.</span>
+                    </div>
+
+                    <!-- Justification / Remarks (Text Area) -->
+                    <div class="form-group">
+                        <label for="justificationTextarea">Justification / Remarks <span class="required-star">*</span></label>
+                        <textarea id="justificationTextarea" rows="4" placeholder="Rebalancing ancillary load due to high burnout risk score. This adjustment is intended to reduce workload from 27 hrs/wk to a more sustainable level."></textarea>
+                        <span class="field-hint">Provide a required note explaining the reason for this adjustment.</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="submitRequestBtn"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                        <button class="btn-outline" id="cancelRequestBtn"><i class="fas fa-times"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        <div class="footer-left">&copy; 2026 Kandili Workspace. All rights reserved.</div>
+        <div class="footer-center"><strong>Data Privacy:</strong> <span class="text-green" style="color: #10b981;"><i class="fas fa-check-square"></i> R.A. 10173 Compliant</span></div>
+        <div class="footer-right">Version 2.1.0</div>
+    </footer>
+
+<!-- ============================================================ -->
+<!-- MODAL: REQUEST LEAVE / ABSENCE                               -->
+<!-- ============================================================ -->
+<div class="modal-overlay" id="requestLeaveModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2><i class="fas fa-calendar-plus" style="color: #0038A8;"></i> Request Absence / Leave</h2>
+            <button class="modal-close-icon" id="leaveModalCloseBtn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            
+            <!-- Leave Type -->
+            <div class="form-group">
+                <label for="leaveTypeSelect">Leave Type <span class="required-star">*</span></label>
+                <select id="leaveTypeSelect">
+                    <option value="Sick Leave" selected>Sick Leave</option>
+                    <option value="Personal Leave">Personal Leave / Vacation</option>
+                    <option value="Emergency Leave">Emergency Leave</option>
+                    <option value="Official Business">Official Business / DepEd Order</option>
+                    <option value="Maternity / Paternity Leave">Maternity / Paternity Leave</option>
+                </select>
+            </div>
+
+            <!-- Date Range Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="leaveStartDate">Start Date <span class="required-star">*</span></label>
+                    <input type="date" id="leaveStartDate" />
+                </div>
+                <div class="form-group">
+                    <label for="leaveEndDate">End Date <span class="required-star">*</span></label>
+                    <input type="date" id="leaveEndDate" />
+                </div>
+            </div>
+
+            <!-- Proposed Substitute (Searchable or Simple Dropdown) -->
+            <div class="form-group">
+                <label for="substituteSelect">Proposed Substitute Teacher</label>
+                <select id="substituteSelect">
+                    <option value="" selected>-- Optional: Select Cover Teacher --</option>
+                    <option value="TCH-015">TCH-015 – Juan M. Santos</option>
+                    <option value="TCH-008">TCH-008 – Maria L. Reyes</option>
+                    <option value="TCH-012">TCH-012 – Antonio G. Cruz</option>
+                    <option value="TCH-022">TCH-022 – Sofia P. Bautista</option>
+                </select>
+                <span class="field-hint">Leave blank if cover teacher is to be assigned by the principal.</span>
+            </div>
+
+            <!-- Reason / Details -->
+            <div class="form-group">
+                <label for="leaveReasonTextarea">Reason / Details <span class="required-star">*</span></label>
+                <textarea id="leaveReasonTextarea" rows="3" placeholder="Provide a brief explanation for your absence request..."></textarea>
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="modal-actions">
+                <button class="btn-outline" id="cancelRequestBtn" type="button">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn-primary" id="submitRequestBtn" type="button">
+                    <i class="fas fa-paper-plane"></i> Submit Request
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+  <script>
+        // ============================================================
+        // CLASS PROGRAM UPLOAD HANDLING
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('classProgramFile');
+            const fileDisplay = document.getElementById('fileDisplay');
+            const uploadBtn = document.getElementById('uploadProgramBtn');
+
+            if (fileInput && fileDisplay) {
+                // Update displayed filename when user selects a file
+                fileInput.addEventListener('change', function () {
+                    if (this.files && this.files.length > 0) {
+                        fileDisplay.textContent = this.files[0].name;
+                    } else {
+                        fileDisplay.textContent = 'No file chosen';
+                    }
+                });
+            }
+
+        });
+
+        // ADDED: The missing logout function
+        function kandiliLogout() {
+            // 1. Ask the user to confirm
+            if (confirm("Are you sure you want to log out?")) {
+                
+                // 2. Clear any local storage/session data if you have any
+                // sessionStorage.clear();
+                // localStorage.clear();
+                
+                // 3. Redirect to your login screen (change 'index.html' to your actual login page)
+                window.location.href = "login.html"; 
+            }
+            
+            // Prevents the default <a> tag behavior (jumping to the top of the page)
+            return false; 
+        }
+
+
+
+        // ============================================================
+        // REQUEST ADJUSTMENT MODAL
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal        = document.getElementById('requestAdjustmentModal');
+            const openBtn      = document.getElementById('requestAdjustmentBtn');
+            const closeBtn     = document.getElementById('modalCloseBtn');
+            const cancelBtn    = document.getElementById('cancelRequestBtn');
+            const submitBtn    = document.getElementById('submitRequestBtn');
+
+            // Searchable dropdown elements
+            const searchInput  = document.getElementById('proposedAssigneeInput');
+            const dropdown     = document.getElementById('assigneeDropdown');
+            const wrapper      = document.querySelector('.searchable-select-wrapper');
+
+            // --- Open Modal ---
+            if (openBtn && modal) {
+                openBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    // Set default date to today
+                    const dateInput = document.getElementById('effectiveDateInput');
+                    if (dateInput) {
+                        const today = new Date().toISOString().split('T')[0];
+                        dateInput.value = today;
+                    }
+                });
+            }
+
+            // --- Close Modal helpers ---
+            function closeModal() {
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+            if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+            // Close on overlay click
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal();
+                });
+            }
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // --- Searchable Dropdown Logic ---
+            if (searchInput && dropdown && wrapper) {
+                // Open/close dropdown on input focus/click
+                searchInput.addEventListener('focus', () => {
+                    dropdown.classList.add('open');
+                    wrapper.classList.add('open');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdown.classList.remove('open');
+                        wrapper.classList.remove('open');
+                    }
+                });
+
+                // Filter dropdown items
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.toLowerCase().trim();
+                    const items = dropdown.querySelectorAll('.dropdown-item');
+                    let hasVisible = false;
+
+                    items.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(query)) {
+                            item.style.display = '';
+                            hasVisible = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    // Show/hide no-results message
+                    let noResults = dropdown.querySelector('.no-results');
+                    if (!hasVisible) {
+                        if (!noResults) {
+                            noResults = document.createElement('div');
+                            noResults.className = 'dropdown-item no-results';
+                            noResults.textContent = 'No matching staff found';
+                            dropdown.appendChild(noResults);
+                        }
+                        noResults.style.display = '';
+                    } else {
+                        if (noResults) noResults.style.display = 'none';
+                    }
+
+                    // Keep dropdown open while typing
+                    dropdown.classList.add('open');
+                    wrapper.classList.add('open');
+                });
+
+                // Select item on click
+                dropdown.addEventListener('click', (e) => {
+                    const item = e.target.closest('.dropdown-item');
+                    if (!item || item.classList.contains('no-results')) return;
+
+                    // Update input value
+                    searchInput.value = item.textContent.trim();
+
+                    // Update selected state
+                    dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+
+                    // Close dropdown
+                    dropdown.classList.remove('open');
+                    wrapper.classList.remove('open');
+                });
+
+                // Keyboard navigation (Arrow keys + Enter)
+                searchInput.addEventListener('keydown', (e) => {
+                    const items = [...dropdown.querySelectorAll('.dropdown-item')];
+                    const visibleItems = items.filter(i => i.style.display !== 'none' && !i.classList.contains('no-results'));
+                    if (visibleItems.length === 0) return;
+
+                    const currentIdx = visibleItems.findIndex(i => i.classList.contains('highlighted'));
+
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const nextIdx = Math.min(currentIdx + 1, visibleItems.length - 1);
+                        visibleItems.forEach(i => i.classList.remove('highlighted'));
+                        visibleItems[nextIdx].classList.add('highlighted');
+                        visibleItems[nextIdx].scrollIntoView({ block: 'nearest' });
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const prevIdx = Math.max(currentIdx - 1, 0);
+                        visibleItems.forEach(i => i.classList.remove('highlighted'));
+                        visibleItems[prevIdx].classList.add('highlighted');
+                        visibleItems[prevIdx].scrollIntoView({ block: 'nearest' });
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const highlighted = visibleItems.find(i => i.classList.contains('highlighted'));
+                        if (highlighted) {
+                            highlighted.click();
+                        }
+                    }
+                });
+            }
+
+            // --- Form Submit Handler ---
+            if (submitBtn && modal) {
+                submitBtn.addEventListener('click', () => {
+                    const duty = document.getElementById('targetDutySelect');
+                    const assigneeInput = document.getElementById('proposedAssigneeInput');
+                    const date = document.getElementById('effectiveDateInput');
+                    const justification = document.getElementById('justificationTextarea');
+
+                    // Simple validation
+                    if (!date.value) {
+                        alert('Please select an effective date.');
+                        return;
+                    }
+                    if (!justification.value.trim()) {
+                        alert('Please provide a justification/remarks.');
+                        return;
+                    }
+
+                    // Simulate submission
+                    const selectedItem = dropdown ? dropdown.querySelector('.dropdown-item.selected') : null;
+                    const assigneeValue = selectedItem ? selectedItem.getAttribute('data-value') : assigneeInput.value;
+
+                    // Show success feedback
+                    const summary = [
+                        `--- Adjustment Request Submitted ---`,
+                        `Action: Role Reassignment`,
+                        `Target Duty: ${duty.value}`,
+                        `Proposed Assignee: ${assigneeValue}`,
+                        `Effective Date: ${date.value}`,
+                        `Justification: ${justification.value.trim()}`,
+                        `Status: PENDING (awaiting principal approval)`
+                    ].join('\n');
+
+                    alert(summary);
+
+                    // Show in console for debugging
+                    console.log('[Adjustment Request Submitted]', {
+                        duty: duty.value,
+                        assignee: assigneeValue,
+                        date: date.value,
+                        justification: justification.value.trim()
+                    });
+
+                    // Reset form and close
+                    if (date) date.value = new Date().toISOString().split('T')[0];
+                    if (justification) justification.value = '';
+                    if (searchInput) searchInput.value = 'TCH-015 – Juan M. Santos';
+                    if (dropdown) {
+                        dropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                        const defaultItem = dropdown.querySelector('[data-value="TCH-015"]');
+                        if (defaultItem) defaultItem.classList.add('selected');
+                    }
+
+                    closeModal();
+                });
+            }
+        });
+    </script>
+    <script src="../../static/js/workloadManager.js"></script>
+</body>
+</html>

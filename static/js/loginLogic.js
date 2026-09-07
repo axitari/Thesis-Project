@@ -3,9 +3,9 @@
 const loginForm = document.getElementById('loginForm');
 
 const roleToDashboard = {
-    'teacher': 'teacherdashboard.html',
-    'principal': 'principaldashboard.html',
-    'admin': 'admindashboard.html'
+    'teacher': '../teacher/teacherdashboard.html',
+    'principal': '../principal/principaldashboard.html',
+    'admin': '../admin/admindashboard.html'
 };
 
 loginForm.addEventListener('submit', async (e) => {

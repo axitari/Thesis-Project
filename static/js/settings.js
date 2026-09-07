@@ -33,14 +33,14 @@ async function initDashboardNavigationLinks() {
                 const navProfile = document.getElementById('navProfile');
 
                 if (role === 'teacher') {
-                    navDashboard.href = 'teacherdashboard.html';
-                    navProfile.href = 'teacherprofilepage.html';
+                    navDashboard.href = '../teacher/teacherdashboard.html';
+                    navProfile.href = '../teacher/teacherprofilepage.html';
                 } else if (role === 'principal') {
-                    navDashboard.href = 'principaldashboard.html';
-                    navProfile.href = 'principalprofilepage.html';
+                    navDashboard.href = '../principal/principaldashboard.html';
+                    navProfile.href = '../principal/principalprofilepage.html';
                 } else if (role === 'admin') {
-                    navDashboard.href = 'admindashboard.html';
-                    navProfile.href = 'principalprofilepage.html';
+                    navDashboard.href = '../admin/admindashboard.html';
+                    navProfile.href = '../principal/principalprofilepage.html';
                 }
             }
         }
