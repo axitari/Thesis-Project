@@ -3,322 +3,311 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Settings &bull; Kandili Workspace</title>
-    <link rel="stylesheet" href="../../static/css/style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Account Settings &bull; Kandili Workspace</title>
+
+    <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Scripts -->
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="any"></script>
-    <script src="../../static/js/logout.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css" />
+    <link rel="stylesheet" href="../../css/general/settings.css" />
 </head>
-<body class="dashboard-body">
+<body class="dashboard-body settings-page-body">
 
-    <!-- ============================================================ -->
-    <!-- TOP NAVIGATION BAR                                           -->
-    <!-- ============================================================ -->
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="historyBackSafe()" type="button"><i class="fas fa-arrow-left"></i></button>
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Settings</div>
-        </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date" id="settingsDate"><i class="far fa-calendar-alt"></i> Loading...</span>
-            <button class="theme-nav__refresh" type="button" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="../teacher/teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
-            <a href="../principal/principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
-            <a href="../teacher/teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
-            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="history.html"><i class="fas fa-history"></i> History</a>
-            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
-            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </nav>
-    </header>
+            <nav class="app-sidebar-nav" id="dynamicSidebarNav">
+                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="settings.html" class="app-sidebar-link active">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="notification.html" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+                <a href="message.html" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="history.html" class="app-sidebar-link">
+                    <i class="fas fa-history"></i> History
+                </a>
 
-    <!-- ============================================================ -->
-    <!-- SETTINGS CONTENT                                             -->
-    <!-- ============================================================ -->
-    <main class="dashboard">
+                <hr class="sidebar-divider" />
 
-        <!-- Settings Header -->
-        <section class="welcome-banner">
-            <h1 class="welcome-title"><i class="fas fa-cog"></i> Account Settings</h1>
-            <p class="welcome-subtitle">Manage your password, notification preferences, and account security.</p>
-        </section>
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
 
-        <!-- ========================================================== -->
-        <!-- SECTION 1: CHANGE PASSWORD                                 -->
-        <!-- ========================================================== -->
-        <section class="content-card settings-card">
-            <div class="card-title">
-                <i class="fas fa-lock" style="color: var(--deped-blue);"></i> Change Password
-                <span class="settings-card-badge">Security</span>
-            </div>
-
-            <form id="passwordChangeForm" class="settings-form">
-                <!-- Current Password -->
-                <div class="settings-field-group">
-                    <label for="currentPassword">Current Password <span class="required-star">*</span></label>
-                    <div class="input-wrapper">
-                        <input type="password" id="currentPassword" required placeholder="Enter your current password" autocomplete="current-password" />
-                        <button type="button" class="password-toggle" onclick="toggleFieldVisibility('currentPassword', 'eyeCurrent')">
-                            <i class="fas fa-eye" id="eyeCurrent"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- New Password -->
-                <div class="settings-field-group">
-                    <label for="newPassword">New Password <span class="required-star">*</span></label>
-                    <div class="input-wrapper">
-                        <input type="password" id="newPassword" required placeholder="Enter new password" autocomplete="new-password" minlength="8" />
-                        <button type="button" class="password-toggle" onclick="toggleFieldVisibility('newPassword', 'eyeNew')">
-                            <i class="fas fa-eye" id="eyeNew"></i>
-                        </button>
-                    </div>
-                    <!-- Strength Meter -->
-                    <div class="strength-meter-container">
-                        <div class="strength-bars">
-                            <div class="strength-bar" id="sbar1"></div>
-                            <div class="strength-bar" id="sbar2"></div>
-                            <div class="strength-bar" id="sbar3"></div>
-                            <div class="strength-bar" id="sbar4"></div>
-                        </div>
-                        <div class="strength-text">
-                            <span id="strengthLabel">Password strength</span>
-                            <span class="requirements-hint">Min 8 chars, 1 uppercase, 1 number, 1 symbol</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Confirm New Password -->
-                <div class="settings-field-group">
-                    <label for="confirmPassword">Confirm New Password <span class="required-star">*</span></label>
-                    <div class="input-wrapper">
-                        <input type="password" id="confirmPassword" required placeholder="Re-enter new password" autocomplete="new-password" />
-                        <button type="button" class="password-toggle" onclick="toggleFieldVisibility('confirmPassword', 'eyeConfirm')">
-                            <i class="fas fa-eye" id="eyeConfirm"></i>
-                        </button>
-                    </div>
-                    <span class="password-match-hint" id="passwordMatchHint"></span>
-                </div>
-
-                <div class="settings-form-actions">
-                    <button type="submit" class="btn-primary settings-submit-btn" id="submitPasswordBtn">
-                        <i class="fas fa-check-circle"></i> Update Password
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVBAR -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="(function(){
+                                const params = new URLSearchParams(window.location.search);
+                                const origin = params.get('origin');
+                                if (origin === 'teacher') {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (origin === 'principal') {
+                                    window.location.href = '../principal/principaldashboard.html';
+                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = '../principal/principaldashboard.html';
+                                }
+                            })()" 
+                            aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
                     </button>
-                    <button type="reset" class="btn-outline">Clear</button>
+                    <div class="theme-nav__title">Account Settings</div>
                 </div>
-                <div id="passwordFeedback" class="settings-feedback"></div>
-            </form>
-        </section>
-
-        <!-- ========================================================== -->
-        <!-- SECTION 2: NOTIFICATION PREFERENCES                        -->
-        <!-- ========================================================== -->
-        <section class="content-card settings-card">
-            <div class="card-title">
-                <i class="fas fa-bell" style="color: var(--deped-blue);"></i> Notification Preferences
-                <span class="settings-card-badge">Preferences</span>
-            </div>
-
-            <div class="settings-notif-grid">
-                <div class="settings-notif-row">
-                    <div class="settings-notif-info">
-                        <strong>Weekly Pulse Reminders</strong>
-                        <p>Get reminded to complete your weekly wellness check-in</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="notifPulse" checked />
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="settings-notif-row">
-                    <div class="settings-notif-info">
-                        <strong>Workload Alerts</strong>
-                        <p>Receive notifications when your workload exceeds thresholds</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="notifWorkload" checked />
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="settings-notif-row">
-                    <div class="settings-notif-info">
-                        <strong>Message Notifications</strong>
-                        <p>Get notified when you receive a new message</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="notifMessages" checked />
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="settings-notif-row">
-                    <div class="settings-notif-info">
-                        <strong>System Announcements</strong>
-                        <p>Receive important system updates and announcements</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="notifAnnouncements" checked />
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="settings-notif-row">
-                    <div class="settings-notif-info">
-                        <strong>Assessment Due Dates</strong>
-                        <p>Reminders for upcoming burnout assessment due dates</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="notifAssessment" checked />
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="settings-form-actions" style="margin-top: 1.2rem;">
-                <button class="btn-primary settings-submit-btn" onclick="saveNotificationPreferences()">
-                    <i class="fas fa-save"></i> Save Preferences
-                </button>
-            </div>
-            <div id="notifFeedback" class="settings-feedback"></div>
-        </section>
-
-        <!-- ========================================================== -->
-        <!-- SECTION 3: ACCOUNT INFORMATION                             -->
-        <!-- ========================================================== -->
-        <section class="content-card settings-card">
-            <div class="card-title">
-                <i class="fas fa-id-card" style="color: var(--deped-blue);"></i> Account Information
-                <span class="settings-card-badge">Details</span>
-            </div>
-
-            <div class="settings-info-grid">
-                <div class="settings-info-item">
-                    <span class="settings-info-label">Email Address</span>
-                    <span class="settings-info-value" id="accountEmail">Loading...</span>
-                </div>
-                <div class="settings-info-item">
-                    <span class="settings-info-label">Account Role</span>
-                    <span class="settings-info-value" id="accountRole">Loading...</span>
-                </div>
-                <div class="settings-info-item">
-                    <span class="settings-info-label">Last Login</span>
-                    <span class="settings-info-value" id="lastLogin">Loading...</span>
-                </div>
-                <div class="settings-info-item">
-                    <span class="settings-info-label">Member Since</span>
-                    <span class="settings-info-value" id="memberSince">Loading...</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================================================== -->
-        <!-- SECTION 4: SESSION MANAGEMENT                              -->
-        <!-- ========================================================== -->
-        <section class="content-card settings-card">
-            <div class="card-title">
-                <i class="fas fa-shield-alt" style="color: var(--deped-red);"></i> Session & Security
-                <span class="settings-card-badge settings-badge-danger">Security</span>
-            </div>
-
-            <div class="settings-action-grid">
-                <div class="settings-action-item">
-                    <div class="settings-action-info">
-                        <strong>Log Out of All Devices</strong>
-                        <p>Sign out from all active sessions across all devices</p>
-                    </div>
-                    <button class="btn-outline settings-btn-danger" onclick="logoutAllDevices()">
-                        <i class="fas fa-sign-out-alt"></i> Log Out All
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date" id="settingsDateDisplay"><i class="far fa-calendar-alt"></i> Loading date...</span>
+                    <button class="theme-nav__refresh" id="navRefreshBtn" type="button">
+                        <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
+            </header>
 
-                <div class="settings-action-item">
-                    <div class="settings-action-info">
-                        <strong>Quick Links</strong>
-                        <p>Navigate to related account tools</p>
+            <main class="dashboard settings-canvas">
+                
+                <!-- HEADER BANNER -->
+                <div class="settings-welcome-card">
+                    <div class="welcome-text">
+                        <h2><i class="fas fa-sliders text-blue"></i> Preferences &amp; Security</h2>
+                        <p>Manage your password credentials, real-time alert thresholds, and active session status.</p>
                     </div>
-                    <div class="settings-action-btns">
-                        <a href="#" id="quickProfileLink" class="btn-outline btn-small"><i class="fas fa-user-edit"></i> Edit Profile</a>
-                        <span class="btn-outline btn-small disabled-link"><i class="fas fa-history"></i> Activity Log</span>
+                    <div class="settings-badge-pill">
+                        <i class="fas fa-shield-halved"></i> DepEd Secure SSO
                     </div>
                 </div>
-            </div>
-        </section>
 
-    </main>
+                <div class="settings-grid">
 
-    <!-- ============================================================ -->
-    <!-- FOOTER                                                       -->
-    <!-- ============================================================ -->
-    <footer class="dashboard-footer">
-        <div class="footer-left">&copy; 2026 Kandili Workspace. All rights reserved.</div>
-        <div class="footer-center">
-            <strong>Data Privacy:</strong> <span class="text-green"><i class="fas fa-check-square"></i> R.A. 10173 Compliant</span>
+                    <!-- SECTION 1: CHANGE PASSWORD -->
+                    <section class="card settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-lock text-blue"></i> Change Password</h3>
+                            <span class="settings-badge badge-security">Security</span>
+                        </div>
+
+                        <form id="passwordChangeForm" class="settings-form">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password <span class="required-star">*</span></label>
+                                <div class="input-toggle-wrap">
+                                    <input type="password" id="currentPassword" class="form-control" required placeholder="Enter current password" autocomplete="current-password" />
+                                    <button type="button" class="btn-eye-toggle" data-target="currentPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">New Password <span class="required-star">*</span></label>
+                                <div class="input-toggle-wrap">
+                                    <input type="password" id="newPassword" class="form-control" required placeholder="Enter new password" autocomplete="new-password" minlength="8" />
+                                    <button type="button" class="btn-eye-toggle" data-target="newPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="strength-meter-wrap">
+                                    <div class="strength-bars">
+                                        <div class="strength-bar" id="sbar1"></div>
+                                        <div class="strength-bar" id="sbar2"></div>
+                                        <div class="strength-bar" id="sbar3"></div>
+                                        <div class="strength-bar" id="sbar4"></div>
+                                    </div>
+                                    <div class="strength-meta">
+                                        <span id="strengthLabel">Password strength</span>
+                                        <span class="requirements-hint">Min 8 chars, 1 uppercase, 1 symbol</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password <span class="required-star">*</span></label>
+                                <div class="input-toggle-wrap">
+                                    <input type="password" id="confirmPassword" class="form-control" required placeholder="Confirm new password" autocomplete="new-password" />
+                                    <button type="button" class="btn-eye-toggle" data-target="confirmPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <span class="password-match-hint" id="passwordMatchHint"></span>
+                            </div>
+
+                            <div class="settings-form-actions">
+                                <button type="reset" class="btn-outline">Clear</button>
+                                <button type="submit" class="btn-primary" id="submitPasswordBtn">
+                                    <i class="fas fa-check-circle"></i> Update Password
+                                </button>
+                            </div>
+                            <div id="passwordFeedback" class="settings-feedback"></div>
+                        </form>
+                    </section>
+
+                    <!-- SECTION 2: NOTIFICATION PREFERENCES -->
+                    <section class="card settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-bell text-blue"></i> Notification Preferences</h3>
+                            <span class="settings-badge badge-pref">Alerts</span>
+                        </div>
+
+                        <div class="settings-notif-list">
+                            <div class="notif-toggle-row">
+                                <div class="notif-info">
+                                    <strong>Weekly Pulse Reminders</strong>
+                                    <p>Automated alerts for weekly wellness and fatigue check-ins.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="notifPulse" checked />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notif-toggle-row">
+                                <div class="notif-info">
+                                    <strong>Workload Exceedance Warnings</strong>
+                                    <p>Direct alert when total quantified load crosses statutory bounds (&gt;40 hrs).</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="notifWorkload" checked />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notif-toggle-row">
+                                <div class="notif-info">
+                                    <strong>Direct Communication</strong>
+                                    <p>Instant alerts on inbox dispatches from school leadership or co-faculty.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="notifMessages" checked />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notif-toggle-row">
+                                <div class="notif-info">
+                                    <strong>Statutory Due Dates</strong>
+                                    <p>Deadlines for mid-year and end-of-year eSF7 audit packages.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="notifAssessment" checked />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-form-actions">
+                            <button type="button" class="btn-primary" id="saveNotifPrefBtn">
+                                <i class="fas fa-save"></i> Save Preferences
+                            </button>
+                        </div>
+                        <div id="notifFeedback" class="settings-feedback"></div>
+                    </section>
+
+                    <!-- SECTION 3: ACCOUNT SUMMARY -->
+                    <section class="card settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-id-card text-blue"></i> Profile Identification</h3>
+                            <span class="settings-badge badge-neutral">Credentials</span>
+                        </div>
+
+                        <div class="settings-info-grid">
+                            <div class="info-metric-item">
+                                <span class="metric-label">Registered DepEd Email</span>
+                                <span class="metric-val" id="accountEmail">user@deped.gov.ph</span>
+                            </div>
+                            <div class="info-metric-item">
+                                <span class="metric-label">Access Scope</span>
+                                <span class="metric-val" id="accountRole">Authenticated User</span>
+                            </div>
+                            <div class="info-metric-item">
+                                <span class="metric-label">Last Active Session</span>
+                                <span class="metric-val" id="lastLogin">September 16, 2026 | Active</span>
+                            </div>
+                            <div class="info-metric-item">
+                                <span class="metric-label">System Tenure</span>
+                                <span class="metric-val" id="memberSince">August 2025</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4: SESSION & DEVICE SECURITY -->
+                    <section class="card settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-shield-halved text-danger"></i> Session &amp; Security Controls</h3>
+                            <span class="settings-badge badge-danger">Danger Zone</span>
+                        </div>
+
+                        <div class="settings-session-list">
+                            <div class="session-item-row">
+                                <div>
+                                    <strong>Terminated Devices Broadcast</strong>
+                                    <p>Sign out all active sessions across alternate workstations and mobile browsers.</p>
+                                </div>
+                                <button type="button" class="btn-delete" id="logoutAllDevicesBtn">
+                                    <i class="fas fa-arrow-right-from-bracket"></i> Log Out Everywhere
+                                </button>
+                            </div>
+
+                            <div class="session-item-row">
+                                <div>
+                                    <strong>Direct Profile Access</strong>
+                                    <p>Update personal bio details and primary academic assignments.</p>
+                                </div>
+                                <a href="#" id="quickProfileLink" class="btn-outline-sm">
+                                    <i class="fas fa-user-pen"></i> Edit Profile
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; All Rights Reserved</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> DepEd Identity Compliant &bull; R.A. 10173
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Account Module v2.1.0</span>
+                </div>
+            </footer>
         </div>
-        <div class="footer-right">Version 2.1.0</div>
-    </footer>
+    </div>
 
-    <!-- ============================================================ -->
-    <!-- JAVASCRIPT                                                   -->
-    <!-- ============================================================ -->
-    <script src="../../static/js/settings.js"></script>
-    <script>
-        // Update date
-        document.addEventListener('DOMContentLoaded', () => {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-            document.getElementById('settingsDate').innerHTML = `<i class="far fa-calendar-alt"></i> ${dateStr} | ${timeStr}`;
-        });
-
-        // Safe back navigation
-        function historyBackSafe() {
-            if (document.referrer && document.referrer.includes(window.location.host)) {
-                window.history.back();
-            } else {
-                window.location.href = 'principaldashboard.html';
-            }
-        }
-
-        // Toggle password visibility
-        function toggleFieldVisibility(fieldId, iconId) {
-            const field = document.getElementById(fieldId);
-            const icon = document.getElementById(iconId);
-            if (field.type === 'password') {
-                field.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                field.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-
-        // Auth check
-        if (typeof checkAuthAndRole === 'function') {
-            checkAuthAndRole('any');
-        }
-    </script>
-
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/general/settingsLogic.js"></script>
 </body>
 </html>
-

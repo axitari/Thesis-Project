@@ -1,0 +1,421 @@
+/* ==========================================================================
+   GENERAL MESSAGING CENTER STYLES
+   ========================================================================== */
+
+.message-canvas {
+    padding: 2rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 1. Welcome Card */
+.message-welcome-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.welcome-text h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0 0 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-text p {
+    font-size: 0.9rem;
+    color: var(--text-muted, #64748b);
+    margin: 0;
+}
+
+.message-stats-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border: 1px solid #bfdbfe;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* 2. Grid Layout */
+.message-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+.message-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+/* 3. Message Tabs */
+.message-tabs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.tabs-group {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    transition: all 0.15s ease;
+}
+
+.tab-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.tab-btn.active {
+    background: var(--deped-blue, #0038A8);
+    color: #ffffff;
+    border-color: var(--deped-blue, #0038A8);
+}
+
+.tab-counter-badge {
+    display: none;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+}
+
+.sidebar-badge {
+    display: none;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+}
+
+.btn-refresh-sm {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-refresh-sm:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+/* 4. Message List Items */
+.message-list-scroll {
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.message-item {
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+    margin-bottom: 0.75rem;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.message-item:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    transform: translateY(-1px);
+}
+
+.message-item.unread {
+    background: #ffffff;
+    border-left: 4px solid var(--deped-blue, #0038A8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.message-item-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+
+.message-item-sender {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: #0f172a;
+}
+
+.message-item-time {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.message-item-subject {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #334155;
+    margin-bottom: 0.25rem;
+}
+
+.message-item-snippet {
+    font-size: 0.8rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.message-empty-placeholder {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* 5. Compose Form */
+.compose-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.compose-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-role-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #15803d;
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #0f172a;
+    background: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--deped-blue, #0038A8);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.1);
+}
+
+.textarea-body {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.compose-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* 6. Message Reader Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.message-modal-box {
+    max-width: 580px;
+    width: 92%;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+}
+
+.message-modal-header {
+    background: var(--deped-blue, #0038A8);
+    color: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.message-modal-header h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-close-icon {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.message-modal-content {
+    padding: 1.75rem;
+}
+
+.modal-meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.85rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-sender-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.modal-role-subtitle {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 0.15rem;
+}
+
+.modal-time-stamp {
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+.modal-subject-preview {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--deped-blue, #0038A8);
+    margin-bottom: 1rem;
+}
+
+.modal-body-text {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #334155;
+    background: #f8fafc;
+    padding: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    min-height: 140px;
+    white-space: pre-line;
+}
+
+.modal-actions {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+.theme-unread-badge {
+    display: none;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    margin-left: 0.4rem;
+}
+
+/* 7. Responsive Rules */
+@media (max-width: 900px) {
+    .message-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .message-canvas {
+        padding: 1rem;
+    }
+}

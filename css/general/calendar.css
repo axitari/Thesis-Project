@@ -1,0 +1,383 @@
+/* ==========================================================================
+   MASTER CALENDAR STYLES
+   ========================================================================== */
+
+.calendar-canvas {
+    padding: 2rem;
+    max-width: 1350px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 1. Welcome Card */
+.calendar-welcome-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.welcome-text h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0 0 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-text p {
+    font-size: 0.9rem;
+    color: var(--text-muted, #64748b);
+    margin: 0;
+}
+
+.calendar-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border: 1px solid #bfdbfe;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* 2. Main Calendar Card */
+.calendar-main-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.month-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.month-nav h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    min-width: 200px;
+    text-align: center;
+}
+
+.calendar-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-outline-sm {
+    background: #f8fafc;
+    border: 1px solid var(--border-color, #cbd5e1);
+    color: #475569;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-outline-sm:hover {
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border-color: #bfdbfe;
+}
+
+/* 3. Calendar Grid Layout */
+.calendar-body {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #64748b;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-left: 1px solid #f1f5f9;
+    border-top: 1px solid #f1f5f9;
+}
+
+.calendar-day {
+    min-height: 95px;
+    padding: 0.4rem;
+    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-day:hover {
+    background: #f8fafc;
+}
+
+.calendar-day.other-month {
+    background: #fdfdfd;
+    color: #cbd5e1;
+}
+
+.calendar-day.today {
+    background: #eff6ff33;
+}
+
+.calendar-day.today .day-number {
+    background: var(--deped-blue, #0038A8);
+    color: #ffffff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-day.selected {
+    outline: 2px solid var(--deped-blue, #0038A8);
+    outline-offset: -2px;
+}
+
+.day-number {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.35rem;
+}
+
+.calendar-day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    overflow: hidden;
+}
+
+.event-chip {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chip-schoolwide { background: #eff6ff; color: #0038A8; border-left: 2px solid #0038A8; }
+.chip-department { background: #faf5ff; color: #7e22ce; border-left: 2px solid #7e22ce; }
+.chip-deadline   { background: #fef2f2; color: #dc2626; border-left: 2px solid #dc2626; }
+.chip-evaluation { background: #fffbeb; color: #d97706; border-left: 2px solid #d97706; }
+
+/* 4. Sidebar Panels */
+.calendar-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.sidebar-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.sidebar-card-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sidebar-date {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--deped-blue, #0038A8);
+    margin-bottom: 0.85rem;
+}
+
+.selected-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.event-sidebar-item {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+}
+
+.event-sidebar-item strong {
+    font-size: 0.85rem;
+    color: #0f172a;
+    display: block;
+}
+
+.event-sidebar-item span {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    font-size: 0.85rem;
+    color: #475569;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+/* 5. Event Form Modal/Expansion */
+.event-form {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 14px;
+}
+
+.event-form.hidden {
+    display: none;
+}
+
+.form-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.form-header-row h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--deped-blue, #0038A8);
+}
+
+.badge-role-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #15803d;
+    background: #dcfce7;
+    border: 1px solid #bbf7d0;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.field-group label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+.field-row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.field-row-three {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+.field-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-group-left {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-delete {
+    background: #fef2f2;
+    border: 1px solid #fecdd3;
+    color: #dc2626;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn-delete.hidden {
+    display: none;
+}
+
+@media (max-width: 960px) {
+    .calendar-body {
+        grid-template-columns: 1fr;
+    }
+    .field-row-two, .field-row-three {
+        grid-template-columns: 1fr;
+    }
+}

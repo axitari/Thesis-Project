@@ -1,0 +1,711 @@
+/* ==========================================================================
+   PRINCIPAL WORKLOAD & BURNOUT DASHBOARD STYLES
+   ========================================================================== */
+
+.principal-dashboard-canvas {
+    padding: 1.5rem 2rem 3rem;
+    max-width: 1350px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 1. Welcome Header Banner */
+.welcome-banner--blue {
+    position: relative;
+    padding: 2.25rem 2.5rem;
+    background: linear-gradient(135deg, #0038A8 0%, #002266 100%);
+    border-radius: 20px;
+    box-shadow: 0 12px 30px -8px rgba(0, 56, 168, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.welcome-banner--blue::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #FCE300 0%, #3b82f6 50%, #ffffff 100%);
+}
+
+.welcome-main-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 320px;
+}
+
+.welcome-icon-box--blue {
+    width: 68px;
+    height: 68px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.welcome-tag-group {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+}
+
+.welcome-role-tag--blue {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+}
+
+.welcome-status-tag--blue {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(16, 185, 129, 0.2);
+    color: #a7f3d0;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.welcome-heading--blue {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.02em;
+}
+
+.welcome-subtext--blue {
+    font-size: 0.92rem;
+    color: #dbeafe;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.welcome-stats-box--blue {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem 1.5rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.stat-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.stat-label--blue {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #93c5fd;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.stat-val--blue {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.stat-val--green-light {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #6ee7b7;
+}
+
+.stat-divider--blue {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* 2. 4-Tier Workload Summary Cards */
+.risk-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.risk-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 175px;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.risk-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -3px rgba(15, 23, 42, 0.06);
+}
+
+.risk-card--info { border-top: 4px solid #0284c7; }
+.risk-card--low { border-top: 4px solid #059669; }
+.risk-card--moderate { border-top: 4px solid #f59e0b; }
+.risk-card--critical { border-top: 4px solid #dc2626; }
+
+.risk-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.risk-card-icon {
+    font-size: 1.4rem;
+}
+
+.risk-card-badge {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+}
+
+.badge-underload { background: #e0f2fe; color: #0369a1; }
+.badge-optimal { background: #dcfce7; color: #15803d; }
+.badge-high-load { background: #fef3c7; color: #b45309; }
+.badge-overload { background: #fee2e2; color: #b91c1c; }
+
+.risk-card-body {
+    margin: 0.75rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.risk-card-number {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.risk-card-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.risk-card-action {
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 0.2rem;
+}
+
+.risk-card-btn {
+    width: 100%;
+    padding: 0.55rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--deped-blue, #0038A8);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: all 0.15s ease;
+}
+
+.risk-card-btn:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #002266;
+}
+
+/* 3. Burnout Cards Grid (3 MBI Tiers) */
+.badge-subscale-pill {
+    background: #e0e7ff;
+    color: #3730a3;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    border: 1px solid #c7d2fe;
+}
+
+.burnout-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.burnout-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.burnout-card--low { border-left: 5px solid #10b981; }
+.burnout-card--moderate { border-left: 5px solid #f59e0b; }
+.burnout-card--high { border-left: 5px solid #dc2626; }
+
+.burnout-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+}
+
+.burnout-card-icon {
+    font-size: 1.25rem;
+}
+
+.burnout-card--low .burnout-card-icon { color: #059669; }
+.burnout-card--moderate .burnout-card-icon { color: #d97706; }
+.burnout-card--high .burnout-card-icon { color: #dc2626; }
+
+.burnout-card-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+}
+
+.burnout-card--low .burnout-card-badge { background: #dcfce7; color: #166534; }
+.burnout-card--moderate .burnout-card-badge { background: #fef3c7; color: #92400e; }
+.burnout-card--high .burnout-card-badge { background: #fee2e2; color: #991b1b; }
+
+.burnout-card-count {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    display: block;
+}
+
+.burnout-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.45rem 0;
+}
+
+.burnout-card-desc {
+    font-size: 0.84rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 1.25rem 0;
+}
+
+.burnout-card-footer {
+    margin-top: auto;
+}
+
+.burnout-card-btn {
+    width: 100%;
+    padding: 0.65rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.burnout-card--low .burnout-card-btn { background: #ecfdf5; color: #047857; }
+.burnout-card--low .burnout-card-btn:hover { background: #d1fae5; }
+
+.burnout-card--moderate .burnout-card-btn { background: #fffbeb; color: #b45309; }
+.burnout-card--moderate .burnout-card-btn:hover { background: #fef3c7; }
+
+.burnout-card--high .burnout-card-btn { background: #fef2f2; color: #b91c1c; }
+.burnout-card--high .burnout-card-btn:hover { background: #fee2e2; }
+
+/* 4. Charts Row */
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.chart-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.chart-body {
+    position: relative;
+    height: 280px;
+    width: 100%;
+}
+
+.chart-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-top: 1rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* 5. Faculty Reports Management */
+.principal-reports-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.reports-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.teacher-select-group {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.select-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    letter-spacing: 0.05em;
+}
+
+.form-control-sm {
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.85rem;
+    color: #0f172a;
+    font-weight: 600;
+    outline: none;
+}
+
+.report-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.report-type-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.report-type-card:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+.report-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.85rem;
+}
+
+.workload-icon { background: #eff6ff; color: var(--deped-blue, #0038A8); }
+.burnout-icon { background: #fdf2f8; color: #be185d; }
+
+.report-type-badge {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+    display: inline-block;
+    margin-bottom: 0.45rem;
+}
+
+.badge-identified { background: #dbeafe; color: #1e40af; }
+.badge-anonymized { background: #fce7f3; color: #9d174d; }
+
+.report-type-card h4 {
+    margin: 0 0 0.4rem 0;
+    font-size: 1.05rem;
+    color: #0f172a;
+}
+
+.report-type-card p {
+    font-size: 0.86rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 1.25rem 0;
+}
+
+/* 6. 3-Card System Navigation Grid */
+.dashboard-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dash-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    transition: transform 0.2s ease;
+}
+
+.dash-card:hover {
+    transform: translateY(-2px);
+}
+
+.dash-card__icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.icon-amber { color: #f59e0b; }
+.icon-purple { color: #8b5cf6; }
+.icon-blue { color: #3b82f6; }
+.icon-slate { color: #64748b; }
+
+.dash-card__title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.45rem 0;
+}
+
+.dash-card__desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.45;
+    margin: 0 0 1rem 0;
+}
+
+.dash-card__status {
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.dash-card__subtext {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+}
+
+.dash-card__footer {
+    margin-top: auto;
+}
+
+.dash-card__btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--deped-blue, #0038A8);
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: all 0.15s ease;
+}
+
+.dash-card__btn:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #002266;
+}
+
+/* 7. Action Button Overrides */
+.action-btn--simulate {
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border: 1px solid #bfdbfe;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.reallocation-btn--apply {
+    background: var(--deped-blue, #0038A8);
+    color: #ffffff;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.reallocation-btn--report {
+    background: transparent;
+    color: var(--deped-blue, #0038A8);
+    border: 1px solid #cbd5e1;
+    padding: 0.65rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* 8. Responsive Rules */
+@media (max-width: 1200px) {
+    .risk-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 960px) {
+    .burnout-cards-grid, .charts-row, .report-type-grid {
+        grid-template-columns: 1fr;
+    }
+    .hotlist-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .principal-dashboard-canvas {
+        padding: 1rem 1rem 2rem;
+    }
+    .risk-cards {
+        grid-template-columns: 1fr;
+    }
+    .welcome-banner--blue {
+        padding: 1.5rem;
+    }
+}
+
+/* 9. Dual Role Switcher Pill */
+.role-switch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 36px;
+    padding: 0 0.95rem;
+    background: #FCE300;
+    color: #002266;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.role-switch-pill:hover {
+    background: #ffffff;
+    color: var(--deped-blue, #0038A8);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.role-switch-pill i {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 860px) {
+    .role-switch-pill span {
+        display: none;
+    }
+    .role-switch-pill {
+        padding: 0 0.65rem;
+    }
+}

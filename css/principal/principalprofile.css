@@ -1,0 +1,457 @@
+/* ==========================================================================
+   PRINCIPAL PROFILE PAGE STYLES
+   ========================================================================== */
+
+.profile-canvas {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.profile-page-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* 1. Header Identity Banner */
+.profile-header-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04);
+    flex-wrap: wrap;
+}
+
+.profile-avatar-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--deped-blue, #0038A8);
+    box-shadow: 0 4px 10px rgba(0, 56, 168, 0.15);
+}
+
+.avatar-edit-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 32px;
+    height: 32px;
+    background: var(--deped-blue, #0038A8);
+    color: #ffffff;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.avatar-edit-badge:hover {
+    background: var(--deped-blue-hover, #002266);
+    transform: scale(1.08);
+}
+
+.profile-summary {
+    flex: 1;
+    min-width: 280px;
+}
+
+.profile-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.25rem;
+}
+
+.profile-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.status-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.status-active {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.profile-role {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--deped-blue, #0038A8);
+    margin: 0 0 0.85rem 0;
+}
+
+.profile-highlights {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+}
+
+.pill-muted {
+    background: #f8fafc;
+    color: var(--text-muted, #64748b);
+    border-color: #e2e8f0;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.btn-small {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+    border-radius: 8px;
+}
+
+/* 2. Dual Column Layout Grid */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+}
+
+.profile-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1.5px solid #f1f5f9;
+}
+
+.section-heading h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.section-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    background: #f8fafc;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+}
+
+/* 3. Employment Stats List */
+.stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+}
+
+.stat-item label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.stat-item p {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+/* 4. Administrative Records Blocks */
+.info-group-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.info-group-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--deped-blue, #0038A8);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.profile-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-row strong {
+    color: #475569;
+    font-weight: 600;
+}
+
+.detail-row span {
+    color: #0f172a;
+    font-weight: 700;
+    text-align: right;
+}
+
+.section-divider {
+    border-top: 1px solid #f1f5f9;
+    margin: 1.75rem 0;
+}
+
+/* 5. Access & Security Box */
+.access-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.access-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.88rem;
+}
+
+.access-item strong {
+    color: #1e3a8a;
+}
+
+.badge-role-admin {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+}
+
+.profile-actions-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* 6. Modal Specific Overrides */
+.profile-edit-modal-box {
+    max-width: 540px !important;
+    width: 95% !important;
+    background: #ffffff !important;
+    border-radius: 20px !important;
+    padding: 2rem !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2) !important;
+}
+
+.profile-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.form-group--full {
+    grid-column: span 2;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-slate, #1e293b);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: var(--text-main, #0f172a);
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--deped-blue, #0038A8);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
+}
+
+/* Modal Overlay Helper */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-close-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.6rem;
+    color: #94a3b8;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close-icon:hover {
+    color: #0f172a;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* 7. Responsive Breakpoints */
+@media (max-width: 992px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .profile-canvas {
+        padding: 1rem;
+    }
+    .profile-header-card {
+        padding: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-heading, .profile-highlights {
+        justify-content: center;
+    }
+    .profile-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-group--full {
+        grid-column: span 1;
+    }
+    .detail-row, .access-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    .detail-row span {
+        text-align: left;
+    }
+}

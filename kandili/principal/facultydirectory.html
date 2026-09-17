@@ -3,138 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Directory - Kandili Workspace</title>
+    <title>Faculty Directory &bull; Kandili Workspace</title>
     
-    <!-- External CSS Files -->
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <link rel="stylesheet" href="../../static/css/facultyDirectory.css">
-    
-    <!-- Font Awesome Icons -->
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="principal"></script>
-    <script src="../../static/js/logout.js"></script>
-    <script src="../../static/js/principalDashboard.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/principal/facultydirectory.css">
 </head>
 <body class="dashboard-body">
 
-    <!-- TOP NAVBAR -->
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.location.href='principaldashboard.html'" type="button" title="Back to Dashboard">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Faculty Directory</div>
-        </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
-            <button class="theme-nav__refresh" type="button" onclick="window.location.reload()">
-                <i class="fas fa-sync-alt"></i> Refresh
-            </button>
-        </div>
-    </header>
+            <nav class="app-sidebar-nav">
+                <a href="principaldashboard.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="facultydirectory.html" class="app-sidebar-link active">
+                    <i class="fas fa-address-book"></i> Faculty Directory
+                </a>
+                <a href="principalprofilepage.html" class="app-sidebar-link">
+                    <i class="fas fa-user-tie"></i> My Profile
+                </a>
+                <a href="burnout_reports_directory.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-column"></i> Burnout Reports
+                </a>
+                
+                <hr class="sidebar-divider">
 
-    <!-- MAIN CONTAINER -->
-    <div class="dashboard-container">
-        
-        <!-- HEADER & SEARCH BAR -->
-        <div class="directory-header">
-            <div class="directory-header-top">
-                <h2><i class="fas fa-folder-open icon-amber"></i> Master Class Programs Directory</h2>
-            </div>
-            
-            <div class="search-wrapper">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="facultySearch" class="search-bar" placeholder="Search teacher name, grade level, or section..." onkeyup="filterDirectory()">
-            </div>
-        </div>
-        
-        <!-- FACULTY GRID CARD LIST -->
-        <div class="directory-grid" id="facultyGrid">
-            
-            <!-- Faculty Item 1 -->
-            <div class="faculty-card">
-                <div class="faculty-avatar">BM</div>
-                <div class="faculty-info">
-                    <div class="faculty-name">Beverly Ann C. Matulac</div>
-                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - SSES</div>
+                <a href="../general/calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="../general/message.html" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="../general/settings.html" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVBAR -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" onclick="window.location.href='principaldashboard.html'" type="button" aria-label="Back to Dashboard">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">Faculty Directory</div>
                 </div>
-                <button class="faculty-action" onclick="window.location.href='../teacher/classprogram.html?faculty=matulac'">
-                    <i class="fas fa-table"></i> View Class Program
-                </button>
-            </div>
-
-            <!-- Faculty Item 2 -->
-            <div class="faculty-card">
-                <div class="faculty-avatar">ME</div>
-                <div class="faculty-info">
-                    <div class="faculty-name">Maria T. Espineda</div>
-                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Melon</div>
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 2:30 PM</span>
+                    <button class="theme-nav__refresh" type="button" onclick="window.location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
-                <button class="faculty-action" onclick="window.location.href='../teacher/classprogram.html?faculty=espineda'">
-                    <i class="fas fa-table"></i> View Class Program
-                </button>
-            </div>
+            </header>
 
-            <!-- Faculty Item 3 -->
-            <div class="faculty-card">
-                <div class="faculty-avatar">JS</div>
-                <div class="faculty-info">
-                    <div class="faculty-name">Juan Carlos Silva</div>
-                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Paho</div>
+            <main class="dashboard directory-canvas">
+                
+                <!-- HEADER & SEARCH BAR -->
+                <div class="directory-header-card">
+                    <div class="directory-header-top">
+                        <div class="directory-title-group">
+                            <h2><i class="fas fa-folder-open icon-amber"></i> Master Class Programs Directory</h2>
+                            <p>Review individual faculty schedules, instructional assignments, and room allocations.</p>
+                        </div>
+                        <div class="directory-badge-count">
+                            <span id="facultyCounter">4</span> Faculty Members Listed
+                        </div>
+                    </div>
+                    
+                    <div class="search-toolbar">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="facultySearch" class="search-bar" placeholder="Search teacher name, grade level, or section...">
+                        </div>
+                        <div class="filter-pills">
+                            <button class="filter-pill active" data-filter="all">All Faculty</button>
+                            <button class="filter-pill" data-filter="Grade 2">Grade 2</button>
+                            <button class="filter-pill" data-filter="SSES">SSES</button>
+                        </div>
+                    </div>
                 </div>
-                <button class="faculty-action" onclick="window.location.href='../teacher/classprogram.html?faculty=silva'">
-                    <i class="fas fa-table"></i> View Class Program
-                </button>
-            </div>
+                
+                <!-- FACULTY GRID CARD LIST -->
+                <div class="directory-grid" id="facultyGrid">
+                    
+                    <!-- Faculty Item 1 -->
+                    <div class="faculty-card" data-tags="Grade 2 SSES">
+                        <div class="faculty-avatar-wrapper">
+                            <div class="faculty-avatar avatar-blue">BM</div>
+                            <span class="status-indicator online" title="Status: Active"></span>
+                        </div>
+                        <div class="faculty-info">
+                            <div class="faculty-name">Beverly Ann C. Matulac</div>
+                            <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - SSES</div>
+                            <div class="faculty-meta"><i class="fas fa-door-open"></i> Room 201 &bull; 24 Students</div>
+                        </div>
+                        <button class="faculty-action" type="button" onclick="window.location.href='../teacher/classprogram.html?faculty=matulac'">
+                            <span>View Class Program</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
 
-            <!-- Faculty Item 4 -->
-            <div class="faculty-card">
-                <div class="faculty-avatar">AG</div>
-                <div class="faculty-info">
-                    <div class="faculty-name">Anna L. Gaylan</div>
-                    <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Pinya</div>
+                    <!-- Faculty Item 2 -->
+                    <div class="faculty-card" data-tags="Grade 2 Melon">
+                        <div class="faculty-avatar-wrapper">
+                            <div class="faculty-avatar avatar-purple">ME</div>
+                            <span class="status-indicator online" title="Status: Active"></span>
+                        </div>
+                        <div class="faculty-info">
+                            <div class="faculty-name">Maria T. Espineda</div>
+                            <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Melon</div>
+                            <div class="faculty-meta"><i class="fas fa-door-open"></i> Room 202 &bull; 26 Students</div>
+                        </div>
+                        <button class="faculty-action" type="button" onclick="window.location.href='../teacher/classprogram.html?faculty=espineda'">
+                            <span>View Class Program</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Faculty Item 3 -->
+                    <div class="faculty-card" data-tags="Grade 2 Paho">
+                        <div class="faculty-avatar-wrapper">
+                            <div class="faculty-avatar avatar-teal">JS</div>
+                            <span class="status-indicator online" title="Status: Active"></span>
+                        </div>
+                        <div class="faculty-info">
+                            <div class="faculty-name">Juan Carlos Silva</div>
+                            <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Paho</div>
+                            <div class="faculty-meta"><i class="fas fa-door-open"></i> Room 203 &bull; 25 Students</div>
+                        </div>
+                        <button class="faculty-action" type="button" onclick="window.location.href='../teacher/classprogram.html?faculty=silva'">
+                            <span>View Class Program</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Faculty Item 4 -->
+                    <div class="faculty-card" data-tags="Grade 2 Pinya">
+                        <div class="faculty-avatar-wrapper">
+                            <div class="faculty-avatar avatar-amber">AG</div>
+                            <span class="status-indicator online" title="Status: Active"></span>
+                        </div>
+                        <div class="faculty-info">
+                            <div class="faculty-name">Anna L. Gaylan</div>
+                            <div class="faculty-role"><i class="fas fa-chalkboard-user"></i> Adviser: Grade 2 - Pinya</div>
+                            <div class="faculty-meta"><i class="fas fa-door-open"></i> Room 204 &bull; 23 Students</div>
+                        </div>
+                        <button class="faculty-action" type="button" onclick="window.location.href='../teacher/classprogram.html?faculty=gaylan'">
+                            <span>View Class Program</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
                 </div>
-                <button class="faculty-action" onclick="window.location.href='../teacher/classprogram.html?faculty=gaylan'">
-                    <i class="fas fa-table"></i> View Class Program
-                </button>
-            </div>
 
+                <!-- Empty State Message -->
+                <div id="noResultsState" class="empty-state" style="display: none;">
+                    <i class="fas fa-users-slash"></i>
+                    <h3>No matching faculty records found</h3>
+                    <p>Try searching for a different teacher name, grade level, or advisory section.</p>
+                </div>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong>. All rights reserved.</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> R.A. 10173 Compliant &bull; Data Encrypted
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Principal Console v2.1.0</span>
+                </div>
+            </footer>
         </div>
-
     </div>
 
-    <!-- DYNAMIC SEARCH SCRIPT -->
-    <script>
-        function filterDirectory() {
-            const query = document.getElementById('facultySearch').value.toLowerCase();
-            const cards = document.querySelectorAll('.faculty-card');
-
-            cards.forEach(card => {
-                const name = card.querySelector('.faculty-name').textContent.toLowerCase();
-                const role = card.querySelector('.faculty-role').textContent.toLowerCase();
-
-                if (name.includes(query) || role.includes(query)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
-            });
-        }
-
-        if (typeof checkAuthAndRole === "function") {
-            checkAuthAndRole('principal'); 
-        }
-    </script>
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
+    <script src="../../js/logout.js"></script>
+    <!-- Standalone Directory Script -->
+    <script src="../../js/principal/facultydirectory.js"></script>
 </body>
 </html>

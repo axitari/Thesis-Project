@@ -1,0 +1,353 @@
+/* ==========================================================================
+   TEACHER BURNOUT ANALYTICS DASHBOARD STYLES
+   ========================================================================== */
+
+/* Main Canvas Wrapper */
+.analytics-dashboard-canvas {
+    padding: 1.5rem 2rem 3rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.analytics-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* ==========================================================================
+   1. HERO BANNER
+   ========================================================================== */
+.analytics-welcome-card {
+    position: relative;
+    padding: 2rem 2.25rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(0, 56, 168, 0.12);
+    border-radius: 18px;
+    box-shadow: 0 10px 25px -5px rgba(0, 56, 168, 0.05),
+                0 4px 6px -2px rgba(15, 23, 42, 0.02);
+    overflow: hidden;
+}
+
+.analytics-welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--deped-blue, #0038A8) 0%, #3b82f6 50%, var(--deped-yellow, #FCE300) 100%);
+}
+
+.welcome-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 56, 168, 0.08);
+    color: var(--deped-blue, #0038A8);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(0, 56, 168, 0.15);
+}
+
+.analytics-welcome-card h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+    line-height: 1.25;
+}
+
+.analytics-welcome-card p {
+    font-size: 0.92rem;
+    color: var(--text-muted, #64748b);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 900px;
+}
+
+/* ==========================================================================
+   2. 4-COLUMN METRIC CARDS
+   ========================================================================== */
+.analytics-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.metric-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 16px;
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    min-height: 175px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -3px rgba(15, 23, 42, 0.06);
+    border-color: #cbd5e1;
+}
+
+.card-risk-overall {
+    border-top: 4px solid var(--deped-red, #C8102E);
+}
+
+.metric-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted, #64748b);
+}
+
+.metric-icon-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+}
+
+.bg-rose  { background: #ffe4e6; }
+.bg-blue  { background: #eff6ff; }
+.bg-amber { background: #fef3c7; }
+.bg-green { background: #dcfce7; }
+
+.metric-value-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+    margin-bottom: 0.5rem;
+}
+
+.metric-number {
+    font-size: 2.35rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    line-height: 1;
+}
+
+.metric-max {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.badge-subscale-status {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.status-high {
+    background: #ffe4e6;
+    color: #be123c;
+    border: 1px solid #fda4af;
+}
+
+/* Progress Trackers */
+.subscale-bar-bg {
+    height: 7px;
+    width: 100%;
+    background-color: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.subscale-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.fill-ee { background-color: var(--deped-red, #C8102E); }
+.fill-dp { background-color: var(--warning-amber, #f59e0b); }
+.fill-pa { background-color: var(--safe-green, #059669); }
+
+.metric-footer {
+    font-size: 0.78rem;
+    color: #475569;
+    font-weight: 500;
+    border-top: 1px dashed var(--border-subtle, #e2e8f0);
+    padding-top: 0.5rem;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.metric-footer-note {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: auto;
+}
+
+/* ==========================================================================
+   3. CHART SECTION
+   ========================================================================== */
+.content-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    color: var(--text-main, #0f172a);
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.75rem;
+}
+
+.title-meta-badge {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--deped-blue, #0038A8);
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+}
+
+.chart-box {
+    position: relative;
+    height: 320px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   4. DATA TABLE & STATUS BADGES
+   ========================================================================== */
+.data-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 12px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+}
+
+.data-table th {
+    background: #f8fafc;
+    padding: 0.85rem 1.2rem;
+    color: var(--text-muted, #64748b);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--border-subtle, #e2e8f0);
+}
+
+.data-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--text-slate, #1e293b);
+    vertical-align: middle;
+}
+
+.data-table tbody tr:hover td {
+    background-color: #f8fafc;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* History Badges */
+.badge-high-risk {
+    background: #ffe4e6;
+    color: #be123c;
+    border: 1px solid #fda4af;
+}
+
+.badge-mod-risk {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.badge-low-risk {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 6px !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Typography Accents */
+.text-crimson { color: var(--deped-red, #C8102E); }
+.text-amber   { color: var(--warning-amber, #f59e0b); }
+.text-green   { color: var(--safe-green, #059669); }
+.text-blue    { color: var(--deped-blue, #0038A8); }
+.font-bold    { font-weight: 700; }
+
+/* ==========================================================================
+   5. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1100px) {
+    .analytics-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+    .analytics-dashboard-canvas {
+        padding: 1rem 1rem 2rem;
+    }
+
+    .analytics-welcome-card {
+        padding: 1.5rem;
+    }
+
+    .analytics-metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-box {
+        height: 260px;
+    }
+}

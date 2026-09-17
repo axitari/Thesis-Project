@@ -1,0 +1,557 @@
+/* ==========================================================================
+   TEACHER PROFILE PAGE STYLING
+   ========================================================================== */
+
+.profile-canvas {
+    padding-top: 1.5rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.profile-page-shell {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* ==========================================================================
+   1. HERO HEADER PROFILE CARD
+   ========================================================================== */
+.profile-header-card {
+    position: relative;
+    display: flex;
+    gap: 2.25rem;
+    align-items: center;
+    padding: 2rem 2.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(0, 56, 168, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px -10px rgba(0, 56, 168, 0.08), 
+                0 4px 6px -2px rgba(15, 23, 42, 0.03);
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+/* Subtle decorative accent pill on the top border */
+.profile-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--deped-blue, #0038A8) 0%, #3b82f6 50%, var(--deped-yellow, #FCE300) 100%);
+}
+
+.profile-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #0038A8 0%, #1e40af 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-shadow: 0 12px 24px -6px rgba(0, 56, 168, 0.3);
+    border: 4px solid #ffffff;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profile-avatar:hover {
+    transform: scale(1.04) rotate(-1deg);
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-summary {
+    flex: 1;
+    min-width: 280px;
+}
+
+.profile-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.35rem;
+}
+
+.profile-name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.status-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-active::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.profile-role {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.profile-highlights {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: rgba(0, 56, 168, 0.08);
+    color: var(--deped-blue, #0038A8);
+    border: 1px solid rgba(0, 56, 168, 0.14);
+    letter-spacing: 0.01em;
+}
+
+.pill-muted {
+    background: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    align-self: center;
+}
+
+.profile-actions .btn-primary,
+.profile-actions .btn-outline {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profile-actions .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(0, 56, 168, 0.35);
+}
+
+.profile-actions .btn-outline:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   2. TWO-COLUMN PROFILE CONTENT GRID
+   ========================================================================== */
+.profile-grid {
+    display: grid !important;
+    grid-template-columns: 340px 1fr !important;
+    gap: 1.75rem !important;
+    align-items: start;
+}
+
+.profile-card {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.03), 
+                0 4px 6px -2px rgba(15, 23, 42, 0.02);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.profile-card:hover {
+    box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.06);
+    border-color: #cbd5e1;
+}
+
+/* Card Header Strip */
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1.5px solid #f1f5f9;
+}
+
+.section-heading h3 {
+    font-size: 1.1rem;
+    color: #0f172a;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.section-tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--deped-blue, #0038A8);
+    background: rgba(0, 56, 168, 0.08);
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+}
+
+/* ==========================================================================
+   3. LEFT SIDEBAR: EMPLOYMENT STATS
+   ========================================================================== */
+.stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.stat-item {
+    background: #f8fafc;
+    border: 1px solid #eef2f6;
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.stat-item:hover {
+    background: #f1f5f9;
+    transform: translateX(3px);
+}
+
+.stat-item label {
+    display: block;
+    color: #64748b;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+}
+
+.stat-item p {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* ==========================================================================
+   4. RIGHT MAIN: TEACHING INFO & QUALIFICATIONS
+   ========================================================================== */
+.info-group-card {
+    padding: 1.25rem 1.5rem;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+}
+
+.info-group-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--deped-blue, #0038A8);
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.info-group-title::before {
+    content: '';
+    width: 4px;
+    height: 12px;
+    background-color: var(--deped-blue, #0038A8);
+    border-radius: 2px;
+}
+
+.profile-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-row strong {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.detail-row span {
+    color: #0f172a;
+    font-weight: 700;
+    text-align: right;
+    word-break: break-word;
+}
+
+.section-divider {
+    border-top: 1px solid #eef2f6;
+    margin: 2rem 0 1.25rem;
+}
+
+/* Security Access Banner */
+.access-box {
+    padding: 1.1rem 1.4rem;
+    border-radius: 12px;
+    background: #f0f7ff;
+    border: 1px solid #bae6fd;
+}
+
+.access-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.88rem;
+}
+
+.access-item strong {
+    color: var(--deped-blue, #0038A8);
+    font-weight: 700;
+}
+
+.access-item span {
+    color: #0369a1;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   5. EXPANDABLE EDIT PROFILE SECTION
+   ========================================================================== */
+#edit-profile-section {
+    background: #ffffff;
+    border: 1.5px solid #bfdbfe;
+    box-shadow: 0 12px 30px -8px rgba(0, 56, 168, 0.12);
+    border-radius: 18px;
+    animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-row-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 1.5rem;
+}
+
+.edit-form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ==========================================================================
+   6. RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 960px) {
+    .profile-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .profile-header-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1.5rem;
+    }
+
+    .profile-heading {
+        justify-content: center;
+    }
+
+    .profile-highlights {
+        justify-content: center;
+    }
+
+    .profile-actions {
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .form-row-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   FIX NUMBER INPUT (YEARS IN SERVICE) & HIDE DEFAULT SPINNERS
+   ========================================================================== */
+
+/* 1. Ensure number inputs match all text fields */
+.form-row-grid input[type="number"],
+input[type="number"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-white, #ffffff);
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-main, #0f172a);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    height: 44px; /* Standardizes height with text inputs */
+}
+
+/* 2. Focus state matching the theme */
+.form-row-grid input[type="number"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--deped-blue, #0038A8);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
+}
+
+/* 3. Hide the ugly default browser spin buttons */
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.stepper-input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Base input field adjustments */
+.stepper-input-wrapper input[type="number"] {
+    width: 100%;
+    height: 44px;
+    padding: 0.65rem 2.5rem 0.65rem 0.9rem !important; /* Space for the right-hand arrows */
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    -moz-appearance: textfield; /* Firefox: hide default spinners */
+}
+
+/* Chrome, Safari, Edge, Opera: hide native spinners */
+.stepper-input-wrapper input[type="number"]::-webkit-outer-spin-button,
+.stepper-input-wrapper input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stepper-input-wrapper input[type="number"]:focus {
+    outline: none;
+    border-color: #0038A8;
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
+}
+
+/* Arrow controls container attached to the right side of the input */
+.stepper-arrow-buttons {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    bottom: 2px;
+    width: 28px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    overflow: hidden;
+}
+
+/* Individual chevron button */
+.arrow-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    padding: 0;
+}
+
+.arrow-btn.up {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.arrow-btn:hover {
+    background: #e0ecff;
+    color: #0038A8;
+}
+
+.arrow-btn:active {
+    background: #c7ddff;
+}

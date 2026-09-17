@@ -3,131 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Messages</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <title>Messages Center &bull; Kandili Workspace</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="any"></script>
-    <script src="../../static/js/logout.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/general/message.css">
 </head>
-<body class="dashboard-body">
+<body class="dashboard-body message-page-body">
 
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Messages <span id="unreadBadge" style="display: none; background: #ef4444; color: white; font-size: 0.75rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 6px;">0</span></div>
-        </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="../teacher/teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
-            <a href="../principal/principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
-            <a href="../teacher/teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
-            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="history.html"><i class="fas fa-history"></i> History</a>
-            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
-            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </nav>
-    </header>
+            <nav class="app-sidebar-nav" id="dynamicSidebarNav">
+                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="message.html" class="app-sidebar-link active">
+                    <i class="fas fa-envelope"></i> Messages <span id="sidebarUnreadBadge" class="sidebar-badge">0</span>
+                </a>
+                <a href="notification.html" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+                <a href="calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="history.html" class="app-sidebar-link">
+                    <i class="fas fa-history"></i> History
+                </a>
+                <a href="settings.html" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
 
-    <main class="dashboard">
-        <div class="welcome-header">
-            <h1><i class="fas fa-comments" style="color: var(--primary, #0038A8); margin-right: 8px;"></i> Messages Center</h1>
-            <p>Keep communication flowing between teachers, principals, and school leadership.</p>
-        </div>
+                <hr class="sidebar-divider">
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
-            <section class="content-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem; margin-bottom: 1rem;">
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button id="tabInboxBtn" class="btn-blue" type="button" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="switchMessageTab('inbox')">
-                            <i class="fas fa-inbox"></i> Received <span id="inboxTabBadge" style="display: none; background: #ef4444; color: white; font-size: 0.7rem; font-weight: 700; padding: 1px 6px; border-radius: 10px; margin-left: 4px;">0</span>
-                        </button>
-                        <button id="tabSentBtn" class="btn-outline" type="button" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;" onclick="switchMessageTab('sent')">
-                            <i class="fas fa-paper-plane"></i> Sent
-                        </button>
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVBAR -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="(function(){
+                                const params = new URLSearchParams(window.location.search);
+                                const origin = params.get('origin');
+                                if (origin === 'teacher') {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (origin === 'principal') {
+                                    window.location.href = '../principal/principaldashboard.html';
+                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                }
+                            })()" 
+                            aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">
+                        Messages Center
+                        <span id="unreadBadge" class="theme-unread-badge">0</span>
                     </div>
                 </div>
-                <div class="message-list">
-                    <!-- Messages loaded by messageLogic.js -->
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+                    <button class="theme-nav__refresh" type="button" id="navRefreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
-            </section>
+            </header>
 
-            <section class="content-card">
-                <div class="card-title"><i class="fas fa-paper-plane"></i> Compose Message</div>
-                <form class="message-form" style="margin-top: 1rem;">
-                    <div style="margin-bottom: 1rem;">
-                        <label for="recipient" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #334155;">To (Recipient)</label>
-                        <select id="recipient" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #ffffff; color: #1e293b; cursor: pointer;">
-                            <option value="">-- Select Recipient --</option>
-                        </select>
+            <main class="dashboard message-canvas">
+                
+                <!-- HEADER BANNER -->
+                <div class="message-welcome-card">
+                    <div class="welcome-text">
+                        <h2><i class="fas fa-comments text-blue"></i> Messages Center</h2>
+                        <p>Keep communication flowing between teachers, department heads, and school leadership.</p>
                     </div>
-
-                    <div style="margin-bottom: 1rem;">
-                        <label for="subject" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #334155;">Subject</label>
-                        <input id="subject" type="text" placeholder="Enter subject here..." style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #ffffff; color: #1e293b;" />
+                    <div class="message-stats-pill">
+                        <i class="fas fa-shield-halved"></i> Internal DepEd Network
                     </div>
-
-                    <div style="margin-bottom: 1.25rem;">
-                        <label for="message" style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: #334155;">Message</label>
-                        <textarea id="message" placeholder="Write your message here..." style="width: 100%; min-height: 120px; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; resize: vertical;"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-blue" style="width: 100%; border: none; cursor: pointer; padding: 0.85rem; font-size: 0.95rem;"><i class="fas fa-paper-plane"></i> Send Message</button>
-                </form>
-            </section>
-        </div>
-
-        <!-- Message Detail Reader Modal -->
-        <div id="messageModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
-            <div style="background: #ffffff; width: 100%; max-width: 580px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                <div style="background: #0038A8; color: #ffffff; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 600;"><i class="fas fa-envelope-open-text" style="margin-right: 8px;"></i> Message Details</h3>
-                    <button type="button" onclick="closeMessageModal()" style="background: transparent; border: none; color: #ffffff; font-size: 1.2rem; cursor: pointer;"><i class="fas fa-times"></i></button>
                 </div>
-                <div style="padding: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1rem;">
-                        <div>
-                            <div id="modalSender" style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">From: Principal</div>
-                            <div id="modalRole" style="font-size: 0.85rem; color: #64748b; margin-top: 0.2rem;">School Leadership</div>
+
+                <!-- MESSAGING TWO-COLUMN GRID -->
+                <div class="message-grid">
+                    
+                    <!-- COLUMN 1: INBOX & SENT LIST -->
+                    <section class="card message-card">
+                        <div class="message-tabs-header">
+                            <div class="tabs-group">
+                                <button id="tabInboxBtn" class="tab-btn active" type="button">
+                                    <i class="fas fa-inbox"></i> Received
+                                    <span id="inboxTabBadge" class="tab-counter-badge">0</span>
+                                </button>
+                                <button id="tabSentBtn" class="tab-btn" type="button">
+                                    <i class="fas fa-paper-plane"></i> Sent
+                                </button>
+                            </div>
+                            <button class="btn-refresh-sm" id="refreshMessagesBtn" type="button" title="Reload messages">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
                         </div>
-                        <div id="modalTime" style="font-size: 0.8rem; color: #64748b; text-align: right;">Time</div>
-                    </div>
-                    <div id="modalBody" style="font-size: 0.98rem; line-height: 1.6; color: #334155; white-space: pre-line; background: #f8fafc; padding: 1.25rem; border-radius: 8px; border: 1px solid #e2e8f0; min-height: 120px;">
-                        Message content...
-                    </div>
-                    <div style="margin-top: 1.5rem; text-align: right;">
-                        <button type="button" class="btn-outline" onclick="closeMessageModal()" style="padding: 0.5rem 1.25rem; font-size: 0.9rem; border-radius: 6px; cursor: pointer;">Close</button>
+
+                        <div class="message-list-scroll">
+                            <div class="message-list" id="messageListContainer">
+                                <div class="message-empty-placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Loading messages...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- COLUMN 2: COMPOSE MESSAGE FORM -->
+                    <section class="card message-card">
+                        <div class="compose-header">
+                            <h3><i class="fas fa-pen-to-square text-blue"></i> Compose Message</h3>
+                            <span class="badge-role-tag">Official Channel</span>
+                        </div>
+
+                        <form class="message-form" id="composeMessageForm">
+                            <div class="form-group">
+                                <label for="recipient">To (Recipient)</label>
+                                <select id="recipient" class="form-control" required>
+                                    <option value="">-- Select Recipient --</option>
+                                    <option value="principal">School Head (Principal Mylene Panaguiton)</option>
+                                    <option value="dept_ap">Araling Panlipunan Coordinator</option>
+                                    <option value="dept_sci">Science Coordinator</option>
+                                    <option value="all_faculty">All Faculty Broadcast</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input id="subject" type="text" class="form-control" placeholder="Enter subject line..." required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message Body</label>
+                                <textarea id="message" class="form-control textarea-body" placeholder="Write your message here..." required></textarea>
+                            </div>
+
+                            <div class="compose-actions">
+                                <button type="reset" class="btn-outline">Clear</button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                </div>
+
+                <!-- MESSAGE DETAIL MODAL -->
+                <div id="messageModal" class="modal-overlay">
+                    <div class="modal-container message-modal-box">
+                        <div class="modal-header message-modal-header">
+                            <h3><i class="fas fa-envelope-open-text"></i> Message Details</h3>
+                            <button type="button" class="modal-close-icon" id="closeModalIconBtn">&times;</button>
+                        </div>
+                        <div class="modal-body message-modal-content">
+                            <div class="modal-meta-bar">
+                                <div>
+                                    <div id="modalSender" class="modal-sender-title">From: Principal</div>
+                                    <div id="modalRole" class="modal-role-subtitle">School Leadership</div>
+                                </div>
+                                <div id="modalTime" class="modal-time-stamp">Time</div>
+                            </div>
+                            <div id="modalSubject" class="modal-subject-preview"></div>
+                            <div id="modalBody" class="modal-body-text">
+                                Message content...
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn-outline" id="closeModalBtn">Close</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; Secure Messaging Node</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> End-to-End Logged &bull; DepEd R.A. 10173
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Comm Hub v2.1.0</span>
+                </div>
+            </footer>
         </div>
-    </main>
+    </div>
 
-
-   <!-- Supabase & Auth Security Stack -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js"></script>
-    <script src="../../static/js/logout.js"></script>
-    <script src="../../static/js/messageLogic.js"></script>
-    <script>
-    if (typeof checkAuthAndRole === "function") {
-        checkAuthAndRole('any'); // 👈 Allows any authenticated user!
-    }
-</script>
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/general/messageLogic.js"></script>
 </body>
 </html>

@@ -3,145 +3,229 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kandili Workspace - Faculty Workload Reports Directory</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <link rel="stylesheet" href="../../static/css/reportsDirectory.css">
+    <title>Faculty Workload Reports Directory &bull; Kandili Workspace</title>
 
-    <!-- Font Awesome for Icons -->
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="principal"></script>
-    <script src="../../static/js/logout.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/principal/reportsDirectory.css">
 </head>
-<body>
+<body class="dashboard-body">
 
-    <!-- TOP NAVIGATION BAR -->
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Faculty Reports Directory</div>
+            <nav class="app-sidebar-nav">
+                <a href="principaldashboard.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="workload_reports_directory.html" class="app-sidebar-link active">
+                    <i class="fas fa-folder-open"></i> Workload Reports
+                </a>
+                <a href="facultydirectory.html" class="app-sidebar-link">
+                    <i class="fas fa-address-book"></i> Faculty Directory
+                </a>
+                <a href="principalprofilepage.html" class="app-sidebar-link">
+                    <i class="fas fa-user-tie"></i> My Profile
+                </a>
+                <a href="burnout_reports_directory.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-column"></i> Burnout Reports
+                </a>
+                
+                <hr class="sidebar-divider">
+
+                <a href="../general/calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="../general/message.html" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="../general/settings.html" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVBAR -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" type="button" onclick="window.location.href='principaldashboard.html'" aria-label="Back to Dashboard">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <div class="theme-nav__title">Administrative Reports Directory</div>
+                </div>
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 2:30 PM</span>
+                    <button class="theme-nav__refresh" type="button" onclick="window.location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </header>
+
+            <!-- MAIN CONTAINER -->
+            <main class="dashboard directory-canvas">
+
+                <!-- HEADER & FILTER BAR -->
+                <div class="directory-header-card">
+                    <div class="directory-header-main">
+                        <div>
+                            <span class="badge-subscale-pill">
+                                <i class="fas fa-file-contract"></i> DepEd eSF7 Form Compliant
+                            </span>
+                            <h2 class="directory-title">
+                                <i class="fas fa-folder-open icon-blue"></i> Workload Quantification Reports
+                            </h2>
+                            <p class="directory-sub">
+                                Official administrative faculty workload audits, teaching allocations, and Magna Carta limits for SY 2026–2027[cite: 4].
+                            </p>
+                        </div>
+                        <div class="directory-count-badge">
+                            <span id="visibleReportCount">5</span> Records Filtered
+                        </div>
+                    </div>
+
+                    <div class="directory-toolbar">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="directorySearch" class="search-input" placeholder="Search faculty name, department, or code..." />
+                        </div>
+                        <div class="filter-select-wrapper">
+                            <select id="statusFilter" class="filter-select">
+                                <option value="all">All Workload Tiers</option>
+                                <option value="overload">Critical Overload (&gt;40 hrs)</option>
+                                <option value="high">High Load (38–40 hrs)</option>
+                                <option value="optimal">Optimal Load (30–37 hrs)</option>
+                                <option value="underload">Underload (&lt;30 hrs)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REPORTS DIRECTORY TABLE CARD -->
+                <div class="directory-table-card">
+                    <div class="table-responsive">
+                        <table class="directory-table">
+                            <thead>
+                                <tr>
+                                    <th>Faculty Name</th>
+                                    <th>System Code</th>
+                                    <th>Department</th>
+                                    <th>Total Hours</th>
+                                    <th>Status Tier</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="directoryTableBody">
+                                <tr data-tier="overload">
+                                    <td class="font-bold cell-name">Juan Dela Cruz</td>
+                                    <td><code class="code-tag cell-code">TCH-012</code></td>
+                                    <td class="cell-dept">Araling Panlipunan</td>
+                                    <td class="font-bold text-danger">48.0 hrs/wk</td>
+                                    <td><span class="badge-status badge-overload">Overload</span></td>
+                                    <td class="text-right">
+                                        <a href="workload_report.html?code=TCH-012" class="btn-view-report">
+                                            <span>View Audit</span> <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr data-tier="high">
+                                    <td class="font-bold cell-name">Maria Santos</td>
+                                    <td><code class="code-tag cell-code">TCH-003</code></td>
+                                    <td class="cell-dept">Science</td>
+                                    <td class="font-bold text-warning">40.0 hrs/wk</td>
+                                    <td><span class="badge-status badge-high">High Load</span></td>
+                                    <td class="text-right">
+                                        <a href="workload_report.html?code=TCH-003" class="btn-view-report">
+                                            <span>View Audit</span> <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr data-tier="optimal">
+                                    <td class="font-bold cell-name">Ramon Garcia</td>
+                                    <td><code class="code-tag cell-code">TCH-008</code></td>
+                                    <td class="cell-dept">Mathematics</td>
+                                    <td class="font-bold text-success">36.0 hrs/wk</td>
+                                    <td><span class="badge-status badge-optimal">Optimal</span></td>
+                                    <td class="text-right">
+                                        <a href="workload_report.html?code=TCH-008" class="btn-view-report">
+                                            <span>View Audit</span> <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr data-tier="overload">
+                                    <td class="font-bold cell-name">Ana Reyes</td>
+                                    <td><code class="code-tag cell-code">TCH-018</code></td>
+                                    <td class="cell-dept">English</td>
+                                    <td class="font-bold text-danger">46.5 hrs/wk</td>
+                                    <td><span class="badge-status badge-overload">Overload</span></td>
+                                    <td class="text-right">
+                                        <a href="workload_report.html?code=TCH-018" class="btn-view-report">
+                                            <span>View Audit</span> <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr data-tier="underload">
+                                    <td class="font-bold cell-name">Leo Bautista</td>
+                                    <td><code class="code-tag cell-code">TCH-004</code></td>
+                                    <td class="cell-dept">MAPEH</td>
+                                    <td class="font-bold text-info">28.0 hrs/wk</td>
+                                    <td><span class="badge-status badge-underload">Underload</span></td>
+                                    <td class="text-right">
+                                        <a href="workload_report.html?code=TCH-004" class="btn-view-report">
+                                            <span>View Audit</span> <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State Feedback -->
+                    <div id="noDirectoryResults" class="directory-empty-state" style="display: none;">
+                        <i class="fas fa-file-circle-xmark"></i>
+                        <h4>No audit reports matching your filter</h4>
+                        <p>Try clearing your keyword query or switching the workload tier selection[cite: 4].</p>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; DepEd R.A. 10173 &amp; R.A. 4670 Compliant[cite: 4]</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> Statutory Verified
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Audit Engine v2.1.0</span>
+                </div>
+            </footer>
         </div>
-        <div class="theme-nav__actions">
-            <button class="theme-nav__refresh" type="button" onclick="window.location.href='principaldashboard.html'">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </button>
-        </div>
-    </header>
+    </div>
 
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="dashboard directory-container">
-
-        <!-- HEADER & FILTER BAR -->
-        <div class="directory-header">
-            <div>
-                <h2 class="directory-title"><i class="fas fa-folder-open icon-blue"></i> Workload Quantification Reports</h2>
-                <p class="directory-sub">Official administrative eSF7 load audits for SY 2026–2027.</p>
-            </div>
-            <div class="directory-controls">
-                <input type="text" id="directorySearch" class="search-input" placeholder="Search faculty name or code..." />
-                <select id="statusFilter" class="filter-select">
-                    <option value="all">All Workload Tiers</option>
-                    <option value="overload">Overload (>40 hrs)</option>
-                    <option value="high">High Load (38–40 hrs)</option>
-                    <option value="optimal">Optimal Load (30–37 hrs)</option>
-                    <option value="underload">Underload (<30 hrs)</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- REPORTS DIRECTORY TABLE CARD -->
-        <div class="directory-card">
-            <table class="directory-table">
-                <thead>
-                    <tr>
-                        <th>Faculty Name</th>
-                        <th>System Code</th>
-                        <th>Department</th>
-                        <th>Total Hours</th>
-                        <th>Status</th>
-                        <th class="text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="directoryTableBody">
-                    <tr>
-                        <td class="font-bold">Juan Dela Cruz</td>
-                        <td><code class="code-tag">TCH-012</code></td>
-                        <td>Araling Panlipunan</td>
-                        <td class="font-bold text-danger">48.0 hrs/wk</td>
-                        <td><span class="badge-status badge-overload">Overload</span></td>
-                        <td class="text-right">
-                            <a href="workload_report.html?code=TCH-012" class="btn-view-report">
-                                <i class="fas fa-file-invoice"></i> View Report
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Maria Santos</td>
-                        <td><code class="code-tag">TCH-003</code></td>
-                        <td>Science</td>
-                        <td class="font-bold text-warning">40.0 hrs/wk</td>
-                        <td><span class="badge-status badge-high">High Load</span></td>
-                        <td class="text-right">
-                            <a href="workload_report.html?code=TCH-003" class="btn-view-report">
-                                <i class="fas fa-file-invoice"></i> View Report
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Ramon Garcia</td>
-                        <td><code class="code-tag">TCH-008</code></td>
-                        <td>Mathematics</td>
-                        <td class="font-bold text-success">36.0 hrs/wk</td>
-                        <td><span class="badge-status badge-optimal">Optimal</span></td>
-                        <td class="text-right">
-                            <a href="workload_report.html?code=TCH-008" class="btn-view-report">
-                                <i class="fas fa-file-invoice"></i> View Report
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Ana Reyes</td>
-                        <td><code class="code-tag">TCH-018</code></td>
-                        <td>English</td>
-                        <td class="font-bold text-danger">46.5 hrs/wk</td>
-                        <td><span class="badge-status badge-overload">Overload</span></td>
-                        <td class="text-right">
-                            <a href="workload_report.html?code=TCH-018" class="btn-view-report">
-                                <i class="fas fa-file-invoice"></i> View Report
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Leo Bautista</td>
-                        <td><code class="code-tag">TCH-004</code></td>
-                        <td>MAPEH</td>
-                        <td class="font-bold text-info">28.0 hrs/wk</td>
-                        <td><span class="badge-status badge-underload">Underload</span></td>
-                        <td class="text-right">
-                            <a href="workload_report.html?code=TCH-004" class="btn-view-report">
-                                <i class="fas fa-file-invoice"></i> View Report
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-    </main>
-
-    <!-- GLOBAL FOOTER -->
-    <footer class="dashboard-footer">
-        &copy; 2026 Kandili Workspace &bull; DepEd R.A. 10173 & R.A. 4670 Compliant
-    </footer>
-
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/principal/reportsDirectory.js"></script>
 </body>
 </html>

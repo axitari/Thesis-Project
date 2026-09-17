@@ -1,0 +1,698 @@
+/* ==========================================================================
+   GLOBAL DESIGN TOKENS & RESET
+   ========================================================================== */
+:root {
+    --deped-blue: #0038A8;
+    --deped-blue-hover: #002266;
+    --deped-blue-dark: #001a4e;
+    --deped-red: #C8102E;
+    --deped-yellow: #FCE300;
+    --safe-green: #059669;
+    --warning-amber: #f59e0b;
+    --bg-light: #f1f5f9;
+    --bg-white: #ffffff;
+    --text-main: #0f172a;
+    --text-slate: #1e293b;
+    --text-body: #334155;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+    --border-subtle: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease-in-out;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* ==========================================================================
+   APP SHELL & SIDEBAR
+   ========================================================================== */
+.app-shell {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-sidebar {
+    width: 260px;
+    min-width: 260px;
+    height: 100vh;
+    background: #002266;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-sidebar-brand {
+    padding: 1.25rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    background: var(--deped-blue);
+    border-bottom: 3px solid var(--deped-yellow);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.app-sidebar-nav {
+    flex: 1;
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    overflow-y: auto;
+}
+
+.app-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.app-sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.app-sidebar-link.active {
+    background: var(--deped-blue);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 56, 168, 0.3);
+}
+
+.sidebar-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin: 0.75rem 0;
+}
+
+.link-logout {
+    color: #fda4af !important;
+}
+
+.app-main-content {
+    flex: 1;
+    min-width: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   TOP NAVIGATION HEADER
+   ========================================================================== */
+.theme-nav {
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    background: linear-gradient(135deg, #0038A8 0%, #0f5ef7 100%);
+    color: #ffffff;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 56, 168, 0.15);
+}
+
+.theme-nav__title {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.theme-nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.theme-nav__date {
+    font-size: 0.85rem;
+    color: #dbeafe;
+}
+
+.theme-nav__refresh {
+    border: none;
+    background: #ffffff;
+    color: var(--deped-blue);
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.theme-nav__refresh:hover {
+    background: #f0f7ff;
+    transform: translateY(-1px);
+}
+
+/* HIDDEN DROPDOWN BY DEFAULT - CRITICAL OVERRIDE */
+.theme-nav__menu {
+    display: none !important;
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 1.5rem;
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 0.6rem;
+    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
+    flex-direction: column;
+    min-width: 220px;
+    z-index: 1000;
+    gap: 0.35rem;
+}
+
+.theme-nav__menu.active {
+    display: flex !important;
+}
+
+.theme-nav__menu a {
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    color: var(--text-main) !important;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-nav__menu a:hover {
+    background: #eff6ff;
+    color: var(--deped-blue) !important;
+}
+
+.theme-nav__menu a.logout-link {
+    color: var(--deped-red) !important;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn-primary {
+    background: var(--deped-blue);
+    color: #ffffff;
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-primary:hover {
+    background: var(--deped-blue-hover);
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--deped-blue);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-outline:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.btn-blue {
+    background: var(--deped-blue);
+    color: #fff;
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-blue:hover {
+    background: var(--deped-blue-hover);
+}
+
+/* ==========================================================================
+   GLOBAL MODALS
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active .modal-container {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+}
+
+.modal-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-slate);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-close-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close-icon:hover {
+    color: var(--deped-red);
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-actions {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    background: #f8fafc;
+}
+
+/* ==========================================================================
+   GLOBAL FORMS
+   ========================================================================== */
+.form-group {
+    margin-bottom: 1.15rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-slate);
+    margin-bottom: 0.4rem;
+}
+
+.required-star {
+    color: var(--deped-red);
+}
+
+.field-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+input[type="text"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--deped-blue);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
+}
+
+/* Searchable Select */
+.searchable-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.searchable-select-input {
+    padding-right: 2.2rem;
+}
+
+.searchable-select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.searchable-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    padding: 0.25rem;
+}
+
+.searchable-dropdown.open {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-body);
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.dropdown-item:hover, .dropdown-item.highlighted {
+    background-color: #eff6ff;
+    color: var(--deped-blue);
+}
+
+.dropdown-item.selected {
+    background-color: #dbeafe;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   ELEVATED GLASSMORPHIC BACK BUTTON
+   ========================================================================== */
+
+.nav-back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    height: 36px;
+    padding: 0 0.95rem;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Icon transition */
+.nav-back-pill i {
+    font-size: 0.82rem;
+    transition: transform 0.2s ease;
+}
+
+/* Hover: light glow + subtle left shift for visual cue */
+.nav-back-pill:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-back-pill:hover i {
+    transform: translateX(-3px);
+}
+
+/* Click state */
+.nav-back-pill:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* If you prefer just the round circle (no text) */
+.nav-back-pill.circle-only {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+}
+
+.nav-back-pill.circle-only:hover i {
+    transform: translateX(-2px);
+}
+
+/* ==========================================================================
+   ADDITIONS: GLASSMORPHIC BACK BUTTON & CLEAN UNIFIED FOOTER
+   ========================================================================== */
+
+/* 1. Back button for teacher & principal top navigation */
+.nav-back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    height: 36px;
+    padding: 0 0.95rem;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.nav-back-pill i {
+    font-size: 0.82rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-back-pill:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-back-pill:hover i {
+    transform: translateX(-3px);
+}
+
+.nav-back-pill:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 2. Unified sleek footer */
+.app-dashboard-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    background: #ffffff;
+    border-top: 1px solid var(--border-subtle, #e2e8f0);
+    font-size: 0.82rem;
+    color: var(--text-muted, #64748b);
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.footer-block {
+    display: flex;
+    align-items: center;
+}
+
+.footer-block.text-right {
+    justify-content: flex-end;
+}
+
+.compliance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.version-label {
+    font-family: monospace;
+    color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+    .app-dashboard-footer {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+    }
+    .footer-block.text-right {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   ROLE SWITCHER PILL (ADMIN CONSOLE RETURN BUTTON)
+   ========================================================================== */
+.role-switch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 36px;
+    padding: 0 1rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+/* Specific styling for the Teacher Dashboard Navbar */
+.role-switch-pill--admin {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.role-switch-pill--admin i {
+    font-size: 0.85rem;
+    color: #FCE300; /* DepEd Gold accent icon */
+}
+
+.role-switch-pill--admin:hover {
+    background: #ffffff !important;
+    color: var(--deped-blue, #0038A8) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.role-switch-pill--admin:hover i {
+    color: var(--deped-blue, #0038A8);
+}
+
+.role-switch-pill--admin:active {
+    transform: translateY(0);
+}
+
+/* Ensure actions group aligns elements evenly */
+.theme-nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}

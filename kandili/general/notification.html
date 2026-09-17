@@ -3,109 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Notifications</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <title>Notifications &bull; Kandili Workspace</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="any"></script>
-    <script src="../../static/js/logout.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/general/notification.css">
 </head>
-<body class="dashboard-body">
+<body class="dashboard-body notification-page-body">
 
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Notifications</div>
+            <nav class="app-sidebar-nav" id="dynamicSidebarNav">
+                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="notification.html" class="app-sidebar-link active">
+                    <i class="fas fa-bell"></i> Notifications <span id="sidebarNotificationBadge" class="sidebar-badge">3</span>
+                </a>
+                <a href="message.html" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="history.html" class="app-sidebar-link">
+                    <i class="fas fa-history"></i> History
+                </a>
+                <a href="settings.html" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+
+                <hr class="sidebar-divider">
+
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVBAR -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="(function(){
+                                const params = new URLSearchParams(window.location.search);
+                                const origin = params.get('origin');
+                                if (origin === 'teacher') {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (origin === 'principal') {
+                                    window.location.href = '../principal/principaldashboard.html';
+                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                }
+                            })()" 
+                            aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">
+                        Notifications Center
+                        <span id="unreadCountBadge" class="theme-unread-badge">3</span>
+                    </div>
+                </div>
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+                    <button class="theme-nav__refresh" type="button" id="navRefreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </header>
+
+            <main class="dashboard notification-canvas">
+                
+                <!-- HEADER BANNER -->
+                <div class="notification-welcome-card">
+                    <div class="welcome-text">
+                        <h2><i class="fas fa-bell text-blue"></i> Notifications</h2>
+                        <p>Stay updated with recent load submissions, diagnostic alerts, and statutory audit actions.</p>
+                    </div>
+                    <div class="notification-actions-group">
+                        <button class="btn-outline-sm" id="markAllReadBtn" type="button">
+                            <i class="fas fa-check-double"></i> Mark All as Read
+                        </button>
+                    </div>
+                </div>
+
+                <!-- NOTIFICATIONS LIST CARD -->
+                <div class="notification-card">
+                    <div class="notification-card-header">
+                        <h3><i class="fas fa-clock-rotate-left"></i> Recent Activity Log</h3>
+                        <span class="summary-live-pill"><i class="fas fa-circle live-dot"></i> Live Stream</span>
+                    </div>
+
+                    <div class="notification-list" id="notificationListContainer">
+                        <!-- Populated by notificationLogic.js -->
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; DepEd Audit Activity Feed</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> System Audited &bull; R.A. 10173
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Notification Engine v2.1.0</span>
+                </div>
+            </footer>
         </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
-            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="../teacher/teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
-            <a href="../principal/principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
-            <a href="../teacher/teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
-            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="history.html"><i class="fas fa-history"></i> History</a>
-            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
-            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </nav>
-    </header>
-
-    <div class="dashboard-container">
-        <section class="welcome-banner">
-            <div class="banner-top">
-                <span class="page-pill">Updates</span>
-            </div>
-            <h2 class="welcome-title">Notifications</h2>
-            <p class="welcome-subtitle">Stay updated with recent actions, approvals, and reminders.</p>
-        </section>
-
-        <section class="card notification-summary-card">
-            <div class="notification-summary">
-                <div>
-                    <p class="summary-label">Today</p>
-                    <h3 class="summary-count">3 new updates</h3>
-                </div>
-                <span class="summary-chip">Live</span>
-            </div>
-        </section>
-
-        <section class="card notification-card">
-            <h3 class="card-header">Recent Activity</h3>
-            <div class="notification-list">
-                <div class="notification-item">
-                    <div class="notification-icon">✓</div>
-                    <div class="notification-content">
-                        <strong>New workload draft submitted</strong>
-                        <p>Teacher Maria submitted a new eSF7 draft for review.</p>
-                    </div>
-                    <span class="notification-time">Just now</span>
-                </div>
-                <div class="notification-item">
-                    <div class="notification-icon">⏳</div>
-                    <div class="notification-content">
-                        <strong>Approval request updated</strong>
-                        <p>Your principal reviewed the pending allocation request.</p>
-                    </div>
-                    <span class="notification-time">12m ago</span>
-                </div>
-                <div class="notification-item">
-                    <div class="notification-icon">!</div>
-                    <div class="notification-content">
-                        <strong>System reminder</strong>
-                        <p>Please complete your profile updates before the next review cycle.</p>
-                    </div>
-                    <span class="notification-time">1h ago</span>
-                </div>
-            </div>
-        </section>
     </div>
 
-
-    <!-- Supabase & Auth Security Stack -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../../static/js/supabaseClient.js"></script>
-<script src="../../static/js/authGuard.js"></script>
-<script src="../../static/js/logout.js"></script>
-<script src="../../static/js/notificationLogic.js"></script>
-<script>
-    if (typeof checkAuthAndRole === "function") {
-        // Allows any authenticated role (teacher, principal, admin)
-       checkAuthAndRole('any');
-    }
-</script>
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/general/notificationLogic.js"></script>
 </body>
 </html>
-

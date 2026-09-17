@@ -1,0 +1,216 @@
+/* ==========================================================================
+   NOTIFICATIONS CENTER STYLES
+   ========================================================================== */
+
+.notification-canvas {
+    padding: 2rem;
+    max-width: 1080px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 1. Welcome Card */
+.notification-welcome-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.welcome-text h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0 0 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-text p {
+    font-size: 0.9rem;
+    color: var(--text-muted, #64748b);
+    margin: 0;
+}
+
+.btn-outline-sm {
+    background: #f8fafc;
+    border: 1px solid var(--border-color, #cbd5e1);
+    color: #475569;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-sm:hover {
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border-color: #bfdbfe;
+}
+
+/* 2. Notification List Card */
+.notification-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.notification-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.notification-card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.summary-live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.live-dot {
+    font-size: 0.5rem;
+    color: #10b981;
+    animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* 3. Notification Items */
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+    padding: 1.15rem;
+    border: 1px solid #f1f5f9;
+    border-radius: 12px;
+    margin-bottom: 0.85rem;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+}
+
+.notification-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.notification-item.unread {
+    background: #ffffff;
+    border-left: 4px solid var(--deped-blue, #0038A8);
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+
+.notification-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.icon-blue { background: #eff6ff; color: var(--deped-blue, #0038A8); }
+.icon-amber { background: #fffbeb; color: #d97706; }
+.icon-red { background: #fef2f2; color: #dc2626; }
+.icon-purple { background: #faf5ff; color: #7e22ce; }
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.2rem 0;
+}
+
+.notification-text {
+    font-size: 0.85rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.45;
+}
+
+.notification-time {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+/* Sidebar & Badges */
+.theme-unread-badge,
+.sidebar-badge {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    margin-left: 0.4rem;
+}
+
+.notification-empty-state {
+    padding: 3.5rem 1.5rem;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.notification-empty-state i {
+    font-size: 2.5rem;
+    color: #cbd5e1;
+    margin-bottom: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .notification-canvas {
+        padding: 1rem;
+    }
+    .notification-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .notification-time {
+        align-self: flex-end;
+    }
+}

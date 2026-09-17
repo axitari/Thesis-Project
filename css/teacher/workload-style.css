@@ -1,0 +1,74 @@
+/* ==========================================================================
+   WORKLOAD & RISK INTELLIGENCE CARDS (4-COLUMNS)
+   ========================================================================== */
+.workload-cards--4col, .risk-cards {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.25rem !important;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.workload-card, .risk-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-top: 4px solid transparent;
+    border-radius: 18px;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 210px;
+    box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
+}
+
+.workload-card--underload, .risk-card--info { border-top-color: #0284c7 !important; }
+.workload-card--optimal, .risk-card--low { border-top-color: var(--safe-green) !important; }
+.workload-card--high, .risk-card--moderate { border-top-color: var(--warning-amber) !important; }
+.workload-card--overload, .risk-card--critical { border-top-color: var(--deped-red) !important; }
+
+.workload-card-number, .risk-card-number {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.workload-card-label, .risk-card-label {
+    margin-top: 0.55rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   DEPARTMENT TRACKER & CHARTS
+   ========================================================================== */
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.dept-bar-track {
+    background: #f1f5f9;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dept-bar--high { background-color: var(--deped-red) !important; }
+.dept-bar--moderate { background-color: var(--warning-amber) !important; }
+.dept-bar--low { background-color: var(--safe-green) !important; }
+
+.hotlist-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.hotlist-item--critical { background: #fff1f2; border-left: 4px solid var(--deped-red); }
+.hotlist-item--hidden { background: #fffbeb; border-left: 4px solid var(--warning-amber-dark); }

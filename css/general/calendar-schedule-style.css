@@ -1,0 +1,35 @@
+/* ==========================================================================
+   TIMETABLES & CALENDAR ENGINE
+   ========================================================================== */
+.calendar-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) 300px;
+    gap: 1rem;
+    padding: 1rem;
+    background: #fcfdff;
+}
+
+.calendar-weekdays, .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-day {
+    min-height: 110px;
+    padding: 0.55rem;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    background: #fff;
+    cursor: pointer;
+}
+
+.timetable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.timetable thead tr { background: #f8fafc; color: var(--text-muted); border-bottom: 2px solid var(--border-subtle); }
+.timetable th, .timetable td { padding: 1rem; border-bottom: 1px solid var(--border-subtle); }
+.timetable tbody tr:hover { background-color: #f1f5f9; }

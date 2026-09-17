@@ -3,179 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Principal Profile</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <title>Principal Profile &bull; Kandili Workspace</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Scripts for Supabase and authentication guard -->
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="principal"></script>
-    <script src="../../static/js/logout.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/principal/principalprofile.css">
 </head>
 <body class="dashboard-body profile-page-body">
 
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Principal Profile</div>
-        </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
-            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
-            <a href="../teacher/teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
-            <a href="principalprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="../general/message.html"><i class="fas fa-envelope"></i> Messages</a>
-            <a href="../general/notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="../general/history.html"><i class="fas fa-history"></i> History</a>
-            <a href="../general/calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
-            <a href="../general/settings.html"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </nav>
-    </header>
+            <nav class="app-sidebar-nav">
+                <a href="principaldashboard.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="principalprofilepage.html" class="app-sidebar-link active">
+                    <i class="fas fa-user-tie"></i> My Profile
+                </a>
+                <a href="facultydirectory.html" class="app-sidebar-link">
+                    <i class="fas fa-address-book"></i> Faculty Directory
+                </a>
+                <a href="burnout_reports_directory.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-column"></i> Burnout Reports
+                </a>
+                
+                <hr class="sidebar-divider">
 
-    <div class="profile-page-shell">
-        <section class="profile-header-card">
-            <div class="profile-avatar">
-                <img src="../../static/assets/placeholder-photo.svg" alt="Profile Photo" class="profile-photo">
-            </div>
-            <div class="profile-summary">
-                <div class="profile-heading">
-                    <h1 class="profile-name">Mylene Panaguiton</h1>
-                    <span class="status-badge status-active">Active Account</span>
+                <a href="../general/message.html" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="../general/notification.html" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+                <a href="../general/history.html" class="app-sidebar-link">
+                    <i class="fas fa-history"></i> History
+                </a>
+                <a href="../general/calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="../general/settings.html" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVIGATION -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" onclick="window.history.back()" type="button" aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">Principal Profile</div>
                 </div>
-                <p class="profile-role">Principal II</p>
-                <div class="profile-highlights">
-                    <span class="pill">Leadership</span>
-                    <span class="pill pill-muted">School Operations</span>
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+                    <button class="theme-nav__refresh" type="button" onclick="location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
-            </div>
-            <div class="profile-actions">
-                <button class="btn-outline btn-small">Update Photo</button>
-                <button class="btn-primary btn-small">Edit Profile</button>
-            </div>
-        </section>
+            </header>
 
-        <div class="profile-grid">
-            <aside class="profile-sidebar">
-                <section class="card profile-card">
-                    <div class="section-heading">
-                        <h3>Employment Stats</h3>
-                        <span class="section-tag">Core Details</span>
-                    </div>
-                    <div class="stat-list">
-                        <div class="stat-item">
-                            <label>DepEd Employee ID</label>
-                            <p>104238</p>
+            <main class="dashboard profile-canvas">
+                <div class="profile-page-shell">
+                    
+                    <!-- Top Profile Identity Banner -->
+                    <section class="profile-header-card">
+                        <div class="profile-avatar-container">
+                            <img src="../../assets/placeholder-photo.svg" id="profileImageDisplay" alt="Profile Photo" class="profile-photo" onerror="this.src='https://ui-avatars.com/api/?name=Mylene+Panaguiton&background=0038A8&color=fff&size=128';">
+                            <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+                            <button class="avatar-edit-badge" id="avatarBadgeBtn" type="button" title="Upload new photo">
+                                <i class="fas fa-camera"></i>
+                            </button>
                         </div>
-                        <div class="stat-item">
-                            <label>Plantilla Item No.</label>
-                            <p>OSEC-DECSB-SP2-123456</p>
-                        </div>
-                        <div class="stat-item">
-                            <label>PRC License No.</label>
-                            <p>0492811</p>
-                        </div>
-                        <div class="stat-item">
-                            <label>Employment Status</label>
-                            <p>Permanent</p>
-                        </div>
-                        <div class="stat-item">
-                            <label>Years in Service</label>
-                            <p>12 Years</p>
-                        </div>
-                    </div>
-                </section>
-            </aside>
-
-            <main class="profile-main">
-                <section class="card profile-card">
-                    <div class="section-heading">
-                        <h3>Administrative Information</h3>
-                        <span class="section-tag">Official Records</span>
-                    </div>
-
-                    <div class="info-group-card">
-                        <div class="info-group-title">School Administration</div>
-                        <div class="profile-details-list">
-                            <div class="detail-row">
-                                <strong>Assigned Institution</strong>
-                                <span>Trailblazers Elementary School</span>
+                        <div class="profile-summary">
+                            <div class="profile-heading">
+                                <h1 class="profile-name" id="displayFullName">Mylene Panaguiton</h1>
+                                <span class="status-badge status-active">Active Account</span>
                             </div>
-                            <div class="detail-row">
-                                <strong>Office Address</strong>
-                                <span>Office of the Principal, Trailblazer Campus</span>
+                            <p class="profile-role" id="displayRoleTitle">Principal II &bull; School Head</p>
+                            <div class="profile-highlights">
+                                <span class="pill"><i class="fas fa-award"></i> Institutional Leadership</span>
+                                <span class="pill pill-muted"><i class="fas fa-school"></i> School Operations</span>
+                                <span class="pill pill-muted"><i class="fas fa-clipboard-check"></i> DepEd Authorized</span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="info-group-card">
-                        <div class="info-group-title">Professional Qualifications</div>
-                        <div class="profile-details-list">
-                            <div class="detail-row">
-                                <strong>Highest Educational Attainment</strong>
-                                <span>Ph.D. in Educational Management</span>
-                            </div>
-                            <div class="detail-row">
-                                <strong>Official Email</strong>
-                                <span>principal.office@deped.gov.ph</span>
-                            </div>
-                            <div class="detail-row">
-                                <strong>Contact Number</strong>
-                                <span>+63 912 345 6789</span>
-                            </div>
+                        <div class="profile-actions">
+                            <button class="btn-outline btn-small" id="updatePhotoBtn" type="button"><i class="fas fa-image"></i> Update Photo</button>
+                            <button class="btn-primary btn-small" id="editProfileBtn" type="button"><i class="fas fa-pen"></i> Edit Profile</button>
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="section-divider"></div>
+                    <!-- Dual Column Information Grid -->
+                    <div class="profile-grid">
+                        
+                        <!-- Left Column: Employment Stats Card -->
+                        <aside class="profile-sidebar-col">
+                            <section class="card profile-card">
+                                <div class="section-heading">
+                                    <h3><i class="fas fa-id-card-clip"></i> Employment Stats</h3>
+                                    <span class="section-tag">Core Details</span>
+                                </div>
+                                <div class="stat-list">
+                                    <div class="stat-item">
+                                        <label>DepEd Employee ID</label>
+                                        <p id="displayEmployeeId">104238</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>Plantilla Item No.</label>
+                                        <p id="displayPlantilla">OSEC-DECSB-SP2-123456</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>PRC License No.</label>
+                                        <p id="displayPrcLicense">0492811</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>Employment Status</label>
+                                        <p class="text-green font-bold"><i class="fas fa-check-circle"></i> Permanent</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <label>Years in Service</label>
+                                        <p id="displayYearsService">12 Years</p>
+                                    </div>
+                                </div>
+                            </section>
+                        </aside>
 
-                    <div class="section-heading">
-                        <h3>System Access & Security</h3>
-                        <span class="section-tag">Confidential</span>
-                    </div>
+                        <!-- Right Column: Institutional & System Records -->
+                        <main class="profile-main-col">
+                            <section class="card profile-card">
+                                <div class="section-heading">
+                                    <h3><i class="fas fa-building-columns"></i> Administrative Information</h3>
+                                    <span class="section-tag">Official Records</span>
+                                </div>
 
-                    <div class="access-box">
-                        <div class="access-item">
-                            <strong>Last Login</strong>
-                            <span>July 18, 2026, 09:30 AM</span>
-                        </div>
-                        <div class="access-item">
-                            <strong>Role Permissions</strong>
-                            <span>Full Administrative Access (Read / Write / Delete)</span>
-                        </div>
-                    </div>
+                                <div class="info-group-card">
+                                    <div class="info-group-title"><i class="fas fa-landmark"></i> School Administration</div>
+                                    <div class="profile-details-list">
+                                        <div class="detail-row">
+                                            <strong>Assigned Institution</strong>
+                                            <span id="displayInstitution">Trailblazers Elementary School</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <strong>Office Address</strong>
+                                            <span id="displayOfficeAddress">Office of the Principal, Trailblazer Campus</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div class="profile-actions profile-actions-end">
-                        <button class="btn-outline">Review Activity Log</button>
+                                <div class="info-group-card">
+                                    <div class="info-group-title"><i class="fas fa-user-graduate"></i> Professional Qualifications</div>
+                                    <div class="profile-details-list">
+                                        <div class="detail-row">
+                                            <strong>Highest Educational Attainment</strong>
+                                            <span id="displayDegree">Ph.D. in Educational Management</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <strong>Official Email</strong>
+                                            <span id="displayEmail">principal.office@deped.gov.ph</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <strong>Contact Number</strong>
+                                            <span id="displayContact">+63 912 345 6789</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="section-divider"></div>
+
+                                <div class="section-heading">
+                                    <h3><i class="fas fa-shield-halved"></i> System Access &amp; Security</h3>
+                                    <span class="section-tag">Confidential</span>
+                                </div>
+
+                                <div class="access-box">
+                                    <div class="access-item">
+                                        <strong>Last System Login</strong>
+                                        <span>July 18, 2026, 09:30 AM</span>
+                                    </div>
+                                    <div class="access-item">
+                                        <strong>Role Permissions</strong>
+                                        <span class="badge-role-admin">Full Administrative Access (Read / Write / Reallocate)</span>
+                                    </div>
+                                </div>
+
+                                <div class="profile-actions profile-actions-end">
+                                    <button class="btn-outline" type="button" onclick="window.location.href='../general/history.html';">
+                                        <i class="fas fa-clock-rotate-left"></i> Review Activity Log
+                                    </button>
+                                </div>
+                            </section>
+                        </main>
+
                     </div>
-                </section>
+                </div>
             </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong>. All rights reserved.</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> R.A. 10173 Compliant &bull; Data Encrypted
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Profile Console v2.1.0</span>
+                </div>
+            </footer>
         </div>
     </div>
 
+    <!-- EDIT PROFILE MODAL -->
+    <div class="modal-overlay" id="editProfileModal">
+        <div class="modal-container profile-edit-modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit" style="color: var(--deped-blue);"></i> Edit Principal Profile</h3>
+                <button class="modal-close-icon" id="closeEditModalBtn" type="button">&times;</button>
+            </div>
+            <form id="editProfileForm">
+                <div class="modal-body">
+                    <div class="profile-form-grid">
+                        <div class="form-group">
+                            <label for="editFullName">Full Name</label>
+                            <input type="text" id="editFullName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRoleTitle">Position / Title</label>
+                            <input type="text" id="editRoleTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmail">Official Email</label>
+                            <input type="email" id="editEmail" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editContact">Contact Number</label>
+                            <input type="text" id="editContact" class="form-control" required>
+                        </div>
+                        <div class="form-group form-group--full">
+                            <label for="editDegree">Educational Attainment</label>
+                            <input type="text" id="editDegree" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelEditBtn" class="btn-outline">Cancel</button>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-
-    <!-- Supabase & Auth Security Stack -->
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js"></script>
-    <script src="../../static/js/logout.js"></script>
-    <script src="../../static/js/principalProfile.js"></script>
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/principalProfile.js"></script>
     <script>
-        if (typeof checkAuthAndRole === "function") {
-            checkAuthAndRole('principal'); 
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logout Trigger
+            document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (typeof kandiliLogout === 'function') {
+                    kandiliLogout();
+                } else if (confirm("Are you sure you want to log out?")) {
+                    window.location.href = "../login.html";
+                }
+            });
+
+            // Edit Profile Modal Wiring
+            const editModal = document.getElementById('editProfileModal');
+            const openEditBtn = document.getElementById('editProfileBtn');
+            const closeEditBtn = document.getElementById('closeEditModalBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const editForm = document.getElementById('editProfileForm');
+
+            // Image Upload Wiring
+            const photoInput = document.getElementById('avatarFileInput');
+            const openPhotoBtn = document.getElementById('updatePhotoBtn');
+            const badgePhotoBtn = document.getElementById('avatarBadgeBtn');
+            const imageDisplay = document.getElementById('profileImageDisplay');
+
+            const triggerPhotoPicker = () => photoInput?.click();
+            openPhotoBtn?.addEventListener('click', triggerPhotoPicker);
+            badgePhotoBtn?.addEventListener('click', triggerPhotoPicker);
+
+            photoInput?.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imageDisplay.src = e.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            const toggleModal = (show) => {
+                if (!editModal) return;
+                if (show) {
+                    // Pre-fill inputs with current UI values
+                    document.getElementById('editFullName').value = document.getElementById('displayFullName').textContent.trim();
+                    document.getElementById('editRoleTitle').value = document.getElementById('displayRoleTitle').textContent.trim();
+                    document.getElementById('editEmail').value = document.getElementById('displayEmail').textContent.trim();
+                    document.getElementById('editContact').value = document.getElementById('displayContact').textContent.trim();
+                    document.getElementById('editDegree').value = document.getElementById('displayDegree').textContent.trim();
+                    
+                    editModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    editModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            };
+
+            openEditBtn?.addEventListener('click', () => toggleModal(true));
+            closeEditBtn?.addEventListener('click', () => toggleModal(false));
+            cancelEditBtn?.addEventListener('click', () => toggleModal(false));
+
+            editModal?.addEventListener('click', (e) => {
+                if (e.target === editModal) toggleModal(false);
+            });
+
+            editForm?.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Read input values
+                const name = document.getElementById('editFullName').value;
+                const role = document.getElementById('editRoleTitle').value;
+                const email = document.getElementById('editEmail').value;
+                const contact = document.getElementById('editContact').value;
+                const degree = document.getElementById('editDegree').value;
+
+                // Update text elements on dashboard
+                document.getElementById('displayFullName').textContent = name;
+                document.getElementById('displayRoleTitle').textContent = role;
+                document.getElementById('displayEmail').textContent = email;
+                document.getElementById('displayContact').textContent = contact;
+                document.getElementById('displayDegree').textContent = degree;
+
+                toggleModal(false);
+            });
+        });
     </script>
-    
 </body>
 </html>

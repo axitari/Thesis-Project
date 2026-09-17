@@ -1,0 +1,378 @@
+/* ==========================================================================
+   ACCOUNT SETTINGS STYLES
+   ========================================================================== */
+
+.settings-canvas {
+    padding: 2rem;
+    max-width: 1250px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 1. Header Banner */
+.settings-welcome-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.welcome-text h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0 0 0.35rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome-text p {
+    font-size: 0.9rem;
+    color: var(--text-muted, #64748b);
+    margin: 0;
+}
+
+.settings-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border: 1px solid #bfdbfe;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* 2. Grid Layout */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+}
+
+.settings-card {
+    background: #ffffff;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 18px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.settings-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.settings-card-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Badges */
+.settings-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+
+.badge-security { background: #eff6ff; color: #0038A8; border: 1px solid #bfdbfe; }
+.badge-pref     { background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+.badge-neutral  { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+.badge-danger   { background: #fef2f2; color: #dc2626; border: 1px solid #fecdd3; }
+
+/* 3. Inputs & Eye Toggle */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+.required-star {
+    color: #ef4444;
+}
+
+.input-toggle-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-toggle-wrap .form-control {
+    width: 100%;
+    padding: 0.65rem 2.5rem 0.65rem 0.85rem;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #0f172a;
+    box-sizing: border-box;
+}
+
+.input-toggle-wrap .form-control:focus {
+    border-color: var(--deped-blue, #0038A8);
+    box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.1);
+}
+
+.btn-eye-toggle {
+    position: absolute;
+    right: 0.85rem;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-eye-toggle:hover {
+    color: #475569;
+}
+
+/* Password Strength */
+.strength-meter-wrap {
+    margin-top: 0.4rem;
+}
+
+.strength-bars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.35rem;
+    margin-bottom: 0.25rem;
+}
+
+.strength-bar {
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    transition: background 0.3s ease;
+}
+
+.strength-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+.password-match-hint {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.2rem;
+}
+
+/* 4. Notification Toggles */
+.settings-notif-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+}
+
+.notif-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notif-info strong {
+    font-size: 0.88rem;
+    color: #0f172a;
+    display: block;
+}
+
+.notif-info p {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 0.15rem 0 0 0;
+}
+
+/* Toggle Switch UI */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #cbd5e1;
+    transition: .25s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .25s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--deped-blue, #0038A8);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* 5. Account Info Grid */
+.settings-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.info-metric-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.metric-val {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* 6. Session Controls */
+.settings-session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.session-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.session-item-row strong {
+    font-size: 0.88rem;
+    color: #0f172a;
+    display: block;
+}
+
+.session-item-row p {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 0.15rem 0 0 0;
+}
+
+.btn-delete {
+    background: #fef2f2;
+    border: 1px solid #fecdd3;
+    color: #dc2626;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn-outline-sm {
+    background: #f8fafc;
+    border: 1px solid var(--border-color, #cbd5e1);
+    color: #475569;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+}
+
+.btn-outline-sm:hover {
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+}
+
+.settings-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.settings-feedback {
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
+}
+
+.settings-feedback.success { color: #15803d; }
+.settings-feedback.error   { color: #dc2626; }
+
+@media (max-width: 960px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+}

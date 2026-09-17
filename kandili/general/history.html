@@ -3,151 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Activity History</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <title>Activity History &bull; Kandili Workspace</title>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js" data-allowed-roles="any"></script>
-    <script src="../../static/js/logout.js"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/general/history.css">
 </head>
-<body class="dashboard-body">
+<body class="dashboard-body history-page-body">
 
-    <header class="theme-nav">
-        <div class="theme-nav__brand">
-            <button class="theme-nav__back" onclick="window.history.back()" type="button"><i class="fas fa-arrow-left"></i></button>
-            <div class="theme-nav__logo">
-                <span class="theme-nav__logo-icon">🏫</span>
-                <span>Kandili</span>
-                <span class="logo-badge">Workspace</span>
+    <div class="app-shell">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print">
+            <div class="app-sidebar-brand">
+                <span>🏫 Kandili Workspace</span>
             </div>
-            <div class="theme-nav__title">Activity History</div>
+            <nav class="app-sidebar-nav" id="dynamicSidebarNav">
+                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="history.html" class="app-sidebar-link active">
+                    <i class="fas fa-history"></i> History
+                </a>
+                <a href="notification.html" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+                <a href="message.html" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="calendar.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                </a>
+                <a href="settings.html" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+
+                <hr class="sidebar-divider">
+
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVBAR -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="(function(){
+                                const params = new URLSearchParams(window.location.search);
+                                const origin = params.get('origin');
+                                if (origin === 'teacher') {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (origin === 'principal') {
+                                    window.location.href = '../principal/principaldashboard.html';
+                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                } else if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = '../teacher/teacherdashboard.html';
+                                }
+                            })()" 
+                            aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">Activity History</div>
+                </div>
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+                    <button class="theme-nav__refresh" type="button" id="navRefreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </header>
+
+            <main class="dashboard history-canvas">
+                
+                <!-- HEADER BANNER -->
+                <div class="history-welcome-card">
+                    <div class="welcome-text">
+                        <h2><i class="fas fa-clock-rotate-left text-blue"></i> Activity History</h2>
+                        <p>Track approvals, profile updates, and eSF7 load submissions in an immutable audit ledger[cite: 6].</p>
+                    </div>
+                    <div class="history-badge-pill">
+                        <i class="fas fa-shield-halved"></i> DepEd Compliant Ledger
+                    </div>
+                </div>
+
+                <!-- SEARCH & FILTER TOOLBAR CARD -->
+                <section class="card history-search-card">
+                    <div class="history-search-row">
+                        <div class="history-input-wrap">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchInput" class="history-search-input" placeholder="Search by action, user, or date..." />
+                        </div>
+                        <select id="filterType" class="history-select">
+                            <option value="all">All activities</option>
+                            <option value="approval">Approvals</option>
+                            <option value="update">Updates</option>
+                            <option value="submission">Submissions</option>
+                        </select>
+                        <div class="history-btn-actions">
+                            <button type="button" id="searchBtn" class="btn-primary history-filter-btn">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button type="button" id="resetBtn" class="btn-outline history-reset-btn">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- LEDGER LIST -->
+                    <div id="historyList" class="history-list">
+                        <div class="history-item" data-category="approval" data-status="approved" data-keywords="principal approved sf7 submission ancillary workload 2026 q3">
+                            <div class="history-icon-circle icon-approve">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="history-item-main">
+                                <strong>Principal approved SF7 submission</strong>
+                                <div class="history-item-meta">Ref: Ancillary Workload 2026-Q3 &bull; Principal Office</div>
+                            </div>
+                            <span class="history-badge badge-approve">Approved</span>
+                            <div class="history-date">July 17, 2026</div>
+                        </div>
+
+                        <div class="history-item" data-category="update" data-status="updated" data-keywords="user profile updated system modification admin july 16">
+                            <div class="history-icon-circle icon-update">
+                                <i class="fas fa-pen-to-square"></i>
+                            </div>
+                            <div class="history-item-main">
+                                <strong>User profile updated</strong>
+                                <div class="history-item-meta">System modification by Admin &bull; Account settings</div>
+                            </div>
+                            <span class="history-badge badge-update">Update</span>
+                            <div class="history-date">July 16, 2026</div>
+                        </div>
+
+                        <div class="history-item" data-category="submission" data-status="submitted" data-keywords="ancillary summary submitted teacher juan submission july 15">
+                            <div class="history-icon-circle icon-submit">
+                                <i class="fas fa-file-arrow-up"></i>
+                            </div>
+                            <div class="history-item-main">
+                                <strong>Ancillary summary submitted</strong>
+                                <div class="history-item-meta">Action performed by Teacher Juan &bull; Summary packet</div>
+                            </div>
+                            <span class="history-badge badge-submit">Submit</span>
+                            <div class="history-date">July 15, 2026</div>
+                        </div>
+
+                        <div class="history-item" data-category="approval" data-status="review" data-keywords="reallocation request reviewed principal workload review july 14">
+                            <div class="history-icon-circle icon-review">
+                                <i class="fas fa-magnifying-glass"></i>
+                            </div>
+                            <div class="history-item-main">
+                                <strong>Reallocation request reviewed</strong>
+                                <div class="history-item-meta">Reviewed by Principal &bull; Pending assignment review</div>
+                            </div>
+                            <span class="history-badge badge-review">Review</span>
+                            <div class="history-date">July 14, 2026</div>
+                        </div>
+                    </div>
+
+                    <div id="historyEmpty" class="history-empty" style="display: none;">
+                        <i class="fas fa-folder-open"></i>
+                        <h4>No matching activity found</h4>
+                        <p>Try adjusting your search keywords or switching category filters[cite: 6].</p>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; DepEd Audit Trail</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> Non-Repudiation Verified &bull; R.A. 10173
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Audit Engine v2.1.0</span>
+                </div>
+            </footer>
         </div>
-        <div class="theme-nav__actions">
-            <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-            <button class="theme-nav__refresh" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
-            <button class="theme-nav__menu-btn" id="burgerMenuBtn" aria-label="Open navigation menu" aria-expanded="false" type="button">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        <nav class="theme-nav__menu" id="themeNavMenu" aria-label="Primary navigation">
-            <a href="../teacher/teacherdashboard.html"><i class="fas fa-chart-line"></i> Teacher Dashboard</a>
-            <a href="../principal/principaldashboard.html"><i class="fas fa-chart-pie"></i> Principal Dashboard</a>
-            <a href="../teacher/teacherprofilepage.html"><i class="fas fa-user"></i> My Profile</a>
-            <a href="message.html"><i class="fas fa-envelope"></i> Messages</a>
-            <a href="notification.html"><i class="fas fa-bell"></i> Notifications</a>
-            <a href="history.html"><i class="fas fa-history"></i> History</a>
-            <a href="calendar.html"><i class="fas fa-calendar-alt"></i> Master Calendar</a>
-            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" class="logout-link" onclick="return kandiliLogout();"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </nav>
-    </header>
-
-    <div class="history-wrapper">
-        <section class="history-banner">
-            <div class="banner-top">
-                <span class="page-pill">History</span>
-            </div>
-            <h2 class="welcome-title">Activity History</h2>
-            <p class="welcome-subtitle">Track approvals, profile changes, and submissions in one place.</p>
-        </section>
-
-        <section class="card history-search-card">
-            <div class="history-search-row">
-                <input type="text" id="searchInput" class="history-search-input" placeholder="Search by action, user, or date">
-                <select id="filterType" class="history-select">
-                    <option value="all">All activities</option>
-                    <option value="approval">Approvals</option>
-                    <option value="update">Updates</option>
-                    <option value="submission">Submissions</option>
-                </select>
-                <button type="button" onclick="filterLogs()" class="btn-primary history-filter-btn">Search</button>
-                <button type="button" onclick="resetLogs()" class="btn-outline history-reset-btn">Reset</button>
-            </div>
-
-            <div id="historyList" class="history-list">
-                <div class="history-item" data-category="approval" data-status="approved" data-keywords="principal approved sf7 submission ancillary workload 2026 q3">
-                    <div class="history-item-main">
-                        <strong>Principal approved SF7 submission</strong>
-                        <div class="history-item-meta">Ref: Ancillary Workload 2026-Q3 • Principal Office</div>
-                    </div>
-                    <span class="history-badge badge-approve">Approved</span>
-                    <div class="history-date">July 17, 2026</div>
-                </div>
-
-                <div class="history-item" data-category="update" data-status="updated" data-keywords="user profile updated system modification admin july 16">
-                    <div class="history-item-main">
-                        <strong>User profile updated</strong>
-                        <div class="history-item-meta">System modification by Admin • Account settings</div>
-                    </div>
-                    <span class="history-badge badge-update">Update</span>
-                    <div class="history-date">July 16, 2026</div>
-                </div>
-
-                <div class="history-item" data-category="submission" data-status="submitted" data-keywords="ancillary summary submitted teacher juan submission july 15">
-                    <div class="history-item-main">
-                        <strong>Ancillary summary submitted</strong>
-                        <div class="history-item-meta">Action performed by Teacher Juan • Summary packet</div>
-                    </div>
-                    <span class="history-badge badge-submit">Submit</span>
-                    <div class="history-date">July 15, 2026</div>
-                </div>
-
-                <div class="history-item" data-category="approval" data-status="review" data-keywords="reallocation request reviewed principal workload review july 14">
-                    <div class="history-item-main">
-                        <strong>Reallocation request reviewed</strong>
-                        <div class="history-item-meta">Reviewed by Principal • Pending assignment review</div>
-                    </div>
-                    <span class="history-badge badge-update">Review</span>
-                    <div class="history-date">July 14, 2026</div>
-                </div>
-            </div>
-
-            <div id="historyEmpty" class="history-empty" hidden>No matching activity found.</div>
-        </section>
     </div>
 
-    <script>
-        function filterLogs() {
-            const input = document.getElementById('searchInput').value.trim().toLowerCase();
-            const type = document.getElementById('filterType').value;
-            const items = document.querySelectorAll('.history-item');
-            let visibleCount = 0;
-
-            items.forEach(item => {
-                const text = (item.dataset.keywords || '') + ' ' + item.textContent.toLowerCase();
-                const matchesText = text.includes(input);
-                const matchesType = type === 'all' || item.dataset.category === type;
-                const shouldShow = matchesText && matchesType;
-                item.style.display = shouldShow ? 'flex' : 'none';
-                if (shouldShow) visibleCount++;
-            });
-
-            document.getElementById('historyEmpty').hidden = visibleCount !== 0;
-        }
-
-        function resetLogs() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterType').value = 'all';
-            document.querySelectorAll('.history-item').forEach(item => item.style.display = 'flex');
-            document.getElementById('historyEmpty').hidden = true;
-        }
-
-        document.getElementById('searchInput').addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') filterLogs();
-        });
-    </script>
-
-    <!-- Supabase & Auth Security Stack -->
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js"></script>
-    <script src="../../static/js/logout.js"></script>
-    <script>
-        if (typeof checkAuthAndRole === "function") {
-            // Allows logged-in users with valid session
-            checkAuthAndRole('teacher'); 
-        }
-    </script>
-
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/general/historyLogic.js"></script>
 </body>
 </html>

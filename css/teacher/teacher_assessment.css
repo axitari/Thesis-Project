@@ -1,0 +1,377 @@
+/* ==========================================================================
+   TEACHER BURNOUT ASSESSMENT (MBI-ES) STYLES
+   ========================================================================== */
+
+.assessment-dashboard-canvas {
+    padding-top: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.assessment-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* 1. Header Banner */
+.assessment-header-card {
+    position: relative;
+    padding: 2.25rem 2.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid rgba(0, 56, 168, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px -10px rgba(0, 56, 168, 0.08), 
+                0 4px 6px -2px rgba(15, 23, 42, 0.03);
+    overflow: hidden;
+}
+
+.assessment-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--deped-blue, #0038A8) 0%, #3b82f6 50%, var(--deped-yellow, #FCE300) 100%);
+}
+
+.badge-assessment-tag {
+    display: inline-block;
+    background: rgba(0, 56, 168, 0.08);
+    color: var(--deped-blue, #0038A8);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(0, 56, 168, 0.15);
+}
+
+.assessment-header-card h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.assessment-header-card p {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 2. Instructions Card */
+.instructions-card {
+    background: #ffffff;
+    border: 1px solid #bae6fd;
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 4px 16px -4px rgba(2, 132, 199, 0.08);
+}
+
+.instructions-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.inst-icon-badge {
+    width: 44px;
+    height: 44px;
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.instructions-header h2 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.2rem 0;
+}
+
+.instructions-header p {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Horizontal 7-column scale bar */
+.scale-stepper-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem;
+    border-radius: 12px;
+}
+
+.scale-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0.65rem 0.35rem;
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 8px;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.scale-step:hover {
+    transform: translateY(-2px);
+    border-color: var(--deped-blue, #0038A8);
+    box-shadow: 0 4px 8px rgba(0, 56, 168, 0.08);
+}
+
+.scale-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+}
+
+.scale-desc {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #475569;
+    line-height: 1.25;
+}
+
+/* Responsive formatting for mobile */
+@media (max-width: 820px) {
+    .scale-stepper-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 540px) {
+    .scale-stepper-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .instructions-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.scale-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.scale-item {
+    background: #ffffff;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.82rem;
+    color: #1e293b;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.scale-item strong {
+    color: var(--deped-blue, #0038A8);
+}
+
+/* 3. Question Section Cards */
+.mbi-survey-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.assessment-section-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+.section-badge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.section-badge-header h3 {
+    font-size: 1.15rem;
+    color: #0f172a;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.subscale-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Question Rows */
+.question-row {
+    padding: 1.25rem 0;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.question-row:first-of-type {
+    border-top: none;
+    padding-top: 0.25rem;
+}
+
+.question-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
+/* 4. Custom Responsive Option Pills */
+.options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.option-pill {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.option-pill input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.option-pill span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.92rem;
+    font-weight: 700;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option-pill:hover span {
+    border-color: var(--deped-blue, #0038A8);
+    background-color: #eff6ff;
+    color: var(--deped-blue, #0038A8);
+    transform: translateY(-2px);
+}
+
+.option-pill input[type="radio"]:checked + span {
+    background-color: var(--deped-blue, #0038A8);
+    color: #ffffff;
+    border-color: var(--deped-blue, #0038A8);
+    box-shadow: 0 4px 12px rgba(0, 56, 168, 0.28);
+    transform: scale(1.05);
+}
+
+/* Focus Accessibility */
+.option-pill input[type="radio"]:focus-visible + span {
+    outline: 2px solid var(--deped-blue, #0038A8);
+    outline-offset: 2px;
+}
+
+/* 5. Form Actions */
+.assessment-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.assessment-form-actions .btn-primary,
+.assessment-form-actions .btn-outline {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+}
+
+.assessment-result-banner {
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+/* Text Accents */
+.text-crimson { color: var(--deped-red, #C8102E); }
+.text-amber { color: var(--warning-amber, #f59e0b); }
+.text-green { color: var(--safe-green, #059669); }
+
+/* 6. Responsive */
+@media (max-width: 768px) {
+    .assessment-header-card {
+        padding: 1.5rem;
+    }
+
+    .assessment-section-card {
+        padding: 1.25rem;
+    }
+
+    .option-pill span {
+        width: 42px;
+        height: 36px;
+        font-size: 0.85rem;
+    }
+
+    .assessment-form-actions {
+        flex-direction: column;
+    }
+
+    .assessment-form-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}

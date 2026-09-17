@@ -1,0 +1,248 @@
+/* ==========================================================================
+   OFFICIAL DEPED CLASS PROGRAM DOCUMENT STYLES
+   ========================================================================== */
+
+.classprogram-canvas {
+    padding-top: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.document-center-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 3rem;
+}
+
+/* Quick Print Button in Top Header */
+.btn-print-doc {
+    background: #ffffff;
+    color: var(--deped-blue, #0038A8);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.btn-print-doc:hover {
+    background: #f0f7ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Document Paper Sheet */
+.deped-document {
+    background-color: #ffffff;
+    padding: 3.5rem 4rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    width: 100%;
+    max-width: 950px;
+    color: #000000;
+    border: 1px solid #cbd5e1;
+    box-sizing: border-box;
+}
+
+/* Document Official Header */
+.doc-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    line-height: 1.35;
+    font-family: 'Arial', sans-serif;
+}
+
+.header-line {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1e293b;
+}
+
+.header-school {
+    margin: 0.4rem 0 0 0;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+}
+
+.doc-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin-top: 1.5rem;
+    margin-bottom: 0.35rem;
+    letter-spacing: 1.5px;
+    color: var(--deped-blue, #0038A8);
+    text-transform: uppercase;
+}
+
+.doc-section-name {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.doc-school-year {
+    margin: 0.15rem 0 0 0;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #475569;
+}
+
+/* Metadata Row */
+.doc-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e293b;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 0.5rem;
+}
+
+/* Formal Timetable Matrix */
+.matrix-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.matrix-table th, .matrix-table td {
+    border: 1px solid #334155;
+    padding: 0.65rem 0.5rem;
+    vertical-align: middle;
+}
+
+.matrix-table th {
+    background-color: #f8fafc;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+}
+
+.matrix-table tbody tr:hover td {
+    background-color: #f1f5f9;
+}
+
+.row-break td {
+    font-weight: 800;
+    letter-spacing: 2px;
+    background-color: #f1f5f9 !important;
+    text-transform: uppercase;
+}
+
+.loading-cell {
+    padding: 2.5rem !important;
+    color: #64748b;
+    font-style: italic;
+}
+
+/* Formal Signatories Footer */
+.doc-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4.5rem;
+    font-size: 0.95rem;
+    font-family: 'Arial', sans-serif;
+}
+
+.signatory-block {
+    text-align: center;
+    width: 260px;
+}
+
+.sig-lead {
+    text-align: left;
+    margin-bottom: 2.75rem;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.signatory-name {
+    font-weight: 800;
+    text-decoration: underline;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: #000000;
+    margin-bottom: 0.25rem;
+}
+
+.sig-role {
+    font-size: 0.88rem;
+    color: #475569;
+}
+
+/* ==========================================================================
+   PRINT ENGINE MEDIA QUERY
+   ========================================================================== */
+@media print {
+    /* Hide all web UI, sidebars, headers, and backgrounds */
+    body, html {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        height: auto !important;
+    }
+
+    .no-print,
+    .app-sidebar,
+    .theme-nav,
+    .dashboard-footer {
+        display: none !important;
+    }
+
+    .app-shell {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .app-main-content {
+        display: block !important;
+        overflow: visible !important;
+        height: auto !important;
+        padding: 0 !important;
+    }
+
+    .dashboard {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .deped-document {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .matrix-table th {
+        background-color: #f1f5f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
