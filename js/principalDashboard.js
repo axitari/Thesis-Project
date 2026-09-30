@@ -6,8 +6,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     initSidebarTracker();
     initLogoutHandler();
-    initReportNavigation();
+    initNavigationListeners();
     initSimulationEngine();
+    initHotlistActions();
+    initPulseControls();
     initDashboardCharts();
 });
 
@@ -42,26 +44,51 @@ function initLogoutHandler() {
 }
 
 /* ==========================================================================
-   3. Faculty Audit & Diagnostic Reports Navigation
+   3. Card Roster & Report Navigation
    ========================================================================== */
-function initReportNavigation() {
-    // 1. Workload Reports Directory
-    const workloadBtn = document.getElementById('openWorkloadReportBtn');
-    if (workloadBtn) {
-        workloadBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'workload_reports_directory.html';
-        });
-    }
+function initNavigationListeners() {
+    // Refresh Top Nav Button
+    document.getElementById('refreshBtn')?.addEventListener('click', () => {
+        window.location.reload();
+    });
 
-    // 2. Burnout Diagnostic Directory
-    const burnoutBtn = document.getElementById('openBurnoutReportBtn');
-    if (burnoutBtn) {
-        burnoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'burnout_reports_directory.html';
-        });
-    }
+    // Workload Summary Tiers Navigation
+    document.getElementById('btnViewUnderload')?.addEventListener('click', () => {
+        window.location.href = '../admin/underload_teachers.html';
+    });
+    document.getElementById('btnViewOptimal')?.addEventListener('click', () => {
+        window.location.href = '../admin/optimal_teachers.html';
+    });
+    document.getElementById('btnViewHighLoad')?.addEventListener('click', () => {
+        window.location.href = '../admin/high-load_teachers.html';
+    });
+    document.getElementById('btnViewOverload')?.addEventListener('click', () => {
+        window.location.href = '../admin/overload_teachers.html';
+    });
+
+    // Burnout Risk Cards Navigation
+    document.getElementById('btnViewLowBurnout')?.addEventListener('click', () => {
+        window.location.href = '../admin/low_burnout_teachers.html';
+    });
+    document.getElementById('btnViewModBurnout')?.addEventListener('click', () => {
+        window.location.href = '../admin/moderate_burnout_teachers.html';
+    });
+    document.getElementById('btnViewHighBurnout')?.addEventListener('click', () => {
+        window.location.href = '../admin/high_burnout_teachers.html';
+    });
+
+    // Reports Management Directories
+    document.getElementById('openWorkloadReportBtn')?.addEventListener('click', () => {
+        window.location.href = 'workload_reports_directory.html';
+    });
+    document.getElementById('openBurnoutReportBtn')?.addEventListener('click', () => {
+        window.location.href = 'burnout_reports_directory.html';
+    });
+
+    // Hidden Strain Flag Link
+    document.getElementById('btnInspectHiddenStrain')?.addEventListener('click', () => {
+        window.location.href = '../admin/moderate_burnout_teachers.html';
+    });
 }
 
 /* ==========================================================================
@@ -73,7 +100,7 @@ const simulationState = {
     'row-sim-3': false
 };
 
-window.toggleRowSimulation = function (rowId, hoursDeduction) {
+function toggleRowSimulation(rowId, hoursDeduction) {
     const row = document.getElementById(rowId);
     if (!row) return;
 
@@ -126,32 +153,78 @@ window.toggleRowSimulation = function (rowId, hoursDeduction) {
             apDeptBar.style.width = '80%';
         }
     }
-};
+}
 
-window.applyAllSimulations = function () {
+function applyAllSimulations() {
     ['row-sim-1', 'row-sim-2', 'row-sim-3'].forEach(id => {
         if (!simulationState[id]) {
             const hours = id === 'row-sim-1' ? 8 : (id === 'row-sim-2' ? 5 : 6);
-            window.toggleRowSimulation(id, hours);
+            toggleRowSimulation(id, hours);
         }
     });
     alert("Simulator state applied across department rosters.");
-};
+}
 
-window.exportSimulationReport = function () {
+function exportSimulationReport() {
     window.location.href = 'workload_report.html?code=TCH-012';
-};
+}
 
-window.sendIndividualCheckIn = function (teacherCode) {
-    alert(`Pulse check-in reminder dispatched to ${teacherCode}.`);
-};
+function initSimulationEngine() {
+    // Row simulation button listener (delegated)
+    document.querySelectorAll('.action-btn--simulate').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const rowId = this.getAttribute('data-row-id');
+            const hours = parseInt(this.getAttribute('data-hours'), 10) || 0;
+            if (rowId) {
+                toggleRowSimulation(rowId, hours);
+            }
+        });
+    });
 
-window.sendBulkPulseReminders = function () {
-    alert("Automated reminders dispatched to all 3 pending faculty members.");
-};
+    // Apply All button
+    document.getElementById('btnApplyAllSimulations')?.addEventListener('click', applyAllSimulations);
+
+    // Export Plan button
+    document.getElementById('btnExportSimulationReport')?.addEventListener('click', exportSimulationReport);
+}
+
+// Global scope export for backwards compatibility
+window.toggleRowSimulation = toggleRowSimulation;
+window.applyAllSimulations = applyAllSimulations;
+window.exportSimulationReport = exportSimulationReport;
 
 /* ==========================================================================
-   5. Chart Visualizations
+   5. Hotlist Actions & Pulse Reminders
+   ========================================================================== */
+function initHotlistActions() {
+    // Diagnostic Buttons
+    document.querySelectorAll('.btn-hotlist-diag').forEach(btn => {
+        btn.addEventListener('click', function () {
+            window.location.href = '../admin/high_burnout_teachers.html';
+        });
+    });
+
+    // Check-in Buttons
+    document.querySelectorAll('.btn-hotlist-checkin').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const code = this.getAttribute('data-code') || 'Faculty Member';
+            alert(`Pulse check-in reminder dispatched to ${code}.`);
+        });
+    });
+}
+
+function initPulseControls() {
+    document.getElementById('btnSendBulkReminders')?.addEventListener('click', () => {
+        alert("Automated reminders dispatched to all 3 pending faculty members.");
+    });
+
+    document.getElementById('btnExportChartData')?.addEventListener('click', () => {
+        alert("Workload and burnout scatter dataset exported to CSV.");
+    });
+}
+
+/* ==========================================================================
+   6. Chart Visualizations
    ========================================================================== */
 function initDashboardCharts() {
     // Chart 1: Workload vs Exhaustion Scatter / Bubble

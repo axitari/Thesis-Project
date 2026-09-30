@@ -12,7 +12,7 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    <!-- Supabase CDN -->
+    <!-- Supabase CDN & html2pdf -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -25,7 +25,7 @@
     <!-- TOP NAVIGATION BAR -->
     <header class="theme-nav no-print">
         <div class="theme-nav__brand">
-            <button class="nav-back-pill" type="button" onclick="window.location.href='burnout_reports_directory.html'" aria-label="Back to Directory">
+            <button class="nav-back-pill" id="btnBackDirectory" type="button" aria-label="Back to Directory">
                 <i class="fas fa-arrow-left"></i>
                 <span>Directory</span>
             </button>
@@ -33,7 +33,7 @@
         </div>
         <div class="theme-nav__actions">
             <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
-            <button class="theme-nav__refresh" type="button" onclick="window.location.reload()">
+            <button class="theme-nav__refresh" id="refreshBtn" type="button">
                 <i class="fas fa-sync-alt"></i> Refresh
             </button>
         </div>
@@ -51,7 +51,7 @@
                 <h2 class="report-title">Burnout Risk Diagnostic Profile</h2>
             </div>
             <div class="report-action-buttons">
-                <button onclick="window.print()" class="btn-outline" type="button">
+                <button id="btnPrintReport" class="btn-outline" type="button">
                     <i class="fas fa-print"></i> Print
                 </button>
                 <button id="downloadPdfBtn" class="btn-primary" type="button">
@@ -61,7 +61,7 @@
         </div>
 
         <!-- MAIN REPORT CANVAS -->
-        <div class="report-card document-sheet">
+        <div class="report-card document-sheet" id="reportDocumentSheet">
             
             <!-- OFFICIAL HEADER -->
             <div class="report-header">
@@ -174,7 +174,7 @@
         </div>
         <div class="footer-block">
             <span class="compliance-badge">
-                <i class="fas fa-shield-check"></i> R.A. 10173 Compliant &bull; Non-Punitive Standard[cite: 6]
+                <i class="fas fa-shield-check"></i> R.A. 10173 Compliant &bull; Non-Punitive Standard
             </span>
         </div>
         <div class="footer-block text-right">
@@ -187,6 +187,6 @@
     <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../../js/logout.js"></script>
     <!-- Dynamic Diagnostic Logic -->
-    <script src="../../js/principal/burnoutReport.js"></script>
+    <script src="../../js/burnoutReport.js"></script>
 </body>
 </html>

@@ -3,109 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kandili - Baseline Assessment</title>
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <title>Baseline Assessment &bull; Kandili Workspace</title>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Third-Party Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/teacher/assessment.css">
 </head>
-<body>
+<body class="dashboard-body assessment-page-body">
 
-    <!-- Wider card to comfortably fit the survey questions -->
-    <div class="auth-card" style="max-width: 750px; border-top: 6px solid #10b981;"> <!-- Green stripe for "Wellness" -->
-        
-        <div class="auth-header">
-            <h2>Initial Wellness Baseline</h2>
-            <p>Please complete this quick assessment to initialize your dashboard.</p>
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print" id="appSidebar">
+            <div class="app-sidebar-brand">
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
+            </div>
+            <nav class="app-sidebar-nav">
+                <a href="teacherdashboard.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Teacher Dashboard</span>
+                </a>
+                <a href="teacherprofilepage.html" class="app-sidebar-link">
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
+                </a>
+                <a href="classprogram.html" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Class Program</span>
+                </a>
+                <a href="burnout-risk_assessment.html" class="app-sidebar-link active">
+                    <i class="fas fa-fire-alt"></i>
+                    <span>Take Assessment</span>
+                </a>
+                <a href="teacher_analytics.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>View Analytics</span>
+                </a>
+                <a href="teacher_report.html" class="app-sidebar-link">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Audit Report</span>
+                </a>
+                
+                <hr class="sidebar-divider">
+
+                <a href="../general/message.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="../general/notification.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="../general/calendar.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Master Calendar</span>
+                </a>
+                <a href="../general/history.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a href="../general/settings.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+
+                <hr class="sidebar-divider">
+
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn" onclick="return kandiliLogout();">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN VIEW CANVAS -->
+        <div class="app-main-content">
+            <!-- TOP NAVIGATION HEADER -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="(function(){
+                                if (document.referrer && document.referrer.toLowerCase().includes('teacherdashboard')) {
+                                    window.location.href = 'teacherdashboard.html';
+                                } else if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = 'teacherdashboard.html';
+                                }
+                            })()" 
+                            aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">Diagnostic Assessment</div>
+                </div>
+                <div class="theme-nav__actions">
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> September 29, 2026 | 8:54 PM</span>
+                    <button class="theme-nav__refresh" type="button" onclick="window.location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </header>
+
+            <main class="dashboard assessment-canvas">
+                <div class="assessment-container">
+                    
+                    <!-- WELCOME BANNER -->
+                    <div class="assessment-welcome-card">
+                        <div class="welcome-text">
+                            <h2><i class="fas fa-heartbeat text-blue"></i> Initial Wellness Baseline</h2>
+                            <p>Complete this validated diagnostic to initialize your fatigue and workload balance index[cite: 11].</p>
+                        </div>
+                        <div class="assessment-badge-pill">
+                            <i class="fas fa-shield-halved"></i> DepEd Non-Repudiation Verified
+                        </div>
+                    </div>
+
+                    <!-- ASSESSMENT SURVEY FORM CARD -->
+                    <form id="assessmentForm" class="card assessment-card">
+                        
+                        <!-- PART 1: MBI-ES -->
+                        <div class="survey-section-header">
+                            <span class="section-tag-pill">Part 1</span>
+                            <h3>Educator Burnout Inventory (MBI-ES)[cite: 11]</h3>
+                        </div>
+                        <p class="section-desc-note">
+                            Reflect on your personal feelings regarding instructional demands and class preparation[cite: 11].
+                        </p>
+
+                        <div class="form-group question-group">
+                            <label for="mbiQ1" class="question-label">
+                                <span class="q-number">1.</span> I feel emotionally drained from my work[cite: 11]. <span class="required-star">*</span>
+                            </label>
+                            <select id="mbiQ1" required class="form-select">
+                                <option value="" disabled selected>Select frequency...</option>
+                                <option value="0">0 - Never</option>
+                                <option value="1">1 - A few times a year</option>
+                                <option value="2">2 - Once a month or less</option>
+                                <option value="3">3 - A few times a month</option>
+                                <option value="4">4 - Once a week</option>
+                                <option value="5">5 - A few times a week</option>
+                                <option value="6">6 - Every day</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group question-group">
+                            <label for="mbiQ2" class="question-label">
+                                <span class="q-number">2.</span> I feel fatigued when I get up in the morning and have to face another day on the job[cite: 11]. <span class="required-star">*</span>
+                            </label>
+                            <select id="mbiQ2" required class="form-select">
+                                <option value="" disabled selected>Select frequency...</option>
+                                <option value="0">0 - Never</option>
+                                <option value="1">1 - A few times a year</option>
+                                <option value="2">2 - Once a month</option>
+                                <option value="3">3 - A few times a month</option>
+                                <option value="4">4 - Once a week</option>
+                                <option value="5">5 - A few times a week</option>
+                                <option value="6">6 - Every day</option>
+                            </select>
+                        </div>
+
+                        <div class="survey-divider"></div>
+
+                        <!-- PART 2: NASA-TLX -->
+                        <div class="survey-section-header">
+                            <span class="section-tag-pill tag-purple">Part 2</span>
+                            <h3>Task Load Index (NASA-TLX)[cite: 11]</h3>
+                        </div>
+                        <p class="section-desc-note">
+                            Based on your typical week, please rate the cognitive and temporal pressure you encounter[cite: 11].
+                        </p>
+
+                        <div class="form-group range-group">
+                            <div class="range-header">
+                                <label for="mentalDemandRange" class="question-label">
+                                    Mental Demand: How much thinking, deciding, and calculating is required?[cite: 11]
+                                </label>
+                                <span class="range-val-badge" id="mentalValDisplay">50</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <span class="range-bound-label">LOW[cite: 11]</span>
+                                <input type="range" id="mentalDemandRange" min="1" max="100" value="50" class="custom-range" data-target="mentalValDisplay">
+                                <span class="range-bound-label">HIGH[cite: 11]</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group range-group">
+                            <div class="range-header">
+                                <label for="temporalDemandRange" class="question-label">
+                                    Temporal Demand: How much time pressure do you feel during the instructional week?[cite: 11]
+                                </label>
+                                <span class="range-val-badge" id="temporalValDisplay">50</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <span class="range-bound-label">LOW[cite: 11]</span>
+                                <input type="range" id="temporalDemandRange" min="1" max="100" value="50" class="custom-range" data-target="temporalValDisplay">
+                                <span class="range-bound-label">HIGH[cite: 11]</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group range-group">
+                            <div class="range-header">
+                                <label for="frustrationRange" class="question-label">
+                                    Frustration Level: How stressed, irritated, or annoyed do you feel during your tasks?[cite: 11]
+                                </label>
+                                <span class="range-val-badge" id="frustrationValDisplay">50</span>
+                            </div>
+                            <div class="slider-wrapper">
+                                <span class="range-bound-label">LOW[cite: 11]</span>
+                                <input type="range" id="frustrationRange" min="1" max="100" value="50" class="custom-range" data-target="frustrationValDisplay">
+                                <span class="range-bound-label">HIGH[cite: 11]</span>
+                            </div>
+                        </div>
+
+                        <!-- ACTIONS -->
+                        <div class="assessment-actions-row">
+                            <button type="submit" class="btn-primary btn-submit-assessment" id="submitAssessmentBtn">
+                                <i class="fas fa-check-double"></i> Submit Assessment &amp; Go To Dashboard[cite: 11]
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; Diagnostic Assessment Module</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> DepEd Order Compliant &bull; R.A. 10173
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">Diagnostic Core v2.1.0</span>
+                </div>
+            </footer>
         </div>
-        
-        <form id="assessmentForm">
-            
-            <!-- SECTION 1: MBI-ES -->
-            <h3 style="color: #0038A8; font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 2px solid #e1effe; padding-bottom: 0.5rem;">
-                Part 1: Educator Burnout Inventory
-            </h3>
-            
-            <div class="form-group">
-                <label>1. I feel emotionally drained from my work.</label>
-                <select required>
-                    <option value="" disabled selected>Select frequency...</option>
-                    <option value="0">Never</option>
-                    <option value="1">A few times a year</option>
-                    <option value="2">Once a month or less</option>
-                    <option value="3">A few times a month</option>
-                    <option value="4">Once a week</option>
-                    <option value="5">A few times a week</option>
-                    <option value="6">Every day</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>2. I feel fatigued when I get up in the morning and have to face another day on the job.</label>
-                <select required>
-                    <option value="" disabled selected>Select frequency...</option>
-                    <option value="0">Never</option>
-                    <option value="1">A few times a year</option>
-                    <option value="2">Once a month</option>
-                    <option value="3">A few times a month</option>
-                    <option value="4">Once a week</option>
-                    <option value="5">A few times a week</option>
-                    <option value="6">Every day</option>
-                </select>
-            </div>
-
-            <br>
-
-            <!-- SECTION 2: NASA-TLX -->
-            <h3 style="color: #0038A8; font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 2px solid #e1effe; padding-bottom: 0.5rem;">
-                Part 2: Task Load Index (NASA-TLX)
-            </h3>
-            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem;">
-                Based on your typical week, please rate the following demands.
-            </p>
-
-            <div class="form-group">
-                <label>Mental Demand (How much thinking, deciding, and calculating is required?)</label>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">LOW</span>
-                    <input type="range" min="1" max="100" value="50" style="flex: 1; cursor: pointer;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">HIGH</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Temporal Demand (How much time pressure do you feel during the week?)</label>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">LOW</span>
-                    <input type="range" min="1" max="100" value="50" style="flex: 1; cursor: pointer;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">HIGH</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Frustration Level (How stressed or annoyed do you feel during your tasks?)</label>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">LOW</span>
-                    <input type="range" min="1" max="100" value="50" style="flex: 1; cursor: pointer;">
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: bold;">HIGH</span>
-                </div>
-            </div>
-
-            <button type="button" onclick="window.location.href='dashboard.html'" class="btn-primary" style="margin-top: 2rem;">
-                Submit Assessment & Go To Dashboard
-            </button>
-            
-        </form>
     </div>
 
-    <!-- Supabase & Auth Security Stack -->
-    <script src="../../static/js/supabaseClient.js"></script>
-    <script src="../../static/js/authGuard.js"></script>
-    <script src="../../static/js/logout.js"></script>
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="teacher,principal"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
     <script>
-        if (typeof checkAuthAndRole === "function") {
-            // Allows logged-in users with valid session
-            checkAuthAndRole('teacher'); 
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Live range slider value badges
+            document.querySelectorAll('.custom-range').forEach(slider => {
+                const targetId = slider.getAttribute('data-target');
+                const badge = document.getElementById(targetId);
+                slider.addEventListener('input', (e) => {
+                    if (badge) badge.textContent = e.target.value;
+                });
+            });
+
+            // Form Submit Logic
+            const form = document.getElementById('assessmentForm');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Store completed flag so onboarding checks pass
+                localStorage.setItem('kandili_baseline_completed', 'true');
+                sessionStorage.setItem('kandili_baseline_completed', 'true');
+
+                // Redirect to Teacher Dashboard
+                window.location.href = 'teacherdashboard.html';
+            });
+        });
     </script>
-    
 </body>
 </html>

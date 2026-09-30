@@ -18,42 +18,66 @@
 </head>
 <body class="dashboard-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav">
                 <a href="principaldashboard.html" class="app-sidebar-link">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </a>
                 <a href="burnout_reports_directory.html" class="app-sidebar-link active">
-                    <i class="fas fa-chart-column"></i> Burnout Reports
+                    <i class="fas fa-chart-column"></i>
+                    <span>Burnout Reports</span>
                 </a>
                 <a href="workload_reports_directory.html" class="app-sidebar-link">
-                    <i class="fas fa-folder-open"></i> Workload Reports
+                    <i class="fas fa-folder-open"></i>
+                    <span>Workload Reports</span>
                 </a>
                 <a href="facultydirectory.html" class="app-sidebar-link">
-                    <i class="fas fa-address-book"></i> Faculty Directory
+                    <i class="fas fa-address-book"></i>
+                    <span>Faculty Directory</span>
                 </a>
                 <a href="principalprofilepage.html" class="app-sidebar-link">
-                    <i class="fas fa-user-tie"></i> My Profile
+                    <i class="fas fa-user-tie"></i>
+                    <span>My Profile</span>
                 </a>
                 
                 <hr class="sidebar-divider">
 
-                <a href="../general/calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                <a href="../general/calendar.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="../general/message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="../general/notification.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="../general/settings.html" class="app-sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="../general/message.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
+                <a href="../general/history.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a href="../general/settings.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+
+                <hr class="sidebar-divider">
+
                 <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -63,7 +87,13 @@
             <!-- TOP NAVBAR -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <button class="nav-back-pill" type="button" onclick="window.location.href='principaldashboard.html'" aria-label="Back to Dashboard">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
+                    <button class="nav-back-pill" id="btnBackDashboard" type="button" aria-label="Back to Dashboard">
                         <i class="fas fa-arrow-left"></i>
                         <span>Dashboard</span>
                     </button>
@@ -71,7 +101,7 @@
                 </div>
                 <div class="theme-nav__actions">
                     <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 2:30 PM</span>
-                    <button class="theme-nav__refresh" type="button" onclick="window.location.reload();">
+                    <button class="theme-nav__refresh" id="refreshBtn" type="button">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
@@ -207,11 +237,11 @@
             <!-- FOOTER -->
             <footer class="app-dashboard-footer no-print">
                 <div class="footer-block">
-                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; Anonymized MBI-ES Protocol[cite: 5]</span>
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; Anonymized MBI-ES Protocol</span>
                 </div>
                 <div class="footer-block">
                     <span class="compliance-badge">
-                        <i class="fas fa-shield-check"></i> R.A. 10173 Data Privacy Guaranteed[cite: 5]
+                        <i class="fas fa-shield-check"></i> R.A. 10173 Data Privacy Guaranteed
                     </span>
                 </div>
                 <div class="footer-block text-right">
@@ -225,6 +255,7 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../../js/logout.js"></script>
-    <script src="../../js/principal/burnoutDirectory.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
+    <script src="../../js/burnoutDirectory.js"></script>
 </body>
 </html>

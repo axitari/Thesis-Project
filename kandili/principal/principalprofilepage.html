@@ -18,45 +18,62 @@
 </head>
 <body class="dashboard-body profile-page-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav">
                 <a href="principaldashboard.html" class="app-sidebar-link">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </a>
                 <a href="principalprofilepage.html" class="app-sidebar-link active">
-                    <i class="fas fa-user-tie"></i> My Profile
+                    <i class="fas fa-user-tie"></i>
+                    <span>My Profile</span>
                 </a>
                 <a href="facultydirectory.html" class="app-sidebar-link">
-                    <i class="fas fa-address-book"></i> Faculty Directory
+                    <i class="fas fa-address-book"></i>
+                    <span>Faculty Directory</span>
                 </a>
                 <a href="burnout_reports_directory.html" class="app-sidebar-link">
-                    <i class="fas fa-chart-column"></i> Burnout Reports
+                    <i class="fas fa-chart-column"></i>
+                    <span>Burnout Reports</span>
                 </a>
                 
                 <hr class="sidebar-divider">
 
-                <a href="../general/message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="../general/message.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
-                <a href="../general/notification.html" class="app-sidebar-link">
-                    <i class="fas fa-bell"></i> Notifications
+                <a href="../general/notification.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="../general/history.html" class="app-sidebar-link">
-                    <i class="fas fa-history"></i> History
+                <a href="../general/history.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
                 </a>
-                <a href="../general/calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                <a href="../general/calendar.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="../general/settings.html" class="app-sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="../general/settings.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
                 </a>
+
+                <hr class="sidebar-divider">
+
                 <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -66,7 +83,13 @@
             <!-- TOP NAVIGATION -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <button class="nav-back-pill" onclick="window.history.back()" type="button" aria-label="Go Back">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
+                    <button class="nav-back-pill" type="button" id="navBackBtn" aria-label="Go Back">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
@@ -74,7 +97,7 @@
                 </div>
                 <div class="theme-nav__actions">
                     <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
-                    <button class="theme-nav__refresh" type="button" onclick="location.reload();">
+                    <button class="theme-nav__refresh" id="refreshBtn" type="button">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
@@ -204,7 +227,7 @@
                                 </div>
 
                                 <div class="profile-actions profile-actions-end">
-                                    <button class="btn-outline" type="button" onclick="window.location.href='../general/history.html';">
+                                    <button class="btn-outline" id="btnReviewActivityLog" type="button">
                                         <i class="fas fa-clock-rotate-left"></i> Review Activity Log
                                     </button>
                                 </div>
@@ -276,92 +299,7 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../../js/logout.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
     <script src="../../js/principalProfile.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Logout Trigger
-            document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (typeof kandiliLogout === 'function') {
-                    kandiliLogout();
-                } else if (confirm("Are you sure you want to log out?")) {
-                    window.location.href = "../login.html";
-                }
-            });
-
-            // Edit Profile Modal Wiring
-            const editModal = document.getElementById('editProfileModal');
-            const openEditBtn = document.getElementById('editProfileBtn');
-            const closeEditBtn = document.getElementById('closeEditModalBtn');
-            const cancelEditBtn = document.getElementById('cancelEditBtn');
-            const editForm = document.getElementById('editProfileForm');
-
-            // Image Upload Wiring
-            const photoInput = document.getElementById('avatarFileInput');
-            const openPhotoBtn = document.getElementById('updatePhotoBtn');
-            const badgePhotoBtn = document.getElementById('avatarBadgeBtn');
-            const imageDisplay = document.getElementById('profileImageDisplay');
-
-            const triggerPhotoPicker = () => photoInput?.click();
-            openPhotoBtn?.addEventListener('click', triggerPhotoPicker);
-            badgePhotoBtn?.addEventListener('click', triggerPhotoPicker);
-
-            photoInput?.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        imageDisplay.src = e.target.result;
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                }
-            });
-
-            const toggleModal = (show) => {
-                if (!editModal) return;
-                if (show) {
-                    // Pre-fill inputs with current UI values
-                    document.getElementById('editFullName').value = document.getElementById('displayFullName').textContent.trim();
-                    document.getElementById('editRoleTitle').value = document.getElementById('displayRoleTitle').textContent.trim();
-                    document.getElementById('editEmail').value = document.getElementById('displayEmail').textContent.trim();
-                    document.getElementById('editContact').value = document.getElementById('displayContact').textContent.trim();
-                    document.getElementById('editDegree').value = document.getElementById('displayDegree').textContent.trim();
-                    
-                    editModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    editModal.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            };
-
-            openEditBtn?.addEventListener('click', () => toggleModal(true));
-            closeEditBtn?.addEventListener('click', () => toggleModal(false));
-            cancelEditBtn?.addEventListener('click', () => toggleModal(false));
-
-            editModal?.addEventListener('click', (e) => {
-                if (e.target === editModal) toggleModal(false);
-            });
-
-            editForm?.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                // Read input values
-                const name = document.getElementById('editFullName').value;
-                const role = document.getElementById('editRoleTitle').value;
-                const email = document.getElementById('editEmail').value;
-                const contact = document.getElementById('editContact').value;
-                const degree = document.getElementById('editDegree').value;
-
-                // Update text elements on dashboard
-                document.getElementById('displayFullName').textContent = name;
-                document.getElementById('displayRoleTitle').textContent = role;
-                document.getElementById('displayEmail').textContent = email;
-                document.getElementById('displayContact').textContent = contact;
-                document.getElementById('displayDegree').textContent = degree;
-
-                toggleModal(false);
-            });
-        });
-    </script>
 </body>
 </html>

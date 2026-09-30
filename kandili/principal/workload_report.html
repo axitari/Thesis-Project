@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Supabase CDN -->
+    <!-- Supabase CDN & html2pdf -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -22,7 +22,7 @@
     <!-- TOP NAVIGATION BAR -->
     <header class="theme-nav no-print">
         <div class="theme-nav__brand">
-            <button class="nav-back-pill" type="button" onclick="window.location.href='workload_reports_directory.html'" aria-label="Back to Directory">
+            <button class="nav-back-pill" id="btnBackDirectory" type="button" aria-label="Back to Directory">
                 <i class="fas fa-arrow-left"></i>
                 <span>Directory</span>
             </button>
@@ -30,7 +30,7 @@
         </div>
         <div class="theme-nav__actions">
             <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026</span>
-            <button class="theme-nav__refresh" type="button" onclick="window.location.reload()">
+            <button class="theme-nav__refresh" id="refreshBtn" type="button">
                 <i class="fas fa-sync-alt"></i> Refresh
             </button>
         </div>
@@ -48,7 +48,7 @@
                 <h2 class="report-title">Faculty Workload Quantification Report</h2>
             </div>
             <div class="report-action-buttons">
-                <button onclick="window.print()" class="btn-outline" type="button">
+                <button id="btnPrintReport" class="btn-outline" type="button">
                     <i class="fas fa-print"></i> Print
                 </button>
                 <button id="downloadPdfBtn" class="btn-primary" type="button">
@@ -58,7 +58,7 @@
         </div>
 
         <!-- MAIN REPORT DOCUMENT CANVAS -->
-        <div class="report-card document-sheet">
+        <div class="report-card document-sheet" id="reportDocumentSheet">
             
             <!-- OFFICIAL DEPED HEADER -->
             <div class="report-header">
@@ -229,7 +229,6 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../../js/logout.js"></script>
-    <!-- Standalone Report Logic -->
-    <script src="../../js/principal/workloadReport.js"></script>
+    <script src="../../js/workloadReport.js"></script>
 </body>
 </html>

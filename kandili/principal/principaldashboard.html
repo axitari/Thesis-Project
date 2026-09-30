@@ -22,60 +22,82 @@
 </head>
 <body class="dashboard-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav">
                 <a href="#section-workload-summary" class="app-sidebar-link active">
-                    <i class="fas fa-layer-group"></i> Workload Summary
+                    <i class="fas fa-layer-group"></i>
+                    <span>Workload Summary</span>
                 </a>
                 <a href="#section-burnout-risk" class="app-sidebar-link">
-                    <i class="fas fa-heart-crack"></i> Burnout Risk (MBI)
+                    <i class="fas fa-heart-crack"></i>
+                    <span>Burnout Risk (MBI)</span>
                 </a>
                 <a href="#section-charts-trajectory" class="app-sidebar-link">
-                    <i class="fas fa-chart-area"></i> Analytics &amp; Trends
+                    <i class="fas fa-chart-area"></i>
+                    <span>Analytics &amp; Trends</span>
                 </a>
                 <a href="#section-recommendations" class="app-sidebar-link">
-                    <i class="fas fa-sliders-h"></i> Workload Simulator
+                    <i class="fas fa-sliders-h"></i>
+                    <span>Workload Simulator</span>
                 </a>
                 <a href="#section-hotlist" class="app-sidebar-link">
-                    <i class="fas fa-triangle-exclamation"></i> High-Risk Hotlist
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span>High-Risk Hotlist</span>
                 </a>
                 <a href="#section-reports" class="app-sidebar-link">
-                    <i class="fas fa-folder-open"></i> Faculty Reports
+                    <i class="fas fa-folder-open"></i>
+                    <span>Faculty Reports</span>
                 </a>
                 <a href="#section-modules" class="app-sidebar-link">
-                    <i class="fas fa-cubes"></i> System Modules
+                    <i class="fas fa-cubes"></i>
+                    <span>System Modules</span>
                 </a>
                 
                 <hr class="sidebar-divider">
 
                 <a href="principalprofilepage.html" class="app-sidebar-link">
-                    <i class="fas fa-user-tie"></i> My Profile
+                    <i class="fas fa-user-tie"></i>
+                    <span>My Profile</span>
                 </a>
                 <a href="facultydirectory.html" class="app-sidebar-link">
-                    <i class="fas fa-address-book"></i> Faculty Directory
+                    <i class="fas fa-address-book"></i>
+                    <span>Faculty Directory</span>
                 </a>
-                <a href="../general/calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                <a href="../general/calendar.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="../general/notification.html" class="app-sidebar-link">
-                    <i class="fas fa-bell"></i> Notifications
+                <a href="../general/notification.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="../general/message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="../general/message.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
-                <a href="../general/history.html" class="app-sidebar-link">
-                    <i class="fas fa-history"></i> History
+                <a href="../general/history.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
                 </a>
-                <a href="../general/settings.html" class="app-sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="../general/settings.html?origin=principal" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
                 </a>
+
+                <hr class="sidebar-divider">
+
                 <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -85,7 +107,11 @@
             <!-- TOP NAVIGATION -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <div class="theme-nav__title">Dashboard</div>
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="theme-nav__title">Principal Dashboard</div>
                 </div>
                 <div class="theme-nav__actions">
                     <!-- DUAL ROLE SWITCHER PILL -->
@@ -95,7 +121,7 @@
                     </a>
 
                     <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 2:30 PM</span>
-                    <button class="theme-nav__refresh" type="button" onclick="location.reload();">
+                    <button class="theme-nav__refresh" id="refreshBtn" type="button">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
@@ -159,7 +185,7 @@
                                 <span class="risk-card-label">Underloaded Teachers</span>
                                 <span class="risk-card-action text-info">&lt; 36 WLU</span>
                             </div>
-                            <button class="risk-card-btn" data-filter="underload" onclick="window.location.href='../admin/underload_teachers.html'; return false;">
+                            <button class="risk-card-btn" id="btnViewUnderload" data-filter="underload" type="button">
                                 View List <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -175,7 +201,7 @@
                                 <span class="risk-card-label">Optimal Load Teachers</span>
                                 <span class="risk-card-action text-success">36–54 WLU</span>
                             </div>
-                            <button class="risk-card-btn" data-filter="optimal" onclick="window.location.href='../admin/optimal_teachers.html'; return false;">
+                            <button class="risk-card-btn" id="btnViewOptimal" data-filter="optimal" type="button">
                                 View List <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -191,7 +217,7 @@
                                 <span class="risk-card-label">High Load Teachers</span>
                                 <span class="risk-card-action text-warning">54–75 WLU</span>
                             </div>
-                            <button class="risk-card-btn" data-filter="high" onclick="window.location.href='../admin/high-load_teachers.html'; return false;">
+                            <button class="risk-card-btn" id="btnViewHighLoad" data-filter="high" type="button">
                                 View List <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -207,7 +233,7 @@
                                 <span class="risk-card-label">Overloaded Teachers</span>
                                 <span class="risk-card-action text-danger">&gt; 75 WLU</span>
                             </div>
-                            <button class="risk-card-btn" data-filter="overload" onclick="window.location.href='../admin/overload_teachers.html'; return false;">
+                            <button class="risk-card-btn" id="btnViewOverload" data-filter="overload" type="button">
                                 View List <i class="fas fa-arrow-right"></i>
                             </button>
                         </div>
@@ -243,7 +269,7 @@
                                 <p class="burnout-card-desc">Faculty showing low Emotional Exhaustion (&le;16), low Depersonalization (&le;6), and high Personal Accomplishment (&ge;37). Workload is well-managed.</p>
                             </div>
                             <div class="burnout-card-footer">
-                                <button class="burnout-card-btn" onclick="window.location.href='../admin/low_burnout_teachers.html'">
+                                <button class="burnout-card-btn" id="btnViewLowBurnout" type="button">
                                     View Roster <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
@@ -261,7 +287,7 @@
                                 <p class="burnout-card-desc">Faculty with moderate Emotional Exhaustion (17–26) or Depersonalization (7–12). Early workload adjustment prevents chronic fatigue.</p>
                             </div>
                             <div class="burnout-card-footer">
-                                <button class="burnout-card-btn" onclick="window.location.href='../admin/moderate_burnout_teachers.html'">
+                                <button class="burnout-card-btn" id="btnViewModBurnout" type="button">
                                     Monitor Trends <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
@@ -279,7 +305,7 @@
                                 <p class="burnout-card-desc">Faculty scoring high Emotional Exhaustion (&ge;27), high Depersonalization (&ge;13), and low Personal Accomplishment (&le;30). Priority intervention needed.</p>
                             </div>
                             <div class="burnout-card-footer">
-                                <button class="burnout-card-btn" onclick="window.location.href='../admin/high_burnout_teachers.html'">
+                                <button class="burnout-card-btn" id="btnViewHighBurnout" type="button">
                                     Review Interventions <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
@@ -302,7 +328,9 @@
                         </div>
                         <div class="chart-footer chart-footer--split">
                             <span style="color: #94a3b8;">&mdash; R.A. 4670 Mandated Max (40 hrs)</span>
-                            <button class="module-btn module-btn--outline" style="width: auto; padding: 0.4rem 1rem;"><i class="fas fa-download"></i> Export Data</button>
+                            <button class="module-btn module-btn--outline" id="btnExportChartData" style="width: auto; padding: 0.4rem 1rem;" type="button">
+                                <i class="fas fa-download"></i> Export Data
+                            </button>
                         </div>
                     </div>
                     
@@ -360,7 +388,7 @@
                                             <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 600;">M. Santos (Optimal)</span></td>
                                             <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 700;">-8 hrs/wk</span></td>
                                             <td style="padding: 0.85rem 1rem; text-align: right;">
-                                                <button class="action-btn action-btn--simulate" onclick="toggleRowSimulation('row-sim-1', 8)">Simulate</button>
+                                                <button class="action-btn action-btn--simulate" data-row-id="row-sim-1" data-hours="8" type="button">Simulate</button>
                                             </td>
                                         </tr>
                                         <tr style="border-bottom: 1px solid #f1f5f9;" id="row-sim-2">
@@ -369,7 +397,7 @@
                                             <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 600;">R. Garcia (Optimal)</span></td>
                                             <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 700;">-5 hrs/wk</span></td>
                                             <td style="padding: 0.85rem 1rem; text-align: right;">
-                                                <button class="action-btn action-btn--simulate" onclick="toggleRowSimulation('row-sim-2', 5)">Simulate</button>
+                                                <button class="action-btn action-btn--simulate" data-row-id="row-sim-2" data-hours="5" type="button">Simulate</button>
                                             </td>
                                         </tr>
                                         <tr id="row-sim-3">
@@ -378,7 +406,7 @@
                                             <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 600;">L. Bautista (Optimal)</span></td>
                                             <td style="padding: 0.85rem 1rem;"><span style="color: #16a34a; font-weight: 700;">-6 hrs/wk</span></td>
                                             <td style="padding: 0.85rem 1rem; text-align: right;">
-                                                <button class="action-btn action-btn--simulate" onclick="toggleRowSimulation('row-sim-3', 6)">Simulate</button>
+                                                <button class="action-btn action-btn--simulate" data-row-id="row-sim-3" data-hours="6" type="button">Simulate</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -386,10 +414,10 @@
                             </div>
 
                             <div class="reallocation-actions" style="margin-top: 1.25rem; display: flex; gap: 1rem;">
-                                <button class="reallocation-btn reallocation-btn--apply" onclick="applyAllSimulations()">
+                                <button class="reallocation-btn reallocation-btn--apply" id="btnApplyAllSimulations" type="button">
                                     <i class="fas fa-check-circle"></i> Apply All in Simulator
                                 </button>
-                                <button class="reallocation-btn reallocation-btn--report" onclick="exportSimulationReport()">
+                                <button class="reallocation-btn reallocation-btn--report" id="btnExportSimulationReport" type="button">
                                     <i class="fas fa-file-pdf"></i> Export Reallocation Plan
                                 </button>
                             </div>
@@ -456,10 +484,10 @@
                                 <span class="hotlist-details" style="font-size: 0.82rem; color: #9f1239;">EE: 31 | DP: 15 | PA: 26 (High Risk)</span>
                             </div>
                             <div class="hotlist-item-right" style="display: flex; gap: 0.5rem;">
-                                <button class="hotlist-btn hotlist-btn--profile" onclick="window.location.href='../admin/high_burnout_teachers.html'" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fecdd3; background: #ffffff; color: #be123c; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                                <button class="hotlist-btn hotlist-btn--profile btn-hotlist-diag" data-code="TCH-012" type="button" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fecdd3; background: #ffffff; color: #be123c; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
                                     <i class="fas fa-file-invoice"></i> Diagnostic
                                 </button>
-                                <button class="hotlist-btn hotlist-btn--checkin" onclick="sendIndividualCheckIn('TCH-012')" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: none; background: #dc2626; color: #ffffff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                                <button class="hotlist-btn hotlist-btn--checkin btn-hotlist-checkin" data-code="TCH-012" type="button" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: none; background: #dc2626; color: #ffffff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
                                     <i class="fas fa-paper-plane"></i> Check-in
                                 </button>
                             </div>
@@ -472,10 +500,10 @@
                                 <span class="hotlist-details" style="font-size: 0.82rem; color: #9f1239;">EE: 28 | DP: 14 | PA: 28 (High Risk)</span>
                             </div>
                             <div class="hotlist-item-right" style="display: flex; gap: 0.5rem;">
-                                <button class="hotlist-btn hotlist-btn--profile" onclick="window.location.href='../admin/high_burnout_teachers.html'" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fecdd3; background: #ffffff; color: #be123c; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                                <button class="hotlist-btn hotlist-btn--profile btn-hotlist-diag" data-code="TCH-018" type="button" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid #fecdd3; background: #ffffff; color: #be123c; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
                                     <i class="fas fa-file-invoice"></i> Diagnostic
                                 </button>
-                                <button class="hotlist-btn hotlist-btn--checkin" onclick="sendIndividualCheckIn('TCH-018')" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: none; background: #dc2626; color: #ffffff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                                <button class="hotlist-btn hotlist-btn--checkin btn-hotlist-checkin" data-code="TCH-018" type="button" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: none; background: #dc2626; color: #ffffff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
                                     <i class="fas fa-paper-plane"></i> Check-in
                                 </button>
                             </div>
@@ -486,7 +514,7 @@
                                 <i class="fas fa-flag" style="color: #d97706; margin-right: 0.4rem;"></i> 
                                 <strong>Hidden Strain Flag:</strong> 3 Faculty entries report high emotional fatigue despite lawful workloads (&lt;40 hrs).
                             </div>
-                            <button class="hidden-flag-link" onclick="window.location.href='../admin/moderate_burnout_teachers.html'" style="background: transparent; border: none; color: #0038A8; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                            <button class="hidden-flag-link" id="btnInspectHiddenStrain" type="button" style="background: transparent; border: none; color: #0038A8; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
                                 Inspect Roster &rarr;
                             </button>
                         </div>
@@ -512,7 +540,7 @@
                                 </div>
                             </div>
 
-                            <button onclick="sendBulkPulseReminders()" style="width: 100%; padding: 0.75rem; background: #0038A8; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: background 0.2s ease;">
+                            <button id="btnSendBulkReminders" type="button" style="width: 100%; padding: 0.75rem; background: #0038A8; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: background 0.2s ease;">
                                 <i class="fas fa-bell"></i> Send Automated Reminder (3 Pending)
                             </button>
 
@@ -555,10 +583,7 @@
                                 <h4>Workload Quantification Reports</h4>
                                 <p>Access official administrative records of teaching hours, ancillary task distributions, and load calculations across all faculty.</p>
                             </div>
-                            <button class="btn-primary" 
-                                    id="openWorkloadReportBtn" 
-                                    type="button" 
-                                    onclick="window.location.href='workload_reports_directory.html';">
+                            <button class="btn-primary" id="openWorkloadReportBtn" type="button">
                                 <i class="fas fa-folder-open"></i> View All Faculty Reports
                             </button>
                         </div>
@@ -626,7 +651,7 @@
                 </section>
             </main>
 
-            <!-- CLEAN RESTRUCTURED FOOTER -->
+            <!-- FOOTER -->
             <footer class="app-dashboard-footer no-print">
                 <div class="footer-block">
                     <span>&copy; 2026 <strong>Kandili Workspace</strong>. All rights reserved.</span>
@@ -647,6 +672,7 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="principal"></script>
     <script src="../../js/logout.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
     <script src="../../js/workloadManager.js"></script>
     <script src="../../js/principalDashboard.js"></script>
 </body>

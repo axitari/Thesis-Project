@@ -27,9 +27,8 @@
 }
 
 html, body {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    width: 100%;
+    min-height: 100vh;
     background-color: var(--bg-light);
     color: var(--text-main);
 }
@@ -45,24 +44,40 @@ button:active {
 }
 
 /* ==========================================================================
-   APP SHELL & SIDEBAR
+   APP SHELL & OFF-CANVAS COLLAPSIBLE SIDEBAR
    ========================================================================== */
 .app-shell {
     display: flex;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    position: relative;
 }
 
+/* Sidebar is hidden off-screen to the left by default on ALL screen sizes */
 .app-sidebar {
-    width: 260px;
-    min-width: 260px;
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 270px;
+    min-width: 270px;
     height: 100vh;
     background: #002266;
     display: flex;
     flex-direction: column;
-    z-index: 1000;
+    z-index: 2000;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35);
+    transform: translateX(-100%); /* HIDDEN BY DEFAULT */
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Slides in when .sidebar-open is present on .app-shell */
+.app-shell.sidebar-open .app-sidebar {
+    transform: translateX(0) !important;
 }
 
 .app-sidebar-brand {
@@ -74,7 +89,31 @@ button:active {
     border-bottom: 3px solid var(--deped-yellow);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.app-sidebar-brand .brand-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.sidebar-close-btn {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.35rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    line-height: 1;
+    transition: background 0.2s ease;
+}
+
+.sidebar-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .app-sidebar-nav {
@@ -97,6 +136,14 @@ button:active {
     font-weight: 600;
     border-radius: 8px;
     transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.app-sidebar-link i {
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
 }
 
 .app-sidebar-link:hover {
@@ -120,14 +167,43 @@ button:active {
     color: #fda4af !important;
 }
 
+.sidebar-badge {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    margin-left: auto;
+}
+
+/* Main Area stretches full width */
 .app-main-content {
     flex: 1;
+    width: 100%;
     min-width: 0;
     height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+}
+
+/* Semi-transparent Dimmed Backdrop */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 1999;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.sidebar-backdrop.active {
+    display: block !important;
+    opacity: 1 !important;
 }
 
 /* ==========================================================================
@@ -144,6 +220,13 @@ button:active {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0, 56, 168, 0.15);
+    width: 100%;
+}
+
+.theme-nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .theme-nav__title {
@@ -182,47 +265,125 @@ button:active {
     transform: translateY(-1px);
 }
 
-/* HIDDEN DROPDOWN BY DEFAULT - CRITICAL OVERRIDE */
-.theme-nav__menu {
-    display: none !important;
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    right: 1.5rem;
-    background: #ffffff;
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 0.6rem;
-    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
-    flex-direction: column;
-    min-width: 220px;
-    z-index: 1000;
-    gap: 0.35rem;
-}
-
-.theme-nav__menu.active {
-    display: flex !important;
-}
-
-.theme-nav__menu a {
-    padding: 0.6rem 0.8rem;
-    border-radius: 6px;
-    color: var(--text-main) !important;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    display: flex;
+.theme-nav__menu-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+    color: #ffffff;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.theme-nav__menu a:hover {
-    background: #eff6ff;
-    color: var(--deped-blue) !important;
+.theme-nav__menu-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
 }
 
-.theme-nav__menu a.logout-link {
-    color: var(--deped-red) !important;
+/* ==========================================================================
+   GLASSMORPHIC BACK BUTTON & ROLE SWITCHER
+   ========================================================================== */
+.nav-back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    height: 36px;
+    padding: 0 0.95rem;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.nav-back-pill i {
+    font-size: 0.82rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-back-pill:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-back-pill:hover i {
+    transform: translateX(-3px);
+}
+
+.nav-back-pill:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-back-pill.circle-only {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+}
+
+.nav-back-pill.circle-only:hover i {
+    transform: translateX(-2px);
+}
+
+.role-switch-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 36px;
+    padding: 0 1rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.role-switch-pill--admin {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.role-switch-pill--admin i {
+    font-size: 0.85rem;
+    color: var(--deped-yellow);
+}
+
+.role-switch-pill--admin:hover {
+    background: #ffffff !important;
+    color: var(--deped-blue, #0038A8) !important;
+    border-color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.role-switch-pill--admin:hover i {
+    color: var(--deped-blue, #0038A8);
+}
+
+.role-switch-pill--admin:active {
+    transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -376,7 +537,7 @@ button:active {
 }
 
 /* ==========================================================================
-   GLOBAL FORMS
+   GLOBAL FORMS & SEARCHABLE SELECT
    ========================================================================== */
 .form-group {
     margin-bottom: 1.15rem;
@@ -402,7 +563,7 @@ button:active {
     margin-top: 0.25rem;
 }
 
-input[type="text"], input[type="date"], select, textarea {
+input[type="text"], input[type="date"], input[type="password"], select, textarea {
     width: 100%;
     padding: 0.65rem 0.9rem;
     background-color: var(--bg-white);
@@ -420,7 +581,6 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
 }
 
-/* Searchable Select */
 .searchable-select-wrapper {
     position: relative;
     width: 100%;
@@ -478,116 +638,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ==========================================================================
-   ELEVATED GLASSMORPHIC BACK BUTTON
+   UNIFIED SLEEK FOOTER
    ========================================================================== */
-
-.nav-back-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    height: 36px;
-    padding: 0 0.95rem;
-    background: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 999px;
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-/* Icon transition */
-.nav-back-pill i {
-    font-size: 0.82rem;
-    transition: transform 0.2s ease;
-}
-
-/* Hover: light glow + subtle left shift for visual cue */
-.nav-back-pill:hover {
-    background: rgba(255, 255, 255, 0.28);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.nav-back-pill:hover i {
-    transform: translateX(-3px);
-}
-
-/* Click state */
-.nav-back-pill:active {
-    transform: translateY(0);
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* If you prefer just the round circle (no text) */
-.nav-back-pill.circle-only {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    justify-content: center;
-}
-
-.nav-back-pill.circle-only:hover i {
-    transform: translateX(-2px);
-}
-
-/* ==========================================================================
-   ADDITIONS: GLASSMORPHIC BACK BUTTON & CLEAN UNIFIED FOOTER
-   ========================================================================== */
-
-/* 1. Back button for teacher & principal top navigation */
-.nav-back-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    height: 36px;
-    padding: 0 0.95rem;
-    background: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 999px;
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.nav-back-pill i {
-    font-size: 0.82rem;
-    transition: transform 0.2s ease;
-}
-
-.nav-back-pill:hover {
-    background: rgba(255, 255, 255, 0.28);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.nav-back-pill:hover i {
-    transform: translateX(-3px);
-}
-
-.nav-back-pill:active {
-    transform: translateY(0);
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* 2. Unified sleek footer */
 .app-dashboard-footer {
     display: flex;
     justify-content: space-between;
@@ -641,58 +693,35 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ==========================================================================
-   ROLE SWITCHER PILL (ADMIN CONSOLE RETURN BUTTON)
+   SIDEBAR TOGGLE FORCED OVERRIDE
    ========================================================================== */
-.role-switch-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    height: 36px;
-    padding: 0 1rem;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-decoration: none;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
+.app-shell .app-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    width: 270px !important;
+    z-index: 99999 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* Specific styling for the Teacher Dashboard Navbar */
-.role-switch-pill--admin {
-    background: rgba(255, 255, 255, 0.18) !important;
-    color: #ffffff !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+/* When active, force it to slide into view */
+.app-shell.sidebar-open .app-sidebar {
+    transform: translateX(0) !important;
 }
 
-.role-switch-pill--admin i {
-    font-size: 0.85rem;
-    color: #FCE300; /* DepEd Gold accent icon */
+/* Ensure backdrop appears on top of the dashboard content */
+.sidebar-backdrop {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 99990 !important;
 }
 
-.role-switch-pill--admin:hover {
-    background: #ffffff !important;
-    color: var(--deped-blue, #0038A8) !important;
-    border-color: #ffffff !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-}
-
-.role-switch-pill--admin:hover i {
-    color: var(--deped-blue, #0038A8);
-}
-
-.role-switch-pill--admin:active {
-    transform: translateY(0);
-}
-
-/* Ensure actions group aligns elements evenly */
-.theme-nav__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+.sidebar-backdrop.active {
+    display: block !important;
 }

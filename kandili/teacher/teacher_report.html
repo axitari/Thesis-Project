@@ -18,48 +18,70 @@
 </head>
 <body class="dashboard-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION (Hidden when printing) -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav">
                 <a href="teacherdashboard.html" class="app-sidebar-link">
-                    <i class="fas fa-chart-line"></i> Teacher Dashboard
+                    <i class="fas fa-chart-line"></i>
+                    <span>Teacher Dashboard</span>
                 </a>
                 <a href="teacherprofilepage.html" class="app-sidebar-link">
-                    <i class="fas fa-user"></i> My Profile
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
                 </a>
                 <a href="classprogram.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Class Program
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Class Program</span>
                 </a>
                 <a href="burnout-risk_assessment.html" class="app-sidebar-link">
-                    <i class="fas fa-fire-alt"></i> Take Assessment
+                    <i class="fas fa-fire-alt"></i>
+                    <span>Take Assessment</span>
                 </a>
                 <a href="teacher_analytics.html" class="app-sidebar-link">
-                    <i class="fas fa-chart-pie"></i> View Analytics
+                    <i class="fas fa-chart-pie"></i>
+                    <span>View Analytics</span>
                 </a>
                 <a href="teacher_report.html" class="app-sidebar-link active">
-                    <i class="fas fa-file-contract"></i> Audit Report
+                    <i class="fas fa-file-contract"></i>
+                    <span>Audit Report</span>
                 </a>
                 
                 <hr class="sidebar-divider">
 
-                <a href="../general/message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="../general/message.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
-                <a href="../general/notification.html" class="app-sidebar-link">
-                    <i class="fas fa-bell"></i> Notifications
+                <a href="../general/notification.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="../general/calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-check"></i> Master Calendar
+                <a href="../general/calendar.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="../general/settings.html" class="app-sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="../general/history.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
                 </a>
-                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                <a href="../general/settings.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+
+                <hr class="sidebar-divider">
+
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn" onclick="return kandiliLogout();">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -69,7 +91,25 @@
             <!-- Top Navigation (Hidden when printing) -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <button class="nav-back-pill" onclick="window.history.back()" type="button" aria-label="Go Back">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="(function(){
+                                if (document.referrer && document.referrer.toLowerCase().includes('teacherdashboard')) {
+                                    window.location.href = 'teacherdashboard.html';
+                                } else if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = 'teacherdashboard.html';
+                                }
+                            })()" 
+                            aria-label="Go Back">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
@@ -212,7 +252,7 @@
                         </section>
 
                         <footer class="report-signature-block print-only">
-                            ...
+                            <!-- Populated on print / export -->
                         </footer>
 
                     </article>
@@ -223,20 +263,9 @@
 
     <!-- Application Script Stack -->
     <script src="../../js/supabaseClient.js"></script>
-    <script src="../../js/authGuard.js" data-allowed-roles="teacher"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="teacher,principal"></script>
     <script src="../../js/logout.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
     <script src="../../js/teacherReport.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (typeof kandiliLogout === 'function') {
-                    kandiliLogout();
-                } else if (confirm("Are you sure you want to log out?")) {
-                    window.location.href = "../login.html";
-                }
-            });
-        });
-    </script>
 </body>
 </html>

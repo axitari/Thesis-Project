@@ -18,50 +18,76 @@
     <link rel="stylesheet" href="../../css/general/general.css">
     <link rel="stylesheet" href="../../css/teacher/teacherdashboard.css">
 </head>
-<body>
+<body class="dashboard-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav">
                 <a href="#class-profile-section" class="app-sidebar-link active">
-                    <i class="fas fa-users"></i> Class Demographics
+                    <i class="fas fa-users"></i>
+                    <span>Class Demographics</span>
                 </a>
                 <a href="#workload-intelligence-section" class="app-sidebar-link">
-                    <i class="fas fa-brain"></i> Workload & Risk
+                    <i class="fas fa-brain"></i>
+                    <span>Workload &amp; Risk</span>
                 </a>
                 <a href="#burnoutAssessmentSection" class="app-sidebar-link">
-                    <i class="fas fa-fire-alt"></i> Burnout Analytics
+                    <i class="fas fa-fire-alt"></i>
+                    <span>Burnout Analytics</span>
                 </a>
                 <a href="#weekly-schedule-section" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Class Timetable
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Class Timetable</span>
                 </a>
                 <a href="#official-workload-section" class="app-sidebar-link">
-                    <i class="fas fa-file-signature"></i> eSF7 Workload
+                    <i class="fas fa-file-signature"></i>
+                    <span>eSF7 Workload</span>
                 </a>
                 <a href="#absence-requests-section" class="app-sidebar-link">
-                    <i class="fas fa-calendar-times"></i> Absence Requests
+                    <i class="fas fa-calendar-times"></i>
+                    <span>Absence Requests</span>
                 </a>
                 
                 <hr class="sidebar-divider">
 
                 <a href="teacherprofilepage.html" class="app-sidebar-link">
-                    <i class="fas fa-user"></i> My Profile
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
                 </a>
-                <a href="../general/message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="../general/notification.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="../general/history.html" class="app-sidebar-link">
-                    <i class="fas fa-history"></i> History
+                <a href="../general/message.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
-                <a href="../general/calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-check"></i> Master Calendar
+                <a href="../general/calendar.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                <a href="../general/history.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a href="../general/settings.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+
+                <hr class="sidebar-divider">
+
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn" onclick="return kandiliLogout();">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -69,8 +95,12 @@
         <!-- MAIN VIEW AREA -->
         <div class="app-main-content">
             <!-- TOP NAVIGATION HEADER -->
-            <header class="theme-nav">
+            <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <div class="theme-nav__title">Teacher Dashboard</div>
                 </div>
                 <div class="theme-nav__actions">
@@ -88,7 +118,9 @@
                     <button class="theme-nav__refresh open-pulse-modal-btn pulse-trigger" id="openPulseModalBtn" type="button">
                         <i class="fas fa-heartbeat"></i> Pulse Check-in
                     </button>
-                    <button class="theme-nav__refresh" id="refreshBtn" type="button"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button class="theme-nav__refresh" id="refreshBtn" type="button" onclick="window.location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
             </header>
 
@@ -689,21 +721,20 @@
 
     <!-- Application Script Stack -->
     <script src="../../js/supabaseClient.js"></script>
-    <!-- 1. FIXED: ALLOW BOTH ROLES IN GUARD -->
     <script src="../../js/authGuard.js" data-allowed-roles="teacher,principal"></script>
     <script src="../../js/logout.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
     <script src="../../js/esf7Parser.js"></script>
     <script src="../../js/teacherDashboard.js"></script>
     <script src="../../js/workloadManager.js"></script>
     <script src="../../js/teacherdashboard-ui.js"></script>
 
-    <!-- 2. AUTOMATIC ROLE-SWITCH ACTIVATION SCRIPT -->
+    <!-- AUTOMATIC ROLE-SWITCH ACTIVATION SCRIPT -->
     <script>
         (function initAdminSwitchButton() {
             const adminBtn = document.getElementById('adminSwitchBtn');
             if (!adminBtn) return;
 
-            // Check A: URL Parameter
             const urlParams = new URLSearchParams(window.location.search);
             const viewAs = urlParams.get('viewAs');
 
@@ -713,20 +744,16 @@
                 return;
             }
 
-            // Check B: Active switch session flag
             if (sessionStorage.getItem('kandili_viewing_as_teacher') === 'true') {
                 adminBtn.style.display = 'inline-flex';
                 return;
             }
 
-            // Check C: Stored user role from login
             const role = (localStorage.getItem('user_role') || sessionStorage.getItem('user_role') || '').toLowerCase();
             if (role === 'principal') {
                 adminBtn.style.display = 'inline-flex';
                 return;
             }
-
-            // Regular teachers will not pass any check, so the button stays hidden.
         })();
     </script>
 </body>
