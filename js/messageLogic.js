@@ -1,235 +1,99 @@
 /**
- * Messages Center Logic & Data Ingestion
- * Kandili Workspace - DepEd Cross-Role Communication
+ * Messages Center Controller
+ * Kandili Workspace - Shared Role Messaging Engine
  */
 
-let currentTab = 'inbox';
-
-const mockMessages = {
-    inbox: [
-        {
-            id: 'msg-1',
-            sender: 'Mylene Panaguiton (Principal II)',
-            role: 'School Leadership',
-            subject: 'eSF7 Workload Balance Consultation',
-            snippet: 'Greetings! We reviewed your mid-year load audit and would like to coordinate regarding ancillary task reallocations...',
-            body: 'Greetings!\n\nWe reviewed your mid-year load audit and noticed your total weekly quantified hours exceed statutory limits under Magna Carta guidelines. We would like to coordinate regarding ancillary task reallocations to prevent instructional fatigue.\n\nPlease drop by the principal console room during your vacant period this Thursday.\n\nWarm regards,\nMylene Panaguiton',
-            timestamp: 'July 20, 2026 | 10:15 AM',
-            unread: true
-        },
-        {
-            id: 'msg-2',
-            sender: 'LAC Coordinator (Science Dept)',
-            role: 'Department Head',
-            subject: 'Upcoming Session Materials Preparation',
-            snippet: 'Please ensure that lesson exemplars for Quarter 3 are uploaded to the shared repository prior to our Friday session...',
-            body: 'Dear Colleagues,\n\nPlease ensure that lesson exemplars for Quarter 3 are uploaded to the shared repository prior to our Friday session. We will focus on hands-on laboratory adjustments.\n\nThank you,\nScience Department',
-            timestamp: 'July 19, 2026 | 3:45 PM',
-            unread: false
-        }
-    ],
-    sent: [
-        {
-            id: 'msg-3',
-            sender: 'Me (To: School Head)',
-            role: 'Self',
-            subject: 'Request for Co-Adviser Support',
-            snippet: 'Submitting formal request for secondary support on Form 137 documentation for Grade 9 Section Rizal...',
-            body: 'Dear Principal Panaguiton,\n\nI am submitting a formal request for secondary support on Form 137 documentation for Grade 9 Section Rizal. The current student load requires additional administrative coordination.\n\nRespectfully,\nFaculty Member',
-            timestamp: 'July 18, 2026 | 11:20 AM',
-            unread: false
-        }
-    ]
-};
-
 document.addEventListener('DOMContentLoaded', () => {
-    initMessageCenter();
-    initTopNavActions();
-    initComposeForm();
-    initModalControls();
+    initRoleRouting();
     initLogoutHandler();
+    initTabSwitching();
+    initModalControls();
+    loadMessages();
 });
 
-function initMessageCenter() {
-    // Determine dynamic dashboard target based on active role
-    const userRole = localStorage.getItem('kandili_role') || sessionStorage.getItem('kandili_role') || 'principal';
-    const dashLink = document.getElementById('navDashboardLink');
-    if (dashLink) {
-        dashLink.href = userRole === 'teacher' ? '../teacher/teacherdashboard.html' : '../principal/principaldashboard.html';
+/* ==========================================================================
+   1. Role-Aware Dynamic Navigation Routing (Bulletproof Back Button)
+   ========================================================================== */
+function initRoleRouting() {
+    const params = new URLSearchParams(window.location.search);
+    let origin = params.get('origin');
+
+    // 1. Resolve role from query param, sessionStorage, or referrer
+    if (!origin) {
+        origin = sessionStorage.getItem('kandili_user_role');
+    }
+    if (!origin) {
+        const ref = (document.referrer || '').toLowerCase();
+        origin = ref.includes('principal') ? 'principal' : 'teacher';
     }
 
-    // Attach Tab switches
-    document.getElementById('tabInboxBtn')?.addEventListener('click', () => switchMessageTab('inbox'));
-    document.getElementById('tabSentBtn')?.addEventListener('click', () => switchMessageTab('sent'));
-    document.getElementById('refreshMessagesBtn')?.addEventListener('click', () => renderMessageList());
+    // Persist active role
+    sessionStorage.setItem('kandili_user_role', origin);
 
-    renderMessageList();
-    updateUnreadBadges();
-}
+    // 2. Adjust sidebar links to match active role
+    const dashboardLink = document.getElementById('navDashboardLink');
+    if (dashboardLink) {
+        dashboardLink.setAttribute(
+            'href',
+            origin === 'principal' 
+                ? '../principal/principaldashboard.html' 
+                : '../teacher/teacherdashboard.html'
+        );
+    }
 
-function initTopNavActions() {
+    // Preserve ?origin= on sibling general navigation links
+    const linksToPreserve = [
+        { id: 'navMessagesLink', file: 'message.html' },
+        { id: 'navNotificationsLink', file: 'notification.html' },
+        { id: 'navCalendarLink', file: 'calendar.html' },
+        { id: 'navHistoryLink', file: 'history.html' },
+        { id: 'navSettingsLink', file: 'settings.html' }
+    ];
+
+    linksToPreserve.forEach(item => {
+        const elem = document.getElementById(item.id);
+        if (elem) {
+            elem.setAttribute('href', `${item.file}?origin=${origin}`);
+        }
+    });
+
+    // 3. Fail-safe Back Button click handler
     const backBtn = document.getElementById('navBackBtn');
     if (backBtn) {
+        backBtn.removeAttribute('onclick');
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
 
-            // Detect user role from local or session storage
-            const role = localStorage.getItem('kandili_role') || sessionStorage.getItem('kandili_role') || 'principal';
-            const defaultFallback = role === 'teacher' 
-                ? '../teacher/teacherdashboard.html' 
-                : '../principal/principaldashboard.html';
+            const targetDashboard = origin === 'principal'
+                ? '../principal/principaldashboard.html'
+                : '../teacher/teacherdashboard.html';
 
-            // Check if there is actual browsing history to return to
-            if (window.history.length > 1 && document.referrer && !document.referrer.includes('login.html')) {
-                window.history.back();
+            const referrer = document.referrer || '';
+            const isInternal = (referrer.includes('/html/') || referrer.includes('dashboard')) && !referrer.includes('login.html');
+
+            if (isInternal) {
+                window.location.href = referrer;
             } else {
-                window.location.href = defaultFallback;
+                window.location.href = targetDashboard;
             }
         });
     }
 
+    // 4. Refresh button handler
     const refreshBtn = document.getElementById('navRefreshBtn');
     if (refreshBtn) {
-        refreshBtn.addEventListener('click', () => {
+        refreshBtn.removeAttribute('onclick');
+        refreshBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             window.location.reload();
         });
     }
 }
 
-function switchMessageTab(tabName) {
-    currentTab = tabName;
-
-    const inboxBtn = document.getElementById('tabInboxBtn');
-    const sentBtn = document.getElementById('tabSentBtn');
-
-    if (tabName === 'inbox') {
-        inboxBtn?.classList.add('active');
-        sentBtn?.classList.remove('active');
-    } else {
-        sentBtn?.classList.add('active');
-        inboxBtn?.classList.remove('active');
-    }
-
-    renderMessageList();
-}
-
-function renderMessageList() {
-    const listContainer = document.getElementById('messageListContainer');
-    if (!listContainer) return;
-
-    const messages = mockMessages[currentTab] || [];
-
-    if (messages.length === 0) {
-        listContainer.innerHTML = `
-            <div class="message-empty-placeholder">
-                <i class="fas fa-inbox"></i>
-                <p>No messages found in this folder.</p>
-            </div>
-        `;
-        return;
-    }
-
-    listContainer.innerHTML = messages.map(msg => `
-        <div class="message-item ${msg.unread ? 'unread' : ''}" data-id="${msg.id}">
-            <div class="message-item-top">
-                <span class="message-item-sender">${msg.sender}</span>
-                <span class="message-item-time">${msg.timestamp}</span>
-            </div>
-            <div class="message-item-subject">${msg.subject}</div>
-            <div class="message-item-snippet">${msg.snippet}</div>
-        </div>
-    `).join('');
-
-    // Attach click triggers to open message modal
-    listContainer.querySelectorAll('.message-item').forEach(card => {
-        card.addEventListener('click', () => {
-            const msgId = card.getAttribute('data-id');
-            openMessageModal(msgId);
-        });
-    });
-}
-
-function openMessageModal(messageId) {
-    const message = [...mockMessages.inbox, ...mockMessages.sent].find(m => m.id === messageId);
-    if (!message) return;
-
-    // Mark as read
-    message.unread = false;
-    updateUnreadBadges();
-    renderMessageList();
-
-    // Populate modal
-    document.getElementById('modalSender').textContent = message.sender;
-    document.getElementById('modalRole').textContent = message.role;
-    document.getElementById('modalTime').textContent = message.timestamp;
-    document.getElementById('modalSubject').textContent = message.subject;
-    document.getElementById('modalBody').textContent = message.body;
-
-    const modal = document.getElementById('messageModal');
-    if (modal) modal.classList.add('active');
-}
-
-function closeMessageModal() {
-    const modal = document.getElementById('messageModal');
-    if (modal) modal.classList.remove('active');
-}
-
-function initModalControls() {
-    document.getElementById('closeModalIconBtn')?.addEventListener('click', closeMessageModal);
-    document.getElementById('closeModalBtn')?.addEventListener('click', closeMessageModal);
-
-    // Close on overlay backdrop click
-    const modal = document.getElementById('messageModal');
-    modal?.addEventListener('click', (e) => {
-        if (e.target === modal) closeMessageModal();
-    });
-}
-
-function updateUnreadBadges() {
-    const unreadCount = mockMessages.inbox.filter(m => m.unread).length;
-
-    const unreadBadge = document.getElementById('unreadBadge');
-    const sidebarBadge = document.getElementById('sidebarUnreadBadge');
-    const inboxBadge = document.getElementById('inboxTabBadge');
-
-    [unreadBadge, sidebarBadge, inboxBadge].forEach(badge => {
-        if (badge) {
-            badge.textContent = unreadCount;
-            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
-        }
-    });
-}
-
-function initComposeForm() {
-    const form = document.getElementById('composeMessageForm');
-    form?.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const recipientSelect = document.getElementById('recipient');
-        const subjectInput = document.getElementById('subject');
-        const messageInput = document.getElementById('message');
-
-        const newMsg = {
-            id: `msg-${Date.now()}`,
-            sender: 'Me',
-            role: 'Self',
-            subject: subjectInput.value.trim(),
-            snippet: messageInput.value.trim().substring(0, 90) + '...',
-            body: messageInput.value.trim(),
-            timestamp: 'Just now',
-            unread: false
-        };
-
-        mockMessages.sent.unshift(newMsg);
-        alert('Message successfully transmitted through DepEd secure channel.');
-        form.reset();
-
-        if (currentTab === 'sent') {
-            renderMessageList();
-        }
-    });
-}
-
+/* ==========================================================================
+   2. Authentication & Logout
+   ========================================================================== */
 function initLogoutHandler() {
     document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
@@ -241,33 +105,181 @@ function initLogoutHandler() {
     });
 }
 
-function handleRoleAwareBack(e) {
-    if (e) e.preventDefault();
+/* ==========================================================================
+   3. Tabs Switching & Messaging Feed
+   ========================================================================== */
+let activeTab = 'inbox';
 
-    // 1. Check if the user navigated from a teacher page via browser referrer
-    if (document.referrer && document.referrer.includes('/teacher/')) {
-        window.location.href = '../teacher/teacherdashboard.html';
+const mockMessages = {
+    inbox: [
+        {
+            id: 'msg-1',
+            sender: 'Principal Mylene Panaguiton',
+            role: 'School Head',
+            time: 'Today, 10:15 AM',
+            subject: 'Mid-Year Instructional Workload Review Notice',
+            body: 'Good morning faculty. Please ensure your respective eSF7 teaching loads and ancillary task distributions are verified before Friday.',
+            unread: true
+        },
+        {
+            id: 'msg-2',
+            sender: 'Department Head (Science)',
+            role: 'Academic Department',
+            time: 'Yesterday, 3:30 PM',
+            subject: 'LAC Session Materials & Room Assignment',
+            body: 'Colleagues, the presentation slides for tomorrow’s Learning Action Cell are available in the shared folder. See you in Room 204.',
+            unread: false
+        }
+    ],
+    sent: [
+        {
+            id: 'msg-3',
+            sender: 'You',
+            recipient: 'Principal Mylene Panaguiton',
+            role: 'Direct Message',
+            time: 'July 18, 2026',
+            subject: 'Clarification regarding SDRRM Ancillary Load',
+            body: 'Dear Principal, acknowledging receipt of the latest schedule. Inquiring regarding the 5-hour coordination allotment for DRRM.',
+            unread: false
+        }
+    ]
+};
+
+function initTabSwitching() {
+    const tabInboxBtn = document.getElementById('tabInboxBtn');
+    const tabSentBtn = document.getElementById('tabSentBtn');
+    const refreshBtn = document.getElementById('refreshMessagesBtn');
+
+    tabInboxBtn?.addEventListener('click', () => {
+        activeTab = 'inbox';
+        tabInboxBtn.classList.add('active');
+        tabSentBtn?.classList.remove('active');
+        renderMessageList();
+    });
+
+    tabSentBtn?.addEventListener('click', () => {
+        activeTab = 'sent';
+        tabSentBtn.classList.add('active');
+        tabInboxBtn?.classList.remove('active');
+        renderMessageList();
+    });
+
+    refreshBtn?.addEventListener('click', () => {
+        loadMessages();
+    });
+
+    document.getElementById('composeMessageForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const recipient = document.getElementById('recipient')?.value;
+        const subject = document.getElementById('subject')?.value;
+        const message = document.getElementById('message')?.value;
+
+        if (!recipient || !subject || !message) return;
+
+        mockMessages.sent.unshift({
+            id: `msg-${Date.now()}`,
+            sender: 'You',
+            recipient: recipient,
+            role: 'Official Broadcast',
+            time: 'Just now',
+            subject: subject,
+            body: message,
+            unread: false
+        });
+
+        alert("Message dispatched securely through the DepEd internal workspace channel.");
+        e.target.reset();
+
+        if (activeTab === 'sent') {
+            renderMessageList();
+        }
+    });
+}
+
+function loadMessages() {
+    renderMessageList();
+}
+
+function renderMessageList() {
+    const container = document.getElementById('messageListContainer');
+    if (!container) return;
+
+    const list = mockMessages[activeTab] || [];
+    const unreadCount = mockMessages.inbox.filter(m => m.unread).length;
+
+    const inboxBadge = document.getElementById('inboxTabBadge');
+    const headerBadge = document.getElementById('unreadBadge');
+    const sidebarBadge = document.getElementById('sidebarUnreadBadge');
+
+    if (inboxBadge) inboxBadge.textContent = unreadCount;
+    if (headerBadge) headerBadge.textContent = unreadCount;
+    if (sidebarBadge) sidebarBadge.textContent = unreadCount;
+
+    if (list.length === 0) {
+        container.innerHTML = `
+            <div class="message-empty-placeholder">
+                <i class="fas fa-inbox"></i>
+                <p>No ${activeTab} messages available.</p>
+            </div>
+        `;
         return;
     }
 
-    // 2. Check if the user navigated from a principal page
-    if (document.referrer && document.referrer.includes('/principal/')) {
-        window.location.href = '../principal/principaldashboard.html';
-        return;
-    }
+    container.innerHTML = list.map(item => `
+        <div class="message-item ${item.unread ? 'unread' : ''}" data-id="${item.id}">
+            <div class="message-item-header">
+                <span class="sender-name">${item.sender}</span>
+                <span class="msg-time">${item.time}</span>
+            </div>
+            <div class="msg-subject">${item.subject}</div>
+            <div class="msg-preview">${item.body.substring(0, 95)}...</div>
+        </div>
+    `).join('');
 
-    // 3. Check session/local storage with all common role keys
-    const detectedRole = (
-        sessionStorage.getItem('kandili_role') ||
-        localStorage.getItem('kandili_role') ||
-        sessionStorage.getItem('role') ||
-        localStorage.getItem('role') ||
-        ''
-    ).toLowerCase();
+    container.querySelectorAll('.message-item').forEach(el => {
+        el.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const found = list.find(m => m.id === id);
+            if (found) {
+                found.unread = false;
+                openMessageModal(found);
+                renderMessageList();
+            }
+        });
+    });
+}
 
-    if (detectedRole === 'teacher') {
-        window.location.href = '../teacher/teacherdashboard.html';
-    } else {
-        window.location.href = '../principal/principaldashboard.html';
-    }
+/* ==========================================================================
+   4. Modal Show / Hide
+   ========================================================================== */
+function initModalControls() {
+    const modal = document.getElementById('messageModal');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const closeIcon = document.getElementById('closeModalIconBtn');
+
+    const closeModal = () => {
+        modal?.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    closeBtn?.addEventListener('click', closeModal);
+    closeIcon?.addEventListener('click', closeModal);
+
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+}
+
+function openMessageModal(message) {
+    const modal = document.getElementById('messageModal');
+    if (!modal) return;
+
+    document.getElementById('modalSender').textContent = message.sender;
+    document.getElementById('modalRole').textContent = message.role || 'DepEd Member';
+    document.getElementById('modalTime').textContent = message.time;
+    document.getElementById('modalSubject').textContent = message.subject;
+    document.getElementById('modalBody').textContent = message.body;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
