@@ -16,35 +16,45 @@ function initRoleRouting() {
     const params = new URLSearchParams(window.location.search);
     let origin = params.get('origin');
 
-    // 1. Resolve role from query param, sessionStorage, or referrer
+    // 1. Check URL param first, then sessionStorage, then referrer
     if (!origin) {
         origin = sessionStorage.getItem('kandili_user_role');
     }
     if (!origin) {
         const ref = (document.referrer || '').toLowerCase();
-        origin = ref.includes('principal') ? 'principal' : 'teacher';
+        if (ref.includes('admin')) {
+            origin = 'admin';
+        } else if (ref.includes('principal')) {
+            origin = 'principal';
+        } else {
+            origin = 'teacher';
+        }
     }
 
-    // Persist active role
+    // Lock in the active role
     sessionStorage.setItem('kandili_user_role', origin);
 
-    // 2. Adjust sidebar links to match active role
+    // 2. Adjust Dashboard Destination Link
     const dashboardLink = document.getElementById('navDashboardLink');
     if (dashboardLink) {
-        dashboardLink.setAttribute(
-            'href',
-            origin === 'principal' 
-                ? '../principal/principaldashboard.html' 
-                : '../teacher/teacherdashboard.html'
-        );
+        if (origin === 'admin') {
+            dashboardLink.setAttribute('href', '../admin/admindashboard.html');
+            dashboardLink.querySelector('span') && (dashboardLink.querySelector('span').textContent = 'Admin Console');
+        } else if (origin === 'principal') {
+            dashboardLink.setAttribute('href', '../principal/principaldashboard.html');
+            dashboardLink.querySelector('span') && (dashboardLink.querySelector('span').textContent = 'Dashboard');
+        } else {
+            dashboardLink.setAttribute('href', '../teacher/teacherdashboard.html');
+            dashboardLink.querySelector('span') && (dashboardLink.querySelector('span').textContent = 'Dashboard');
+        }
     }
 
-    // Preserve ?origin= on sibling general navigation links
+    // 3. Preserve ?origin= on ALL sidebar links so clicking them doesn't drop role
     const linksToPreserve = [
-        { id: 'navHistoryLink', file: 'history.html' },
         { id: 'navNotificationsLink', file: 'notification.html' },
         { id: 'navMessagesLink', file: 'message.html' },
         { id: 'navCalendarLink', file: 'calendar.html' },
+        { id: 'navHistoryLink', file: 'history.html' },
         { id: 'navSettingsLink', file: 'settings.html' }
     ];
 
@@ -55,17 +65,16 @@ function initRoleRouting() {
         }
     });
 
-    // 3. Fail-safe Back Button click handler
+    // 4. Safe Back Button Handler
     const backBtn = document.getElementById('navBackBtn');
     if (backBtn) {
         backBtn.removeAttribute('onclick');
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation();
 
-            const targetDashboard = origin === 'principal'
-                ? '../principal/principaldashboard.html'
-                : '../teacher/teacherdashboard.html';
+            let targetDashboard = '../teacher/teacherdashboard.html';
+            if (origin === 'admin') targetDashboard = '../admin/admindashboard.html';
+            else if (origin === 'principal') targetDashboard = '../principal/principaldashboard.html';
 
             const referrer = document.referrer || '';
             const isInternal = (referrer.includes('/html/') || referrer.includes('dashboard')) && !referrer.includes('login.html');
@@ -75,16 +84,6 @@ function initRoleRouting() {
             } else {
                 window.location.href = targetDashboard;
             }
-        });
-    }
-
-    // 4. Refresh button handler
-    const refreshBtn = document.getElementById('navRefreshBtn');
-    if (refreshBtn) {
-        refreshBtn.removeAttribute('onclick');
-        refreshBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.reload();
         });
     }
 }
