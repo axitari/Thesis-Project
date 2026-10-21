@@ -1,155 +1,97 @@
 /**
- * Notifications Management Logic
- * Kandili Workspace - Central Activity Log
+ * Notifications Controller
+ * Kandili Workspace - Shared Role Notification Engine
  */
 
-let notifications = [
-    {
-        id: 'notif-1',
-        icon: 'fas fa-file-invoice',
-        theme: 'icon-blue',
-        title: 'New eSF7 Workload Draft Submitted',
-        text: 'Teacher Maria Santos submitted a revised instructional program draft for administrative review.',
-        time: 'Just now',
-        unread: true
-    },
-    {
-        id: 'notif-2',
-        icon: 'fas fa-triangle-exclamation',
-        theme: 'icon-red',
-        title: 'Burnout Threshold Warning',
-        text: 'Faculty code TCH-012 triggered High Emotional Exhaustion (EE) benchmark (>27). Task rebalancing advised.',
-        time: '18m ago',
-        unread: true
-    },
-    {
-        id: 'notif-3',
-        icon: 'fas fa-shield-heart',
-        theme: 'icon-purple',
-        title: 'Simulator Relief Applied',
-        text: 'Workload reallocation was successfully exported for Grade 9 Rizal Advisory duty offloading.',
-        time: '1h ago',
-        unread: true
-    },
-    {
-        id: 'notif-4',
-        icon: 'fas fa-calendar-check',
-        theme: 'icon-amber',
-        title: 'Upcoming Academic Review Cycle',
-        text: 'DepEd Division Office scheduled the Mid-Year Magna Carta load validation next Monday at 9:00 AM.',
-        time: 'Yesterday',
-        unread: false
-    }
-];
-
 document.addEventListener('DOMContentLoaded', () => {
-    initNotificationsFeed();
-    initTopNavActions();
+    initRoleRouting();
     initLogoutHandler();
+    initNotificationFeed();
 });
 
-function initNotificationsFeed() {
-    // Dynamically point sidebar dashboard link according to active user role
-    const userRole = localStorage.getItem('kandili_role') || sessionStorage.getItem('kandili_role') || 'principal';
-    const dashLink = document.getElementById('navDashboardLink');
-    if (dashLink) {
-        dashLink.href = userRole === 'teacher' ? '../teacher/teacherdashboard.html' : '../principal/principaldashboard.html';
+/* ==========================================================================
+   1. Role-Aware Dynamic Navigation Routing (Bulletproof Back Button)
+   ========================================================================== */
+function initRoleRouting() {
+    const params = new URLSearchParams(window.location.search);
+    let origin = params.get('origin');
+
+    // 1. Resolve role from query param, sessionStorage, or referrer
+    if (!origin) {
+        origin = sessionStorage.getItem('kandili_user_role');
+    }
+    if (!origin) {
+        const ref = (document.referrer || '').toLowerCase();
+        origin = ref.includes('principal') ? 'principal' : 'teacher';
     }
 
-    renderNotificationItems();
-    updateBadges();
+    // Persist active role
+    sessionStorage.setItem('kandili_user_role', origin);
 
-    // Mark all as read button
-    document.getElementById('markAllReadBtn')?.addEventListener('click', () => {
-        notifications.forEach(n => n.unread = false);
-        renderNotificationItems();
-        updateBadges();
+    // 2. Adjust sidebar links to match active role
+    const dashboardLink = document.getElementById('navDashboardLink');
+    if (dashboardLink) {
+        dashboardLink.setAttribute(
+            'href',
+            origin === 'principal' 
+                ? '../principal/principaldashboard.html' 
+                : '../teacher/teacherdashboard.html'
+        );
+    }
+
+    // Preserve ?origin= on sibling general navigation links
+    const linksToPreserve = [
+        { id: 'navNotificationsLink', file: 'notification.html' },
+        { id: 'navMessagesLink', file: 'message.html' },
+        { id: 'navCalendarLink', file: 'calendar.html' },
+        { id: 'navHistoryLink', file: 'history.html' },
+        { id: 'navSettingsLink', file: 'settings.html' }
+    ];
+
+    linksToPreserve.forEach(item => {
+        const elem = document.getElementById(item.id);
+        if (elem) {
+            elem.setAttribute('href', `${item.file}?origin=${origin}`);
+        }
     });
-}
 
-function initTopNavActions() {
+    // 3. Fail-safe Back Button click handler
     const backBtn = document.getElementById('navBackBtn');
     if (backBtn) {
+        backBtn.removeAttribute('onclick');
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            
-            // Check stored role (defaults to principal)
-            const role = localStorage.getItem('kandili_role') || sessionStorage.getItem('kandili_role') || 'principal';
-            const destination = (role === 'teacher') 
-                ? '../teacher/teacherdashboard.html' 
-                : '../principal/principaldashboard.html';
+            e.stopPropagation();
 
-            window.location.href = destination;
+            const targetDashboard = origin === 'principal'
+                ? '../principal/principaldashboard.html'
+                : '../teacher/teacherdashboard.html';
+
+            const referrer = document.referrer || '';
+            const isInternal = (referrer.includes('/html/') || referrer.includes('dashboard')) && !referrer.includes('login.html');
+
+            if (isInternal) {
+                window.location.href = referrer;
+            } else {
+                window.location.href = targetDashboard;
+            }
         });
     }
 
+    // 4. Refresh button handler
     const refreshBtn = document.getElementById('navRefreshBtn');
     if (refreshBtn) {
-        refreshBtn.addEventListener('click', () => {
+        refreshBtn.removeAttribute('onclick');
+        refreshBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             window.location.reload();
         });
     }
 }
 
-    document.getElementById('navRefreshBtn')?.addEventListener('click', () => {
-        window.location.reload();
-    });
-}
-
-function renderNotificationItems() {
-    const listContainer = document.getElementById('notificationListContainer');
-    if (!listContainer) return;
-
-    if (notifications.length === 0) {
-        listContainer.innerHTML = `
-            <div class="notification-empty-state">
-                <i class="far fa-bell-slash"></i>
-                <p>No activity notifications at this time.</p>
-            </div>
-        `;
-        return;
-    }
-
-    listContainer.innerHTML = notifications.map(notif => `
-        <div class="notification-item ${notif.unread ? 'unread' : ''}" data-id="${notif.id}">
-            <div class="notification-icon-wrapper ${notif.theme}">
-                <i class="${notif.icon}"></i>
-            </div>
-            <div class="notification-content">
-                <div class="notification-title">${notif.title}</div>
-                <p class="notification-text">${notif.text}</p>
-            </div>
-            <span class="notification-time">${notif.time}</span>
-        </div>
-    `).join('');
-
-    // Clicking an item marks it as read
-    listContainer.querySelectorAll('.notification-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const id = item.getAttribute('data-id');
-            const target = notifications.find(n => n.id === id);
-            if (target && target.unread) {
-                target.unread = false;
-                renderNotificationItems();
-                updateBadges();
-            }
-        });
-    });
-}
-
-function updateBadges() {
-    const unreadCount = notifications.filter(n => n.unread).length;
-    const topBadge = document.getElementById('unreadCountBadge');
-    const sideBadge = document.getElementById('sidebarNotificationBadge');
-
-    [topBadge, sideBadge].forEach(badge => {
-        if (badge) {
-            badge.textContent = unreadCount;
-            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
-        }
-    });
-}
-
+/* ==========================================================================
+   2. Authentication & Logout
+   ========================================================================== */
 function initLogoutHandler() {
     document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
@@ -161,33 +103,103 @@ function initLogoutHandler() {
     });
 }
 
-function handleRoleAwareBack(e) {
-    if (e) e.preventDefault();
+/* ==========================================================================
+   3. Notifications Feed & Interactions
+   ========================================================================== */
+const notificationsData = [
+    {
+        id: 'notif-1',
+        icon: 'fa-triangle-exclamation',
+        iconType: 'warning',
+        title: 'Workload Threshold Warning (Overload Risk)',
+        message: 'Faculty entry TCH-012 has reached 48.0 hrs/wk, exceeding Magna Carta guidelines by 8.0 hours. Task rebalance is recommended.',
+        time: '15 minutes ago',
+        unread: true
+    },
+    {
+        id: 'notif-2',
+        icon: 'fa-clipboard-check',
+        iconType: 'success',
+        title: 'eSF7 Teaching Load Approved',
+        message: 'Mid-Year class schedule upload for Grade 2 (ROVCMS) has been approved and logged into DepEd official records.',
+        time: '2 hours ago',
+        unread: true
+    },
+    {
+        id: 'notif-3',
+        icon: 'fa-heartbeat',
+        iconType: 'danger',
+        title: 'Pulse Check-in Response Flagged',
+        message: 'Anonymized MBI-ES subscale flags high Emotional Exhaustion (EE: 31/54). Rest buffer protocol suggested.',
+        time: '5 hours ago',
+        unread: true
+    },
+    {
+        id: 'notif-4',
+        icon: 'fa-shield-halved',
+        iconType: 'info',
+        title: 'System Audit Trail Logged',
+        message: 'Master timetable optimization report exported and archived for statutory verification.',
+        time: 'Yesterday, 4:15 PM',
+        unread: false
+    }
+];
 
-    // 1. Check if the user navigated from a teacher page via browser referrer
-    if (document.referrer && document.referrer.includes('/teacher/')) {
-        window.location.href = '../teacher/teacherdashboard.html';
-        return;
+function initNotificationFeed() {
+    const listContainer = document.getElementById('notificationListContainer');
+    const markAllBtn = document.getElementById('markAllReadBtn');
+
+    function renderFeed() {
+        if (!listContainer) return;
+
+        const unreadCount = notificationsData.filter(n => n.unread).length;
+        const topBadge = document.getElementById('unreadCountBadge');
+        const sidebarBadge = document.getElementById('sidebarNotificationBadge');
+
+        if (topBadge) topBadge.textContent = unreadCount;
+        if (sidebarBadge) sidebarBadge.textContent = unreadCount;
+
+        if (notificationsData.length === 0) {
+            listContainer.innerHTML = `
+                <div class="empty-state-notice">
+                    <i class="fas fa-bell-slash"></i>
+                    <p>No notifications at this time.</p>
+                </div>
+            `;
+            return;
+        }
+
+        listContainer.innerHTML = notificationsData.map(item => `
+            <div class="notification-item ${item.unread ? 'unread' : ''}" data-id="${item.id}">
+                <div class="notification-icon-box ${item.iconType}">
+                    <i class="fas ${item.icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-item-header">
+                        <span class="notification-title">${item.title}</span>
+                        <span class="notification-timestamp">${item.time}</span>
+                    </div>
+                    <p class="notification-text">${item.message}</p>
+                </div>
+            </div>
+        `).join('');
+
+        listContainer.querySelectorAll('.notification-item').forEach(el => {
+            el.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const notif = notificationsData.find(n => n.id === id);
+                if (notif && notif.unread) {
+                    notif.unread = false;
+                    renderFeed();
+                }
+            });
+        });
     }
 
-    // 2. Check if the user navigated from a principal page
-    if (document.referrer && document.referrer.includes('/principal/')) {
-        window.location.href = '../principal/principaldashboard.html';
-        return;
-    }
+    markAllBtn?.addEventListener('click', () => {
+        notificationsData.forEach(n => n.unread = false);
+        renderFeed();
+    });
 
-    // 3. Check session/local storage with all common role keys
-    const detectedRole = (
-        sessionStorage.getItem('kandili_role') ||
-        localStorage.getItem('kandili_role') ||
-        sessionStorage.getItem('role') ||
-        localStorage.getItem('role') ||
-        ''
-    ).toLowerCase();
-
-    if (detectedRole === 'teacher') {
-        window.location.href = '../teacher/teacherdashboard.html';
-    } else {
-        window.location.href = '../principal/principaldashboard.html';
-    }
+    renderFeed();
 }

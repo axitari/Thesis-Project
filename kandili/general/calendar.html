@@ -12,7 +12,7 @@
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Sorted Stylesheets -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="../../css/general/general.css">
     <link rel="stylesheet" href="../../css/general/calendar.css">
     <style>
@@ -63,36 +63,47 @@
 </head>
 <body class="dashboard-body calendar-page-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav" id="dynamicSidebarNav">
-                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                <a href="../teacher/teacherdashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </a>
-                <a href="calendar.html" class="app-sidebar-link active">
-                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                <a href="calendar.html" class="app-sidebar-link active" id="navCalendarLink">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="notification.html" class="app-sidebar-link">
-                    <i class="fas fa-bell"></i> Notifications
+                <a href="notification.html" class="app-sidebar-link" id="navNotificationsLink">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="message.html" class="app-sidebar-link" id="navMessagesLink">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
-                <a href="history.html" class="app-sidebar-link">
-                    <i class="fas fa-history"></i> History
+                <a href="history.html" class="app-sidebar-link" id="navHistoryLink">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
                 </a>
-                <a href="settings.html" class="app-sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="settings.html" class="app-sidebar-link" id="navSettingsLink">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
                 </a>
 
                 <hr class="sidebar-divider">
 
                 <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -102,32 +113,17 @@
             <!-- TOP NAVBAR -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <button class="nav-back-pill" 
-                            type="button" 
-                            id="navBackBtn" 
-                            onclick="(function(){
-                                const params = new URLSearchParams(window.location.search);
-                                const origin = params.get('origin');
-                                if (origin === 'teacher') {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                } else if (origin === 'principal') {
-                                    window.location.href = '../principal/principaldashboard.html';
-                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                } else if (window.history.length > 1) {
-                                    window.history.back();
-                                } else {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                }
-                            })()" 
-                            aria-label="Go Back">
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button class="nav-back-pill" type="button" id="navBackBtn" aria-label="Go Back">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
                     <div class="theme-nav__title">Master Calendar &bull; Elementary School</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <span class="theme-nav__date" id="navDateDisplay"><i class="far fa-calendar-alt"></i> September 16, 2026</span>
+                    <span class="theme-nav__date" id="navDateDisplay"><i class="far fa-calendar-alt"></i> October 13, 2026</span>
                     <button class="theme-nav__refresh" id="navRefreshBtn" type="button">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
@@ -140,36 +136,110 @@
                 <div class="calendar-welcome-card">
                     <div class="welcome-text">
                         <h2><i class="fas fa-calendar-day text-blue"></i> Institutional Master Schedule</h2>
-                        <p>DepEd ROVCMS elementary activities, classroom observations, and advisory schedules.</p>
+                        <p>DepEd school activities, statutory submission deadlines, and InSET events for SY 2026–2027.</p>
                     </div>
-                    <div class="calendar-badge-pill">
-                        <i class="fas fa-clock"></i> Academic Year 2026–2027
+                    <div class="hero-right">
+                        <span class="role-pill" id="userRoleBadge">
+                            <i class="fas fa-user-shield"></i> Active Role: Loading...
+                        </span>
                     </div>
                 </div>
 
-                <!-- CALENDAR MAIN INTERFACE -->
-                <section class="card calendar-main-card">
-                    <div class="calendar-header">
-                        <div class="month-nav">
-                            <button id="prevMonthBtn" class="btn-outline-sm" type="button" aria-label="Previous Month">
+                <!-- MAIN WORKSPACE CONTAINER -->
+                <section class="calendar-workspace">
+                    
+                    <!-- CALENDAR CONTROLS & HEADER -->
+                    <div class="calendar-control-bar">
+                        <div class="month-selector">
+                            <button id="prevMonthBtn" class="btn-icon" type="button" aria-label="Previous Month">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <h2 id="monthLabel">September 2026</h2>
-                            <button id="nextMonthBtn" class="btn-outline-sm" type="button" aria-label="Next Month">
+                            <h2 id="monthLabel">October 2026</h2>
+                            <button id="nextMonthBtn" class="btn-icon" type="button" aria-label="Next Month">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
                         <div class="calendar-actions">
                             <button id="todayBtn" class="btn-outline-sm" type="button">Today</button>
                             <button id="addEventBtn" class="btn-primary" type="button">
-                                <i class="fas fa-plus"></i> Add Event / Appointment
+                                <i class="fas fa-plus"></i> Add Event
                             </button>
                         </div>
                     </div>
 
-                    <div class="calendar-body">
-                        <div class="calendar-grid-container">
-                            <div class="calendar-weekdays">
+                    <!-- INLINE CREATION DRAWER (SLIDES DOWN CLEANLY) -->
+                    <div id="inlineEventPanel" class="inline-entry-panel hidden">
+                        <div class="panel-header">
+                            <div>
+                                <h3 id="panelTitle">Create Schedule Entry</h3>
+                                <p id="panelSubtitle">Fill in the fields below to schedule a calendar item.</p>
+                            </div>
+                            <span class="badge-entry-scope" id="scopeBadge">Institutional</span>
+                        </div>
+
+                        <form id="scheduleForm" novalidate>
+                            <input type="hidden" id="entryRecordId">
+
+                            <div class="form-row">
+                                <div class="form-field flex-2">
+                                    <label for="entryTitle" id="titleInputLabel">Event / Task Title</label>
+                                    <input type="text" id="entryTitle" placeholder="e.g., Midyear InSET Training, Lesson Preparation..." required />
+                                </div>
+                                <div class="form-field flex-1">
+                                    <label for="entryCategory">Category</label>
+                                    <select id="entryCategory"></select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <!-- Target audience field is only available to Principals -->
+                                <div class="form-field flex-2" id="targetAudienceContainer">
+                                    <label for="entryTarget">Target Audience / Teacher</label>
+                                    <select id="entryTarget">
+                                        <option value="All Faculty">All Faculty (Schoolwide)</option>
+                                        <option value="Grades 1-3 Teachers">Grades 1–3 Teachers (Self-Contained)</option>
+                                        <option value="Grades 4-6 Teachers">Grades 4–6 Teachers (Departmental)</option>
+                                        <option value="Department Heads">Department Heads</option>
+                                        <option value="Teacher Juan Dela Cruz (TCH-012)">Specific: Juan Dela Cruz (TCH-012)</option>
+                                        <option value="Teacher Maria Santos (TCH-003)">Specific: Maria Santos (TCH-003)</option>
+                                        <option value="Teacher Ramon Garcia (TCH-008)">Specific: Ramon Garcia (TCH-008)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-field flex-1">
+                                    <label for="entryStartTime">Start Time</label>
+                                    <input type="time" id="entryStartTime" value="08:00" />
+                                </div>
+
+                                <div class="form-field flex-1">
+                                    <label for="entryDuration">Duration</label>
+                                    <select id="entryDuration">
+                                        <option value="30">30 minutes</option>
+                                        <option value="60" selected>1 hour</option>
+                                        <option value="120">2 hours</option>
+                                        <option value="240">Half Day (4 hrs)</option>
+                                        <option value="480">Full Day (8 hrs)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="panel-button-row">
+                                <div class="left-buttons">
+                                    <button type="submit" class="btn-primary" id="saveEntryBtn">Save Entry</button>
+                                    <button type="button" class="btn-secondary" id="cancelEntryBtn">Cancel</button>
+                                </div>
+                                <button type="button" class="btn-danger hidden" id="deleteEntryBtn">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- CALENDAR INTERACTIVE GRID + DETAILS SIDEBAR -->
+                    <div class="calendar-layout">
+                        <!-- THE 7-COLUMN MONTH GRID -->
+                        <div class="grid-section">
+                            <div class="weekday-labels">
                                 <div>Sun</div>
                                 <div>Mon</div>
                                 <div>Tue</div>
@@ -178,91 +248,81 @@
                                 <div>Fri</div>
                                 <div>Sat</div>
                             </div>
-                            <div id="calendarGrid" class="calendar-grid"></div>
+                            <div id="calendarMonthGrid" class="month-cells-grid"></div>
                         </div>
 
-                        <!-- CALENDAR SIDEBAR -->
-                        <aside class="calendar-sidebar">
-                            <div class="sidebar-card">
-                                <div class="sidebar-card-title">Selected Day</div>
-                                <div id="selectedDateLabel" class="sidebar-date">Select a date</div>
-                                <div id="selectedEvents" class="selected-events-list"></div>
+                        <!-- DETAILS INSPECTOR (RIGHT PANEL) -->
+                        <aside class="details-section">
+                            <div class="inspector-card">
+                                <span class="inspector-label">Selected Date</span>
+                                <h3 id="inspectorDateText" class="inspector-date">October 13, 2026</h3>
+                                <div id="inspectorEventsList" class="inspector-list">
+                                    <!-- Populated dynamically -->
+                                </div>
                             </div>
 
-                            <div class="sidebar-card">
-                                <div class="sidebar-card-title">This Month</div>
-                                <div class="stat-row">
-                                    <span>Total Events</span>
-                                    <strong id="monthEventCount">0</strong>
+                            <div class="inspector-card">
+                                <span class="inspector-label">Month Overview</span>
+                                <div class="overview-stat">
+                                    <span>Total Scheduled</span>
+                                    <strong id="statTotalMonth">0</strong>
+                                </div>
+                                <div class="overview-stat">
+                                    <span>Schoolwide Activities</span>
+                                    <strong id="statSchoolwide">0</strong>
                                 </div>
                                 <div class="stat-row">
-                                    <span>Schoolwide</span>
-                                    <strong id="schoolCount">0</strong>
-                                </div>
-                                <div class="stat-row">
-                                    <span>Appointments</span>
+                                    <span>Department</span>
                                     <strong id="deptCount">0</strong>
                                 </div>
                             </div>
                         </aside>
                     </div>
 
-                    <!-- EVENT MODAL / FORM WITH CONSISTENT BOX SIZING -->
+                    <!-- EVENT MODAL / FORM -->
                     <form id="eventForm" class="event-form hidden" novalidate>
-                        <div class="form-header-row" style="margin-bottom: 1.25rem;">
-                            <h4 id="formHeader" style="margin: 0; font-size: 1.1rem; color: #0f172a;">Create Schedule Entry</h4>
-                            <span class="badge-role-tag" id="calendarRoleBadge">DepEd Entry</span>
+                        <div class="form-header-row">
+                            <h4 id="formHeader">Create New Event</h4>
+                            <span class="badge-role-tag">DepEd Calendar Entry</span>
                         </div>
                         
                         <input type="hidden" id="eventId">
 
-                        <!-- ROW 1: Title and Target Date -->
-                        <div class="field-row-two">
-                            <div class="field-group">
-                                <label for="eventTitle">Event / Activity Title <span style="color:#dc2626;">*</span></label>
-                                <input id="eventTitle" name="eventTitle" type="text" class="form-control" placeholder="e.g., Classroom Observation, LAC Session, Advisory Meeting" required>
-                            </div>
-                            <div class="field-group">
-                                <label for="eventTargetDate">Schedule Date <span style="color:#dc2626;">*</span></label>
-                                <input id="eventTargetDate" name="eventTargetDate" type="date" value="2026-09-16" class="form-control" required>
-                            </div>
+                        <div class="field-group">
+                            <label for="eventTitle">Event Title</label>
+                            <input id="eventTitle" name="eventTitle" type="text" class="form-control" placeholder="e.g., Division Evaluation, Midyear InSET, Faculty Meeting" required>
                         </div>
 
-                        <!-- ROW 2: Category and Elementary Target Attendee -->
                         <div class="field-row-two">
                             <div class="field-group">
-                                <label for="eventType">Category / Scope <span style="color:#dc2626;">*</span></label>
+                                <label for="eventType">Category / Scope</label>
                                 <select id="eventType" name="eventType" class="form-control">
-                                    <option value="schoolwide">Schoolwide Assembly / InSET</option>
-                                    <option value="appointment" selected>1-on-1 Faculty Appointment / Observation</option>
-                                    <option value="department">Elementary Department / LAC Session</option>
-                                    <option value="deadline">DepEd Form / eSF7 Submission</option>
+                                    <option value="schoolwide">Schoolwide Activity</option>
+                                    <option value="department">Department / LAC Session</option>
+                                    <option value="deadline">DepEd Statutory Deadline</option>
+                                    <option value="evaluation">Monitoring &amp; Evaluation</option>
                                 </select>
                             </div>
 
                             <div class="field-group">
-                                <label for="targetAudience" id="targetAudienceLabel">Appointment / Target Faculty <span style="color:#dc2626;">*</span></label>
+                                <label for="targetAudience">Target Audience</label>
                                 <select id="targetAudience" name="targetAudience" class="form-control">
-                                    <option value="All Faculty">All Faculty (Whole School)</option>
-                                    <option value="Grades 1-3 (Primary)">Grades 1–3 Primary Faculty (Self-Contained)</option>
-                                    <option value="Grades 4-6 (Intermediate)">Grades 4–6 Intermediate Faculty (Departmentalized)</option>
-                                    <option value="Sarah J. Cruz (TCH-012)">Sarah J. Cruz (Grade 2 Adviser)</option>
-                                    <option value="Juan M. Santos (TCH-015)">Juan M. Santos (Science Specialist)</option>
-                                    <option value="Maria L. Reyes (TCH-008)">Maria L. Reyes (Grade 1 Adviser)</option>
-                                    <option value="Antonio G. Cruz (TCH-012)">Antonio G. Cruz (Grade 6 Adviser)</option>
-                                    <option value="SDRRM & Feeding Coordinators">Ancillary Coordinators (SDRRM / 4Ps)</option>
+                                    <option value="All Faculty">All Faculty (Schoolwide)</option>
+                                    <option value="Junior High School">Junior High School</option>
+                                    <option value="Senior High School">Senior High School</option>
+                                    <option value="Department Heads">Department Heads</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- ROW 3: Times and Duration -->
-                        <div class="field-row-two">
+                        <div class="field-row-three">
                             <div class="field-group">
-                                <label for="eventStartTime">Time Window <span style="color:#dc2626;">*</span></label>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                                    <input id="eventStartTime" name="eventStartTime" type="time" value="08:00" class="form-control">
-                                    <input id="eventEndTime" name="eventEndTime" type="time" value="09:30" class="form-control">
-                                </div>
+                                <label for="eventStartTime">Start Time</label>
+                                <input id="eventStartTime" name="eventStartTime" type="time" value="08:00" class="form-control">
+                            </div>
+                            <div class="field-group">
+                                <label for="eventEndTime">End Time</label>
+                                <input id="eventEndTime" name="eventEndTime" type="time" value="12:00" class="form-control">
                             </div>
                             <div class="field-group">
                                 <label for="eventDaysSpan">Duration (Days)</label>
@@ -270,17 +330,12 @@
                             </div>
                         </div>
 
-                        <!-- ACTIONS -->
-                        <div class="field-actions" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-                            <div class="btn-group-left" style="display: flex; gap: 0.75rem;">
-                                <button type="submit" id="saveEventBtn" class="btn-primary" style="padding: 0.65rem 1.5rem;">
-                                    <i class="fas fa-check"></i> Save Schedule
-                                </button>
-                                <button id="cancelEventBtn" type="button" class="btn-outline" style="padding: 0.65rem 1.25rem;">
-                                    Cancel
-                                </button>
+                        <div class="field-actions">
+                            <div class="btn-group-left">
+                                <button type="submit" id="saveEventBtn" class="btn-primary">Save Event</button>
+                                <button id="cancelEventBtn" type="button" class="btn-outline">Cancel</button>
                             </div>
-                            <button id="deleteEventBtn" type="button" class="btn-delete hidden" style="padding: 0.65rem 1.25rem;">
+                            <button id="deleteEventBtn" type="button" class="btn-delete hidden">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
@@ -300,7 +355,7 @@
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Scheduler v2.2.0</span>
+                    <span class="version-label">Scheduler v2.1.0</span>
                 </div>
             </footer>
         </div>
@@ -310,6 +365,6 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
     <script src="../../js/logout.js"></script>
-    <script src="../../js/calendarLogic.js"></script>
+    <script src="../../js/general/calendarLogic.js"></script>
 </body>
 </html>

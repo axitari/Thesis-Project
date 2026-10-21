@@ -18,36 +18,47 @@
 </head>
 <body class="dashboard-body settings-page-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav" id="dynamicSidebarNav">
-                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                <a href="../teacher/teacherdashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </a>
-                <a href="settings.html" class="app-sidebar-link active">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="../general/settings.html?origin=admin" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
                 </a>
-                <a href="notification.html" class="app-sidebar-link">
-                    <i class="fas fa-bell"></i> Notifications
+                <a href="notification.html" class="app-sidebar-link" id="navNotificationsLink">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="message.html" class="app-sidebar-link">
-                    <i class="fas fa-envelope"></i> Messages
+                <a href="message.html" class="app-sidebar-link" id="navMessagesLink">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
                 </a>
-                <a href="calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                <a href="calendar.html" class="app-sidebar-link" id="navCalendarLink">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="history.html" class="app-sidebar-link">
-                    <i class="fas fa-history"></i> History
+                <a href="history.html" class="app-sidebar-link" id="navHistoryLink">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
                 </a>
 
                 <hr class="sidebar-divider" />
 
                 <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -57,32 +68,35 @@
             <!-- TOP NAVBAR -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
                     <button class="nav-back-pill" 
                             type="button" 
                             id="navBackBtn" 
+                            aria-label="Go Back"
                             onclick="(function(){
                                 const params = new URLSearchParams(window.location.search);
-                                const origin = params.get('origin');
-                                if (origin === 'teacher') {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                } else if (origin === 'principal') {
+                                const origin = params.get('origin') || sessionStorage.getItem('kandili_user_role') || '';
+                                
+                                if (origin.toLowerCase().includes('admin')) {
+                                    window.location.href = '../admin/admindashboard.html';
+                                } else if (origin.toLowerCase().includes('principal')) {
                                     window.location.href = '../principal/principaldashboard.html';
-                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                } else if (window.history.length > 1) {
-                                    window.history.back();
                                 } else {
-                                    window.location.href = '../principal/principaldashboard.html';
+                                    window.location.href = '../teacher/teacherdashboard.html';
                                 }
-                            })()" 
-                            aria-label="Go Back">
+                            })()">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
                     <div class="theme-nav__title">Account Settings</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <span class="theme-nav__date" id="settingsDateDisplay"><i class="far fa-calendar-alt"></i> Loading date...</span>
+                    <span class="theme-nav__date" id="settingsDateDisplay"><i class="far fa-calendar-alt"></i> October 14, 2026</span>
                     <button class="theme-nav__refresh" id="navRefreshBtn" type="button">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
@@ -244,7 +258,7 @@
                             </div>
                             <div class="info-metric-item">
                                 <span class="metric-label">Last Active Session</span>
-                                <span class="metric-val" id="lastLogin">September 16, 2026 | Active</span>
+                                <span class="metric-val" id="lastLogin">October 14, 2026 | Active</span>
                             </div>
                             <div class="info-metric-item">
                                 <span class="metric-label">System Tenure</span>
@@ -308,6 +322,7 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
     <script src="../../js/logout.js"></script>
-    <script src="../../js/general/settingsLogic.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
+    <script src="../../js/settingsLogic.js"></script>
 </body>
 </html>

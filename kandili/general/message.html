@@ -18,36 +18,48 @@
 </head>
 <body class="dashboard-body message-page-body">
 
-    <div class="app-shell">
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar no-print">
+        <aside class="app-sidebar no-print" id="appSidebar">
             <div class="app-sidebar-brand">
-                <span>🏫 Kandili Workspace</span>
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
             </div>
             <nav class="app-sidebar-nav" id="dynamicSidebarNav">
-                <a href="../principal/principaldashboard.html" class="app-sidebar-link" id="navDashboardLink">
-                    <i class="fas fa-chart-line"></i> Dashboard
+                <a href="../teacher/teacherdashboard.html" class="app-sidebar-link" id="navDashboardLink">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </a>
-                <a href="message.html" class="app-sidebar-link active">
-                    <i class="fas fa-envelope"></i> Messages <span id="sidebarUnreadBadge" class="sidebar-badge">0</span>
+                <a href="message.html" class="app-sidebar-link active" id="navMessagesLink">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                    <span id="sidebarUnreadBadge" class="sidebar-badge">0</span>
                 </a>
-                <a href="notification.html" class="app-sidebar-link">
-                    <i class="fas fa-bell"></i> Notifications
+                <a href="notification.html" class="app-sidebar-link" id="navNotificationsLink">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                 </a>
-                <a href="calendar.html" class="app-sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Master Calendar
+                <a href="calendar.html" class="app-sidebar-link" id="navCalendarLink">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Master Calendar</span>
                 </a>
-                <a href="history.html" class="app-sidebar-link">
-                    <i class="fas fa-history"></i> History
+                <a href="history.html" class="app-sidebar-link" id="navHistoryLink">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
                 </a>
-                <a href="settings.html" class="app-sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
+                <a href="settings.html" class="app-sidebar-link" id="navSettingsLink">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
                 </a>
 
                 <hr class="sidebar-divider">
 
                 <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
                 </a>
             </nav>
         </aside>
@@ -57,25 +69,13 @@
             <!-- TOP NAVBAR -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <button class="nav-back-pill" 
-                            type="button" 
-                            id="navBackBtn" 
-                            onclick="(function(){
-                                const params = new URLSearchParams(window.location.search);
-                                const origin = params.get('origin');
-                                if (origin === 'teacher') {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                } else if (origin === 'principal') {
-                                    window.location.href = '../principal/principaldashboard.html';
-                                } else if (document.referrer && document.referrer.toLowerCase().includes('teacher')) {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                } else if (window.history.length > 1) {
-                                    window.history.back();
-                                } else {
-                                    window.location.href = '../teacher/teacherdashboard.html';
-                                }
-                            })()" 
-                            aria-label="Go Back">
+                    <!-- BURGER MENU TOGGLE -->
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
+                    <button class="nav-back-pill" type="button" id="navBackBtn" aria-label="Go Back">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
@@ -98,10 +98,10 @@
                 <div class="message-welcome-card">
                     <div class="welcome-text">
                         <h2><i class="fas fa-comments text-blue"></i> Messages Center</h2>
-                        <p>Keep communication flowing between teachers, department heads, and school leadership.</p>
+                        <p>Keep communication flowing between teachers, department heads, and school leadership.[cite: 17]</p>
                     </div>
                     <div class="message-stats-pill">
-                        <i class="fas fa-shield-halved"></i> Internal DepEd Network
+                        <i class="fas fa-shield-halved"></i> Internal DepEd Network[cite: 17]
                     </div>
                 </div>
 
@@ -117,7 +117,7 @@
                                     <span id="inboxTabBadge" class="tab-counter-badge">0</span>
                                 </button>
                                 <button id="tabSentBtn" class="tab-btn" type="button">
-                                    <i class="fas fa-paper-plane"></i> Sent
+                                    <i class="fas fa-paper-plane"></i> Sent[cite: 17]
                                 </button>
                             </div>
                             <button class="btn-refresh-sm" id="refreshMessagesBtn" type="button" title="Reload messages">
@@ -129,7 +129,7 @@
                             <div class="message-list" id="messageListContainer">
                                 <div class="message-empty-placeholder">
                                     <i class="fas fa-spinner fa-spin"></i>
-                                    <p>Loading messages...</p>
+                                    <p>Loading messages...[cite: 17]</p>
                                 </div>
                             </div>
                         </div>
@@ -139,18 +139,18 @@
                     <section class="card message-card">
                         <div class="compose-header">
                             <h3><i class="fas fa-pen-to-square text-blue"></i> Compose Message</h3>
-                            <span class="badge-role-tag">Official Channel</span>
+                            <span class="badge-role-tag">Official Channel[cite: 17]</span>
                         </div>
 
                         <form class="message-form" id="composeMessageForm">
                             <div class="form-group">
                                 <label for="recipient">To (Recipient)</label>
                                 <select id="recipient" class="form-control" required>
-                                    <option value="">-- Select Recipient --</option>
-                                    <option value="principal">School Head (Principal Mylene Panaguiton)</option>
-                                    <option value="dept_ap">Araling Panlipunan Coordinator</option>
-                                    <option value="dept_sci">Science Coordinator</option>
-                                    <option value="all_faculty">All Faculty Broadcast</option>
+                                    <option value="">-- Select Recipient --[cite: 17]</option>
+                                    <option value="principal">School Head (Principal Mylene Panaguiton)[cite: 17]</option>
+                                    <option value="dept_ap">Araling Panlipunan Coordinator[cite: 17]</option>
+                                    <option value="dept_sci">Science Coordinator[cite: 17]</option>
+                                    <option value="all_faculty">All Faculty Broadcast[cite: 17]</option>
                                 </select>
                             </div>
 
@@ -167,7 +167,7 @@
                             <div class="compose-actions">
                                 <button type="reset" class="btn-outline">Clear</button>
                                 <button type="submit" class="btn-primary">
-                                    <i class="fas fa-paper-plane"></i> Send Message
+                                    <i class="fas fa-paper-plane"></i> Send Message[cite: 17]
                                 </button>
                             </div>
                         </form>
@@ -185,14 +185,14 @@
                         <div class="modal-body message-modal-content">
                             <div class="modal-meta-bar">
                                 <div>
-                                    <div id="modalSender" class="modal-sender-title">From: Principal</div>
-                                    <div id="modalRole" class="modal-role-subtitle">School Leadership</div>
+                                    <div id="modalSender" class="modal-sender-title">From: Principal[cite: 17]</div>
+                                    <div id="modalRole" class="modal-role-subtitle">School Leadership[cite: 17]</div>
                                 </div>
-                                <div id="modalTime" class="modal-time-stamp">Time</div>
+                                <div id="modalTime" class="modal-time-stamp">Time[cite: 17]</div>
                             </div>
                             <div id="modalSubject" class="modal-subject-preview"></div>
                             <div id="modalBody" class="modal-body-text">
-                                Message content...
+                                Message content...[cite: 17]
                             </div>
                             <div class="modal-actions">
                                 <button type="button" class="btn-outline" id="closeModalBtn">Close</button>
@@ -206,15 +206,15 @@
             <!-- FOOTER -->
             <footer class="app-dashboard-footer no-print">
                 <div class="footer-block">
-                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; Secure Messaging Node</span>
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong> &bull; Secure Messaging Node[cite: 17]</span>
                 </div>
                 <div class="footer-block">
                     <span class="compliance-badge">
-                        <i class="fas fa-shield-check"></i> End-to-End Logged &bull; DepEd R.A. 10173
+                        <i class="fas fa-shield-check"></i> End-to-End Logged &bull; DepEd R.A. 10173[cite: 17]
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Comm Hub v2.1.0</span>
+                    <span class="version-label">Comm Hub v2.1.0[cite: 17]</span>
                 </div>
             </footer>
         </div>
@@ -224,6 +224,7 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
     <script src="../../js/logout.js"></script>
-    <script src="../../js/general/messageLogic.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
+    <script src="../../js/messageLogic.js"></script>
 </body>
 </html>
