@@ -15,6 +15,51 @@
     <!-- Sorted Stylesheets -->
     <link rel="stylesheet" href="../../css/general/general.css">
     <link rel="stylesheet" href="../../css/general/calendar.css">
+    <style>
+        /* Uniform Form Layout & Elementary Custom Badges */
+        .event-form .field-row-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .event-form .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .event-form .form-control {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            background: #ffffff;
+            box-sizing: border-box;
+            height: 42px;
+        }
+        .event-form .form-control:focus {
+            border-color: #0038A8;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 56, 168, 0.12);
+        }
+        .badge-target-attendee {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            margin-top: 0.2rem;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .event-form .field-row-two {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body class="dashboard-body calendar-page-body">
 
@@ -79,7 +124,7 @@
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
-                    <div class="theme-nav__title">Master Calendar</div>
+                    <div class="theme-nav__title">Master Calendar &bull; Elementary School</div>
                 </div>
                 <div class="theme-nav__actions">
                     <span class="theme-nav__date" id="navDateDisplay"><i class="far fa-calendar-alt"></i> September 16, 2026</span>
@@ -95,7 +140,7 @@
                 <div class="calendar-welcome-card">
                     <div class="welcome-text">
                         <h2><i class="fas fa-calendar-day text-blue"></i> Institutional Master Schedule</h2>
-                        <p>DepEd school activities, statutory submission deadlines, and InSET events for SY 2026–2027.</p>
+                        <p>DepEd ROVCMS elementary activities, classroom observations, and advisory schedules.</p>
                     </div>
                     <div class="calendar-badge-pill">
                         <i class="fas fa-clock"></i> Academic Year 2026–2027
@@ -117,7 +162,7 @@
                         <div class="calendar-actions">
                             <button id="todayBtn" class="btn-outline-sm" type="button">Today</button>
                             <button id="addEventBtn" class="btn-primary" type="button">
-                                <i class="fas fa-plus"></i> Add Event
+                                <i class="fas fa-plus"></i> Add Event / Appointment
                             </button>
                         </div>
                     </div>
@@ -155,57 +200,69 @@
                                     <strong id="schoolCount">0</strong>
                                 </div>
                                 <div class="stat-row">
-                                    <span>Department</span>
+                                    <span>Appointments</span>
                                     <strong id="deptCount">0</strong>
                                 </div>
                             </div>
                         </aside>
                     </div>
 
-                    <!-- EVENT MODAL / FORM -->
+                    <!-- EVENT MODAL / FORM WITH CONSISTENT BOX SIZING -->
                     <form id="eventForm" class="event-form hidden" novalidate>
-                        <div class="form-header-row">
-                            <h4 id="formHeader">Create New Event</h4>
-                            <span class="badge-role-tag">DepEd Calendar Entry</span>
+                        <div class="form-header-row" style="margin-bottom: 1.25rem;">
+                            <h4 id="formHeader" style="margin: 0; font-size: 1.1rem; color: #0f172a;">Create Schedule Entry</h4>
+                            <span class="badge-role-tag" id="calendarRoleBadge">DepEd Entry</span>
                         </div>
                         
                         <input type="hidden" id="eventId">
 
-                        <div class="field-group">
-                            <label for="eventTitle">Event Title</label>
-                            <input id="eventTitle" name="eventTitle" type="text" class="form-control" placeholder="e.g., Division Evaluation, Midyear InSET, Faculty Meeting" required>
-                        </div>
-
+                        <!-- ROW 1: Title and Target Date -->
                         <div class="field-row-two">
                             <div class="field-group">
-                                <label for="eventType">Category / Scope</label>
+                                <label for="eventTitle">Event / Activity Title <span style="color:#dc2626;">*</span></label>
+                                <input id="eventTitle" name="eventTitle" type="text" class="form-control" placeholder="e.g., Classroom Observation, LAC Session, Advisory Meeting" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="eventTargetDate">Schedule Date <span style="color:#dc2626;">*</span></label>
+                                <input id="eventTargetDate" name="eventTargetDate" type="date" value="2026-09-16" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <!-- ROW 2: Category and Elementary Target Attendee -->
+                        <div class="field-row-two">
+                            <div class="field-group">
+                                <label for="eventType">Category / Scope <span style="color:#dc2626;">*</span></label>
                                 <select id="eventType" name="eventType" class="form-control">
-                                    <option value="schoolwide">Schoolwide Activity</option>
-                                    <option value="department">Department / LAC Session</option>
-                                    <option value="deadline">DepEd Statutory Deadline</option>
-                                    <option value="evaluation">Monitoring &amp; Evaluation</option>
+                                    <option value="schoolwide">Schoolwide Assembly / InSET</option>
+                                    <option value="appointment" selected>1-on-1 Faculty Appointment / Observation</option>
+                                    <option value="department">Elementary Department / LAC Session</option>
+                                    <option value="deadline">DepEd Form / eSF7 Submission</option>
                                 </select>
                             </div>
 
                             <div class="field-group">
-                                <label for="targetAudience">Target Audience</label>
+                                <label for="targetAudience" id="targetAudienceLabel">Appointment / Target Faculty <span style="color:#dc2626;">*</span></label>
                                 <select id="targetAudience" name="targetAudience" class="form-control">
-                                    <option value="All Faculty">All Faculty (Schoolwide)</option>
-                                    <option value="Junior High School">Junior High School</option>
-                                    <option value="Senior High School">Senior High School</option>
-                                    <option value="Department Heads">Department Heads</option>
+                                    <option value="All Faculty">All Faculty (Whole School)</option>
+                                    <option value="Grades 1-3 (Primary)">Grades 1–3 Primary Faculty (Self-Contained)</option>
+                                    <option value="Grades 4-6 (Intermediate)">Grades 4–6 Intermediate Faculty (Departmentalized)</option>
+                                    <option value="Sarah J. Cruz (TCH-012)">Sarah J. Cruz (Grade 2 Adviser)</option>
+                                    <option value="Juan M. Santos (TCH-015)">Juan M. Santos (Science Specialist)</option>
+                                    <option value="Maria L. Reyes (TCH-008)">Maria L. Reyes (Grade 1 Adviser)</option>
+                                    <option value="Antonio G. Cruz (TCH-012)">Antonio G. Cruz (Grade 6 Adviser)</option>
+                                    <option value="SDRRM & Feeding Coordinators">Ancillary Coordinators (SDRRM / 4Ps)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="field-row-three">
+                        <!-- ROW 3: Times and Duration -->
+                        <div class="field-row-two">
                             <div class="field-group">
-                                <label for="eventStartTime">Start Time</label>
-                                <input id="eventStartTime" name="eventStartTime" type="time" value="08:00" class="form-control">
-                            </div>
-                            <div class="field-group">
-                                <label for="eventEndTime">End Time</label>
-                                <input id="eventEndTime" name="eventEndTime" type="time" value="12:00" class="form-control">
+                                <label for="eventStartTime">Time Window <span style="color:#dc2626;">*</span></label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                    <input id="eventStartTime" name="eventStartTime" type="time" value="08:00" class="form-control">
+                                    <input id="eventEndTime" name="eventEndTime" type="time" value="09:30" class="form-control">
+                                </div>
                             </div>
                             <div class="field-group">
                                 <label for="eventDaysSpan">Duration (Days)</label>
@@ -213,12 +270,17 @@
                             </div>
                         </div>
 
-                        <div class="field-actions">
-                            <div class="btn-group-left">
-                                <button type="submit" id="saveEventBtn" class="btn-primary">Save Event</button>
-                                <button id="cancelEventBtn" type="button" class="btn-outline">Cancel</button>
+                        <!-- ACTIONS -->
+                        <div class="field-actions" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div class="btn-group-left" style="display: flex; gap: 0.75rem;">
+                                <button type="submit" id="saveEventBtn" class="btn-primary" style="padding: 0.65rem 1.5rem;">
+                                    <i class="fas fa-check"></i> Save Schedule
+                                </button>
+                                <button id="cancelEventBtn" type="button" class="btn-outline" style="padding: 0.65rem 1.25rem;">
+                                    Cancel
+                                </button>
                             </div>
-                            <button id="deleteEventBtn" type="button" class="btn-delete hidden">
+                            <button id="deleteEventBtn" type="button" class="btn-delete hidden" style="padding: 0.65rem 1.25rem;">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
@@ -234,11 +296,11 @@
                 </div>
                 <div class="footer-block">
                     <span class="compliance-badge">
-                        <i class="fas fa-shield-check"></i> Statutory Sync Active &bull; DepEd Order No. 034
+                        <i class="fas fa-shield-check"></i> Elementary School Management
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Scheduler v2.1.0</span>
+                    <span class="version-label">Scheduler v2.2.0</span>
                 </div>
             </footer>
         </div>
@@ -248,6 +310,6 @@
     <script src="../../js/supabaseClient.js"></script>
     <script src="../../js/authGuard.js" data-allowed-roles="any"></script>
     <script src="../../js/logout.js"></script>
-    <script src="../../js/general/calendarLogic.js"></script>
+    <script src="../../js/calendarLogic.js"></script>
 </body>
 </html>

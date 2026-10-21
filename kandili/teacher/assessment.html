@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baseline Assessment &bull; Kandili Workspace</title>
+    <title>Trimester Assessment &bull; Kandili Workspace</title>
 
     <!-- Google Fonts & FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -91,7 +91,6 @@
             <!-- TOP NAVIGATION HEADER -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <!-- BURGER MENU TOGGLE -->
                     <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -100,23 +99,15 @@
                     <button class="nav-back-pill" 
                             type="button" 
                             id="navBackBtn" 
-                            onclick="(function(){
-                                if (document.referrer && document.referrer.toLowerCase().includes('teacherdashboard')) {
-                                    window.location.href = 'teacherdashboard.html';
-                                } else if (window.history.length > 1) {
-                                    window.history.back();
-                                } else {
-                                    window.location.href = 'teacherdashboard.html';
-                                }
-                            })()" 
+                            onclick="window.location.href='teacherdashboard.html'" 
                             aria-label="Go Back">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
-                    <div class="theme-nav__title">Diagnostic Assessment</div>
+                    <div class="theme-nav__title">Diagnostic Assessment &bull; Trimester 1</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> September 29, 2026 | 8:54 PM</span>
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> Trimester 1 Cycle (SY 2026–2027)</span>
                     <button class="theme-nav__refresh" type="button" onclick="window.location.reload();">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
@@ -129,11 +120,11 @@
                     <!-- WELCOME BANNER -->
                     <div class="assessment-welcome-card">
                         <div class="welcome-text">
-                            <h2><i class="fas fa-heartbeat text-blue"></i> Initial Wellness Baseline</h2>
-                            <p>Complete this validated diagnostic to initialize your fatigue and workload balance index[cite: 11].</p>
+                            <h2><i class="fas fa-heartbeat text-blue"></i> Trimester 1 Well-being Assessment</h2>
+                            <p>Complete this periodic diagnostic to evaluate teaching demands, ancillary duty loads, and burnout risk index.</p>
                         </div>
                         <div class="assessment-badge-pill">
-                            <i class="fas fa-shield-halved"></i> DepEd Non-Repudiation Verified
+                            <i class="fas fa-shield-halved"></i> DepEd Non-Repudiation Verified[cite: 8]
                         </div>
                     </div>
 
@@ -143,15 +134,15 @@
                         <!-- PART 1: MBI-ES -->
                         <div class="survey-section-header">
                             <span class="section-tag-pill">Part 1</span>
-                            <h3>Educator Burnout Inventory (MBI-ES)[cite: 11]</h3>
+                            <h3>Educator Burnout Inventory (MBI-ES)[cite: 8]</h3>
                         </div>
                         <p class="section-desc-note">
-                            Reflect on your personal feelings regarding instructional demands and class preparation[cite: 11].
+                            Reflect on your personal feelings regarding instructional demands and class preparation over the past trimester[cite: 8].
                         </p>
 
                         <div class="form-group question-group">
                             <label for="mbiQ1" class="question-label">
-                                <span class="q-number">1.</span> I feel emotionally drained from my work[cite: 11]. <span class="required-star">*</span>
+                                <span class="q-number">1.</span> I feel emotionally drained from my teaching and classroom responsibilities. <span class="required-star">*</span>
                             </label>
                             <select id="mbiQ1" required class="form-select">
                                 <option value="" disabled selected>Select frequency...</option>
@@ -159,7 +150,7 @@
                                 <option value="1">1 - A few times a year</option>
                                 <option value="2">2 - Once a month or less</option>
                                 <option value="3">3 - A few times a month</option>
-                                <option value="4">4 - Once a week</option>
+                                <option value="4" selected>4 - Once a week</option>
                                 <option value="5">5 - A few times a week</option>
                                 <option value="6">6 - Every day</option>
                             </select>
@@ -167,7 +158,7 @@
 
                         <div class="form-group question-group">
                             <label for="mbiQ2" class="question-label">
-                                <span class="q-number">2.</span> I feel fatigued when I get up in the morning and have to face another day on the job[cite: 11]. <span class="required-star">*</span>
+                                <span class="q-number">2.</span> I feel fatigued when I get up in the morning and have to face another instructional day[cite: 8]. <span class="required-star">*</span>
                             </label>
                             <select id="mbiQ2" required class="form-select">
                                 <option value="" disabled selected>Select frequency...</option>
@@ -176,7 +167,7 @@
                                 <option value="2">2 - Once a month</option>
                                 <option value="3">3 - A few times a month</option>
                                 <option value="4">4 - Once a week</option>
-                                <option value="5">5 - A few times a week</option>
+                                <option value="5" selected>5 - A few times a week</option>
                                 <option value="6">6 - Every day</option>
                             </select>
                         </div>
@@ -186,58 +177,69 @@
                         <!-- PART 2: NASA-TLX -->
                         <div class="survey-section-header">
                             <span class="section-tag-pill tag-purple">Part 2</span>
-                            <h3>Task Load Index (NASA-TLX)[cite: 11]</h3>
+                            <h3>Cognitive &amp; Temporal Demand (NASA-TLX)[cite: 8]</h3>
                         </div>
                         <p class="section-desc-note">
-                            Based on your typical week, please rate the cognitive and temporal pressure you encounter[cite: 11].
+                            Rate the cognitive pressure, grading demands, and time constraints you encounter weekly[cite: 8].
                         </p>
 
                         <div class="form-group range-group">
                             <div class="range-header">
                                 <label for="mentalDemandRange" class="question-label">
-                                    Mental Demand: How much thinking, deciding, and calculating is required?[cite: 11]
+                                    Mental Demand: How much thinking, analyzing, and grading is required?
                                 </label>
-                                <span class="range-val-badge" id="mentalValDisplay">50</span>
+                                <span class="range-val-badge" id="mentalValDisplay">65</span>
                             </div>
                             <div class="slider-wrapper">
-                                <span class="range-bound-label">LOW[cite: 11]</span>
-                                <input type="range" id="mentalDemandRange" min="1" max="100" value="50" class="custom-range" data-target="mentalValDisplay">
-                                <span class="range-bound-label">HIGH[cite: 11]</span>
+                                <span class="range-bound-label">LOW[cite: 8]</span>
+                                <input type="range" id="mentalDemandRange" min="1" max="100" value="65" class="custom-range" data-target="mentalValDisplay">
+                                <span class="range-bound-label">HIGH[cite: 8]</span>
                             </div>
                         </div>
 
                         <div class="form-group range-group">
                             <div class="range-header">
                                 <label for="temporalDemandRange" class="question-label">
-                                    Temporal Demand: How much time pressure do you feel during the instructional week?[cite: 11]
+                                    Temporal Demand: How much time pressure do you feel during the teaching week?
                                 </label>
-                                <span class="range-val-badge" id="temporalValDisplay">50</span>
+                                <span class="range-val-badge" id="temporalValDisplay">70</span>
                             </div>
                             <div class="slider-wrapper">
-                                <span class="range-bound-label">LOW[cite: 11]</span>
-                                <input type="range" id="temporalDemandRange" min="1" max="100" value="50" class="custom-range" data-target="temporalValDisplay">
-                                <span class="range-bound-label">HIGH[cite: 11]</span>
+                                <span class="range-bound-label">LOW[cite: 8]</span>
+                                <input type="range" id="temporalDemandRange" min="1" max="100" value="70" class="custom-range" data-target="temporalValDisplay">
+                                <span class="range-bound-label">HIGH[cite: 8]</span>
                             </div>
                         </div>
 
+                        <div class="survey-divider"></div>
+
+                        <!-- PART 3: HIDDEN ANCILLARY DUTIES (PANEL MANDATE) -->
+                        <div class="survey-section-header">
+                            <span class="section-tag-pill" style="background: #fef3c7; color: #b45309;">Part 3</span>
+                            <h3>Ancillary &amp; Non-Teaching Task Pressure</h3>
+                        </div>
+                        <p class="section-desc-note">
+                            Indicate the stress and additional time burden caused by school ancillary duties (e.g., SDRRM, 4Ps, Form 137).
+                        </p>
+
                         <div class="form-group range-group">
                             <div class="range-header">
-                                <label for="frustrationRange" class="question-label">
-                                    Frustration Level: How stressed, irritated, or annoyed do you feel during your tasks?[cite: 11]
+                                <label for="ancillaryDemandRange" class="question-label">
+                                    Ancillary Duty Strain: How heavily do designated non-teaching tasks impact your lesson prep?
                                 </label>
-                                <span class="range-val-badge" id="frustrationValDisplay">50</span>
+                                <span class="range-val-badge" id="ancillaryValDisplay" style="background:#fee2e2; color:#dc2626;">75</span>
                             </div>
                             <div class="slider-wrapper">
-                                <span class="range-bound-label">LOW[cite: 11]</span>
-                                <input type="range" id="frustrationRange" min="1" max="100" value="50" class="custom-range" data-target="frustrationValDisplay">
-                                <span class="range-bound-label">HIGH[cite: 11]</span>
+                                <span class="range-bound-label">MINIMAL</span>
+                                <input type="range" id="ancillaryDemandRange" min="1" max="100" value="75" class="custom-range" data-target="ancillaryValDisplay">
+                                <span class="range-bound-label">SEVERE</span>
                             </div>
                         </div>
 
                         <!-- ACTIONS -->
                         <div class="assessment-actions-row">
                             <button type="submit" class="btn-primary btn-submit-assessment" id="submitAssessmentBtn">
-                                <i class="fas fa-check-double"></i> Submit Assessment &amp; Go To Dashboard[cite: 11]
+                                <i class="fas fa-check-double"></i> Submit Trimester 1 Assessment &rarr;
                             </button>
                         </div>
                     </form>
@@ -252,11 +254,11 @@
                 </div>
                 <div class="footer-block">
                     <span class="compliance-badge">
-                        <i class="fas fa-shield-check"></i> DepEd Order Compliant &bull; R.A. 10173
+                        <i class="fas fa-shield-check"></i> DepEd Order Compliant &bull; R.A. 10173[cite: 8]
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Diagnostic Core v2.1.0</span>
+                    <span class="version-label">Diagnostic Core v2.2.0</span>
                 </div>
             </footer>
         </div>
@@ -283,11 +285,11 @@
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-                // Store completed flag so onboarding checks pass
-                localStorage.setItem('kandili_baseline_completed', 'true');
-                sessionStorage.setItem('kandili_baseline_completed', 'true');
+                // Save submission flag
+                localStorage.setItem('kandili_trimester_assessed', 'true');
+                sessionStorage.setItem('kandili_trimester_assessed', 'true');
 
-                // Redirect to Teacher Dashboard
+                alert("Trimester 1 Burnout Assessment submitted successfully! Workload index updated.");
                 window.location.href = 'teacherdashboard.html';
             });
         });

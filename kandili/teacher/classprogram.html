@@ -3,21 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burnout Analytics &bull; Kandili Workspace</title>
+    <title>Official Class Program &bull; Kandili Workspace</title>
     
     <!-- Google Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Stylesheets -->
+    <!-- Sorted Stylesheets -->
     <link rel="stylesheet" href="../../css/general/general.css">
-    <link rel="stylesheet" href="../../css/teacher/teacher_analytics.css">
+    <link rel="stylesheet" href="../../css/teacher/teacherdashboard.css">
+    <style>
+        .program-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .program-meta-header {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+        }
+        .program-meta-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .program-stat-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+        }
+        .program-stat-box span {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            display: block;
+        }
+        .program-stat-box strong {
+            font-size: 1.35rem;
+            color: #0f172a;
+            display: block;
+            margin-top: 0.25rem;
+        }
+        .program-table-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+        }
+        .esf7-badge {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 800;
+        }
+        .badge-model-tag {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+    </style>
 </head>
 <body class="dashboard-body">
 
@@ -40,7 +111,7 @@
                     <i class="fas fa-user"></i>
                     <span>My Profile</span>
                 </a>
-                <a href="classprogram.html" class="app-sidebar-link">
+                <a href="classprogram.html" class="app-sidebar-link active">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Class Program</span>
                 </a>
@@ -48,9 +119,13 @@
                     <i class="fas fa-fire-alt"></i>
                     <span>Take Assessment</span>
                 </a>
-                <a href="teacher_analytics.html" class="app-sidebar-link active">
+                <a href="teacher_analytics.html" class="app-sidebar-link">
                     <i class="fas fa-chart-pie"></i>
                     <span>View Analytics</span>
+                </a>
+                <a href="teacher_report.html" class="app-sidebar-link">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Audit Report</span>
                 </a>
                 
                 <hr class="sidebar-divider">
@@ -90,179 +165,154 @@
             <!-- TOP NAVIGATION -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <!-- BURGER MENU TOGGLE -->
                     <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
 
-                    <!-- ROLE-AWARE SAFE BACK BUTTON -->
+                    <!-- SAFE BACK BUTTON -->
                     <button class="nav-back-pill" 
                             type="button" 
                             id="navBackBtn" 
-                            onclick="(function(){
-                                if (document.referrer && document.referrer.toLowerCase().includes('teacherdashboard')) {
-                                    window.location.href = 'teacherdashboard.html';
-                                } else if (window.history.length > 1) {
-                                    window.history.back();
-                                } else {
-                                    window.location.href = 'teacherdashboard.html';
-                                }
-                            })()" 
+                            onclick="window.location.href='teacherdashboard.html'" 
                             aria-label="Go Back">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
-                    <div class="theme-nav__title">Faculty Portal &bull; Detailed Analytics</div>
+                    <div class="theme-nav__title">Official Class Program &bull; eSF7 Schedule</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 1:39 AM</span>
+                    <button class="btn-print-report" id="printProgramBtn" type="button" onclick="window.print();">
+                        <i class="fas fa-print"></i> Export Schedule
+                    </button>
                     <button class="theme-nav__refresh" type="button" onclick="location.reload();">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
             </header>
 
-            <main class="dashboard analytics-dashboard-canvas">
-                <div class="analytics-container">
+            <main class="dashboard report-dashboard-canvas">
+                <div class="program-container">
                     
-                    <!-- Page Header -->
-                    <div class="analytics-welcome-card">
-                        <div class="welcome-badge">Longitudinal MBI-ES Diagnostic</div>
-                        <h1>Comprehensive Burnout Analytics</h1>
-                        <p>In-depth diagnostic breakdown of Maslach Burnout Inventory (MBI-ES) subscale indicators, emotional thresholds, and multicycle risk trajectory.</p>
+                    <!-- HEADER INFO (NO ARTIFICIAL TOGGLES) -->
+                    <div class="program-meta-header">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.25rem;">
+                                <h2 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: #0f172a;">
+                                    DepEd Master Class Program &bull; SY 2026–2027
+                                </h2>
+                                <span class="esf7-badge"><i class="fas fa-file-signature"></i> eSF7 Standard</span>
+                            </div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                                Class Adviser: <strong>Sarah J. Cruz (TCH-012)</strong> &bull; School: <strong>ROVCMS</strong>
+                            </p>
+                        </div>
+
+                        <!-- Fixed DepEd Model Badge -->
+                        <div>
+                            <span class="badge-model-tag">
+                                <i class="fas fa-chalkboard-user"></i> Grades 1–3 Self-Contained Advisory
+                            </span>
+                        </div>
                     </div>
 
-                    <!-- 4-Column Metric Summary Cards Grid -->
-                    <div class="analytics-metrics-grid">
-                        
-                        <!-- Overall Risk Card -->
-                        <div class="metric-card card-risk-overall">
-                            <div class="metric-card-header">
-                                <span>Overall Risk Index</span>
-                                <div class="metric-icon-box bg-rose"><i class="fas fa-fire-alt text-crimson"></i></div>
-                            </div>
-                            <div class="metric-value-wrapper">
-                                <span class="metric-number text-crimson">72</span>
-                                <span class="metric-max">/100</span>
-                                <span class="badge-subscale-status status-high">High Risk</span>
-                            </div>
-                            <div class="metric-footer">
-                                <i class="fas fa-arrow-up text-crimson"></i> <strong>+4 pts</strong> vs previous assessment
-                            </div>
+                    <!-- MACRO LOAD DETAILS -->
+                    <div class="program-meta-stats">
+                        <div class="program-stat-box">
+                            <span>Teaching Model</span>
+                            <strong style="color: #0038A8;">Self-Contained Advisory</strong>
+                            <small style="font-size: 0.72rem; color: #64748b;">Single Class / All Learning Areas</small>
                         </div>
-
-                        <!-- EE Subscale Card -->
-                        <div class="metric-card">
-                            <div class="metric-card-header">
-                                <span>Emotional Exhaustion (EE)</span>
-                                <div class="metric-icon-box bg-blue"><i class="fas fa-heartbeat text-blue"></i></div>
-                            </div>
-                            <div class="metric-value-wrapper">
-                                <span class="metric-number">38</span>
-                                <span class="metric-max">/54</span>
-                            </div>
-                            <div class="subscale-bar-bg">
-                                <div class="subscale-bar-fill fill-ee" style="width: 70%;"></div>
-                            </div>
-                            <div class="metric-footer-note text-crimson">Severity Level: High</div>
+                        <div class="program-stat-box">
+                            <span>Advisory Section</span>
+                            <strong>Grade 2 - Section A</strong>
+                            <small style="font-size: 0.72rem; color: #64748b;">Room 204 &bull; 42 Enrolled Learners</small>
                         </div>
-
-                        <!-- DP Subscale Card -->
-                        <div class="metric-card">
-                            <div class="metric-card-header">
-                                <span>Depersonalization (DP)</span>
-                                <div class="metric-icon-box bg-amber"><i class="fas fa-user-slash text-amber"></i></div>
-                            </div>
-                            <div class="metric-value-wrapper">
-                                <span class="metric-number">14</span>
-                                <span class="metric-max">/30</span>
-                            </div>
-                            <div class="subscale-bar-bg">
-                                <div class="subscale-bar-fill fill-dp" style="width: 46%;"></div>
-                            </div>
-                            <div class="metric-footer-note text-amber">Severity Level: Moderate</div>
+                        <div class="program-stat-box">
+                            <span>Instructional Hours</span>
+                            <strong>22.0 hrs/week</strong>
+                            <small style="font-size: 0.72rem; color: #16a34a; font-weight: 700;">Within Magna Carta 30h Cap</small>
                         </div>
-
-                        <!-- PA Subscale Card -->
-                        <div class="metric-card">
-                            <div class="metric-card-header">
-                                <span>Personal Accomplishment (PA)</span>
-                                <div class="metric-icon-box bg-green"><i class="fas fa-award text-green"></i></div>
-                            </div>
-                            <div class="metric-value-wrapper">
-                                <span class="metric-number">31</span>
-                                <span class="metric-max">/48</span>
-                            </div>
-                            <div class="subscale-bar-bg">
-                                <div class="subscale-bar-fill fill-pa" style="width: 64%;"></div>
-                            </div>
-                            <div class="metric-footer-note text-green">Sense of Efficacy: Satisfactory</div>
+                        <div class="program-stat-box">
+                            <span>Ancillary Duties</span>
+                            <strong style="color: #dc2626;">5.0 hrs/week</strong>
+                            <small style="font-size: 0.72rem; color: #dc2626; font-weight: 700;">SDRRM &amp; 4Ps Monitoring</small>
                         </div>
-
                     </div>
 
-                    <!-- Longitudinal Trend Chart Section -->
-                    <section class="content-card">
-                        <div class="card-title">
-                            <i class="fas fa-chart-area text-blue"></i> 6-Month Burnout &amp; Subscale Trajectory
+                    <!-- TIMETABLE SCHEDULE CARD -->
+                    <div class="program-table-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+                                <i class="fas fa-calendar-week text-blue"></i> Weekly Instructional Timetable
+                            </h3>
+                            <span style="font-size: 0.8rem; color: #64748b;">Schedule Cycle: <strong>Trimester 1</strong></span>
                         </div>
-                        <div class="chart-box">
-                            <canvas id="burnoutTrendChart"></canvas>
-                        </div>
-                    </section>
 
-                    <!-- Detailed Assessment History Table -->
-                    <section class="content-card">
-                        <div class="card-title">
-                            <i class="fas fa-history text-blue"></i> Assessment History Logs
-                            <span class="title-meta-badge">3 Cycles Completed</span>
-                        </div>
-                        
-                        <div class="data-table-wrapper">
-                            <table class="data-table">
+                        <div class="schedule-wrapper">
+                            <table class="timetable" id="mainTimetable">
                                 <thead>
                                     <tr>
-                                        <th>Date Taken</th>
-                                        <th>EE Score</th>
-                                        <th>DP Score</th>
-                                        <th>PA Score</th>
-                                        <th>Calculated Risk</th>
-                                        <th>Diagnostic Status</th>
-                                        <th style="text-align: right;">Action</th>
+                                        <th>TIME</th>
+                                        <th>MONDAY</th>
+                                        <th>TUESDAY</th>
+                                        <th>WEDNESDAY</th>
+                                        <th>THURSDAY</th>
+                                        <th>FRIDAY</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><strong>June 15, 2026</strong></td>
-                                        <td>38 / 54</td>
-                                        <td>14 / 30</td>
-                                        <td>31 / 48</td>
-                                        <td><span class="text-crimson font-bold">72 / 100</span></td>
-                                        <td><span class="status-badge badge-high-risk">Moderate-High</span></td>
-                                        <td style="text-align: right;"><button class="btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</button></td>
+                                        <td class="time-col"><strong>07:30 - 08:00</strong></td>
+                                        <td>Flag Ceremony / Homeroom</td>
+                                        <td>Homeroom Guidance</td>
+                                        <td>Homeroom Guidance</td>
+                                        <td>Homeroom Guidance</td>
+                                        <td>Health &amp; Nutrition / 4Ps</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>March 10, 2026</strong></td>
-                                        <td>32 / 54</td>
-                                        <td>11 / 30</td>
-                                        <td>35 / 48</td>
-                                        <td><span class="text-amber font-bold">64 / 100</span></td>
-                                        <td><span class="status-badge badge-mod-risk">Moderate</span></td>
-                                        <td style="text-align: right;"><button class="btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</button></td>
+                                        <td class="time-col"><strong>08:00 - 09:30</strong></td>
+                                        <td>Mother Tongue (MTB-MLE)</td>
+                                        <td>Mother Tongue (MTB-MLE)</td>
+                                        <td>Mother Tongue (MTB-MLE)</td>
+                                        <td>Mother Tongue (MTB-MLE)</td>
+                                        <td>Remedial Reading (MTB)</td>
+                                    </tr>
+                                    <tr class="homeroom-row">
+                                        <td class="time-col"><strong>09:30 - 09:50</strong></td>
+                                        <td colspan="5" class="homeroom-cell" style="letter-spacing: 0.05em; font-weight: 700;">RECESS BREAK</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Dec 05, 2025</strong></td>
-                                        <td>24 / 54</td>
-                                        <td>08 / 30</td>
-                                        <td>39 / 48</td>
-                                        <td><span class="text-green font-bold">48 / 100</span></td>
-                                        <td><span class="status-badge badge-low-risk">Low Risk</span></td>
-                                        <td style="text-align: right;"><button class="btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</button></td>
+                                        <td class="time-col"><strong>09:50 - 11:20</strong></td>
+                                        <td>Mathematics 2</td>
+                                        <td>Mathematics 2</td>
+                                        <td>Mathematics 2</td>
+                                        <td>Mathematics 2</td>
+                                        <td>Numeracy Enrichment</td>
+                                    </tr>
+                                    <tr class="homeroom-row">
+                                        <td class="time-col"><strong>11:20 - 12:30</strong></td>
+                                        <td colspan="5" class="homeroom-cell" style="letter-spacing: 0.05em; font-weight: 700;">NOON NOURISHMENT INTERMISSION</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-col"><strong>12:30 - 14:00</strong></td>
+                                        <td>English &amp; Literacy 2</td>
+                                        <td>English &amp; Literacy 2</td>
+                                        <td>English &amp; Literacy 2</td>
+                                        <td>English &amp; Literacy 2</td>
+                                        <td>Catch-up Friday (English)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-col"><strong>14:00 - 15:00</strong></td>
+                                        <td>Araling Panlipunan 2</td>
+                                        <td>MAPEH (Music/Arts)</td>
+                                        <td>MAPEH (PE/Health)</td>
+                                        <td>ESP / Values Ed</td>
+                                        <td style="background: #fff1f2; color: #dc2626; font-weight: 600;">SDRRM Inspection (Ancillary)</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </section>
+                    </div>
 
                 </div>
             </main>
@@ -270,15 +320,15 @@
             <!-- FOOTER -->
             <footer class="app-dashboard-footer no-print">
                 <div class="footer-block">
-                    <span>&copy; 2026 <strong>Kandili Workspace</strong>. All rights reserved.</span>
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong>. DepEd Instructional Schedule Management.</span>
                 </div>
                 <div class="footer-block">
                     <span class="compliance-badge">
-                        <i class="fas fa-shield-check"></i> R.A. 10173 Compliant &bull; Data Encrypted
+                        <i class="fas fa-shield-check"></i> DepEd Order No. 005, s. 2024 &bull; eSF7 Compliant
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Analytics Engine v2.1.0</span>
+                    <span class="version-label">eSF7 Module v2.2.0</span>
                 </div>
             </footer>
         </div>
@@ -289,6 +339,5 @@
     <script src="../../js/authGuard.js" data-allowed-roles="teacher,principal"></script>
     <script src="../../js/logout.js"></script>
     <script src="../../js/sidebarToggle.js"></script>
-    <script src="../../js/teacherAnalytics.js"></script>
 </body>
 </html>

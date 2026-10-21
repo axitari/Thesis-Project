@@ -1,0 +1,258 @@
+/* ==========================================================================
+   Kandili Workspace • Class Program & Timetable Stylesheet
+   Compatible with eSF7 Self-Contained and Departmental Models
+   ========================================================================== */
+
+/* Main Layout Wrapper */
+.program-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Header & Meta Card */
+.program-meta-header {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+
+.badge-model-tag-dept {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    padding: 0.35rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Macro Stat Cards Grid */
+.program-meta-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.program-stat-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.program-stat-box span {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+}
+
+.program-stat-box strong {
+    font-size: 1.25rem;
+    color: #0f172a;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.program-stat-box small {
+    font-size: 0.75rem;
+    color: #64748b;
+    display: block;
+    margin-top: 0.2rem;
+}
+
+/* Timetable Container & Table */
+.program-table-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+
+.timetable-wrapper {
+    overflow-x: auto;
+    margin-top: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+.timetable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    text-align: center;
+    background: #ffffff;
+}
+
+.timetable thead th {
+    background: #f8fafc;
+    color: #1e293b;
+    font-weight: 700;
+    padding: 0.85rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+}
+
+.timetable tbody td {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.timetable .time-col {
+    background: #f8fafc;
+    font-weight: 700;
+    color: #0f172a;
+    width: 130px;
+    border-right: 2px solid #cbd5e1;
+}
+
+.timetable .break-row td {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    padding: 0.5rem;
+}
+
+.section-tag {
+    background: #e0f2fe;
+    color: #0284c7;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   Official Print Mode Styles (A4 Landscape Form)
+   ========================================================================== */
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 10mm 15mm;
+    }
+
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt !important;
+    }
+
+    .no-print,
+    .app-sidebar,
+    .theme-nav,
+    .sidebar-backdrop,
+    .app-dashboard-footer,
+    button {
+        display: none !important;
+    }
+
+    .app-shell,
+    .app-main-content,
+    .dashboard,
+    .program-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .program-meta-header,
+    .program-table-card {
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .program-meta-stats {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        margin-bottom: 12px !important;
+        gap: 8px !important;
+    }
+
+    .program-stat-box {
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 6px 10px !important;
+        flex: 1 !important;
+    }
+
+    .timetable {
+        border: 1.5px solid #000000 !important;
+    }
+
+    .timetable thead th,
+    .timetable tbody td {
+        border: 1px solid #000000 !important;
+        color: #000000 !important;
+        padding: 5px 6px !important;
+    }
+
+    .timetable .time-col {
+        background: #f0f0f0 !important;
+        border-right: 1.5px solid #000000 !important;
+    }
+
+    .timetable .break-row td {
+        background: #e5e5e5 !important;
+    }
+
+    .section-tag {
+        border: 1px solid #777777 !important;
+        color: #000000 !important;
+        background: transparent !important;
+    }
+}
+
+.btn-print-report {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+
+.btn-print-report:hover {
+    background: #ffffff;
+    color: #0038A8;
+    border-color: #ffffff;
+}

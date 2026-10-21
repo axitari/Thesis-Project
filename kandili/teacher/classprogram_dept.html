@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departmentalized Class Program &bull; Kandili Workspace</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Sorted Stylesheets -->
+    <link rel="stylesheet" href="../../css/general/general.css">
+    <link rel="stylesheet" href="../../css/teacher/teacherdashboard.css">
+    <link rel="stylesheet" href="../../css/teacher/classprogram_dept.css">
+</head>
+<body class="dashboard-body">
+
+    <div class="app-shell" id="appShell">
+        <!-- MOBILE BACKDROP -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar no-print" id="appSidebar">
+            <div class="app-sidebar-brand">
+                <span class="brand-icon">🏫</span>
+                <span class="brand-text">Kandili Workspace</span>
+            </div>
+            <nav class="app-sidebar-nav">
+                <a href="teacherdashboard.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Teacher Dashboard</span>
+                </a>
+                <a href="teacherprofilepage.html" class="app-sidebar-link">
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
+                </a>
+                <a href="classprogram_dept.html" class="app-sidebar-link active">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Class Program</span>
+                </a>
+                <a href="burnout-risk_assessment.html" class="app-sidebar-link">
+                    <i class="fas fa-fire-alt"></i>
+                    <span>Take Assessment</span>
+                </a>
+                <a href="teacher_analytics.html" class="app-sidebar-link">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>View Analytics</span>
+                </a>
+                <a href="teacher_report.html" class="app-sidebar-link">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Audit Report</span>
+                </a>
+                
+                <hr class="sidebar-divider">
+
+                <a href="../general/message.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="../general/notification.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="../general/calendar.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Master Calendar</span>
+                </a>
+                <a href="../general/history.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a href="../general/settings.html?origin=teacher" class="app-sidebar-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+
+                <hr class="sidebar-divider">
+
+                <a href="#" class="app-sidebar-link link-logout" id="sidebarLogoutBtn" onclick="return kandiliLogout();">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-main-content">
+            <!-- TOP NAVIGATION -->
+            <header class="theme-nav no-print">
+                <div class="theme-nav__brand">
+                    <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+                    <!-- SAFE BACK BUTTON -->
+                    <button class="nav-back-pill" 
+                            type="button" 
+                            id="navBackBtn" 
+                            onclick="window.location.href='teacherdashboard.html'" 
+                            aria-label="Go Back">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="theme-nav__title">Departmentalized Class Program &bull; eSF7 Schedule</div>
+                </div>
+                <div class="theme-nav__actions">
+                    <button class="btn-print-report" id="printProgramBtn" type="button" onclick="window.print();">
+                        <i class="fas fa-print"></i> Export Schedule
+                    </button>
+                    <button class="theme-nav__refresh" type="button" onclick="location.reload();">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </header>
+
+            <main class="dashboard report-dashboard-canvas">
+                <div class="program-container">
+                    
+                    <!-- HEADER INFO (DEPARTMENTAL PROFILE) -->
+                    <div class="program-meta-header">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.25rem;">
+                                <h2 style="margin: 0; font-size: 1.3rem; font-weight: 800; color: #0f172a;">
+                                    DepEd Master Class Program &bull; SY 2026–2027
+                                </h2>
+                                <span class="esf7-badge"><i class="fas fa-file-signature"></i> eSF7 Standard</span>
+                            </div>
+                            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
+                                Subject Teacher: <strong>Juan Dela Cruz (TCH-004)</strong> &bull; School: <strong>ROVCMS</strong>
+                            </p>
+                        </div>
+
+                        <!-- Fixed DepEd Model Badge for Grades 4-6 -->
+                        <div>
+                            <span class="badge-model-tag-dept">
+                                <i class="fas fa-diagram-project"></i> Grades 4–6 Departmentalized Delivery
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- MACRO LOAD DETAILS -->
+                    <div class="program-meta-stats">
+                        <div class="program-stat-box">
+                            <span>Specialization</span>
+                            <strong style="color: #0038A8;">Mathematics &amp; Science</strong>
+                            <small style="font-size: 0.72rem; color: #64748b;">Intermediate Grade Specialist</small>
+                        </div>
+                        <div class="program-stat-box">
+                            <span>Handled Cohorts</span>
+                            <strong>3 Active Sections</strong>
+                            <small style="font-size: 0.72rem; color: #64748b;">Grades 4-Mabini, 5-Rizal, 6-Bonifacio</small>
+                        </div>
+                        <div class="program-stat-box">
+                            <span>Direct Contact Hours</span>
+                            <strong>24.0 hrs/week</strong>
+                            <small style="font-size: 0.72rem; color: #16a34a; font-weight: 700;">4 hrs/day across rotating cohorts</small>
+                        </div>
+                        <div class="program-stat-box">
+                            <span>Ancillary / Lab Duties</span>
+                            <strong style="color: #dc2626;">6.5 hrs/week</strong>
+                            <small style="font-size: 0.72rem; color: #dc2626; font-weight: 700;">Science Lab In-Charge &amp; SDRRM</small>
+                        </div>
+                    </div>
+
+                    <!-- TIMETABLE SCHEDULE CARD -->
+                    <div class="program-table-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+                                    <i class="fas fa-calendar-week text-blue"></i> Weekly Departmental Timetable
+                                </h3>
+                                <p style="margin: 0.2rem 0 0 0; font-size: 0.8rem; color: #64748b;">Rotating room assignments across intermediate grade clusters.</p>
+                            </div>
+                            <span style="font-size: 0.8rem; color: #64748b;">Schedule Cycle: <strong>Trimester 1</strong></span>
+                        </div>
+
+                        <div class="schedule-wrapper">
+                            <table class="timetable" id="mainTimetable">
+                                <thead>
+                                    <tr>
+                                        <th>TIME</th>
+                                        <th>MONDAY</th>
+                                        <th>TUESDAY</th>
+                                        <th>WEDNESDAY</th>
+                                        <th>THURSDAY</th>
+                                        <th>FRIDAY</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="time-col"><strong>07:30 - 08:00</strong></td>
+                                        <td>Flag Ceremony / Staff Assembly</td>
+                                        <td>Lesson Prep &amp; Lab Check</td>
+                                        <td>Lesson Prep &amp; Lab Check</td>
+                                        <td>Lesson Prep &amp; Lab Check</td>
+                                        <td>Math Remediation Check-in</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-col"><strong>08:00 - 09:30</strong></td>
+                                        <td>
+                                            <strong>Mathematics 4</strong><br>
+                                            <span class="section-tag">G4 - Mabini (Rm 301)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Mathematics 4</strong><br>
+                                            <span class="section-tag">G4 - Mabini (Rm 301)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Mathematics 4</strong><br>
+                                            <span class="section-tag">G4 - Mabini (Rm 301)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Mathematics 4</strong><br>
+                                            <span class="section-tag">G4 - Mabini (Rm 301)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Math Practicum</strong><br>
+                                            <span class="section-tag">G4 - Mabini</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="homeroom-row">
+                                        <td class="time-col"><strong>09:30 - 09:50</strong></td>
+                                        <td colspan="5" class="homeroom-cell" style="letter-spacing: 0.05em; font-weight: 700;">RECESS BREAK</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-col"><strong>09:50 - 11:20</strong></td>
+                                        <td>
+                                            <strong>Science &amp; Health 5</strong><br>
+                                            <span class="section-tag">G5 - Rizal (Rm 304)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Science &amp; Health 5</strong><br>
+                                            <span class="section-tag">G5 - Rizal (Rm 304)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Science &amp; Health 5</strong><br>
+                                            <span class="section-tag">G5 - Rizal (Rm 304)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Science &amp; Health 5</strong><br>
+                                            <span class="section-tag">G5 - Rizal (Rm 304)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Science Experiment Day</strong><br>
+                                            <span class="section-tag">G5 - Lab 1</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="homeroom-row">
+                                        <td class="time-col"><strong>11:20 - 12:30</strong></td>
+                                        <td colspan="5" class="homeroom-cell" style="letter-spacing: 0.05em; font-weight: 700;">NOON NOURISHMENT INTERMISSION</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-col"><strong>12:30 - 14:00</strong></td>
+                                        <td>
+                                            <strong>Mathematics 6</strong><br>
+                                            <span class="section-tag">G6 - Bonifacio (Rm 308)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Mathematics 6</strong><br>
+                                            <span class="section-tag">G6 - Bonifacio (Rm 308)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Mathematics 6</strong><br>
+                                            <span class="section-tag">G6 - Bonifacio (Rm 308)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Mathematics 6</strong><br>
+                                            <span class="section-tag">G6 - Bonifacio (Rm 308)</span>
+                                        </td>
+                                        <td>
+                                            <strong>Catch-up Friday (Math/Sci)</strong><br>
+                                            <span class="section-tag">G6 - Bonifacio</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-col"><strong>14:00 - 15:30</strong></td>
+                                        <td style="background: #fff1f2; color: #dc2626; font-weight: 600;">
+                                            SDRRM School Inspection
+                                        </td>
+                                        <td>Science Lab Equipment Inventory</td>
+                                        <td>Department Subject Planning</td>
+                                        <td>Learner Progress Profiling</td>
+                                        <td style="background: #fff1f2; color: #dc2626; font-weight: 600;">
+                                            Form 137 / SF10 Encoding
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="app-dashboard-footer no-print">
+                <div class="footer-block">
+                    <span>&copy; 2026 <strong>Kandili Workspace</strong>. DepEd Instructional Schedule Management.</span>
+                </div>
+                <div class="footer-block">
+                    <span class="compliance-badge">
+                        <i class="fas fa-shield-check"></i> DepEd Order No. 005, s. 2024 &bull; eSF7 Compliant
+                    </span>
+                </div>
+                <div class="footer-block text-right">
+                    <span class="version-label">eSF7 Module v2.2.0</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Application Script Stack -->
+    <script src="../../js/supabaseClient.js"></script>
+    <script src="../../js/authGuard.js" data-allowed-roles="teacher,principal"></script>
+    <script src="../../js/logout.js"></script>
+    <script src="../../js/sidebarToggle.js"></script>
+</body>
+</html>

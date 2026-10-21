@@ -41,6 +41,10 @@
                     <i class="fas fa-heart-crack"></i>
                     <span>Burnout Risk (MBI)</span>
                 </a>
+                <a href="#section-institutional-summary" class="app-sidebar-link">
+                    <i class="fas fa-landmark"></i>
+                    <span>Institutional Summary</span>
+                </a>
                 <a href="#section-charts-trajectory" class="app-sidebar-link">
                     <i class="fas fa-chart-area"></i>
                     <span>Analytics &amp; Trends</span>
@@ -56,10 +60,6 @@
                 <a href="#section-reports" class="app-sidebar-link">
                     <i class="fas fa-folder-open"></i>
                     <span>Faculty Reports</span>
-                </a>
-                <a href="#section-modules" class="app-sidebar-link">
-                    <i class="fas fa-cubes"></i>
-                    <span>System Modules</span>
                 </a>
                 
                 <hr class="sidebar-divider">
@@ -107,14 +107,12 @@
             <!-- TOP NAVIGATION -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <!-- BURGER MENU TOGGLE -->
                     <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="theme-nav__title">Principal Dashboard</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <!-- DUAL ROLE SWITCHER PILL -->
                     <a href="../teacher/teacherdashboard.html?viewAs=principal" class="role-switch-pill" title="Switch to Teaching Faculty View">
                         <i class="fas fa-chalkboard-user"></i>
                         <span>Switch to Teacher View</span>
@@ -245,14 +243,14 @@
                     <div class="section-header" style="margin-bottom: 1.25rem;">
                         <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.25rem;">
                             <h2 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #0f172a;">
-                                Burnout Risk Assessment
+                                Burnout Risk Assessment (Trimester Cadence)
                             </h2>
                             <span class="badge-subscale-pill">
                                 MBI-ES Standardized
                             </span>
                         </div>
                         <p style="margin: 0; font-size: 0.9rem; color: #64748b;">
-                            Proactive risk profiling based on Maslach Burnout Inventory for Educators (EE, DP, and PA subscales) paired with eSF7 workload metrics.
+                            Proactive risk profiling evaluated per trimester (EE, DP, PA subscales) paired with quantified eSF7 workload metrics.
                         </p>
                     </div>
 
@@ -313,7 +311,44 @@
                     </div>
                 </section>
 
-                <!-- SECTION 3: CHARTS ROW -->
+                <!-- SECTION 3: INSTITUTIONAL SUMMARY (Clean, direct & teacher-friendly) -->
+                <section id="section-institutional-summary" style="margin-top: 2.5rem;">
+                    <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.85rem; margin-bottom: 1.25rem;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: #0f172a;">
+                                    <i class="fas fa-landmark" style="color: #0038A8;"></i> Schoolwide Institutional Health Summary
+                                </h3>
+                                <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: #64748b;">
+                                    Overview of faculty balance across elementary teaching models.
+                                </p>
+                            </div>
+                            <span class="badge-subscale-pill" style="background: #ecfdf5; color: #059669; font-weight: 700; font-size: 0.8rem; padding: 0.3rem 0.75rem; border-radius: 999px;">
+                                <i class="fas fa-check-circle"></i> Trimester 1 Evaluated
+                            </span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Average Faculty Load</span>
+                                <h4 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0;">38.4 hrs/wk</h4>
+                                <small style="color: #16a34a; font-weight: 600;">Compliant with Magna Carta</small>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Grades 1–3 (Self-Contained)</span>
+                                <h4 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0;">12 Advisers</h4>
+                                <small style="color: #64748b;">100% Optimal Balance</small>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Grades 4–6 (Departmental)</span>
+                                <h4 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0;">16 Teachers</h4>
+                                <small style="color: #d97706; font-weight: 600;">2 Overload Interventions Active</small>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: CHARTS ROW -->
                 <section id="section-charts-trajectory" class="charts-row" style="margin-top: 2rem;">
                     <div class="chart-card">
                         <div class="chart-header">
@@ -348,7 +383,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 4: REALLOCATION RECOMMENDATIONS & SIMULATOR -->
+                <!-- SECTION 5: REALLOCATION RECOMMENDATIONS & SIMULATOR (YOUR ORIGINAL WORKING CODE) -->
                 <section id="section-recommendations" class="recommendations" style="margin-top: 2.5rem;">
                     <div class="recommendations-header">
                         <h2 style="color: #0f172a; margin-bottom: 0.25rem;">
@@ -466,7 +501,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 5: HOTLIST & SIDE CARDS -->
+                <!-- SECTION 6: HOTLIST & SIDE CARDS -->
                 <section id="section-hotlist" class="hotlist-row" style="margin-top: 2.5rem;">
                     <!-- LEFT: HIGH RISK HOTLIST -->
                     <div class="hotlist-panel" style="background: #fff; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(15, 23, 42, 0.05);">
@@ -554,7 +589,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 6: FACULTY REPORTS MANAGEMENT -->
+                <!-- SECTION 7: FACULTY REPORTS MANAGEMENT -->
                 <section id="section-reports" class="content-card principal-reports-card" style="margin-top: 2.5rem;">
                     <div class="reports-header">
                         <div>
@@ -605,50 +640,6 @@
                     </div>
                 </section>
 
-                <!-- SECTION 7: 3-CARD SYSTEM MODULES GRID -->
-                <section id="section-modules" class="dashboard-grid-4" style="margin-top: 2.5rem;">
-                    <!-- CARD 1: MASTER CLASS PROGRAMS -->
-                    <div class="dash-card">
-                        <div class="dash-card__icon"><i class="fas fa-folder-open icon-amber"></i></div>
-                        <h3 class="dash-card__title">Master Class Programs</h3>
-                        <p class="dash-card__desc">Access and review official eSF7 class schedules and workload audits of all faculty members.</p>
-                        <div class="dash-card__footer">
-                            <a href="facultydirectory.html" class="dash-card__btn">
-                                Open Directory <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- CARD 2: RISK ASSESSMENTS -->
-                    <div class="dash-card">
-                        <div class="dash-card__icon"><i class="fas fa-chart-column icon-purple"></i></div>
-                        <h3 class="dash-card__title">Risk Assessments</h3>
-                        <p class="dash-card__desc">Review MBI-ES predictive burnout risk levels. Fully anonymized with Teacher Codes.</p>
-                        <div class="dash-card__status text-success">
-                            <i class="fas fa-shield-alt"></i> R.A. 10173 Compliant
-                        </div>
-                        <div class="dash-card__footer">
-                            <a href="burnout_reports_directory.html" class="dash-card__btn">
-                                Open Analytics <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- CARD 3: DATA INGESTION -->
-                    <div class="dash-card">
-                        <div class="dash-card__icon"><i class="fas fa-cloud-arrow-up icon-blue"></i></div>
-                        <h3 class="dash-card__title">Data Ingestion</h3>
-                        <p class="dash-card__desc">Upload Master eSF7 spreadsheet to extract objective workload data for automated parsing.</p>
-                        <div class="dash-card__subtext">
-                            Last Upload: 07/23/2026
-                        </div>
-                        <div class="dash-card__footer">
-                            <a href="principaldashboard.html#upload" class="dash-card__btn">
-                                <i class="fas fa-upload"></i> Upload New Data
-                            </a>
-                        </div>
-                    </div>
-                </section>
             </main>
 
             <!-- FOOTER -->

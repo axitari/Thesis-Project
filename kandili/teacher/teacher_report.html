@@ -91,7 +91,6 @@
             <!-- Top Navigation (Hidden when printing) -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <!-- BURGER MENU TOGGLE -->
                     <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -113,7 +112,7 @@
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
-                    <div class="theme-nav__title">Institutional Audit Report &bull; Cycle Q2 2026</div>
+                    <div class="theme-nav__title">Institutional Audit Report &bull; Trimester 1 (SY 2026–2027)</div>
                 </div>
                 <div class="theme-nav__actions">
                     <button class="btn-print-report" id="printReportBtn" type="button" onclick="window.print();">
@@ -142,8 +141,8 @@
                             </div>
                             <div class="report-meta">
                                 <div><strong>Teacher Code:</strong> <span class="teacher-code-badge">TCH-012</span></div>
-                                <div><strong>Report ID:</strong> RPT-2026-0723</div>
-                                <div><strong>Generated:</strong> July 23, 2026</div>
+                                <div><strong>Report ID:</strong> RPT-2026-T1-012</div>
+                                <div><strong>Generated:</strong> October 22, 2026</div>
                                 <div><strong>Status:</strong> <span class="status-badge-support">Support Recommended</span></div>
                             </div>
                         </header>
@@ -158,8 +157,8 @@
                                 <div><strong>Faculty Name:</strong> Sarah J. Cruz</div>
                                 <div><strong>Position / Title:</strong> Teacher II / Class Adviser</div>
                                 <div><strong>Assigned Section:</strong> Grade 2 - Section A (ROVCMS)</div>
-                                <div><strong>Assessment Cycle:</strong> Mid-Year 2026 Well-being Review</div>
-                                <div><strong>Evaluating System:</strong> Kandili Intelligence Engine v2.1</div>
+                                <div><strong>Assessment Cycle:</strong> Trimester 1 Statutory Review (SY 2026–2027)</div>
+                                <div><strong>Evaluating System:</strong> Kandili Intelligence Engine v2.2</div>
                             </div>
                         </section>
 
@@ -173,14 +172,14 @@
                                 </div>
                                 <div class="summary-text-column">
                                     <h4>Proactive Support &amp; Capacity Optimization Identified</h4>
-                                    <p>Faculty member <strong>TCH-012</strong> demonstrates high dedication and positive professional efficacy (<strong>PA = 31/48</strong>). To maintain long-term teaching sustainability and prevent exhaustion, the intelligence engine identifies a key opportunity to optimize capacity by balancing <strong>5 hours/week of ancillary duties</strong> with additional departmental resources.</p>
+                                    <p>Faculty member <strong>TCH-012</strong> demonstrates high dedication and positive professional efficacy (<strong>PA = 31/48</strong>). To maintain long-term teaching sustainability and prevent clinical burnout, the intelligence engine identifies a key opportunity to optimize capacity by offloading <strong>hidden ancillary tasks (SDRRM, School Feeding/4Ps, &amp; Form 137 Encoding)</strong> totaling <strong>5.0 hrs/week</strong>[cite: 5].</p>
                                 </div>
                             </div>
                         </section>
 
                         <!-- MBI Diagnostic Breakdown Table -->
                         <section class="report-section">
-                            <h3 class="section-heading"><i class="fas fa-list-ol"></i> MBI-ES Well-being Dimension Breakdown</h3>
+                            <h3 class="section-heading"><i class="fas fa-list-ol"></i> MBI-ES Well-being Dimension Breakdown (Trimester 1)</h3>
                             <div class="report-table-wrapper">
                                 <table class="report-table">
                                     <thead>
@@ -193,13 +192,13 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><strong>Emotional Energy &amp; Strain (EE)</strong></td>
+                                            <td><strong>Emotional Exhaustion &amp; Strain (EE)</strong></td>
                                             <td>38 / 54</td>
                                             <td><span class="badge-support">Rest Buffer Recommended</span></td>
                                             <td>0 - 26 (Balanced Energy)</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Professional Connection (DP)</strong></td>
+                                            <td><strong>Depersonalization / Connection (DP)</strong></td>
                                             <td>14 / 30</td>
                                             <td><span class="badge-mod">Moderate Efficacy</span></td>
                                             <td>0 - 9 (High Engagement)</td>
@@ -215,19 +214,21 @@
                             </div>
                         </section>
 
-                        <!-- Formula Breakdown Section -->
+                        <!-- Formula Breakdown Section with Explicit Hidden Task Factoring -->
                         <section class="report-section">
-                            <h3 class="section-heading"><i class="fas fa-calculator"></i> Workload &amp; Well-being Index Calculation</h3>
+                            <h3 class="section-heading"><i class="fas fa-calculator"></i> Workload &amp; Hidden Task Index Calculation</h3>
                             <div class="formula-box">
-                                <p class="formula-title">Calculated Sustainability Equation:</p>
+                                <p class="formula-title">Calculated Sustainability Equation (DepEd Magna Carta Ratio):</p>
                                 <div class="formula-code">
-                                    Workload Index = (0.50 &times; EE_normalized) + (0.30 &times; Ancillary_Load_Factor) + (0.20 &times; DP_normalized)
+                                    Workload Index = (0.50 &times; EE_normalized) + (0.30 &times; Ancillary_Hidden_Factor) + (0.20 &times; DP_normalized)
                                 </div>
                                 <ul class="formula-notes">
                                     <li><strong>Emotional Energy Component:</strong> (38 / 54) &times; 100 = 70.37 &rarr; Contributes <strong>35.18 pts</strong></li>
-                                    <li><strong>Ancillary Load Contribution:</strong> (5 hrs over threshold) &rarr; Contributes <strong>24.00 pts</strong></li>
+                                    <li><strong>Hidden Ancillary Contribution:</strong> 
+                                        SDRRM (2.5 hrs) + Feeding/4Ps (1.5 hrs) + Form 137 (1.0 hr) = 5.0 hrs over limit &rarr; Contributes <strong>24.00 pts</strong>
+                                    </li>
                                     <li><strong>Professional Connection Factor:</strong> (14 / 30) &times; 100 = 46.66 &rarr; Contributes <strong>13.33 pts</strong></li>
-                                    <li><strong>Composite Sustainability Index:</strong> <strong>72.51 &approx; 72</strong></li>
+                                    <li><strong>Composite Sustainability Index:</strong> <strong>72.51 &approx; 72 (Elevated Risk)</strong></li>
                                 </ul>
                             </div>
                         </section>
@@ -239,13 +240,13 @@
                                 <div class="reco-card-item">
                                     <div class="reco-tag">Action 1</div>
                                     <div class="reco-content">
-                                        <strong>Ancillary Rebalance:</strong> Reassign <em>SDRRM Coordinator</em> duties (5 hrs/wk) from <strong>TCH-012</strong> to designated co-faculty member TCH-015 to restore optimal class prep time.
+                                        <strong>Ancillary Reallocation:</strong> Offload designated <em>SDRRM Coordinator and Feeding Program</em> duties (4.0 hrs/wk) to available co-faculty (TCH-015) to restore teaching prep reserves[cite: 5].
                                     </div>
                                 </div>
                                 <div class="reco-card-item">
                                     <div class="reco-tag alt">Action 2</div>
                                     <div class="reco-content">
-                                        <strong>Focus Time Buffer:</strong> Provide at least 1.5 consecutive hours of uninterrupted daily planning time to enhance instructional delivery and reduce stress.
+                                        <strong>Form 137 / SF10 Batching:</strong> Allocate 1.5 consecutive hours of uninterrupted administrative time on Friday afternoons for learner record encoding[cite: 5].
                                     </div>
                                 </div>
                             </div>

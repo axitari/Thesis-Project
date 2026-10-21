@@ -90,7 +90,6 @@
             <!-- TOP NAVIGATION -->
             <header class="theme-nav no-print">
                 <div class="theme-nav__brand">
-                    <!-- BURGER MENU TOGGLE -->
                     <button class="theme-nav__menu-btn" id="burgerMenuBtn" type="button" aria-label="Toggle Sidebar">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -112,10 +111,10 @@
                         <i class="fas fa-arrow-left"></i>
                         <span>Back</span>
                     </button>
-                    <div class="theme-nav__title">Faculty Portal &bull; Detailed Analytics</div>
+                    <div class="theme-nav__title">Faculty Portal &bull; Trimester Burnout Analytics</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 23, 2026 | 1:39 AM</span>
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> October 22, 2026 | 12:45 AM</span>
                     <button class="theme-nav__refresh" type="button" onclick="location.reload();">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
@@ -127,9 +126,9 @@
                     
                     <!-- Page Header -->
                     <div class="analytics-welcome-card">
-                        <div class="welcome-badge">Longitudinal MBI-ES Diagnostic</div>
+                        <div class="welcome-badge">Trimester MBI-ES Diagnostic</div>
                         <h1>Comprehensive Burnout Analytics</h1>
-                        <p>In-depth diagnostic breakdown of Maslach Burnout Inventory (MBI-ES) subscale indicators, emotional thresholds, and multicycle risk trajectory.</p>
+                        <p>In-depth diagnostic breakdown of Maslach Burnout Inventory (MBI-ES) subscale indicators, emotional thresholds, and multicycle risk trajectory across evaluation trimesters[cite: 6].</p>
                     </div>
 
                     <!-- 4-Column Metric Summary Cards Grid -->
@@ -204,25 +203,26 @@
                     <!-- Longitudinal Trend Chart Section -->
                     <section class="content-card">
                         <div class="card-title">
-                            <i class="fas fa-chart-area text-blue"></i> 6-Month Burnout &amp; Subscale Trajectory
+                            <i class="fas fa-chart-area text-blue"></i> 3-Trimester Longitudinal Trajectory (SY 2025–2027)
                         </div>
                         <div class="chart-box">
                             <canvas id="burnoutTrendChart"></canvas>
                         </div>
                     </section>
 
-                    <!-- Detailed Assessment History Table -->
+                    <!-- Detailed Assessment History Table with Trimester Cadence -->
                     <section class="content-card">
                         <div class="card-title">
-                            <i class="fas fa-history text-blue"></i> Assessment History Logs
-                            <span class="title-meta-badge">3 Cycles Completed</span>
+                            <i class="fas fa-history text-blue"></i> Trimester Assessment History Logs
+                            <span class="title-meta-badge">3 Cycles Completed[cite: 6]</span>
                         </div>
                         
                         <div class="data-table-wrapper">
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Date Taken</th>
+                                        <th>Evaluation Cadence</th>
+                                        <th>Date Completed</th>
                                         <th>EE Score</th>
                                         <th>DP Score</th>
                                         <th>PA Score</th>
@@ -233,16 +233,18 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><strong>June 15, 2026</strong></td>
+                                        <td><span class="badge-subscale-pill" style="background:#eff6ff; color:#1d4ed8; font-weight:700; padding: 0.2rem 0.5rem; border-radius: 4px;">Trimester 1 (SY 2026–2027)</span></td>
+                                        <td><strong>Oct 15, 2026</strong></td>
                                         <td>38 / 54</td>
                                         <td>14 / 30</td>
                                         <td>31 / 48</td>
                                         <td><span class="text-crimson font-bold">72 / 100</span></td>
-                                        <td><span class="status-badge badge-high-risk">Moderate-High</span></td>
+                                        <td><span class="status-badge badge-high-risk">High Risk</span></td>
                                         <td style="text-align: right;"><button class="btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</button></td>
                                     </tr>
                                     <tr>
-                                        <td><strong>March 10, 2026</strong></td>
+                                        <td><span class="badge-subscale-pill" style="background:#f8fafc; color:#475569; font-weight:700; padding: 0.2rem 0.5rem; border-radius: 4px;">Trimester 3 (SY 2025–2026)</span></td>
+                                        <td><strong>June 10, 2026</strong></td>
                                         <td>32 / 54</td>
                                         <td>11 / 30</td>
                                         <td>35 / 48</td>
@@ -251,7 +253,8 @@
                                         <td style="text-align: right;"><button class="btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</button></td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Dec 05, 2025</strong></td>
+                                        <td><span class="badge-subscale-pill" style="background:#f8fafc; color:#475569; font-weight:700; padding: 0.2rem 0.5rem; border-radius: 4px;">Trimester 2 (SY 2025–2026)</span></td>
+                                        <td><strong>Feb 05, 2026</strong></td>
                                         <td>24 / 54</td>
                                         <td>08 / 30</td>
                                         <td>39 / 48</td>
@@ -278,7 +281,7 @@
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Analytics Engine v2.1.0</span>
+                    <span class="version-label">Analytics Engine v2.2.0</span>
                 </div>
             </footer>
         </div>

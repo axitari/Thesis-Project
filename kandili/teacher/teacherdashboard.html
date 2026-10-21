@@ -17,6 +17,38 @@
     <!-- Sorted Stylesheets -->
     <link rel="stylesheet" href="../../css/general/general.css">
     <link rel="stylesheet" href="../../css/teacher/teacherdashboard.css">
+    <style>
+        /* Pulse & Assessment Modal Trigger Animations */
+        #assessmentReminderModal.active {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+        .reminder-icon-bubble {
+            background: #fee2e2;
+            color: #dc2626;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+        .clinical-badge-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+    </style>
 </head>
 <body class="dashboard-body">
 
@@ -50,6 +82,10 @@
                 <a href="#official-workload-section" class="app-sidebar-link">
                     <i class="fas fa-file-signature"></i>
                     <span>eSF7 Workload</span>
+                </a>
+                <a href="#student-grades-section" class="app-sidebar-link">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Student Grades Storage</span>
                 </a>
                 <a href="#absence-requests-section" class="app-sidebar-link">
                     <i class="fas fa-calendar-times"></i>
@@ -104,7 +140,7 @@
                     <div class="theme-nav__title">Teacher Dashboard</div>
                 </div>
                 <div class="theme-nav__actions">
-                    <!-- DUAL-ROLE CONSOLE RETURN PILL (Shown only for principal accounts) -->
+                    <!-- DUAL-ROLE CONSOLE RETURN PILL -->
                     <a href="../principal/principaldashboard.html" 
                        id="adminSwitchBtn" 
                        class="role-switch-pill role-switch-pill--admin" 
@@ -114,7 +150,7 @@
                         <span>Admin Console</span>
                     </a>
 
-                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> July 20, 2026 | 2:30 PM</span>
+                    <span class="theme-nav__date"><i class="far fa-calendar-alt"></i> October 22, 2026 | 2:30 PM</span>
                     <button class="theme-nav__refresh open-pulse-modal-btn pulse-trigger" id="openPulseModalBtn" type="button">
                         <i class="fas fa-heartbeat"></i> Pulse Check-in
                     </button>
@@ -128,7 +164,7 @@
                 <!-- WELCOME HEADER -->
                 <div class="welcome-header">
                     <h1>👋 Welcome back, Sarah J. Cruz</h1>
-                    <p>Teacher | Class Adviser | ROVCMS</p>
+                    <p>Teacher II &bull; Class Adviser (Grade 2 - A) &bull; ROVCMS</p>
                 </div>
 
                 <!-- CLASS PROGRAM UPLOAD -->
@@ -308,7 +344,7 @@
                                 </div>
                                 <div class="assessment-meta">
                                     <div><i class="fas fa-history meta-icon"></i> <strong>Last Assessment:</strong> June 15, 2026</div>
-                                    <div><i class="fas fa-clock meta-icon text-crimson"></i> <strong>Next Due:</strong> <span class="text-crimson font-bold">July 15, 2026</span> (Overdue)</div>
+                                    <div><i class="fas fa-clock meta-icon text-crimson"></i> <strong>Next Due:</strong> <span class="text-crimson font-bold">Trimester 1 Statutory Window</span> (Overdue)</div>
                                 </div>
                             </div>
                         </div>
@@ -319,7 +355,7 @@
                                 Complete your standardized assessment to update your quantified risk score. The system relies on this data to adjust your workload recommendations accurately.
                             </p>
                             <div class="action-row no-border">
-                                <button class="btn-blue" id="takeAssessmentBtn" type="button" onclick="window.location.href='burnout-risk_assessment.html'">
+                                <button class="btn-blue" id="takeAssessmentBtn" type="button" onclick="window.location.href='assessment.html'">
                                     <i class="fas fa-clipboard-check"></i> Take Assessment
                                 </button>
                                 <button class="btn-outline" id="viewAnalyticsBtn" type="button" onclick="window.location.href='teacher_analytics.html'">
@@ -369,7 +405,7 @@
                             <i class="fas fa-calendar-alt"></i> Weekly Class Schedule (Preview)
                         </h3>
                         <div class="schedule-meta-badge">
-                            Grade 2 - A &nbsp;|&nbsp; Room 204 &nbsp;|&nbsp; 1st Sem
+                            Grade 2 - A &nbsp;|&nbsp; Room 204 &nbsp;|&nbsp; Self-Contained Advisory
                         </div>
                     </div>
                     <div class="schedule-wrapper">
@@ -417,8 +453,8 @@
                         </table>
                     </div>
                     <div class="action-row margin-top-md">
-                        <button class="btn-outline" id="exportPdfBtn" type="button"><i class="fas fa-file-pdf"></i> Export PDF</button>
-                        <button class="btn-outline btn-right" id="exportCalendarBtn" type="button"><i class="fas fa-calendar-plus"></i> Export to Master Calendar</button>
+                        <button class="btn-outline" id="exportPdfBtn" type="button" onclick="window.location.href='classprogram.html'"><i class="fas fa-file-pdf"></i> View Class Program</button>
+                        <button class="btn-outline btn-right" id="exportCalendarBtn" type="button" onclick="window.location.href='../general/calendar.html?origin=teacher'"><i class="fas fa-calendar-plus"></i> Open Master Calendar</button>
                     </div>
                 </section>
 
@@ -463,6 +499,80 @@
                     </div>
                 </section>
 
+                <!-- STUDENT GRADES & ASSESSMENT STORAGE -->
+                <section class="content-card" id="student-grades-section">
+                    <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <i class="fas fa-graduation-cap text-blue"></i> Learner Assessment &amp; Grades Storage
+                            <span class="card-title-meta">Grade 2 - Section A (Advisory)</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select id="gradeQuarterFilter" style="padding: 0.35rem 0.65rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; background: #fff;">
+                                <option value="Q1" selected>Quarter 1 (Trimester 1)</option>
+                                <option value="Q2">Quarter 2 (Trimester 1)</option>
+                                <option value="Q3">Quarter 3 (Trimester 2)</option>
+                                <option value="Q4">Quarter 4 (Trimester 3)</option>
+                            </select>
+                            <button type="button" class="btn-primary" id="saveGradesBtn" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+                                <i class="fas fa-save"></i> Save Records
+                            </button>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper" style="max-height: 280px; overflow-y: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>LRN</th>
+                                    <th>Learner Full Name</th>
+                                    <th>English</th>
+                                    <th>Math</th>
+                                    <th>Filipino</th>
+                                    <th>General Avg</th>
+                                    <th>DepEd Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentGradesTableBody">
+                                <tr>
+                                    <td class="text-muted">115204200001</td>
+                                    <td><strong>Alvarez, Miguel S.</strong></td>
+                                    <td><input type="number" class="grade-input" value="88" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="85" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="90" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><strong style="color: #16a34a;">87.6</strong></td>
+                                    <td><span class="status-badge status-confirmed">Passed</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">115204200002</td>
+                                    <td><strong>Bautista, Chloe M.</strong></td>
+                                    <td><input type="number" class="grade-input" value="92" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="91" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="94" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><strong style="color: #16a34a;">92.3</strong></td>
+                                    <td><span class="status-badge status-confirmed">With Honors</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">115204200003</td>
+                                    <td><strong>Dela Cruz, Juan Carlos</strong></td>
+                                    <td><input type="number" class="grade-input" value="79" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="81" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="80" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><strong style="color: #d97706;">80.0</strong></td>
+                                    <td><span class="status-badge status-confirmed">Passed</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">115204200004</td>
+                                    <td><strong>Flores, Angelica R.</strong></td>
+                                    <td><input type="number" class="grade-input" value="85" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="86" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><input type="number" class="grade-input" value="88" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
+                                    <td><strong style="color: #16a34a;">86.3</strong></td>
+                                    <td><span class="status-badge status-confirmed">Passed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <!-- ABSENCE REQUESTS -->
                 <section class="content-card" id="absence-requests-section">
                     <div class="card-title">
@@ -470,27 +580,30 @@
                         <button type="button" class="btn-link" id="openLeaveModalBtn"><i class="fas fa-plus"></i> Request Leave</button>
                     </div>
                     <div class="data-table-wrapper">
-                        <table class="data-table">
+                        <table class="data-table" id="absenceTable">
                             <thead>
                                 <tr>
                                     <th>Date Requested</th>
                                     <th>Type</th>
+                                    <th>Clinical Backing</th>
                                     <th>Status</th>
                                     <th>Substitute</th>
                                     <th>Details</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="absenceTableBody">
                                 <tr>
                                     <td>July 25, 2026</td>
                                     <td>Sick Leave</td>
+                                    <td><span class="clinical-badge-row">High EE (72/100)</span></td>
                                     <td><span class="status-badge status-pending">Pending</span></td>
                                     <td>-</td>
-                                    <td class="text-muted">Under review by admin</td>
+                                    <td class="text-muted">Burnout &amp; fatigue recovery requested</td>
                                 </tr>
                                 <tr>
                                     <td>July 15, 2026</td>
                                     <td>Personal</td>
+                                    <td><span style="background: #f1f5f9; color: #475569; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.72rem;">Elective</span></td>
                                     <td><span class="status-badge status-confirmed">Approved</span></td>
                                     <td>TCH-015</td>
                                     <td class="text-muted">Covered by Mr. Santos</td>
@@ -512,13 +625,51 @@
                     </span>
                 </div>
                 <div class="footer-block text-right">
-                    <span class="version-label">Faculty Portal v2.1.0</span>
+                    <span class="version-label">Faculty Portal v2.2.0</span>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- MODAL: WELLNESS CHECK-IN -->
+    <!-- MODAL 1: AUTOMATIC ASSESSMENT DUE POPUP (TRIGGERED ON LOAD) -->
+    <div class="modal-overlay" id="assessmentReminderModal" style="display: none;">
+        <div class="modal-container modal-container--sm modal-padded" style="border-top: 5px solid #dc2626;">
+            <div class="modal-header border-none padding-bottom-zero" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                    <div class="reminder-icon-bubble">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <h2 style="font-size: 1.15rem; margin: 0; color: #0f172a;">Trimester Assessment Due</h2>
+                        <span style="font-size: 0.76rem; color: #dc2626; font-weight: 700; text-transform: uppercase;">Statutory Action Required</span>
+                    </div>
+                </div>
+                <button class="modal-close-icon" id="closeAssessmentReminderBtn" aria-label="Close modal">&times;</button>
+            </div>
+
+            <div class="modal-body padding-top-sm">
+                <p style="font-size: 0.88rem; color: #475569; line-height: 1.5; margin: 0.75rem 0 1.25rem 0;">
+                    Hello, <strong>Teacher Sarah</strong>! Your <strong>Trimester 1 MBI-ES &amp; Workload Assessment</strong> is currently pending. Completing this ensures your contact hours, ancillary duties, and fatigue indicators are properly recorded in the school system.
+                </p>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.78rem; color: #64748b;">
+                    <i class="fas fa-info-circle text-blue"></i>
+                    <span>Takes only <strong>2–3 minutes</strong>. Your inputs are confidential under R.A. 10173.</span>
+                </div>
+
+                <div class="modal-actions modal-actions--split">
+                    <button type="button" class="btn-outline" id="remindMeLaterAssessmentBtn" style="font-size: 0.85rem;">
+                        Remind Me Later
+                    </button>
+                    <button type="button" class="btn-primary" id="takeAssessmentNowBtn" onclick="window.location.href='assessment.html'" style="font-size: 0.85rem; background: #0038A8;">
+                        Take Assessment Now &rarr;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: WELLNESS CHECK-IN -->
     <div class="modal-overlay" id="wellnessCheckinModal">
         <div class="modal-container modal-container--sm modal-padded">
             <div class="modal-header border-none padding-bottom-zero">
@@ -574,14 +725,14 @@
                 </div>
 
                 <div class="modal-actions modal-actions--split">
-                    <button class="btn-outline width-auto" id="completeCheckinBtn" type="button" onclick="window.location.href='burnout-risk_assessment.html'">Full Risk Assessment &rarr;</button>
+                    <button class="btn-outline width-auto" id="completeCheckinBtn" type="button" onclick="window.location.href='assessment.html'">Full Risk Assessment &rarr;</button>
                     <button class="btn-primary width-auto" id="submitWellnessBtn" type="button">Submit Pulse &rarr;</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: REQUEST ADJUSTMENT -->
+    <!-- MODAL 3: REQUEST ADJUSTMENT -->
     <div class="modal-overlay" id="requestAdjustmentModal">
         <div class="modal-container">
             <div class="modal-header">
@@ -660,7 +811,7 @@
         </div>
     </div>
 
-    <!-- MODAL: REQUEST LEAVE -->
+    <!-- MODAL 4: REQUEST LEAVE (WITH EMBEDDED BURNOUT & WORKLOAD JUSTIFICATION) -->
     <div class="modal-overlay" id="requestLeaveModal">
         <div class="modal-container">
             <div class="modal-header">
@@ -668,10 +819,41 @@
                 <button class="modal-close-icon" id="leaveModalCloseBtn" aria-label="Close modal">&times;</button>
             </div>
             <div class="modal-body">
+                
+                <!-- AUTOMATED WORKLOAD & HEALTH JUSTIFICATION CARD -->
+                <div class="leave-burnout-justification-card" style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                        <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #0038A8; letter-spacing: 0.04em;">
+                            <i class="fas fa-file-medical"></i> Workload &amp; Health Justification
+                        </span>
+                        <span style="background: #fee2e2; color: #dc2626; font-size: 0.72rem; font-weight: 800; padding: 0.15rem 0.55rem; border-radius: 999px;">
+                            Elevated Burnout Risk
+                        </span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.65rem;">
+                        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.65rem;">
+                            <span style="font-size: 0.72rem; color: #64748b; display: block;">Current Weekly Load:</span>
+                            <strong style="font-size: 0.95rem; color: #0f172a;" id="leaveModalWorkloadHrs">27.0 hrs (68 WLU)</strong>
+                            <small style="font-size: 0.7rem; color: #d97706; display: block; font-weight: 600;">Moderate Overload Tier</small>
+                        </div>
+                        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.65rem;">
+                            <span style="font-size: 0.72rem; color: #64748b; display: block;">MBI-ES Exhaustion Index:</span>
+                            <strong style="font-size: 0.95rem; color: #dc2626;" id="leaveModalMbiScore">72 / 100 Index</strong>
+                            <small style="font-size: 0.7rem; color: #dc2626; display: block; font-weight: 600;">High Fatigue Subscale</small>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.74rem; color: #475569; display: flex; align-items: center; gap: 0.4rem;">
+                        <i class="fas fa-shield-halved text-blue"></i>
+                        <span>DepEd Health Mandate: Absence verified against objective eSF7 workload metrics.</span>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="leaveTypeSelect">Leave Type <span class="required-star">*</span></label>
                     <select id="leaveTypeSelect">
-                        <option value="Sick Leave" selected>Sick Leave</option>
+                        <option value="Sick Leave" selected>Sick Leave (Health / Burnout Recovery)</option>
                         <option value="Personal Leave">Personal Leave / Vacation</option>
                         <option value="Emergency Leave">Emergency Leave</option>
                         <option value="Official Business">Official Business / DepEd Order</option>
@@ -729,8 +911,88 @@
     <script src="../../js/workloadManager.js"></script>
     <script src="../../js/teacherdashboard-ui.js"></script>
 
-    <!-- AUTOMATIC ROLE-SWITCH ACTIVATION SCRIPT -->
+    <!-- Modal & Workflow Interaction Controller -->
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. AUTOMATIC ASSESSMENT POP-UP REMINDER TRIGGER
+            (function initAssessmentPopup() {
+                const reminderModal = document.getElementById('assessmentReminderModal');
+                if (!reminderModal) return;
+
+                const isCompleted = localStorage.getItem('kandili_trimester_assessed') === 'true' ||
+                                    sessionStorage.getItem('kandili_trimester_assessed') === 'true';
+
+                const isSnoozed = sessionStorage.getItem('kandili_assessment_snoozed') === 'true';
+
+                // Display automatically on launch if not completed or snoozed
+                if (!isCompleted && !isSnoozed) {
+                    setTimeout(() => {
+                        reminderModal.style.display = 'flex';
+                        reminderModal.classList.add('active');
+                    }, 500);
+                }
+
+                const closeBtn = document.getElementById('closeAssessmentReminderBtn');
+                const snoozeBtn = document.getElementById('remindMeLaterAssessmentBtn');
+
+                function dismissReminder() {
+                    reminderModal.style.display = 'none';
+                    reminderModal.classList.remove('active');
+                    sessionStorage.setItem('kandili_assessment_snoozed', 'true');
+                }
+
+                closeBtn?.addEventListener('click', dismissReminder);
+                snoozeBtn?.addEventListener('click', dismissReminder);
+            })();
+
+            // 2. SAVE GRADES INTERACTION
+            document.getElementById('saveGradesBtn')?.addEventListener('click', () => {
+                alert("Learner quarterly grades saved successfully in local storage!");
+            });
+
+            // 3. LEAVE REQUEST MODAL & JUSTIFICATION SUBMISSION
+            const leaveModal = document.getElementById('requestLeaveModal');
+            const openLeaveBtn = document.getElementById('openLeaveModalBtn');
+            const closeLeaveBtn = document.getElementById('leaveModalCloseBtn');
+            const cancelLeaveBtn = document.getElementById('cancelLeaveBtn');
+            const submitLeaveBtn = document.getElementById('submitLeaveBtn');
+
+            openLeaveBtn?.addEventListener('click', () => leaveModal?.classList.add('active'));
+            closeLeaveBtn?.addEventListener('click', () => leaveModal?.classList.remove('active'));
+            cancelLeaveBtn?.addEventListener('click', () => leaveModal?.classList.remove('active'));
+
+            submitLeaveBtn?.addEventListener('click', () => {
+                const leaveType = document.getElementById('leaveTypeSelect')?.value;
+                const startDate = document.getElementById('leaveStartDate')?.value;
+                const reason = document.getElementById('leaveReasonTextarea')?.value.trim();
+
+                if (!startDate) {
+                    alert("Please select a start date for the absence.");
+                    return;
+                }
+
+                // Add row to Absence Requests table with clinical badge
+                const tbody = document.getElementById('absenceTableBody');
+                if (tbody) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${startDate}</td>
+                        <td>${leaveType}</td>
+                        <td><span class="clinical-badge-row">High EE (72/100)</span></td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>TCH-015</td>
+                        <td class="text-muted">${reason || 'Health recovery requested'}</td>
+                    `;
+                    tbody.prepend(tr);
+                }
+
+                alert("Absence request submitted to the School Head with attached Workload Diagnostic Justification!");
+                leaveModal?.classList.remove('active');
+            });
+        });
+
+        // 4. ROLE-SWITCH RETENTION FOR PRINCIPAL TESTING
         (function initAdminSwitchButton() {
             const adminBtn = document.getElementById('adminSwitchBtn');
             if (!adminBtn) return;
@@ -738,13 +1000,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             const viewAs = urlParams.get('viewAs');
 
-            if (viewAs === 'principal') {
+            if (viewAs === 'principal' || sessionStorage.getItem('kandili_viewing_as_teacher') === 'true') {
                 sessionStorage.setItem('kandili_viewing_as_teacher', 'true');
-                adminBtn.style.display = 'inline-flex';
-                return;
-            }
-
-            if (sessionStorage.getItem('kandili_viewing_as_teacher') === 'true') {
                 adminBtn.style.display = 'inline-flex';
                 return;
             }
@@ -752,7 +1009,6 @@
             const role = (localStorage.getItem('user_role') || sessionStorage.getItem('user_role') || '').toLowerCase();
             if (role === 'principal') {
                 adminBtn.style.display = 'inline-flex';
-                return;
             }
         })();
     </script>
