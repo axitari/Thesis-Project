@@ -72,6 +72,160 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
+.school-node-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.school-node-toolbar h3 {
+    margin: 0 0 0.3rem;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.school-node-toolbar p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.84rem;
+}
+
+.school-node-switcher {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.admin-school-filter {
+    min-width: min(100%, 320px);
+    padding: 0.7rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0f172a;
+    font: inherit;
+}
+
+.school-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.62);
+    backdrop-filter: blur(3px);
+}
+
+.school-modal-backdrop.is-open {
+    display: flex !important;
+}
+
+.school-modal {
+    width: min(100%, 620px);
+    max-height: min(90vh, 760px);
+    overflow-y: auto;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+}
+
+.school-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.school-modal-header h2 {
+    margin: 0 0 0.35rem;
+    color: #0f172a;
+    font-size: 1.25rem;
+}
+
+.school-modal-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.88rem;
+}
+
+.school-modal-close {
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.school-modal-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.school-modal-fields .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.school-modal-fields label {
+    color: #334155;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.school-modal-fields input,
+.school-modal-fields select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0f172a;
+    font: inherit;
+}
+
+.school-modal-fields input:focus,
+.school-modal-fields select:focus {
+    outline: 3px solid rgba(0, 56, 168, 0.14);
+    border-color: #0038a8;
+}
+
+.school-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.school-modal-actions button {
+    min-height: 42px;
+}
+
+.school-node-delete {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid #fecaca;
+    border-radius: 7px;
+    background: #fff1f2;
+    color: #b91c1c;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.school-node-delete:hover {
+    background: #ffe4e6;
+}
+
 .selector-label {
     font-size: 0.8rem;
     font-weight: 800;
@@ -420,6 +574,10 @@
         grid-template-columns: 1fr 1fr;
     }
     .admin-two-col-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .school-modal-fields {
         grid-template-columns: 1fr;
     }
 }

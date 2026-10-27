@@ -1,8 +1,52 @@
 // static/registerLogic.js
 
+function renderRegisteredSchoolOptions() {
+    const schoolSelect = document.getElementById('school');
+    const stored = localStorage.getItem('kandili_master_schools');
+    if (!schoolSelect || stored === null) return;
+
+    let schools;
+    try {
+        schools = JSON.parse(stored);
+    } catch (error) {
+        console.error('Unable to read the registered school list:', error);
+        return;
+    }
+
+    if (!Array.isArray(schools)) {
+        console.error('The registered school list must be a JSON array.');
+        return;
+    }
+
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    placeholder.textContent = 'Select School...';
+    schoolSelect.replaceChildren(placeholder);
+
+    schools.forEach(school => {
+        if (typeof school.school_name !== 'string' || !school.school_name.trim()) return;
+        const option = document.createElement('option');
+        option.value = school.school_name;
+        option.textContent = school.short_code
+            ? `${school.school_name} (${school.short_code})`
+            : school.school_name;
+        schoolSelect.appendChild(option);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderRegisteredSchoolOptions();
+    window.addEventListener('storage', event => {
+        if (event.key === 'kandili_master_schools') renderRegisteredSchoolOptions();
+    });
+    window.addEventListener('kandili:schools-updated', renderRegisteredSchoolOptions);
+});
+
 const registerForm = document.getElementById('registerForm');
 
-registerForm.addEventListener('submit', async (e) => {
+registerForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const firstName = document.getElementById('firstName').value;

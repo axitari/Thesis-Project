@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function handleAssessmentSubmit(event) {
     event.preventDefault();
 
-    const submitBtn = document.querySelector('.btn-submit');
+    const submitBtn = document.getElementById('submitAssessmentBtn');
     const resultDiv = document.getElementById('result');
 
     const formData = new FormData(event.target);
@@ -68,6 +68,9 @@ async function handleAssessmentSubmit(event) {
             });
 
         if (error) throw error;
+
+        localStorage.setItem('kandili_trimester_assessed', 'true');
+        sessionStorage.setItem('kandili_trimester_assessed', 'true');
 
         if (resultDiv) {
             resultDiv.style.display = 'block';

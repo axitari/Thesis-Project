@@ -100,31 +100,41 @@
                     </div>
                 </div>
 
-                <!-- 1. SCHOOL SELECTOR BUTTONS (THE CORE CONTROL) -->
+                <!-- 1. DISTRICT SCHOOL NODES -->
                 <section class="school-selector-container">
-                    <span class="selector-label">Select Active School Node:</span>
-                    <div class="school-button-group">
-                        <button type="button" class="btn-school-pill active" data-school="ROVCMS" id="btnSchoolROVCMS">
-                            <i class="fas fa-school-flag"></i>
-                            <div class="school-pill-text">
-                                <strong>ROVCMS</strong>
-                                <span>Elementary School</span>
-                            </div>
+                    <div class="school-node-toolbar">
+                        <div>
+                            <h3><i class="fas fa-school-flag text-blue"></i> District School Nodes</h3>
+                            <p>Manage registered elementary campuses and choose the active school.</p>
+                        </div>
+                        <button type="button" class="btn-primary" id="openAddSchoolModalBtn">
+                            <i class="fas fa-plus"></i> Add New School Node
                         </button>
-                        <button type="button" class="btn-school-pill" data-school="LJES" id="btnSchoolLJES">
-                            <i class="fas fa-school-flag"></i>
-                            <div class="school-pill-text">
-                                <strong>LJES</strong>
-                                <span>Elementary School</span>
-                            </div>
-                        </button>
-                        <button type="button" class="btn-school-pill" data-school="SMES" id="btnSchoolSMES">
-                            <i class="fas fa-school-flag"></i>
-                            <div class="school-pill-text">
-                                <strong>SMES</strong>
-                                <span>Elementary School</span>
-                            </div>
-                        </button>
+                    </div>
+
+                    <div class="school-node-switcher">
+                        <label class="selector-label" for="adminSchoolFilter">Select Active School Node:</label>
+                        <select id="adminSchoolFilter" class="admin-school-filter">
+                            <option value="all">All District Schools (Consolidated)</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>School Name</th>
+                                    <th>School ID</th>
+                                    <th>Code</th>
+                                    <th>District</th>
+                                    <th>DepEd Division</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminSchoolsTableBody">
+                                <!-- Populated from the registered school profiles -->
+                            </tbody>
+                        </table>
                     </div>
                 </section>
 
@@ -288,11 +298,57 @@
         </div>
     </div>
 
+    <div id="addSchoolModal" class="school-modal-backdrop" role="presentation" aria-hidden="true" style="display: none;">
+        <section class="school-modal" role="dialog" aria-modal="true" aria-labelledby="addSchoolModalTitle">
+            <header class="school-modal-header">
+                <div>
+                    <h2 id="addSchoolModalTitle">Add New School Node</h2>
+                    <p>Register a DepEd school for this district workspace.</p>
+                </div>
+                <button type="button" class="school-modal-close" id="closeAddSchoolModalBtn" aria-label="Close dialog">&times;</button>
+            </header>
+            <form id="addSchoolForm">
+                <div class="school-modal-fields">
+                    <div class="form-group">
+                        <label for="newSchoolId">Official DepEd School ID</label>
+                        <input type="text" id="newSchoolId" name="school_id" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newSchoolName">Complete School Name</label>
+                        <input type="text" id="newSchoolName" name="school_name" placeholder="Raul O.V. Causing Memorial School" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newShortCode">Acronym / Code</label>
+                        <input type="text" id="newShortCode" name="short_code" placeholder="ROVCMS" pattern="[A-Z0-9]{2,12}" maxlength="12" autocapitalize="characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newDistrict">District</label>
+                        <input type="text" id="newDistrict" name="district" placeholder="District V" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newDivision">DepEd Division</label>
+                        <select id="newDivision" name="division" required>
+                            <option value="" disabled selected>Select Division...</option>
+                            <option value="Division of Iloilo City">Division of Iloilo City</option>
+                            <option value="Division of Iloilo Province">Division of Iloilo Province</option>
+                            <option value="Division of Guimaras">Division of Guimaras</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="school-modal-actions">
+                    <button type="button" class="btn-outline" id="cancelAddSchoolBtn">Cancel</button>
+                    <button type="submit" class="btn-primary" id="saveSchoolBtn">Save &amp; Broadcast</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
     <!-- Application Script Stack -->
-    <script src="../../js/supabaseClient.js"></script>
-    <script src="../../js/authGuard.js" data-allowed-roles="admin"></script>
-    <script src="../../js/logout.js"></script>
+    <script src="../../static/js/supabaseClient.js"></script>
+    <script src="../../static/js/authGuard.js" data-allowed-roles="admin"></script>
+    <script src="../../static/js/logout.js"></script>
     <script src="../../js/sidebarToggle.js"></script>
     <script src="../../js/superadminLogic.js"></script>
+    <script src="../../static/js/adminSchoolManager.js"></script>
 </body>
 </html>

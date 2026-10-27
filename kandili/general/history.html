@@ -103,6 +103,14 @@
 
                 <!-- SEARCH & FILTER TOOLBAR CARD -->
                 <section class="card history-search-card">
+                    <div class="history-mode-switch" role="group" aria-label="Activity history view">
+                        <button type="button" class="history-mode-btn is-active" data-history-mode="recent" aria-pressed="true">
+                            <i class="fas fa-clock"></i> Most Recent
+                        </button>
+                        <button type="button" class="history-mode-btn" data-history-mode="relevant" aria-pressed="false">
+                            <i class="fas fa-star"></i> Relevant
+                        </button>
+                    </div>
                     <div class="history-search-row">
                         <div class="history-input-wrap">
                             <i class="fas fa-search search-icon"></i>
@@ -124,7 +132,7 @@
 
                     <!-- LEDGER LIST -->
                     <div id="historyList" class="history-list">
-                        <div class="history-item" data-category="approval" data-status="approved" data-keywords="principal approved sf7 submission ancillary workload 2026 q3">
+                        <div class="history-item" data-category="approval" data-status="approved" data-action-category="approval" data-relevant-roles="principal,admin" data-timestamp="2026-07-17T09:00:00" data-keywords="principal approved sf7 submission ancillary workload 2026 q3">
                             <div class="history-icon-circle icon-approve">
                                 <i class="fas fa-check"></i>
                             </div>
@@ -136,7 +144,7 @@
                             <div class="history-date">July 17, 2026</div>
                         </div>
 
-                        <div class="history-item" data-category="update" data-status="updated" data-keywords="user profile updated system modification admin july 16">
+                        <div class="history-item" data-category="update" data-status="updated" data-action-category="profile-update" data-relevant-roles="" data-timestamp="2026-07-16T09:00:00" data-keywords="user profile updated system modification admin july 16">
                             <div class="history-icon-circle icon-update">
                                 <i class="fas fa-pen-to-square"></i>
                             </div>
@@ -148,7 +156,7 @@
                             <div class="history-date">July 16, 2026</div>
                         </div>
 
-                        <div class="history-item" data-category="submission" data-status="submitted" data-keywords="ancillary summary submitted teacher juan submission july 15">
+                        <div class="history-item" data-category="submission" data-status="submitted" data-action-category="submission" data-relevant-roles="teacher" data-timestamp="2026-07-15T09:00:00" data-keywords="ancillary summary submitted teacher juan submission july 15">
                             <div class="history-icon-circle icon-submit">
                                 <i class="fas fa-file-arrow-up"></i>
                             </div>
@@ -160,7 +168,7 @@
                             <div class="history-date">July 15, 2026</div>
                         </div>
 
-                        <div class="history-item" data-category="approval" data-status="review" data-keywords="reallocation request reviewed principal workload review july 14">
+                        <div class="history-item" data-category="approval" data-status="review" data-action-category="review" data-relevant-roles="principal,admin" data-timestamp="2026-07-14T09:00:00" data-keywords="reallocation request reviewed principal workload review july 14">
                             <div class="history-icon-circle icon-review">
                                 <i class="fas fa-magnifying-glass"></i>
                             </div>

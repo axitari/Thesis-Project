@@ -62,6 +62,37 @@
     box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
+.history-mode-switch {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    margin-bottom: 1.25rem;
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.history-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748b;
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-mode-btn.is-active {
+    background: #ffffff;
+    color: var(--deped-blue, #0038A8);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
 .history-search-row {
     display: flex;
     gap: 1rem;

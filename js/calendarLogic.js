@@ -3,23 +3,25 @@
  * Kandili Workspace - DepEd Master Calendar
  */
 
-let currentDate = new Date(2026, 8, 16); // September 16, 2026[cite: 7]
-let selectedDate = new Date(2026, 8, 16);
+let currentDate = new Date();
+let selectedDate = new Date(currentDate);
 
 let eventsData = [
     {
         id: 'evt-1',
         title: 'Midyear InSET Workshop (Day 1)',
-        type: 'schoolwide',
+        type: 'SCHOOL EVENT',
         audience: 'All Faculty',
+        date: '2026-09-16',
         startTime: '08:00',
-        duration: '240',
+        endTime: '12:00',
+        daysSpan: 1,
         createdByRole: 'principal'
     },
     {
         id: 'evt-2',
         title: 'eSF7 Load Audit Submission Deadline',
-        type: 'deadline',
+        type: 'DEPED REQUIREMENTS',
         audience: 'Department Heads',
         date: '2026-09-21',
         startTime: '17:00',
@@ -29,7 +31,7 @@ let eventsData = [
     {
         id: 'evt-3',
         title: 'Science Dept LAC Session',
-        type: 'department',
+        type: 'PERSONAL GROWTH',
         audience: 'Junior High School',
         date: '2026-09-24',
         startTime: '13:00',
@@ -39,28 +41,76 @@ let eventsData = [
     {
         id: 'evt-4',
         title: 'Division Evaluator Visit',
-        type: 'evaluation',
+        type: 'ACADEMIC ASSESSMENT',
         audience: 'All Faculty',
         date: '2026-09-28',
         startTime: '09:00',
         endTime: '12:00',
         daysSpan: 1
+    },
+    {
+        id: 'evt-5',
+        title: 'SDRRM and Inventory Coordination',
+        type: 'ANCILLARY TASK',
+        audience: 'Ancillary Coordinators',
+        date: '2026-09-30',
+        startTime: '13:00',
+        endTime: '15:00',
+        daysSpan: 1
     }
 ];
+
+function getDashboardRole() {
+    const roleHints = [
+        new URLSearchParams(window.location.search).get('origin'),
+        document.referrer,
+        localStorage.getItem('kandili_role'),
+        sessionStorage.getItem('kandili_role'),
+        localStorage.getItem('kandili_user_role'),
+        sessionStorage.getItem('kandili_user_role')
+    ];
+    const roleHint = roleHints
+        .map(hint => hint?.toLowerCase() || '')
+        .find(hint => hint.includes('teacher') || hint.includes('principal'));
+
+    return roleHint?.includes('teacher') ? 'teacher' : 'principal';
+}
+
+function getChipCategoryClass(type) {
+    const categoryClasses = {
+        'ACADEMIC ASSESSMENT': 'chip-deadline',
+        'DEPED REQUIREMENTS': 'chip-evaluation',
+        'PERSONAL GROWTH': 'chip-appointment',
+        'ANCILLARY TASK': 'chip-department',
+        'SCHOOL EVENT': 'chip-schoolwide'
+    };
+
+    return categoryClasses[type] || 'chip-appointment';
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initCalendar();
     initTopNavActions();
     initFormHandlers();
+    configureEventFormForRole();
     initLogoutHandler();
 });
 
 function initCalendar() {
-    // Dynamic dashboard link in sidebar based on stored user role
-    const userRole = localStorage.getItem('kandili_role') || sessionStorage.getItem('kandili_role') || 'principal';
+    // Keep the sidebar dashboard route aligned with the role-aware back button.
+    const userRole = getDashboardRole();
     const dashLink = document.getElementById('navDashboardLink');
     if (dashLink) {
         dashLink.href = userRole === 'teacher' ? '../teacher/teacherdashboard.html' : '../principal/principaldashboard.html';
+    }
+
+    const navDateDisplay = document.getElementById('navDateDisplay');
+    if (navDateDisplay) {
+        navDateDisplay.innerHTML = `<i class="far fa-calendar-alt"></i> ${new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}`;
     }
 
     renderCalendar();
@@ -81,21 +131,27 @@ function initCalendar() {
     });
 
     document.getElementById('todayBtn')?.addEventListener('click', () => {
-        currentDate = new Date(2026, 8, 16); // Sept 16, 2026
-        selectedDate = new Date(2026, 8, 16);
+        currentDate = new Date();
+        selectedDate = new Date(currentDate);
         renderCalendar();
         updateSidebarSelectedDay();
         updateSidebarStats();
     });
 
-    // Toggle event form expansion
+    // Open the event form and bring it into view for users below the calendar.
     document.getElementById('addEventBtn')?.addEventListener('click', () => {
         const form = document.getElementById('eventForm');
         form.reset();
         document.getElementById('eventId').value = '';
+        document.getElementById('eventTargetDate').value = formatDate(selectedDate);
         document.getElementById('formHeader').textContent = 'Create New Event';
         document.getElementById('deleteEventBtn')?.classList.add('hidden');
-        form?.classList.toggle('hidden');
+        configureEventFormForRole();
+        form.classList.remove('hidden');
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.setTimeout(() => {
+            document.getElementById('eventTitle').focus({ preventScroll: true });
+        }, 300);
     });
 
     document.getElementById('cancelEventBtn')?.addEventListener('click', () => {
@@ -103,17 +159,41 @@ function initCalendar() {
     });
 }
 
+function formatDate(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function configureEventFormForRole() {
+    const role = getDashboardRole();
+    const eventType = document.getElementById('eventType');
+    const audience = document.getElementById('targetAudience');
+    const roleBadge = document.getElementById('userRoleBadge');
+
+    if (roleBadge) {
+        roleBadge.innerHTML = `<i class="fas fa-user-shield"></i> Active Role: ${role === 'teacher' ? 'Teacher' : 'Principal'}`;
+    }
+
+    if (!eventType || !audience) return;
+
+    const isTeacher = role === 'teacher';
+    Array.from(eventType.options).forEach(option => {
+        option.hidden = isTeacher && option.value !== 'PERSONAL GROWTH';
+    });
+    Array.from(audience.options).forEach(option => {
+        option.hidden = isTeacher && option.value !== 'My Classroom';
+    });
+
+    eventType.disabled = isTeacher;
+    audience.disabled = isTeacher;
+    if (isTeacher) {
+        eventType.value = 'PERSONAL GROWTH';
+        audience.value = 'My Classroom';
+    }
+}
+
 function initTopNavActions() {
     const backBtn = document.getElementById('navBackBtn');
-    if (backBtn) {
-        backBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const role = localStorage.getItem('kandili_role') || sessionStorage.getItem('kandili_role') || 'principal';
-            window.location.href = (role === 'teacher') 
-                ? '../teacher/teacherdashboard.html' 
-                : '../principal/principaldashboard.html';
-        });
-    }
+    backBtn?.addEventListener('click', handleRoleAwareBack);
 
     document.getElementById('navRefreshBtn')?.addEventListener('click', () => {
         window.location.reload();
@@ -121,7 +201,7 @@ function initTopNavActions() {
 }
 
 function renderCalendar() {
-    const grid = document.getElementById('calendarGrid');
+    const grid = document.getElementById('calendarMonthGrid');
     const monthLabel = document.getElementById('monthLabel');
     if (!grid || !monthLabel) return;
 
@@ -129,6 +209,7 @@ function renderCalendar() {
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+    const today = new Date();
 
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -154,7 +235,7 @@ function renderCalendar() {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         
         dayCell.className = 'calendar-day';
-        if (year === 2026 && month === 8 && day === 16) {
+        if (today.getFullYear() === year && today.getMonth() === month && today.getDate() === day) {
             dayCell.classList.add('today');
         }
         if (
@@ -167,7 +248,7 @@ function renderCalendar() {
 
         const eventsToday = eventsData.filter(e => e.date === dateStr);
         const chipsHtml = eventsToday.map(e => `
-            <div class="event-chip chip-${e.type}" title="${e.title} (${e.startTime})">
+            <div class="event-chip ${getChipCategoryClass(e.type)}" title="${e.title} (${e.startTime})">
                 ${e.title}
             </div>
         `).join('');
@@ -201,8 +282,8 @@ function renderCalendar() {
 }
 
 function updateSidebarSelectedDay() {
-    const label = document.getElementById('selectedDateLabel');
-    const container = document.getElementById('selectedEvents');
+    const label = document.getElementById('inspectorDateText');
+    const container = document.getElementById('inspectorEventsList');
     if (!label || !container) return;
 
     const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
@@ -232,27 +313,52 @@ function updateSidebarStats() {
     const month = currentDate.getMonth();
     const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
 
-    const monthEvents = eventsData.filter(e => e.date.startsWith(monthPrefix));
-    
-    document.getElementById('monthEventCount').textContent = monthEvents.length;
-    document.getElementById('schoolCount').textContent = monthEvents.filter(e => e.type === 'schoolwide').length;
-    document.getElementById('deptCount').textContent = monthEvents.filter(e => e.type === 'department').length;
+    const monthEvents = eventsData.filter(e => e.date?.startsWith(monthPrefix));
+
+    const total = document.getElementById('statTotalMonth');
+    const schoolwide = document.getElementById('statSchoolwide');
+    const department = document.getElementById('deptCount');
+    if (total) total.textContent = monthEvents.length;
+    if (schoolwide) schoolwide.textContent = monthEvents.filter(e => e.type === 'SCHOOL EVENT').length;
+    if (department) {
+        department.textContent = monthEvents.filter(
+            e => e.type === 'ANCILLARY TASK' || e.type === 'PERSONAL GROWTH'
+        ).length;
+    }
 }
 
 window.openEventForEdit = function(id) {
     const event = eventsData.find(e => e.id === id);
     if (!event) return;
+    if (getDashboardRole() === 'teacher' && event.createdByRole !== 'teacher') return;
 
     const form = document.getElementById('eventForm');
     form.classList.remove('hidden');
 
     document.getElementById('eventId').value = event.id;
     document.getElementById('eventTitle').value = event.title;
-    document.getElementById('eventType').value = event.type;
-    document.getElementById('targetAudience').value = event.audience;
+    const legacyTypeMap = {
+        schoolwide: 'SCHOOL EVENT',
+        department: 'PERSONAL GROWTH',
+        deadline: 'DEPED REQUIREMENTS',
+        evaluation: 'ACADEMIC ASSESSMENT',
+        'school-event': 'SCHOOL EVENT',
+        'personal-growth': 'PERSONAL GROWTH',
+        'ancillary-task': 'ANCILLARY TASK',
+        'academic-assessment': 'ACADEMIC ASSESSMENT',
+        'deped-requirements': 'DEPED REQUIREMENTS'
+    };
+    document.getElementById('eventType').value = legacyTypeMap[event.type] || event.type;
+    const legacyAudienceMap = {
+        'Junior High School': 'Grades 4-6 Intermediate',
+        'Department Heads': 'Ancillary Coordinators'
+    };
+    document.getElementById('targetAudience').value = legacyAudienceMap[event.audience] || event.audience;
     document.getElementById('eventStartTime').value = event.startTime;
     document.getElementById('eventEndTime').value = event.endTime;
     document.getElementById('eventDaysSpan').value = event.daysSpan || 1;
+    document.getElementById('eventTargetDate').value = event.date || formatDate(selectedDate);
+    configureEventFormForRole();
 
     document.getElementById('formHeader').textContent = 'Edit Event Details';
     document.getElementById('deleteEventBtn')?.classList.remove('hidden');
@@ -265,13 +371,18 @@ function initFormHandlers() {
 
         const id = document.getElementById('eventId').value;
         const title = document.getElementById('eventTitle').value.trim();
-        const type = document.getElementById('eventType').value;
-        const audience = document.getElementById('targetAudience').value;
+        const role = getDashboardRole();
+        const type = role === 'teacher' ? 'PERSONAL GROWTH' : document.getElementById('eventType').value;
+        const audience = role === 'teacher' ? 'My Classroom' : document.getElementById('targetAudience').value;
+        const dateStr = document.getElementById('eventTargetDate').value;
         const startTime = document.getElementById('eventStartTime').value;
         const endTime = document.getElementById('eventEndTime').value;
         const daysSpan = parseInt(document.getElementById('eventDaysSpan').value, 10) || 1;
 
-        const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+        if (!title || !dateStr) {
+            form.reportValidity();
+            return;
+        }
 
         if (id) {
             // Edit existing
@@ -283,6 +394,8 @@ function initFormHandlers() {
                 target.startTime = startTime;
                 target.endTime = endTime;
                 target.daysSpan = daysSpan;
+                target.date = dateStr;
+                target.createdByRole = role;
             }
         } else {
             // Create new
@@ -294,10 +407,13 @@ function initFormHandlers() {
                 date: dateStr,
                 startTime,
                 endTime,
-                daysSpan
+                daysSpan,
+                createdByRole: role
             });
         }
 
+        selectedDate = new Date(`${dateStr}T00:00:00`);
+        currentDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
         form.classList.add('hidden');
         renderCalendar();
         updateSidebarSelectedDay();
@@ -307,6 +423,8 @@ function initFormHandlers() {
     document.getElementById('deleteEventBtn')?.addEventListener('click', () => {
         const id = document.getElementById('eventId').value;
         if (!id) return;
+        const event = eventsData.find(e => e.id === id);
+        if (getDashboardRole() === 'teacher' && event?.createdByRole !== 'teacher') return;
 
         if (confirm('Are you sure you want to remove this calendar entry?')) {
             eventsData = eventsData.filter(e => e.id !== id);
@@ -331,31 +449,8 @@ function initLogoutHandler() {
 
 function handleRoleAwareBack(e) {
     if (e) e.preventDefault();
-
-    // 1. Check if the user navigated from a teacher page via browser referrer
-    if (document.referrer && document.referrer.includes('/teacher/')) {
-        window.location.href = '../teacher/teacherdashboard.html';
-        return;
-    }
-
-    // 2. Check if the user navigated from a principal page
-    if (document.referrer && document.referrer.includes('/principal/')) {
-        window.location.href = '../principal/principaldashboard.html';
-        return;
-    }
-
-    // 3. Check session/local storage with all common role keys
-    const detectedRole = (
-        sessionStorage.getItem('kandili_role') ||
-        localStorage.getItem('kandili_role') ||
-        sessionStorage.getItem('role') ||
-        localStorage.getItem('role') ||
-        ''
-    ).toLowerCase();
-
-    if (detectedRole === 'teacher') {
-        window.location.href = '../teacher/teacherdashboard.html';
-    } else {
-        window.location.href = '../principal/principaldashboard.html';
-    }
+    const role = getDashboardRole();
+    window.location.href = role === 'teacher'
+        ? '../teacher/teacherdashboard.html'
+        : '../principal/principaldashboard.html';
 }

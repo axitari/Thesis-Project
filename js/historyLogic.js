@@ -112,25 +112,53 @@ function initHistoryFilters() {
     const resetBtn = document.getElementById('resetBtn');
     const historyList = document.getElementById('historyList');
     const emptyState = document.getElementById('historyEmpty');
+    const modeButtons = Array.from(document.querySelectorAll('[data-history-mode]'));
 
     if (!historyList) return;
 
     const items = Array.from(historyList.querySelectorAll('.history-item'));
+    let activeMode = 'recent';
 
     function applyFilters() {
         const query = (searchInput?.value || '').trim().toLowerCase();
         const selectedCategory = (filterSelect?.value || 'all').toLowerCase();
+        const role = (
+            new URLSearchParams(window.location.search).get('origin') ||
+            sessionStorage.getItem('kandili_user_role') ||
+            'teacher'
+        ).toLowerCase();
+        const highPriorityActions = {
+            teacher: new Set(['leave-approval', 'schedule-shift', 'assessment-submission', 'submission']),
+            principal: new Set(['leave-approval', 'schedule-shift', 'assessment-submission', 'approval', 'review']),
+            admin: new Set(['leave-approval', 'schedule-shift', 'assessment-submission', 'approval', 'review'])
+        };
+        const relevantActions = highPriorityActions[role] || highPriorityActions.teacher;
+        const sortedItems = [...items].sort((a, b) => {
+            const timestampA = Date.parse(a.dataset.timestamp || '');
+            const timestampB = Date.parse(b.dataset.timestamp || '');
+            return (Number.isFinite(timestampB) ? timestampB : 0) -
+                (Number.isFinite(timestampA) ? timestampA : 0);
+        });
         let visibleCount = 0;
 
-        items.forEach(item => {
+        sortedItems.forEach(item => {
             const keywords = (item.getAttribute('data-keywords') || '').toLowerCase();
             const textContent = item.textContent.toLowerCase();
             const category = (item.getAttribute('data-category') || '').toLowerCase();
+            const actionCategory = (item.getAttribute('data-action-category') || '').toLowerCase();
+            const relevantRoles = (item.getAttribute('data-relevant-roles') || '')
+                .toLowerCase()
+                .split(',')
+                .map(itemRole => itemRole.trim())
+                .filter(Boolean);
 
             const matchesQuery = !query || keywords.includes(query) || textContent.includes(query);
             const matchesCategory = selectedCategory === 'all' || category === selectedCategory;
+            const matchesMode = activeMode === 'recent' ||
+                (relevantActions.has(actionCategory) && relevantRoles.includes(role));
 
-            if (matchesQuery && matchesCategory) {
+            historyList.appendChild(item);
+            if (matchesQuery && matchesCategory && matchesMode) {
                 item.style.display = 'flex';
                 visibleCount++;
             } else {
@@ -140,6 +168,12 @@ function initHistoryFilters() {
 
         if (emptyState) {
             emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+            const emptyMessage = emptyState.querySelector('p');
+            if (emptyMessage && activeMode === 'relevant') {
+                emptyMessage.textContent = 'No relevant activity found for your role and current filters.';
+            } else if (emptyMessage) {
+                emptyMessage.textContent = 'Try adjusting your search keywords or switching category filters.';
+            }
         }
     }
 
@@ -149,11 +183,30 @@ function initHistoryFilters() {
         if (e.key === 'Enter') applyFilters();
     });
     filterSelect?.addEventListener('change', applyFilters);
+    modeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            activeMode = button.dataset.historyMode === 'relevant' ? 'relevant' : 'recent';
+            modeButtons.forEach(modeButton => {
+                const isActive = modeButton === button;
+                modeButton.classList.toggle('is-active', isActive);
+                modeButton.setAttribute('aria-pressed', String(isActive));
+            });
+            applyFilters();
+        });
+    });
 
     // Reset button
     resetBtn?.addEventListener('click', () => {
         if (searchInput) searchInput.value = '';
         if (filterSelect) filterSelect.value = 'all';
+        activeMode = 'recent';
+        modeButtons.forEach(button => {
+            const isActive = button.dataset.historyMode === 'recent';
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-pressed', String(isActive));
+        });
         applyFilters();
     });
+
+    applyFilters();
 }

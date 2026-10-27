@@ -7,9 +7,11 @@
 const schoolData = {
     ROVCMS: {
         code: 'ROVCMS',
-        fullName: 'Raul OV Causing Memorial School (ROVCMS)',
+        fullName: 'Raul O.V. Causing Memorial School (ROVCMS)',
         schoolId: '115204',
-        location: 'District II, Division of Iloilo',
+        district: 'District II',
+        division: 'Division of Iloilo Province',
+        location: 'District II, Division of Iloilo Province',
         principal: 'Mylene Panaguiton',
         learners: '780',
         facultyCount: '24',
@@ -35,8 +37,10 @@ const schoolData = {
     LJES: {
         code: 'LJES',
         fullName: 'Lopez Jaena Elementary School (LJES)',
-        schoolId: '115212',
-        location: 'District I, Division of Iloilo',
+        schoolId: '115208',
+        district: 'District I',
+        division: 'Division of Iloilo Province',
+        location: 'District I, Division of Iloilo Province',
         principal: 'Dr. Arthur S. Morales',
         learners: '540',
         facultyCount: '18',
@@ -58,8 +62,10 @@ const schoolData = {
     SMES: {
         code: 'SMES',
         fullName: 'San Miguel Elementary School (SMES)',
-        schoolId: '115220',
-        location: 'District III, Division of Iloilo',
+        schoolId: '115215',
+        district: 'District III',
+        division: 'Division of Iloilo Province',
+        location: 'District III, Division of Iloilo Province',
         principal: 'Grace H. Villanueva',
         learners: '420',
         facultyCount: '14',
@@ -88,8 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Setup Topbar & Actions
     initAdminHeader();
 
-    // 3. Initialize School Buttons
-    initSchoolButtons();
+    // 3. Initialize the school node filter and registry
+    initSchoolFilter();
+    renderManagedSchools();
 
     // 4. Initialize Forms & Search
     initModelAutoSelector();
@@ -123,28 +130,45 @@ function initAdminHeader() {
     });
 }
 
-// 1. School Selector Button Events
-function initSchoolButtons() {
-    const buttons = document.querySelectorAll('.btn-school-pill');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const schoolKey = btn.getAttribute('data-school');
-            if (!schoolKey || !schoolData[schoolKey]) return;
+// 1. School node filter and registry
+function initSchoolFilter() {
+    const schoolFilter = document.getElementById('adminSchoolFilter');
+    schoolFilter?.addEventListener('change', () => {
+        const schoolKey = schoolFilter.value;
+        if (!schoolData[schoolKey]) return;
 
-            buttons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            currentSelectedSchool = schoolKey;
-            loadSchoolData(schoolKey);
-        });
+        currentSelectedSchool = schoolKey;
+        loadSchoolData(schoolKey);
     });
+}
+
+function renderManagedSchools() {
+    if (typeof renderAdminSchoolNodes === 'function') {
+        renderAdminSchoolNodes();
+        return;
+    }
+
+    const schoolsTable = document.getElementById('adminSchoolsTableBody');
+    if (!schoolsTable) return;
+
+    schoolsTable.innerHTML = Object.values(schoolData).map(school => `
+        <tr>
+            <td><strong>${school.code}</strong> — ${school.fullName}</td>
+            <td>${school.schoolId}</td>
+            <td>${school.location.split(',')[0]}</td>
+            <td><span class="badge-status-active">Managed</span></td>
+        </tr>
+    `).join('');
 }
 
 // 2. Load School Profile, Demographics, Sections & Faculty
 function loadSchoolData(schoolKey) {
     const data = schoolData[schoolKey];
     if (!data) return;
+    currentSelectedSchool = schoolKey;
+
+    const schoolFilter = document.getElementById('adminSchoolFilter');
+    if (schoolFilter && schoolFilter.value !== 'all') schoolFilter.value = schoolKey;
 
     // Header Demographics
     const titleEl = document.getElementById('currentSchoolTitle');
@@ -152,7 +176,17 @@ function loadSchoolData(schoolKey) {
     const princEl = document.getElementById('currentSchoolPrincipal');
 
     if (titleEl) titleEl.textContent = data.fullName;
-    if (locEl) locEl.innerHTML = `<i class="fas fa-location-dot"></i> ${data.location} &bull; School ID: <strong>${data.schoolId}</strong>`;
+    if (locEl) {
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-location-dot';
+        const schoolId = document.createElement('strong');
+        schoolId.textContent = data.schoolId;
+        locEl.replaceChildren(
+            icon,
+            document.createTextNode(` ${data.location} • School ID: `),
+            schoolId
+        );
+    }
     if (princEl) princEl.textContent = data.principal;
 
     // Stats

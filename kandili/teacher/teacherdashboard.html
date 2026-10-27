@@ -355,7 +355,7 @@
                                 Complete your standardized assessment to update your quantified risk score. The system relies on this data to adjust your workload recommendations accurately.
                             </p>
                             <div class="action-row no-border">
-                                <button class="btn-blue" id="takeAssessmentBtn" type="button" onclick="window.location.href='assessment.html'">
+                                <button class="btn-blue" id="takeAssessmentBtn" type="button">
                                     <i class="fas fa-clipboard-check"></i> Take Assessment
                                 </button>
                                 <button class="btn-outline" id="viewAnalyticsBtn" type="button" onclick="window.location.href='teacher_analytics.html'">
@@ -524,10 +524,10 @@
                                 <tr>
                                     <th>LRN</th>
                                     <th>Learner Full Name</th>
-                                    <th>English</th>
-                                    <th>Math</th>
-                                    <th>Filipino</th>
-                                    <th>General Avg</th>
+                                    <th>Mother Tongue (MTB-MLE)</th>
+                                    <th>Mathematics 2</th>
+                                    <th>English &amp; Literacy 2</th>
+                                    <th>General Average</th>
                                     <th>DepEd Status</th>
                                 </tr>
                             </thead>
@@ -661,7 +661,7 @@
                     <button type="button" class="btn-outline" id="remindMeLaterAssessmentBtn" style="font-size: 0.85rem;">
                         Remind Me Later
                     </button>
-                    <button type="button" class="btn-primary" id="takeAssessmentNowBtn" onclick="window.location.href='assessment.html'" style="font-size: 0.85rem; background: #0038A8;">
+                    <button type="button" class="btn-primary" id="takeAssessmentNowBtn" onclick="window.location.href='burnout-risk_assessment.html'" style="font-size: 0.85rem; background: #0038A8;">
                         Take Assessment Now &rarr;
                     </button>
                 </div>
@@ -725,7 +725,7 @@
                 </div>
 
                 <div class="modal-actions modal-actions--split">
-                    <button class="btn-outline width-auto" id="completeCheckinBtn" type="button" onclick="window.location.href='assessment.html'">Full Risk Assessment &rarr;</button>
+                    <button class="btn-outline width-auto" id="completeCheckinBtn" type="button" onclick="window.location.href='burnout-risk_assessment.html'">Full Risk Assessment &rarr;</button>
                     <button class="btn-primary width-auto" id="submitWellnessBtn" type="button">Submit Pulse &rarr;</button>
                 </div>
             </div>
@@ -922,16 +922,7 @@
 
                 const isCompleted = localStorage.getItem('kandili_trimester_assessed') === 'true' ||
                                     sessionStorage.getItem('kandili_trimester_assessed') === 'true';
-
-                const isSnoozed = sessionStorage.getItem('kandili_assessment_snoozed') === 'true';
-
-                // Display automatically on launch if not completed or snoozed
-                if (!isCompleted && !isSnoozed) {
-                    setTimeout(() => {
-                        reminderModal.style.display = 'flex';
-                        reminderModal.classList.add('active');
-                    }, 500);
-                }
+                const isSnoozed = sessionStorage.getItem('kandili_trimester_assessment_snoozed') === 'true';
 
                 const closeBtn = document.getElementById('closeAssessmentReminderBtn');
                 const snoozeBtn = document.getElementById('remindMeLaterAssessmentBtn');
@@ -939,11 +930,18 @@
                 function dismissReminder() {
                     reminderModal.style.display = 'none';
                     reminderModal.classList.remove('active');
-                    sessionStorage.setItem('kandili_assessment_snoozed', 'true');
+                    sessionStorage.setItem('kandili_trimester_assessment_snoozed', 'true');
                 }
 
                 closeBtn?.addEventListener('click', dismissReminder);
                 snoozeBtn?.addEventListener('click', dismissReminder);
+
+                if (!isCompleted && !isSnoozed) {
+                    setTimeout(() => {
+                        reminderModal.style.display = 'flex';
+                        reminderModal.classList.add('active');
+                    }, 500);
+                }
             })();
 
             // 2. SAVE GRADES INTERACTION
