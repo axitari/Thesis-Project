@@ -45,7 +45,10 @@ async function checkAuthAndRole(requiredRole) {
     const userRole = profile.role;
 
     // 3. Role enforcement check
-    if (requiredRole && requiredRole !== 'any' && userRole !== requiredRole) {
+    const allowedRoles = requiredRole ? requiredRole.split(',').map(r => r.trim()) : [];
+const isAuthorized = requiredRole === 'any' || allowedRoles.includes(userRole);
+
+if (requiredRole && !isAuthorized) {
         console.warn(`Unauthorized Access. User is a ${userRole}, required ${requiredRole}.`);
         if (userRole === 'teacher') {
             window.location.href = getKandiliPath('teacher', 'teacherdashboard.html');
