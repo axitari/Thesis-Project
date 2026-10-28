@@ -53,6 +53,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const latestAssessment = assessments && assessments.length > 0 ? assessments[0] : null;
 
+            // Fetch Department Peers for Comparison
+            let deptAvg = 0;
+            let deptMin = 0;
+            
+            if (profile && profile.department) {
+                const { data: peers } = await window.supabaseClient
+                    .from('profiles')
+                    .select(`
+                        id,
+                        teaching_loads ( minutes_per_week ),
+                        ancillary_duties ( hours_per_week )
+                    `)
+                    .eq('department', profile.department)
+                    .eq('role', 'teacher');
+
+                if (peers && peers.length > 0) {
+                    const peerTotals = peers.map(p => {
+                        const tMins = p.teaching_loads?.reduce((sum, l) => sum + (l.minutes_per_week || 0), 0) || 0;
+                        const tHours = tMins / 60;
+                        const aHours = p.ancillary_duties?.reduce((sum, d) => sum + parseFloat(d.hours_per_week || 0), 0) || 0;
+                        return tHours + aHours;
+                    });
+
+                    deptAvg = peerTotals.reduce((a, b) => a + b, 0) / peerTotals.length;
+                    deptMin = Math.min(...peerTotals);
+                }
+            }
+
             // Compute Totals
             const totalTeachingMinutes = (teachingLoads || []).reduce((sum, load) => sum + (load.minutes_per_week || 0), 0);
             const totalTeachingHours = (totalTeachingMinutes / 60);
@@ -60,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const totalWorkloadHours = (totalTeachingHours + totalAncillaryHours);
 
             // Render Chart.js Analytics
-            renderTeacherCharts(totalWorkloadHours, totalTeachingHours, totalAncillaryHours, latestAssessment);
+            renderTeacherCharts(totalWorkloadHours, totalTeachingHours, totalAncillaryHours, latestAssessment, deptAvg, deptMin);
 
         } catch (err) {
             console.error("Failed to load teacher workload:", err);
@@ -409,7 +437,7 @@ async function applyExtractedProgramToDashboard(data) {
     }
 }
 
-function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs, latestAssessment = null) {
+function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs, latestAssessment = null, deptAvg = 0, deptMin = 0) {
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#64748b';
 
@@ -463,7 +491,7 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs, latestAssessm
                 labels: ['Your Total', 'Dept Avg', 'Dept Min'],
                 datasets: [{
                     label: 'Hours / Week',
-                    data: [userTotal.toFixed(1), 40, 32],
+                    data: [userTotal.toFixed(1), deptAvg.toFixed(1), deptMin.toFixed(1)],
                     backgroundColor: ['#C8102E', '#64748b', '#cbd5e1'],
                     borderRadius: 6
                 }]
