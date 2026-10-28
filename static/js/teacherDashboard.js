@@ -64,26 +64,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Restore saved extracted class program data across refreshes & sessions
     try {
-        let savedProgram = null;
+
         if (session) {
             const { data: profile } = await window.supabaseClient
                 .from('profiles')
-                .select('advisory_class')
+                .select('class_program')
                 .eq('id', session.user.id)
                 .single();
 
-            if (profile && profile.advisory_class && profile.advisory_class.startsWith('{')) {
-                savedProgram = profile.advisory_class;
+            if (profile && profile.class_program) {
+                await applyExtractedProgramToDashboard(profile.class_program);
             } else {
-                savedProgram = localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`) || localStorage.getItem('kandili_extracted_class_program');
+                const cached = localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`) 
+                    || localStorage.getItem('kandili_extracted_class_program');
+                if (cached) {
+                    await applyExtractedProgramToDashboard(JSON.parse(cached));
+                }
             }
         } else {
-            savedProgram = localStorage.getItem('kandili_extracted_class_program');
+            const cached = localStorage.getItem('kandili_extracted_class_program');
+            if (cached) {
+                await applyExtractedProgramToDashboard(JSON.parse(cached));
+            }
         }
 
-        if (savedProgram) {
-            await applyExtractedProgramToDashboard(JSON.parse(savedProgram));
-        }
+
+
     } catch (e) {}
 });
 
@@ -383,8 +389,8 @@ async function applyExtractedProgramToDashboard(data) {
             await window.supabaseClient
                 .from('profiles')
                 .update({ 
-                    advisory_class: jsonStr,
-                    department: data.section || 'Grade 2 - A'
+                    advisory_class: data.section || null,
+                    class_program: data
                 })
                 .eq('id', session.user.id);
         }
