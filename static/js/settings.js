@@ -65,7 +65,7 @@ async function loadAccountInfo() {
         // Fetch profile from profiles table
         const { data: profile, error: profileError } = await window.supabaseClient
             .from('profiles')
-            .select('role, created_at, last_login')
+            .select('role, created_at')
             .eq('id', user.id)
             .single();
 

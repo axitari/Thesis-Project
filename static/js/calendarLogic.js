@@ -218,7 +218,7 @@
         
         const countTotal = document.getElementById('monthEventCount');
         const countSchool = document.getElementById('schoolCount');
-        const countPersonal = document.getElementById('personalCount');
+        const countPersonal = document.getElementById('deptCount');
 
         if (countTotal) countTotal.textContent = monthEvents.length;
         if (countSchool) countSchool.textContent = monthEvents.filter(e => e.type === 'schoolwide').length;
@@ -321,7 +321,7 @@
         const addEventBtn = document.getElementById('addEventBtn');
         const cancelEventBtn = document.getElementById('cancelEventBtn');
         const eventForm = document.getElementById('eventForm');
-        const refreshBtn = document.getElementById('refreshBtn');
+        const refreshBtn = document.getElementById('navRefreshBtn');
 
         if (prevBtn) prevBtn.addEventListener('click', () => { currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1); renderCalendar(); });
         if (nextBtn) nextBtn.addEventListener('click', () => { currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1); renderCalendar(); });

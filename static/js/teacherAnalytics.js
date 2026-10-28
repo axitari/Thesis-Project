@@ -54,7 +54,7 @@ async function loadTeacherAnalytics() {
 function updateMetricCards(latest, logs) {
     // Overall Risk Index Card
     const riskNum = document.querySelector('.metric-card .metric-number');
-    const riskBadge = document.querySelector('.metric-card .status-badge');
+    const riskBadge = document.querySelector('.metric-card .badge-subscale-status');
     const riskFooter = document.querySelector('.metric-card .metric-footer');
 
     if (riskNum) riskNum.textContent = latest.risk_index;

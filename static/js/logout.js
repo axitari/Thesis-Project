@@ -25,7 +25,7 @@ async function handleLogout(event) {
 window.kandiliLogout = handleLogout;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const logoutElements = document.querySelectorAll('#logoutLink, .btn-logout, a[href="login.html"]');
+    const logoutElements = document.querySelectorAll('#logoutLink, .btn-logout, a[href="login.html"], #sidebarLogoutBtn, .link-logout');
     logoutElements.forEach(element => {
         element.removeAttribute('onclick');
         element.addEventListener('click', handleLogout);

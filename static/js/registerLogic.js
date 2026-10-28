@@ -102,7 +102,8 @@ registerForm?.addEventListener('submit', async (e) => {
                 advisory_class: advisoryClass,
                 educational_attainment: educationalAttainment,
                 contact_number: contactNumber,
-                teaching_level: teachingLevel
+                grade_level: teachingLevel,
+                school: school
             }
         }
     });
