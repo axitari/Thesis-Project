@@ -172,7 +172,7 @@ async function loadPrincipalDashboardData() {
 
         // 4. Render Table & Charts
         renderPrincipalFacultyTable(processedTeachers);
-        renderPrincipalCharts(processedTeachers, {
+        await renderPrincipalCharts(processedTeachers, {
             underloadedCount,
             optimalCount,
             highCount,
@@ -452,97 +452,129 @@ function renderPulseCompliancePanel(totalFaculty, completedCount, totalRiskSum) 
     `;
 }
 
-function renderPrincipalCharts(teachers, metrics) {
+async function renderPrincipalCharts(teachers, metrics) {
     if (typeof Chart === 'undefined') return;
 
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#64748b';
 
+    // 1. Doughnut: Faculty Burnout Risk Distribution
     const distCanvas = document.getElementById('distributionChart');
     if (distCanvas) {
         if (distributionChartInstance) distributionChartInstance.destroy();
 
-        distributionChartInstance = new Chart(distCanvas.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Optimal (36-54 WLU)', 'High/Maximized (54-75 WLU)', 'Overloaded (>75 WLU)'],
-                datasets: [{
-                    label: 'Teachers Count',
-                    data: [
-                        (metrics.optimalCount || 0) + (metrics.underloadedCount || 0), 
-                        (metrics.highCount || 0) + (metrics.maximizedCount || 0), 
-                        (metrics.overloadedCount || 0)
-                    ],
-                    backgroundColor: ['#0038A8', '#f59e0b', '#C8102E'],
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1 } },
-                    x: { grid: { display: false } }
+        let allAssessments = [];
+        try {
+            const { data, error } = await window.supabaseClient
+                .from('burnout_assessments')
+                .select('risk_index');
+            if (!error && data) allAssessments = data;
+        } catch (e) {
+            console.error("Error fetching burnout assessments for chart:", e);
+        }
+
+        if (!allAssessments || allAssessments.length === 0) {
+            distCanvas.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
+        } else {
+            let highCount = 0;
+            let moderateCount = 0;
+            let lowCount = 0;
+
+            allAssessments.forEach(item => {
+                const score = parseFloat(item.risk_index || 0);
+                if (score > 70) highCount++;
+                else if (score >= 40) moderateCount++;
+                else lowCount++;
+            });
+
+            distributionChartInstance = new Chart(distCanvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['High Risk (>70)', 'Moderate Risk (40–70)', 'Low Risk (<40)'],
+                    datasets: [{
+                        data: [highCount, moderateCount, lowCount],
+                        backgroundColor: ['#dc2626', '#f59e0b', '#059669'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { boxWidth: 12, padding: 12 }
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
+    // 2. Scatter: Workload vs. Exhaustion
     const scatterCanvas = document.getElementById('workloadChart');
     if (scatterCanvas) {
         if (workloadChartInstance) workloadChartInstance.destroy();
 
-        const scatterPoints = teachers.map(t => {
-            const jds = parseFloat(t.totalJDS || 0);
-            let state = 'Optimal';
-            if (jds > 75) state = 'Overloaded';
-            else if (jds >= 54) state = 'Maximized';
+        const scatterPoints = [];
+        (teachers || []).forEach(t => {
+            const teachingMins = t.teaching_loads?.reduce((sum, item) => sum + (item.minutes_per_week || 0), 0) || 0;
+            const teachingHrs = teachingMins / 60;
+            const ancillaryHrs = t.ancillary_duties?.reduce((sum, item) => sum + parseFloat(item.hours_per_week || item.hours || 0), 0) || 0;
+            const totalHours = parseFloat((teachingHrs + ancillaryHrs).toFixed(1));
 
-            return {
-                x: jds,
-                y: t.riskIndex || 0,
-                state: state,
-                name: t.fullName
-            };
-        });
+            const sorted = t.burnout_assessments?.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const latest = sorted && sorted.length > 0 ? sorted[0] : null;
 
-        workloadChartInstance = new Chart(scatterCanvas.getContext('2d'), {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Teachers',
-                    data: scatterPoints.length > 0 ? scatterPoints : [],
-                    backgroundColor: function(context) {
-                        const state = context.raw?.state;
-                        if (state === 'Overloaded') return '#C8102E';
-                        if (state === 'Maximized') return '#f59e0b';
-                        return '#0038A8';
-                    },
-                    pointRadius: 7,
-                    pointHoverRadius: 9
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                const pt = ctx.raw;
-                                return `${pt.name || 'Teacher'}: Workload ${pt.x} WLU | Exhaustion ${pt.y}% (${pt.state})`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: { title: { display: true, text: 'Exhaustion Score (%)' }, min: 0, max: 100 },
-                    x: { title: { display: true, text: 'Job Demand Score (WLU)' }, min: 0, max: 110 }
-                }
+            if (latest && latest.risk_index != null) {
+                const riskIndex = parseFloat(latest.risk_index);
+                scatterPoints.push({
+                    x: totalHours,
+                    y: riskIndex,
+                    isHighRisk: riskIndex > 70,
+                    name: t.fullName || 'Teacher'
+                });
             }
         });
+
+        if (!teachers || teachers.length === 0 || scatterPoints.length === 0) {
+            scatterCanvas.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
+        } else {
+            workloadChartInstance = new Chart(scatterCanvas.getContext('2d'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Teachers',
+                        data: scatterPoints,
+                        backgroundColor: function(context) {
+                            return context.raw?.isHighRisk ? '#C8102E' : '#0038A8';
+                        },
+                        pointRadius: 7,
+                        pointHoverRadius: 9
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(ctx) {
+                                    const pt = ctx.raw;
+                                    return `${pt.name}: ${pt.x} hrs/wk | Risk Index: ${pt.y}${pt.isHighRisk ? ' (High Risk)' : ''}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { title: { display: true, text: 'Burnout Risk Index' }, min: 0, max: 100 },
+                        x: { title: { display: true, text: 'Total Workload (Hours / Week)' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
     }
 }
 
