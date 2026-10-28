@@ -123,4 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('An unexpected error occurred while updating the teacher profile.');
         }
     });
+
+    // Deferred to end so the search filter listener is already attached.
+    const searchParam = new URLSearchParams(window.location.search).get('search');
+    const searchInput = document.getElementById('directorySearchInput');
+    if (searchParam && searchInput) {
+        searchInput.value = searchParam;
+        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
 });

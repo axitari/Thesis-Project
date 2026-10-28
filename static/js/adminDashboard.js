@@ -260,7 +260,7 @@ async function loadFacultyDirectory() {
                             <button
                                 class="dropdown-item btn-edit-profile"
                                 type="button"
-                                onclick="window.openTeacherEditModal(this)"
+                                onclick="window.location.href='admin_facultydirectory.html?search=${encodeURIComponent(tCode)}'"
                                 data-profile-id="${profile.id || ''}"
                                 data-code="${tCode}"
                                 data-firstname="${profile.first_name || ''}"
