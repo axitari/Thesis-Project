@@ -2,6 +2,9 @@
 /* DIVISION SUPER ADMIN - ANALYTICS & GOVERNANCE CONTROLLER      */
 /* ============================================================ */
 
+let schoolLoadChartInstance = null;
+let burnoutRiskChartInstance = null;
+
 function switchView(tabName) {
     const analyticsSection = document.getElementById('analyticsSection');
     const accountsSection = document.getElementById('accountsSection');
@@ -37,25 +40,91 @@ function closeAuditModal() {
     document.getElementById('schoolAuditModal').classList.add('hidden');
 }
 
-// Chart.js Rendering for Multi-School Analytics
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Campus Teaching Load Comparison (Bar Chart)
+/**
+ * 1. Campus Teaching & Ancillary Load Comparison (Bar Chart)
+ * Groups teacher profiles by assigned_institution and calculates real averages.
+ */
+async function renderSchoolLoadChart() {
     const ctxLoad = document.getElementById('schoolLoadChart');
-    if (ctxLoad) {
-        new Chart(ctxLoad, {
+    if (!ctxLoad) return;
+
+    try {
+        if (!window.supabaseClient) {
+            console.error('[superAdmin] Supabase client is not initialized.');
+            return;
+        }
+
+        const { data: teachers, error } = await window.supabaseClient
+            .from('profiles')
+            .select(`
+                id,
+                assigned_institution,
+                teaching_loads ( minutes_per_week ),
+                ancillary_duties ( hours_per_week )
+            `)
+            .eq('role', 'teacher');
+
+        if (error || !teachers || teachers.length === 0) {
+            ctxLoad.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
+            return;
+        }
+
+        // Group by campus / school
+        const schoolGroups = {};
+        teachers.forEach(teacher => {
+            const schoolName = (teacher.assigned_institution || '').trim();
+            if (!schoolName) return;
+
+            if (!schoolGroups[schoolName]) {
+                schoolGroups[schoolName] = {
+                    teacherCount: 0,
+                    totalTeachingHours: 0,
+                    totalAncillaryHours: 0
+                };
+            }
+
+            const tMins = (teacher.teaching_loads || []).reduce((sum, l) => sum + (l.minutes_per_week || 0), 0);
+            const tHours = tMins / 60;
+            const aHours = (teacher.ancillary_duties || []).reduce((sum, d) => sum + parseFloat(d.hours_per_week || 0), 0);
+
+            schoolGroups[schoolName].teacherCount += 1;
+            schoolGroups[schoolName].totalTeachingHours += tHours;
+            schoolGroups[schoolName].totalAncillaryHours += aHours;
+        });
+
+        const schoolNames = Object.keys(schoolGroups);
+        if (schoolNames.length === 0) {
+            ctxLoad.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
+            return;
+        }
+
+        const avgTeaching = schoolNames.map(name => {
+            const group = schoolGroups[name];
+            return parseFloat((group.totalTeachingHours / (group.teacherCount || 1)).toFixed(1));
+        });
+
+        const avgAncillary = schoolNames.map(name => {
+            const group = schoolGroups[name];
+            return parseFloat((group.totalAncillaryHours / (group.teacherCount || 1)).toFixed(1));
+        });
+
+        if (schoolLoadChartInstance) {
+            schoolLoadChartInstance.destroy();
+        }
+
+        schoolLoadChartInstance = new Chart(ctxLoad.getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ['West Visayas CS', 'Iloilo NHS', 'Jaro NHS', 'La Paz CS'],
+                labels: schoolNames,
                 datasets: [
                     {
                         label: 'Avg Teaching Hours (hrs/wk)',
-                        data: [24.5, 27.8, 19.2, 21.0],
+                        data: avgTeaching,
                         backgroundColor: '#0038A8'
                     },
                     {
                         label: 'Avg Ancillary Load (hrs/wk)',
-                        data: [6.5, 8.2, 4.0, 5.1],
+                        data: avgAncillary,
                         backgroundColor: '#f59e0b'
                     }
                 ]
@@ -66,23 +135,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 35,
                         title: { display: true, text: 'Hours per Week' }
                     }
                 }
             }
         });
+    } catch (err) {
+        console.error('[superAdmin] Error rendering school load chart:', err);
+        ctxLoad.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
     }
+}
 
-    // 2. Division Burnout Risk Classification (Doughnut Chart)
+/**
+ * 2. Division Burnout Risk Classification (Doughnut Chart)
+ * Queries burnout_assessments and categorizes High (>70), Moderate (40-70), and Low (<40).
+ */
+async function renderBurnoutRiskChart() {
     const ctxRisk = document.getElementById('burnoutRiskChart');
-    if (ctxRisk) {
-        new Chart(ctxRisk, {
+    if (!ctxRisk) return;
+
+    try {
+        if (!window.supabaseClient) {
+            console.error('[superAdmin] Supabase client is not initialized.');
+            return;
+        }
+
+        const { data: assessments, error } = await window.supabaseClient
+            .from('burnout_assessments')
+            .select('risk_index');
+
+        if (error || !assessments || assessments.length === 0) {
+            ctxRisk.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
+            return;
+        }
+
+        let highCount = 0;
+        let moderateCount = 0;
+        let lowCount = 0;
+
+        assessments.forEach(item => {
+            const risk = parseFloat(item.risk_index || 0);
+            if (risk > 70) highCount++;
+            else if (risk >= 40) moderateCount++;
+            else lowCount++;
+        });
+
+        const highRiskStat = document.getElementById('statHighRisk');
+        if (highRiskStat) {
+            highRiskStat.textContent = `${highCount} Teacher${highCount === 1 ? '' : 's'}`;
+        }
+
+        if (burnoutRiskChartInstance) {
+            burnoutRiskChartInstance.destroy();
+        }
+
+        burnoutRiskChartInstance = new Chart(ctxRisk.getContext('2d'), {
             type: 'doughnut',
             data: {
                 labels: ['Optimal / Low Risk', 'Moderate Load', 'High Burnout Risk'],
                 datasets: [{
-                    data: [124, 40, 18],
+                    data: [lowCount, moderateCount, highCount],
                     backgroundColor: ['#16a34a', '#f59e0b', '#dc2626']
                 }]
             },
@@ -94,7 +206,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+    } catch (err) {
+        console.error('[superAdmin] Error rendering burnout risk chart:', err);
+        ctxRisk.parentElement.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; min-height:220px; color:#94a3b8; font-size:0.9rem; font-weight:500;">No data available yet.</div>`;
     }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await renderSchoolLoadChart();
+    await renderBurnoutRiskChart();
 });
 
 /* Sidebar Collapsing & Navigation Actions */
