@@ -282,15 +282,97 @@
 
             // Form Submit Logic
             const form = document.getElementById('assessmentForm');
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                // Save submission flag
-                localStorage.setItem('kandili_trimester_assessed', 'true');
-                sessionStorage.setItem('kandili_trimester_assessed', 'true');
+                const mbiQ1El = document.getElementById('mbiQ1');
+                const mbiQ2El = document.getElementById('mbiQ2');
+                const mentalEl = document.getElementById('mentalDemandRange');
+                const temporalEl = document.getElementById('temporalDemandRange');
+                const ancillaryEl = document.getElementById('ancillaryDemandRange');
 
-                alert("Trimester 1 Burnout Assessment submitted successfully! Workload index updated.");
-                window.location.href = 'teacherdashboard.html';
+                // 1. Validation: MBI Questions must not be empty
+                if (!mbiQ1El?.value || !mbiQ2El?.value) {
+                    alert("Please answer all required MBI questions before submitting.");
+                    return;
+                }
+
+                // 2. Validation: Sliders within min/max bounds
+                const validateSlider = (el, name) => {
+                    if (!el) return false;
+                    const val = Number(el.value);
+                    const min = Number(el.min);
+                    const max = Number(el.max);
+                    if (isNaN(val) || val < min || val > max) {
+                        alert(`Invalid value for ${name}. Must be between ${min} and ${max}.`);
+                        return false;
+                    }
+                    return true;
+                };
+
+                if (!validateSlider(mentalEl, "Mental Demand") ||
+                    !validateSlider(temporalEl, "Temporal Demand") ||
+                    !validateSlider(ancillaryEl, "Ancillary Duty Strain")) {
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitAssessmentBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Submitting...`;
+                }
+
+                try {
+                    const mbiQ1 = parseInt(mbiQ1El.value, 10);
+                    const mbiQ2 = parseInt(mbiQ2El.value, 10);
+                    const mentalDemand = parseInt(mentalEl.value, 10);
+                    const temporalDemand = parseInt(temporalEl.value, 10);
+                    const ancillaryDemand = parseInt(ancillaryEl.value, 10);
+
+                    const results = {
+                        mbi_q1: mbiQ1,
+                        mbi_q2: mbiQ2,
+                        mbi_total: mbiQ1 + mbiQ2,
+                        mental_demand: mentalDemand,
+                        temporal_demand: temporalDemand,
+                        ancillary_demand: ancillaryDemand,
+                        tlx_average: Math.round((mentalDemand + temporalDemand) / 2)
+                    };
+
+                    if (!window.supabaseClient) {
+                        throw new Error("Supabase client is not available.");
+                    }
+
+                    const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
+                    if (sessionError || !session?.user?.id) {
+                        throw new Error("Active session not found. Please log in again.");
+                    }
+
+                    const { error: insertError } = await window.supabaseClient
+                        .from('assessments')
+                        .insert({
+                            teacher_id: session.user.id,
+                            results: results
+                        });
+
+                    if (insertError) {
+                        throw insertError;
+                    }
+
+                    // Save submission flag only on successful insert
+                    localStorage.setItem('kandili_trimester_assessed', 'true');
+                    sessionStorage.setItem('kandili_trimester_assessed', 'true');
+
+                    alert("Trimester 1 Burnout Assessment submitted successfully! Workload index updated.");
+                    window.location.href = 'teacherdashboard.html';
+                } catch (err) {
+                    console.error("Submission failed:", err);
+                    alert("Submission error: " + (err.message || "Failed to save assessment."));
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = `<i class="fas fa-check-double"></i> Submit Trimester 1 Assessment &rarr;`;
+                    }
+                }
             });
         });
     </script>
