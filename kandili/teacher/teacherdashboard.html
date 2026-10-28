@@ -420,35 +420,8 @@
                                     <th>FRI</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="time-col">08:00 - 10:00</td>
-                                    <td>Math<span class="class-tag">G2-A</span></td>
-                                    <td>Science<span class="class-tag">G2-A</span></td>
-                                    <td>Science<span class="class-tag">G2-A</span></td>
-                                    <td>English<span class="class-tag">G2-A</span></td>
-                                    <td>Science<span class="class-tag">G2-A</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-col">10:30 - 11:30</td>
-                                    <td>Filipino<span class="class-tag">G2-A</span></td>
-                                    <td>Filipino<span class="class-tag">G2-A</span></td>
-                                    <td>Filipino<span class="class-tag">G2-A</span></td>
-                                    <td>Filipino<span class="class-tag">G2-A</span></td>
-                                    <td>Filipino<span class="class-tag">G2-A</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="time-col">12:30 - 14:30</td>
-                                    <td>ESP/EPP<span class="class-tag">G2-A</span></td>
-                                    <td>MAPEH<span class="class-tag">G2-A</span></td>
-                                    <td>MTB<span class="class-tag">G2-A</span></td>
-                                    <td>Araling Pan.<span class="class-tag">G2-A</span></td>
-                                    <td>ESP/EPP<span class="class-tag">G2-A</span></td>
-                                </tr>
-                                <tr class="homeroom-row">
-                                    <td class="time-col">14:30 - 15:00</td>
-                                    <td colspan="5" class="homeroom-cell">Homeroom / Advisory Period (G2-A)</td>
-                                </tr>
+                            <tbody id="dashboard-timetable-body">
+                                <tr><td colspan="6" style="text-align:center; color:#64748b; padding:2rem;">Upload your class program to generate your schedule.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -532,42 +505,7 @@
                                 </tr>
                             </thead>
                             <tbody id="studentGradesTableBody">
-                                <tr>
-                                    <td class="text-muted">115204200001</td>
-                                    <td><strong>Alvarez, Miguel S.</strong></td>
-                                    <td><input type="number" class="grade-input" value="88" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="85" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="90" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><strong style="color: #16a34a;">87.6</strong></td>
-                                    <td><span class="status-badge status-confirmed">Passed</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-muted">115204200002</td>
-                                    <td><strong>Bautista, Chloe M.</strong></td>
-                                    <td><input type="number" class="grade-input" value="92" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="91" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="94" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><strong style="color: #16a34a;">92.3</strong></td>
-                                    <td><span class="status-badge status-confirmed">With Honors</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-muted">115204200003</td>
-                                    <td><strong>Dela Cruz, Juan Carlos</strong></td>
-                                    <td><input type="number" class="grade-input" value="79" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="81" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="80" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><strong style="color: #d97706;">80.0</strong></td>
-                                    <td><span class="status-badge status-confirmed">Passed</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-muted">115204200004</td>
-                                    <td><strong>Flores, Angelica R.</strong></td>
-                                    <td><input type="number" class="grade-input" value="85" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="86" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><input type="number" class="grade-input" value="88" style="width: 50px; padding: 2px 4px; border: 1px solid #cbd5e1; border-radius: 4px; text-align: center;"></td>
-                                    <td><strong style="color: #16a34a;">86.3</strong></td>
-                                    <td><span class="status-badge status-confirmed">Passed</span></td>
-                                </tr>
+                                <tr><td colspan="7" style="text-align:center; color:#64748b; padding:2rem;">No student grades recorded yet.</td></tr>
                             </tbody>
                         </table>
                     </div>

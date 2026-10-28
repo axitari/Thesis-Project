@@ -46,12 +46,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Fetch Latest Burnout Assessment
             const { data: assessments } = await window.supabaseClient
                 .from('burnout_assessments')
-                .select('ee_score, dp_score, pa_score')
+                .select('risk_index, created_at, ee_score, dp_score, pa_score')
                 .eq('teacher_id', userId)
                 .order('created_at', { ascending: false })
                 .limit(1);
             
             const latestAssessment = assessments && assessments.length > 0 ? assessments[0] : null;
+
+            // Update Risk Index & Assessment Date in DOM
+            const riskValEl = document.querySelector('.risk-index-value');
+            if (riskValEl) {
+                const riskScore = (latestAssessment && latestAssessment.risk_index != null) ? latestAssessment.risk_index : 0;
+                riskValEl.innerHTML = `${riskScore}<span class="risk-index-max">/100</span>`;
+            }
+
+            const lastAssessmentEl = document.querySelector('.assessment-meta div:first-child');
+            if (lastAssessmentEl) {
+                const formattedDate = (latestAssessment && latestAssessment.created_at)
+                    ? new Date(latestAssessment.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                    : 'No assessment taken';
+                lastAssessmentEl.innerHTML = `<i class="fas fa-history meta-icon"></i> <strong>Last Assessment:</strong> ${formattedDate}`;
+            }
 
             // Fetch Department Peers for Comparison
             let deptAvg = 0;
