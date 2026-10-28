@@ -17,9 +17,10 @@ async function loadBurnoutDirectory() {
             .from('profiles')
             .select(`
                 id, teacher_code, department,
-                burnout_assessments ( risk_index, emotional_exhaustion, depersonalization, personal_accomplishment, created_at )
+                burnout_assessments ( risk_index, ee_score, dp_score, pa_score, created_at )
             `)
-            .eq('role', 'teacher');
+            .eq('role', 'teacher')
+            .order('created_at', { foreignTable: 'burnout_assessments', ascending: false });
 
         if (error) throw error;
 
@@ -37,27 +38,41 @@ async function loadBurnoutDirectory() {
             const sorted = teacher.burnout_assessments?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             const latest = sorted && sorted.length > 0 ? sorted[0] : null;
 
-            const ee = latest?.emotional_exhaustion || Math.round(Math.random() * 20 + 10);
-            const dp = latest?.depersonalization || Math.round(Math.random() * 10 + 2);
-            const pa = latest?.personal_accomplishment || Math.round(Math.random() * 15 + 30);
-            const riskIndex = latest?.risk_index ? parseFloat(latest.risk_index) : Math.round((ee/54)*50 + (dp/30)*30 + ((48-pa)/48)*20);
-
             let tierBadge = '';
-            let eeText = `${ee} / 54`;
-            let dpText = `${dp} / 30`;
-            let paText = `${pa} / 48`;
+            let eeText = '—';
+            let dpText = '—';
+            let paText = '—';
+            let riskAttr = 'unassessed';
 
-            if (riskIndex >= 70 || (ee >= 27 && dp >= 13)) {
-                tierBadge = `<span class="badge-risk badge-high-risk" style="background:#ffe4e6; color:#be123c; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">HIGH RISK</span>`;
-            } else if (riskIndex >= 40 || ee >= 17 || dp >= 7) {
-                tierBadge = `<span class="badge-risk badge-moderate-risk" style="background:#fef3c7; color:#b45309; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">MODERATE RISK</span>`;
+            if (latest) {
+                const ee = latest.ee_score;
+                const dp = latest.dp_score;
+                const pa = latest.pa_score;
+                const riskIndex = latest.risk_index != null
+                    ? parseFloat(latest.risk_index)
+                    : Math.round(((ee || 0)/54)*50 + ((dp || 0)/30)*30 + ((48-(pa || 0))/48)*20);
+
+                eeText = ee != null ? `${ee} / 54` : '—';
+                dpText = dp != null ? `${dp} / 30` : '—';
+                paText = pa != null ? `${pa} / 48` : '—';
+
+                if (riskIndex >= 70 || (ee >= 27 && dp >= 13)) {
+                    tierBadge = `<span class="badge-risk badge-high-risk" style="background:#ffe4e6; color:#be123c; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">HIGH RISK</span>`;
+                    riskAttr = 'high';
+                } else if (riskIndex >= 40 || ee >= 17 || dp >= 7) {
+                    tierBadge = `<span class="badge-risk badge-moderate-risk" style="background:#fef3c7; color:#b45309; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">MODERATE RISK</span>`;
+                    riskAttr = 'moderate';
+                } else {
+                    tierBadge = `<span class="badge-risk badge-low-risk" style="background:#dcfce7; color:#15803d; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">LOW RISK</span>`;
+                    riskAttr = 'low';
+                }
             } else {
-                tierBadge = `<span class="badge-risk badge-low-risk" style="background:#dcfce7; color:#15803d; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">LOW RISK</span>`;
+                tierBadge = `<span class="badge-risk" style="background:#f1f5f9; color:#64748b; padding:0.25rem 0.65rem; border-radius:999px; font-weight:700; font-size:0.75rem;">UNASSESSED</span>`;
             }
 
             const row = document.createElement('tr');
             row.setAttribute('data-code', tCode.toLowerCase());
-            row.setAttribute('data-risk', riskIndex >= 70 ? 'high' : riskIndex >= 40 ? 'moderate' : 'low');
+            row.setAttribute('data-risk', riskAttr);
 
             row.innerHTML = `
                 <td><code class="code-tag-bold" style="font-weight:700; color:#0038A8;">${tCode}</code></td>
