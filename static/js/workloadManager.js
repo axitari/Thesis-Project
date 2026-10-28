@@ -216,7 +216,7 @@ async function loadOfficialClassProgramView() {
             const { data: principalProfiles, error: pErr } = await window.supabaseClient
                 .from('profiles')
                 .select('first_name, last_name, role')
-                .or('role.eq.principal,role.eq.Principal')
+                .eq('role', 'principal')
                 .limit(1);
 
             if (pErr) console.warn("Principal query note:", pErr.message);
