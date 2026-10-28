@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadMessages(currentMessageTab);
     await updateUnreadCount();
     setupComposeForm();
+
+    document.getElementById('tabInboxBtn')?.addEventListener('click', () => window.switchMessageTab('inbox'));
+    document.getElementById('tabSentBtn')?.addEventListener('click', () => window.switchMessageTab('sent'));
+    document.getElementById('closeModalIconBtn')?.addEventListener('click', () => window.closeMessageModal());
+    document.getElementById('closeModalBtn')?.addEventListener('click', () => window.closeMessageModal());
 });
 
 // Unread Badge Count Update
