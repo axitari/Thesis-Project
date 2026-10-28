@@ -43,6 +43,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 .select('*')
                 .eq('teacher_id', userId);
 
+            // Fetch Latest Burnout Assessment
+            const { data: assessments } = await window.supabaseClient
+                .from('burnout_assessments')
+                .select('ee_score, dp_score, pa_score')
+                .eq('teacher_id', userId)
+                .order('created_at', { ascending: false })
+                .limit(1);
+            
+            const latestAssessment = assessments && assessments.length > 0 ? assessments[0] : null;
+
             // Compute Totals
             const totalTeachingMinutes = (teachingLoads || []).reduce((sum, load) => sum + (load.minutes_per_week || 0), 0);
             const totalTeachingHours = (totalTeachingMinutes / 60);
@@ -50,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const totalWorkloadHours = (totalTeachingHours + totalAncillaryHours);
 
             // Render Chart.js Analytics
-            renderTeacherCharts(totalWorkloadHours, totalTeachingHours, totalAncillaryHours);
+            renderTeacherCharts(totalWorkloadHours, totalTeachingHours, totalAncillaryHours, latestAssessment);
 
         } catch (err) {
             console.error("Failed to load teacher workload:", err);
@@ -399,11 +409,19 @@ async function applyExtractedProgramToDashboard(data) {
     }
 }
 
-function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
+function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs, latestAssessment = null) {
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#64748b';
 
-    // 1. Wellness Baseline Chart (Bar / Radar)
+    // 1. Calculate real percentages (fallback to 0 if no assessment)
+    let eePct = 0, dpPct = 0, paPct = 0;
+    if (latestAssessment) {
+        eePct = Math.round((latestAssessment.ee_score / 54) * 100);
+        dpPct = Math.round((latestAssessment.dp_score / 30) * 100);
+        paPct = Math.round((latestAssessment.pa_score / 48) * 100);
+    }
+
+    // 2. Wellness Baseline Chart (Bar / Radar)
     const wellnessCanvas = document.getElementById('teacherWellnessChart');
     if (wellnessCanvas) {
         if (teacherWellnessChartInstance) teacherWellnessChartInstance.destroy();
@@ -414,7 +432,7 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
                 labels: ['Emotional Exhaustion', 'Depersonalization', 'Personal Accomplishment'],
                 datasets: [{
                     label: 'Score (%)',
-                    data: [65, 30, 78],
+                    data: [eePct, dpPct, paPct],
                     backgroundColor: ['#f59e0b', '#10b981', '#3b82f6'],
                     borderRadius: 6
                 }]
@@ -434,7 +452,7 @@ function renderTeacherCharts(userTotal, teachingHrs, ancillaryHrs) {
         });
     }
 
-    // 2. Workload Comparison Chart (Horizontal Bar Chart)
+    // 3. Workload Comparison Chart (Horizontal Bar Chart)
     const workloadCanvas = document.getElementById('teacherWorkloadChart');
     if (workloadCanvas) {
         if (teacherWorkloadChartInstance) teacherWorkloadChartInstance.destroy();
