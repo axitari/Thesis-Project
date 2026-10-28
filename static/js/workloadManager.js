@@ -251,12 +251,12 @@ async function loadOfficialClassProgramView() {
         if (!data && session && window.supabaseClient) {
             const { data: profile } = await window.supabaseClient
                 .from('profiles')
-                .select('advisory_class')
+                .select('class_program')
                 .eq('id', session.user.id)
                 .maybeSingle();
 
-            if (profile && profile.advisory_class && profile.advisory_class.trim().startsWith('{')) {
-                data = JSON.parse(profile.advisory_class);
+            if (profile && profile.class_program) {
+                data = profile.class_program;
             }
         }
     } catch(e){}
@@ -319,7 +319,6 @@ async function loadOfficialClassProgramView() {
 
         tr.innerHTML = `
             <td style="padding: 0.75rem; font-weight: 600; color: #0f172a;">${row.time}</td>
-            <td style="padding: 0.75rem; color: #64748b;">${row.min}</td>
             <td style="padding: 0.75rem;">${row.mon}</td>
             <td style="padding: 0.75rem;">${row.tue}</td>
             <td style="padding: 0.75rem;">${row.wed}</td>
