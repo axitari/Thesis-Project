@@ -195,13 +195,13 @@ function initLeaveModal() {
    ========================================================================== */
 function initNavigationAndLogout() {
     document.getElementById('sidebarLogoutBtn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (typeof kandiliLogout === 'function') {
-            kandiliLogout();
-        } else if (confirm("Are you sure you want to log out?")) {
-            window.location.href = "../login.html";
-        }
-    });
+    e.preventDefault();
+    if (typeof kandiliLogout === 'function') {
+        kandiliLogout();
+    } else {
+        window.location.href = '/kandili/general/login.html';
+    }
+});
 
     document.getElementById('takeAssessmentBtn')?.addEventListener('click', () => {
         window.location.href = 'burnout-risk_assessment.html';
