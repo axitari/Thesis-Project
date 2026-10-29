@@ -174,8 +174,8 @@
     margin-top: 0.5rem;
 }
 
-.track-boys { width: 52%; background: #3b82f6; }
-.track-girls { width: 48%; background: #ec4899; }
+.track-boys { width: 0%; background: #3b82f6; }
+.track-girls { width: 0%; background: #ec4899; }
 
 /* Weekly Tasks Progress */
 .task-breakdown-container { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem; }

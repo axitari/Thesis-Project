@@ -164,7 +164,7 @@
                 <!-- WELCOME HEADER -->
                 <div class="welcome-header">
                     <h1>👋 Welcome back, Sarah J. Cruz</h1>
-                    <p>Teacher II &bull; Class Adviser (Grade 2 - A) &bull; ROVCMS</p>
+                    <p id="dashboard-user-subtitle">Loading details...</p>
                 </div>
 
                 <!-- CLASS PROGRAM UPLOAD -->
@@ -192,45 +192,45 @@
                     <div class="profile-grid">
                         <div class="info-box">
                             <h4><i class="fas fa-info-circle"></i> Section Information</h4>
-                            <div class="info-row"><span>Section:</span> <span id="dashSectionVal">Grade 2 - A</span></div>
-                            <div class="info-row"><span>Adviser:</span> <span id="dashAdviserVal">Doctor Brown</span></div>
-                            <div class="info-row"><span>SY:</span> <span id="dashSYVal">2026-2027</span></div>
+                            <div class="info-row"><span>Section:</span> <span id="dashSectionVal">Not set</span></div>
+                            <div class="info-row"><span>Adviser:</span> <span id="dashAdviserVal">Not set</span></div>
+                            <div class="info-row"><span>SY:</span> <span id="dashSYVal">Not set</span></div>
                         </div>
 
                         <div class="info-box flex-between">
                             <h4><i class="fas fa-chart-pie"></i> Student Demographics</h4>
                             <div class="demographics-stat-row">
                                 <div class="text-left">
-                                    <div class="stat-large-total" id="dashTotalDemographics">42</div>
+                                    <div class="stat-large-total" id="dashTotalDemographics">0</div>
                                     <div class="stat-sublabel">Total</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="stat-number-blue" id="dashBoysCount">22</div>
+                                    <div class="stat-number-blue" id="dashBoysCount">0</div>
                                     <div class="stat-sublabel">Boys</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="stat-number-pink" id="dashGirlsCount">20</div>
+                                    <div class="stat-number-pink" id="dashGirlsCount">0</div>
                                     <div class="stat-sublabel">Girls</div>
                                 </div>
                             </div>
                             <div class="demographics-bar-container">
                                 <div class="demographics-percentages">
-                                    <span id="dashBoysPercent">52%</span>
-                                    <span id="dashGirlsPercent">48%</span>
+                                    <span id="dashBoysPercent">0%</span>
+                                    <span id="dashGirlsPercent">0%</span>
                                 </div>
                                 <div class="demographics-track">
-                                    <div class="track-boys" id="dashBoysBar"></div>
-                                    <div class="track-girls" id="dashGirlsBar"></div>
+                                    <div class="track-boys" id="dashBoysBar" style="width: 0%;"></div>
+                                    <div class="track-girls" id="dashGirlsBar" style="width: 0%;"></div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="info-box">
                             <h4><i class="fas fa-bolt"></i> Quick Stats</h4>
-                            <div class="info-row"><span><i class="fas fa-medal icon-orange"></i> Honor Students:</span> <span>5</span></div>
-                            <div class="info-row"><span><i class="fas fa-star icon-green"></i> Sp. Needs:</span> <span>2</span></div>
-                            <div class="info-row"><span><i class="fas fa-calendar-check icon-blue"></i> Attendance:</span> <span>89%</span></div>
-                            <div class="info-row"><span><i class="fas fa-book icon-purple"></i> Subjects:</span> <span id="dashSubjectsCount">8</span></div>
+                            <div class="info-row"><span><i class="fas fa-medal icon-orange"></i> Honor Students:</span> <span>—</span></div>
+                            <div class="info-row"><span><i class="fas fa-star icon-green"></i> Sp. Needs:</span> <span>—</span></div>
+                            <div class="info-row"><span><i class="fas fa-calendar-check icon-blue"></i> Attendance:</span> <span>—</span></div>
+                            <div class="info-row"><span><i class="fas fa-book icon-purple"></i> Subjects:</span> <span id="dashSubjectsCount">0</span></div>
                         </div>
 
                         <div class="info-box flex-between">
@@ -238,8 +238,8 @@
                             <div class="task-breakdown-container">
                                 <div>
                                     <div class="task-row-label">
-                                        <span id="dashCoreSubjectsTitle"><i class="fas fa-chalkboard icon-blue"></i> Core Teaching (8 Subjects)</span>
-                                        <span class="hours-val" id="dashCoreHoursVal">22 hrs</span>
+                                        <span id="dashCoreSubjectsTitle"><i class="fas fa-chalkboard icon-blue"></i> Core Teaching (0 Subjects)</span>
+                                        <span class="hours-val" id="dashCoreHoursVal">0 hrs</span>
                                     </div>
                                     <div class="progress-track">
                                         <div class="progress-fill fill-blue" id="dashCoreBar"></div>
@@ -248,7 +248,7 @@
                                 <div>
                                     <div class="task-row-label">
                                         <span><i class="fas fa-folder-open icon-orange"></i> Ancillary &amp; Advising</span>
-                                        <span class="hours-val" id="dashAncillaryHoursVal">5 hrs</span>
+                                        <span class="hours-val" id="dashAncillaryHoursVal">0 hrs</span>
                                     </div>
                                     <div class="progress-track">
                                         <div class="progress-fill fill-orange" id="dashAncillaryBar"></div>
@@ -256,7 +256,7 @@
                                 </div>
                                 <div class="task-total-row">
                                     <span class="task-total-label">Total Logged</span>
-                                    <span class="task-total-value" id="dashTotalLoggedHoursVal">27 hrs</span>
+                                    <span class="task-total-value" id="dashTotalLoggedHoursVal">0 hrs</span>
                                 </div>
                             </div>
                         </div>
@@ -267,7 +267,7 @@
                                     <i class="fas fa-calendar-alt"></i> View Class Program
                                 </a>
                                 <span class="workload-pill">
-                                    <i class="fas fa-tasks"></i> Workload: 68 (Mod)
+                                    <i class="fas fa-tasks"></i> Workload: —
                                 </span>
                             </div>
                         </div>
@@ -376,7 +376,7 @@
                             <i class="fas fa-calendar-alt"></i> Weekly Class Schedule (Preview)
                         </h3>
                         <div class="schedule-meta-badge">
-                            Grade 2 - A &nbsp;|&nbsp; Room 204 &nbsp;|&nbsp; Self-Contained Advisory
+                            <span id="dashboard-schedule-meta">No schedule uploaded</span>
                         </div>
                     </div>
                     <div class="schedule-wrapper">

@@ -29,6 +29,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const teacherFullName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
                     adviserEl.textContent = teacherFullName || 'Teacher';
                 }
+
+                const subtitleEl = document.getElementById('dashboard-user-subtitle');
+                if (subtitleEl) {
+                    const role = profile.role ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : 'Teacher';
+                    const advisory = profile.advisory_class ? `Class Adviser (${profile.advisory_class})` : 'No Advisory';
+                    const school = profile.school || 'No School Assigned';
+                    subtitleEl.textContent = `${role} • ${advisory} • ${school}`;
+                }
             }
 
             // Fetch Teaching Loads
@@ -128,14 +136,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (profile && profile.class_program) {
                 await applyExtractedProgramToDashboard(profile.class_program);
             } else {
-                const cached = localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`) 
-                    || localStorage.getItem('kandili_extracted_class_program');
+                const cached = localStorage.getItem(`kandili_extracted_class_program_${session.user.id}`);
+;
                 if (cached) {
                     await applyExtractedProgramToDashboard(JSON.parse(cached));
                 }
             }
         } else {
-            const cached = localStorage.getItem('kandili_extracted_class_program');
+            const cached = null;
             if (cached) {
                 await applyExtractedProgramToDashboard(JSON.parse(cached));
             }
@@ -393,6 +401,46 @@ async function applyExtractedProgramToDashboard(data) {
     if (roomEl) roomEl.textContent = data.room || 'Room 204';
     if (syEl) syEl.textContent = data.schoolYear || '2026 - 2027';
 
+    // 1. Update Weekly Task Breakdown Hours
+    const coreHoursEl = document.getElementById('dashCoreHoursVal');
+    if (coreHoursEl) coreHoursEl.textContent = (data.coreHours || 0) + ' hrs';
+    const ancHoursEl = document.getElementById('dashAncillaryHoursVal');
+    if (ancHoursEl) ancHoursEl.textContent = (data.ancillaryHours || 0) + ' hrs';
+    const totLoggedEl = document.getElementById('dashTotalLoggedHoursVal');
+    if (totLoggedEl) totLoggedEl.textContent = (data.totalLogged || 0) + ' hrs';
+
+    // 2. Update Schedule Preview Header Badge
+    const schedMetaEl = document.getElementById('dashboard-schedule-meta');
+    if (schedMetaEl && (data.section || data.room)) {
+        schedMetaEl.textContent = `${data.section || 'Grade 2 - A'} | ${data.room || 'Room 204'} | Self-Contained Advisory`;
+    }
+
+    // 3. Render Schedule Matrix Preview
+    const timetableBody = document.getElementById('dashboard-timetable-body');
+    if (timetableBody) {
+        if (data.scheduleMatrix && data.scheduleMatrix.length > 0) {
+            timetableBody.innerHTML = '';
+            data.scheduleMatrix.forEach(row => {
+                const tr = document.createElement('tr');
+                const isRecess = (row.mon || '').toLowerCase().includes('recess');
+                if (isRecess) {
+                    tr.className = 'homeroom-row';
+                }
+                tr.innerHTML = `
+                    <td class="time-col"><strong>${row.time || ''}</strong></td>
+                    <td>${row.mon || ''}</td>
+                    <td>${row.tue || ''}</td>
+                    <td>${row.wed || ''}</td>
+                    <td>${row.thu || ''}</td>
+                    <td>${row.fri || ''}</td>
+                `;
+                timetableBody.appendChild(tr);
+            });
+        } else {
+            timetableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#64748b; padding:2rem;">Upload your class program to generate your schedule.</td></tr>';
+        }
+    }
+
     const totEl = document.getElementById('dashTotalDemographics');
     const boysEl = document.getElementById('dashBoysCount');
     const girlsEl = document.getElementById('dashGirlsCount');
@@ -432,7 +480,7 @@ async function applyExtractedProgramToDashboard(data) {
 
     try {
         const jsonStr = JSON.stringify(data);
-        localStorage.setItem('kandili_extracted_class_program', jsonStr);
+
 
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         if (session) {
