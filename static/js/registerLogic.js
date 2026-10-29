@@ -50,6 +50,7 @@ registerForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const firstName = document.getElementById('firstName').value;
+    const middleName = document.getElementById('middleName')?.value || '';
     const lastName = document.getElementById('lastName').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -58,13 +59,27 @@ registerForm?.addEventListener('submit', async (e) => {
     const plantillaItemNo = document.getElementById('plantillaItemNo')?.value || '';
     const prcLicenseNo = document.getElementById('prcLicenseNo')?.value || '';
     const employmentStatus = document.getElementById('employmentStatus')?.value || '';
-    const yearsInService = document.getElementById('yearsInService')?.value || '';
+    const birthdate = document.getElementById('birthdate')?.value || null;
+    const dateStarted = document.getElementById('dateStarted')?.value || null;
+    let calculatedYearsInService = null;
+    if (dateStarted) {
+        const startDate = new Date(dateStarted);
+        const today = new Date();
+        let years = today.getFullYear() - startDate.getFullYear();
+        const monthDiff = today.getMonth() - startDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < startDate.getDate())) {
+            years--;
+        }
+        calculatedYearsInService = Math.max(0, years);
+    }
     const division = document.getElementById('division')?.value || '';
     const school = document.getElementById('school')?.value || '';
     const assignedInstitution = document.getElementById('assignedInstitution')?.value || school || '';
     const department = document.getElementById('department')?.value || '';
     const advisoryClass = document.getElementById('advisoryClass')?.value || '';
-    const educationalAttainment = document.getElementById('educationalAttainment')?.value || '';
+    const eduSelect = document.getElementById('educationalAttainment')?.value || '';
+    const eduOther = document.getElementById('educationalAttainmentOther')?.value.trim() || '';
+    const educationalAttainment = (eduSelect === 'Other' && eduOther) ? eduOther : eduSelect;
     const contactNumber = document.getElementById('contactNumber')?.value || '';
     const teachingLevel = document.getElementById('teachingLevel')?.value || '';
 
@@ -89,13 +104,16 @@ registerForm?.addEventListener('submit', async (e) => {
         options: {
             data: {
                 first_name: firstName,
+                middle_name: middleName,
                 last_name: lastName,
                 role: normalizedRole,
                 deped_employee_id: depedEmployeeId,
                 plantilla_item_no: plantillaItemNo,
                 prc_license_no: prcLicenseNo,
                 employment_status: employmentStatus,
-                years_in_service: yearsInService ? Number(yearsInService) : null,
+                birthdate: birthdate,
+                date_started: dateStarted,
+                years_in_service: calculatedYearsInService,
                 division: division,
                 assigned_institution: assignedInstitution,
                 department: department,

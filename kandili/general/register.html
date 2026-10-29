@@ -136,34 +136,34 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="depedEmployeeId">DepEd Employee ID <span class="required-star">*</span></label>
-                    <input type="text" id="depedEmployeeId" placeholder="e.g. 1234567" required>
+                    <input type="text" id="depedEmployeeId" placeholder="e.g. 1234567" pattern="[0-9]{7}" title="Must be exactly 7 digits" required>
                 </div>
                 <div class="form-group">
                     <label for="plantillaItemNo">Plantilla Item No. <span class="required-star">*</span></label>
-                    <input type="text" id="plantillaItemNo" placeholder="e.g. T-2024-001" required>
+                    <input type="text" id="plantillaItemNo" placeholder="e.g. T-2024-001" pattern="[A-Za-z0-9\-]+" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="prcLicenseNo">PRC Professional License No. <span class="required-star">*</span></label>
-                    <input type="text" id="prcLicenseNo" placeholder="e.g. 1234567" required>
+                    <input type="text" id="prcLicenseNo" placeholder="e.g. 1234567" pattern="[0-9]{7}" title="Must be exactly 7 digits" required>
                 </div>
                 <div class="form-group">
                     <label for="contactNumber">Active Contact Number <span class="required-star">*</span></label>
-                    <input type="tel" id="contactNumber" placeholder="+63 912 345 6789" required>
+                    <input type="tel" id="contactNumber" placeholder="+63 912 345 6789" pattern="^(09|\+639)\d{9}$" title="Must be a valid PH mobile number" required>
                 </div>
             </div>
 
-            <!-- Demographics (Age & Years in Service) -->
+            <!-- Demographics (Birthdate & Date Started) -->
             <div class="form-row">
                 <div class="form-group">
-                    <label for="age">Age <span class="required-star">*</span></label>
-                    <input type="number" id="age" min="20" max="65" placeholder="e.g. 34" required>
+                    <label for="birthdate">Birthdate <span class="required-star">*</span></label>
+                    <input type="date" id="birthdate" required>
                 </div>
                 <div class="form-group">
-                    <label for="yearsInService">Years in Service <span class="required-star">*</span></label>
-                    <input type="number" id="yearsInService" min="0" max="45" placeholder="e.g. 8" required>
+                    <label for="dateStarted">Date Started in DepEd <span class="required-star">*</span></label>
+                    <input type="date" id="dateStarted" required>
                 </div>
             </div>
 
@@ -221,7 +221,9 @@
                         <option value="Bachelor of Secondary Education (BSEd)">Bachelor of Secondary Education (BSEd)</option>
                         <option value="Master of Arts in Education (MAEd)">Master of Arts in Education (MAEd)</option>
                         <option value="Doctor of Education (EdD / PhD)">Doctor of Education (EdD / PhD)</option>
+                        <option value="Other">Other (Please Specify)</option>
                     </select>
+                    <input type="text" id="educationalAttainmentOther" style="display: none; margin-top: 0.5rem;" placeholder="Specify your degree...">
                 </div>
                 <div class="form-group">
                     <label for="role">Requested System Role <span class="required-star">*</span></label>
@@ -280,6 +282,23 @@
 
             pwd.addEventListener('input', checkPasswords);
             confirmPwd.addEventListener('input', checkPasswords);
+
+            // Toggle Educational Attainment "Other" input
+            const eduSelect = document.getElementById('educationalAttainment');
+            const eduOther = document.getElementById('educationalAttainmentOther');
+            if (eduSelect && eduOther) {
+                eduSelect.addEventListener('change', () => {
+                    if (eduSelect.value === 'Other') {
+                        eduOther.style.display = 'block';
+                        eduOther.required = true;
+                        eduOther.focus();
+                    } else {
+                        eduOther.style.display = 'none';
+                        eduOther.required = false;
+                        eduOther.value = '';
+                    }
+                });
+            }
 
             form.addEventListener('submit', (e) => {
                 if (!checkPasswords()) {
